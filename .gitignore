@@ -1,0 +1,15 @@
+/NetworkDriver/*.pyc
+/NetworkSetup/bin
+/NetworkSetup/traceFiles
+/NetworkSetup/output
+/NetworkSetup/.settings
+/NetworkSetup/.classpath
+/NetworkSetup/.project
+/NetworkSetup/.goutput*
+/NetworkDriver/.idea
+/Paper/*.pdf
+/Paper/*.dvi
+/Paper/*.bbl
+/Paper/*.blg
+/Paper/*.aux
+/Paper/*.log
