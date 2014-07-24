@@ -1,0 +1,21 @@
+constants:
+- 0
+- 1
+- 2
+inputInterfaces:
+  IACK: []
+  IREQ:
+  - Integer
+  - Integer
+  - Integer
+  ITIMEOUT: []
+name: brp_ref_maxrn5
+outputInterfaces:
+  OCONF:
+  - Integer
+  OFRAME:
+  - Integer
+  - Integer
+  - Integer
+  - Integer
+  ONOK: []

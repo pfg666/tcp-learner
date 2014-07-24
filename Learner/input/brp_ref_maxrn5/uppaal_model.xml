@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_1.dtd'><nta><declaration>constants = 0,1,2;
+
+min_value = 4;
+max_value =9;
+
+lts_min_value = 8;
+lts_max_value = 10;
+
+int n;
+int rn;
+int max_rn = 5;
+int toggle;
+int msg1;
+int msg2;
+int msg3;
+
+void IREQ(int m1, int m2, int m3) {
+}
+
+void ITIMEOUT() {
+}
+
+void IACK() {
+}
+
+void ONOK() {
+}
+
+void OFRAME(int f, int l, int t, int m) {
+}
+
+void OCONF (int out) {
+}
+
+
+
+
+</declaration><template><name x="5" y="5">Template</name><declaration>// Place local declarations here.
+</declaration><location id="id0" x="352" y="384" color="#ff0000"></location><location id="id1" x="-32" y="-64" color="#ff0000"></location><location id="id2" x="288" y="0" color="#ff00ff"><name x="288" y="-32">SF</name></location><location id="id3" x="32" y="320" color="#ff00ff"><name x="0" y="296">SC</name></location><location id="id4" x="288" y="320" color="#ffff00"><name x="248" y="296">WA</name></location><location id="id5" x="32" y="0" color="#ffff00"><name x="40" y="-32">INIT</name></location><init ref="id5"/><transition><source ref="id4"/><target ref="id0"/><label kind="synchronisation" x="280" y="400">IREQ(m1,m2,m3)</label><nail x="288" y="384"/></transition><transition><source ref="id0"/><target ref="id4"/><label kind="synchronisation" x="320" y="328">ONOK()</label></transition><transition><source ref="id5"/><target ref="id1"/><label kind="synchronisation" x="-72" y="8">ITIMEOUT()</label><nail x="-32" y="0"/></transition><transition><source ref="id1"/><target ref="id5"/><label kind="synchronisation" x="-24" y="-48">ONOK()</label></transition><transition><source ref="id5"/><target ref="id1"/><label kind="synchronisation" x="40" y="-64">IACK()</label><nail x="32" y="-64"/></transition><transition><source ref="id4"/><target ref="id2"/><label kind="guard" x="424" y="112">n&lt;2</label><label kind="synchronisation" x="424" y="128">IACK()</label><label kind="assignment" x="424" y="144">n=n+1;
+rn =0;
+toggle=1-toggle;</label><nail x="416" y="288"/><nail x="416" y="32"/></transition><transition><source ref="id3"/><target ref="id5"/><label kind="guard" x="-32" y="216">n &lt; 2</label><label kind="synchronisation" x="-64" y="232">OCONF(0)</label><nail x="48" y="128"/></transition><transition><source ref="id3"/><target ref="id5"/><label kind="guard" x="-32" y="152">n==2</label><label kind="synchronisation" x="-64" y="168">OCONF(2)</label><nail x="16" y="128"/></transition><transition><source ref="id4"/><target ref="id3"/><label kind="guard" x="128" y="384">n==2</label><label kind="synchronisation" x="128" y="400">IACK()</label><label kind="assignment" x="128" y="416">n = 3;
+rn=0;
+toggle=1-toggle;</label><nail x="256" y="384"/><nail x="64" y="384"/></transition><transition><source ref="id3"/><target ref="id5"/><label kind="guard" x="-32" y="96">n==3</label><label kind="synchronisation" x="-64" y="112">OCONF(1)</label></transition><transition><source ref="id4"/><target ref="id2"/><label kind="guard" x="328" y="112">rn &lt;= max_rn</label><label kind="synchronisation" x="328" y="128">ITIMEOUT()</label><nail x="320" y="288"/><nail x="320" y="32"/></transition><transition><source ref="id2"/><target ref="id4"/><label kind="guard" x="224" y="160">n==1</label><label kind="synchronisation" x="88" y="176">OFRAME(0,0,toggle,msg2)</label><label kind="assignment" x="192" y="192">rn = rn+1;</label><nail x="304" y="128"/></transition><transition><source ref="id2"/><target ref="id4"/><label kind="guard" x="224" y="224">n==2</label><label kind="synchronisation" x="88" y="240">OFRAME(0,1,toggle,msg3)</label><label kind="assignment" x="192" y="256">rn = rn+1;</label></transition><transition><source ref="id2"/><target ref="id4"/><label kind="guard" x="224" y="96">n==0</label><label kind="synchronisation" x="88" y="112">OFRAME(1,0,toggle,msg1)</label><label kind="assignment" x="192" y="128">rn = rn+1;</label><nail x="272" y="128"/></transition><transition><source ref="id4"/><target ref="id3"/><label kind="guard" x="128" y="320">rn &gt; max_rn</label><label kind="synchronisation" x="128" y="336">ITIMEOUT()</label></transition><transition><source ref="id5"/><target ref="id2"/><label kind="synchronisation" x="80" y="-24">IREQ(m1,m2,m3)</label><label kind="assignment" x="80" y="0">n = 0;
+rn = 0;
+msg1 = m1;
+msg2 = m2;
+msg3 = m3;</label></transition></template><system>// Place template instantiations here.
+Process = Template();
+
+// List one or more processes to be composed into a system.
+system Process;</system></nta>

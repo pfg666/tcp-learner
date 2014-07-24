@@ -1,0 +1,35 @@
+learning:
+    sutinfoFile: /home/paul/Dropbox/Research/workspace/TomteSetup/input/brp_ref_maxrn5/sutinfo.yaml
+    seed: 123
+    minValue: 0
+    maxValue: 100
+    lookahead: 0
+    prefixOn: false
+    preferFirst: false
+testing:
+    minTraceLength: 100
+    maxTraceLength: 150
+    maxNumTraces: 1000
+sutInterface:
+    sutWrapperClassName: SutSocketWrapper
+    portNumber: 7892
+sutImplementation:
+    modelName: ${modelDirName}
+    projectClassPath: build
+learnResults:
+    outputDir: output/brp_ref_maxrn5
+    abstractModelDotFile: learnedAbstractModel.dot
+    abstractModelPdfFile: learnedAbstractModel.pdf
+    statisticsFile: statistics.txt
+    abstractionFile: learnedAbstraction.txt
+    learnedModelDataFile: learnedModelData.json
+    learnedConcreteModelFile: learnedConcreteModel.xml
+logging:
+    logDir: log/
+    logFile: log.txt
+    abstractionsLog: abstractions.txt
+original:
+    configFile: /home/paul/Dropbox/Research/workspace/TomteSetup/input/brp_ref_maxrn5/config.yaml
+    tomteRootPath: /home/paul/tomte-0.2
+devel:
+    modeOn: false

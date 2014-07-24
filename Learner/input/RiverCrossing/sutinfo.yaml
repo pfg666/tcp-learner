@@ -1,0 +1,11 @@
+constants: []
+inputInterfaces:
+  INOTHING: []
+  IWOLF: []
+  ICABBAGE: []
+name: RiverCrossing
+outputInterfaces:
+  OEATEN: []
+  ODONE: []
+  ORETRY: []
+  OFINISHED: []
