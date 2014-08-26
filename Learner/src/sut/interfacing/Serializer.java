@@ -1,19 +1,12 @@
 package sut.interfacing;
 
+import sut.interfacing.io.AbstractRequest;
+import sut.interfacing.io.ConcreteResponse;
+import sut.mapper.FlagSet;
+import sut.mapper.Symbol;
+
 public class Serializer {
-	/**
-	 * Converts the parameters of a concrete message to a single string, so it
-	 * can be used by the network interface
-	 * 
-	 * @param flags
-	 *            separated with "+", e.g. "FIN+ACK"
-	 * @param seqNr
-	 *            seq nr. sent
-	 * @param ackNr
-	 *            ack nr. sent
-	 * @return a single string which can be used by the network interface, e.g.
-	 *         "FA 123 456"
-	 */
+
 	public static String concreteMessageToString(String flags, long seqNr,
 			long ackNr) {
 		StringBuilder result = new StringBuilder();
@@ -30,18 +23,19 @@ public class Serializer {
 		return result.toString();
 	}
 	
-	/**
-	 * Converts the parameters of an abstract message to a single string, so it
-	 * can be used by the leaner
-	 * 
-	 * @param flags
-	 *            the characters of the flags set
-	 * @param seqValidity
-	 *            either "V" of "INV"
-	 * @param ackValidity
-	 *            either "V" of "INV"
-	 * @return a single string in the output alphabet, e.g. "FIN+ACK(123,456)"
-	 */
+	public static String concreteMessageToString(FlagSet flags, long seqNr,
+			long ackNr) {
+		StringBuilder result = new StringBuilder();
+
+		result.append(flags.toInitials());
+		
+		result.append(" ");
+		result.append(seqNr);
+		result.append(" ");
+		result.append(ackNr);
+		return result.toString();
+	}
+
 	public static String abstractMessageToString(char[] flags,
 			String seqValidity, String ackValidity) {
 		StringBuilder result = new StringBuilder();
@@ -60,13 +54,35 @@ public class Serializer {
 		return result.toString();
 	}
 	
-	/**
-	 * detemines the flags abbreviation from its staring letter
-	 * 
-	 * @param c
-	 *            starting letter, e.g. 's' or 'A'
-	 * @return the abbreviation, e.g. "SYN" or "ACK"
-	 */
+	public static String abstractMessageToString(FlagSet flags,
+			Symbol seqValidity, Symbol ackValidity) {
+		char[] flagInitials = flags.toInitials();
+		String seqString = seqValidity.name();
+		String ackString = ackValidity.name();
+		String result = abstractMessageToString(flagInitials, seqString, ackString);
+		return result;
+	}
+	
+	public static AbstractRequest stringToAbstractRequest(String abstractRequestString) {
+		String[] inputValues = abstractRequestString.split("\\(|,|\\)"); 
+		FlagSet flags = new FlagSet(inputValues[0]); 
+		Symbol abstractSeq = Symbol.toSymbol(inputValues[1]);
+		Symbol abstractAck = Symbol.toSymbol(inputValues[2]);
+		return new AbstractRequest(flags, abstractSeq, abstractAck);
+	}
+	
+	public static ConcreteResponse stringToConcreteResponse(String concreteResponseString) {
+		String[] inputValues = concreteResponseString.split(" ");
+		FlagSet flags = new FlagSet(inputValues[0].toCharArray());
+		long seqReceived = Long.parseLong(inputValues[1]);
+		long ackReceived = Long.parseLong(inputValues[2]);
+		return new ConcreteResponse(flags, seqReceived, ackReceived);
+	}
+	
+	public static String concreteResponseToString(ConcreteResponse response) {
+		return concreteMessageToString(response.flags, response.seqNumber, response.ackNumber);
+	}
+	
 	public static String charToFlag(char c) {
 		c = Character.toLowerCase(c);
 		switch (c) {

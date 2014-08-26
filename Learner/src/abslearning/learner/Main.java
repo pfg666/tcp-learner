@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Locale;
-import java.util.Random;
 import java.util.Scanner;
 
 import org.apache.log4j.BasicConfigurator;
@@ -16,8 +15,10 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerRepository;
 
 import sut.info.SutInfo;
+import sut.interfacing.init.CacheManager;
 import util.ExceptionAdapter;
 import util.RunCmd;
+import util.SoundUtils;
 import util.exceptions.CheckException;
 import abslearning.exceptions.BugException;
 import abslearning.exceptions.ConfigurationException;
@@ -27,12 +28,10 @@ import abslearning.exceptions.UpdateConstantActionException;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
-import de.ls5.jlearn.equivalenceoracles.WMethodEquivalenceTest;
 import de.ls5.jlearn.interfaces.Alphabet;
 import de.ls5.jlearn.interfaces.Automaton;
 import de.ls5.jlearn.interfaces.EquivalenceOracleOutput;
 import de.ls5.jlearn.interfaces.Learner;
-import de.ls5.jlearn.interfaces.Word;
 import de.ls5.jlearn.util.DotUtil;
 
 
@@ -45,9 +44,6 @@ public class Main {
 
 
 	public static Learner learner = null;
-	private static Word counterExampleInputs;
-	private static Word counterExampleOutputs;
-
 
 	
 	public static void learn_nodata(Config config)  throws FileNotFoundException {
@@ -80,13 +76,8 @@ public class Main {
 
 		BasicMembershipOracle memberOracle = new BasicMembershipOracle();		
 		BasicEquivalenceOracle equivalenceOracle = new BasicEquivalenceOracle();	
-		
 
-		// create Teacher oracle :  random testing using specified number and lenght of traces using seed
-		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle;
-		eqOracle = new RandomWalkEquivalenceOracle(config.testing_maxNumTraces, config.testing_minTraceLength, config.testing_maxTraceLength);
-		//de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle
-		eqOracle = new WMethodEquivalenceTest();
+		RandomWalkEquivalenceOracle eqOracle = new RandomWalkEquivalenceOracle(config.testing_maxNumTraces, config.testing_minTraceLength, config.testing_maxTraceLength);
 		eqOracle.setOracle(equivalenceOracle);
 		//Random random = new Random(config.testing_seed);
 		//((RandomWalkEquivalenceOracle)eqOracle).setRandom(random);	
@@ -177,7 +168,10 @@ public class Main {
 					logger.debug("Counter Example: "
 									+ o.getCounterExample().toString());
 					logger.debug("o.getOracleOutput(): "
-									+ o.getOracleOutput().toString());					
+									+ o.getOracleOutput().toString());
+					System.out.println(o.getCounterExample().toString());
+					System.out.println(o.getOracleOutput().toString());
+					done = true;
 					
 					//-----------------------------------------------------------------
 					// give counter example to learner
@@ -201,7 +195,7 @@ public class Main {
 			}
 		}
 
-
+		SoundUtils.announce();
         // output learned model
         //---------------------
 		Automaton learnedModel = learner.getResult();
@@ -237,6 +231,7 @@ public class Main {
 
 		logger.debug("Seed: " + Long.toString(config.testing_seed));
 		System.out.println("Seed: " + Long.toString(config.testing_seed));
+		new CacheManager().dump("cache.txt");
 
 		// when learning gets terminated then :  
 		//      two cases :
@@ -249,8 +244,6 @@ public class Main {
 		}		
 		
 	}
-	
-
 	
 	
 	public static void init(Config config) throws FileNotFoundException {
@@ -296,12 +289,15 @@ public class Main {
 		SutInfo.setPortNumber(config.sutInterface_portNumber);
 
 		// modelFile is relative from config file
-		String configDir = (new File(config.params_configFile)).getParent();
+//		String configDir = (new File(config.params_configFile)).getParent();
 		logger.info(SutInfo.getName());
 
 		SutInfo.initialize(config.learning_sutinfoFile,
 				config.sutInterface_sutWrapperClassName,
 				config.learnResults_outputDir);
+		
+		// TCP additions
+		SutInfo.setTcpConfig(TCPConfig.buildTCPConfig(config));
 	}
 
 	// run from command line in windows :
@@ -317,7 +313,7 @@ public class Main {
 				 * alternative yaml config file can be specified serialize final
 				 * config to config yaml file
 				 */
-				File file = new File(args[0]);
+//				File file = new File(args[0]);
 				//System.out.println(file.exists());
 				 config = new Config(args);  // simply loads params from config file
 				 
@@ -375,7 +371,7 @@ public class Main {
 			} catch (FileNotFoundException fnfe) {
 				logger.fatal(fnfe.getMessage() + "\n\n");
 				if (develMode) fnfe.printStackTrace();
-			} catch (Exception e) {
+			} catch (Exception e) {	
 				logger.fatal(Messages.BUG  + "\n\n");
 				// no specific handler match: rethrow ea and let java print
 				// exception
@@ -389,7 +385,6 @@ public class Main {
 		
 		
 		logger.info("THE END");
-		Prediction.dumpCheckedConditions();
 		System.exit(0); 
 	}
 

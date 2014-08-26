@@ -46,6 +46,11 @@ public class Config extends util.Config {
 	public int testing_maxTraceLength=20;
 	public int testing_maxNumTraces=100;
 	
+	// TCP parameters
+	public String tcp_cacheFile="cache.txt";
+	public boolean tcp_verbose=false;
+	public boolean tcp_prebuildCache=false;
+	public String tcp_oracle = "adaptive";
 	
 	public String sutInterface_sutWrapperClassName="SutSocketWrapper";
 	public int  sutInterface_portNumber=18200;
@@ -53,7 +58,7 @@ public class Config extends util.Config {
 	// for sut with inputActions with params we can flatten the alphabet to just a set of
 	// actions without parameters. For each action we loop over a range of values for each param,
 	// and for each combination of params we create an action which has no params , but has
-	// the params set in its string name
+	// the params set in its string name.  
 	//
 	// Note: if min=max then flatten is disabled
 	public int   sutInterface_flattenAlphabet_minValue=0;

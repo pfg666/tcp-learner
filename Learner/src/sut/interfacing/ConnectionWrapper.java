@@ -30,6 +30,7 @@ public class ConnectionWrapper {
      */
     public ConnectionWrapper (String ipAddress, int portNumber) {
         try {
+        	
             socket = new Socket(ipAddress, portNumber);
             //socket.setSoTimeout(2000);
             socket.setTcpNoDelay(false);
@@ -85,7 +86,7 @@ public class ConnectionWrapper {
      */
     public void close() {
     	try {
-			socket.close();
+    		socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

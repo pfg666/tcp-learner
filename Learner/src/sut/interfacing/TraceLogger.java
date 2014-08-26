@@ -39,6 +39,13 @@ public class TraceLogger {
 		appendMessages(filePath, allTraces);
 	}
 	
+	public void clearTraceFile(String filePath) {
+		File traceFile = new File(filePath);
+		if(traceFile.exists() && traceFile.isFile()) {
+			traceFile.delete();
+		}
+	}
+	
 	private void appendMessages(String fileName, List<String> messages) {
 		try {
 			FileWriter fw = new FileWriter(fileName, true);

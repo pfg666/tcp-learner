@@ -22,6 +22,7 @@ import util.Filesystem;
 
 import sut.info.ActionSignature;
 import abslearning.learner.SutInfoYaml;
+import abslearning.learner.TCPConfig;
 
 public class SutInfo {
 	public static String name;
@@ -33,6 +34,7 @@ public class SutInfo {
 	private static String sutWrapperClassName;
 	public static String sutInfoYamlFile;
 	private static int portNumber;
+	private static TCPConfig tcpConfig;
 
 	protected static void addFlattenedSymbols(Alphabet result, String symbol,
 			int min, int max, int numParams, int level) {
@@ -104,6 +106,15 @@ public class SutInfo {
 	public static void setMaxValue(int maxValue) {
 		SutInfo.maxValue = maxValue;
 	}
+	
+	public static TCPConfig getTcpConfig() {
+		return tcpConfig;
+	}
+
+	public static void setTcpConfig(TCPConfig tcpConfig) {
+		SutInfo.tcpConfig = tcpConfig;
+	}
+
 
 	// ignored if using simulateSut
 	public void setSutInterface(String sutInfoFileName, String sutInterface) {
@@ -138,20 +149,12 @@ public class SutInfo {
 			// sutInfoYamlFile = "input/sutInfo.yaml";
 			
 			Filesystem.copyfile(sutInfoYamlFile, outputDir + "/sutinfo.yaml");
-			paulAdditions(outputDir);
 		} else {
 			System.err.println("\nAbort:\n  Invalid sut wrapper class : \""
 					+ SutInfo.sutWrapperClassName + "\"");
 			System.exit(1);
 		}
 
-	}
-	
-	public static void paulAdditions(String outputDir) {
-		String projectDir = System.getProperty("user.dir");
-		String interfacingDir = projectDir+"/src/sut/interfacing";
-		Filesystem.copyfile(interfacingDir + "/Mapper.java", outputDir+"/Mapper.java");
-		Filesystem.copyfile(interfacingDir + "/SutSocketWrapper.java", outputDir+"/SutSocketWrapper.java");
 	}
 
 	public static SutInterface newSutWrapper() {
@@ -162,7 +165,7 @@ public class SutInfo {
 
 		SutInterface sutWrapper = null;
 		if (SutInfo.sutWrapperClassName.equals("SutSocketWrapper")) {
-			sutWrapper = new SutSocketWrapper(portNumber);
+			sutWrapper = new SutSocketWrapper(tcpConfig);
 		} else {
 			System.err.println("\nAbort:\n  Invalid sut wrapper class : \""
 					+ SutInfo.sutWrapperClassName + "\"");
@@ -186,6 +189,14 @@ public class SutInfo {
 
 	public static List<ActionSignature> getInputSignatures() {
 		return new ArrayList<ActionSignature>(inputSignatures);
+	}
+	
+	public static List<String> getInputStrings() {
+		List<String> inputStrings = new ArrayList<String>();
+		for(ActionSignature action : inputSignatures){
+			inputStrings.add(action.getMethodName());
+		} 
+		return inputStrings;
 	}
 
 	public static void setInputSignatures(Map<String, List<String>> signatures) {

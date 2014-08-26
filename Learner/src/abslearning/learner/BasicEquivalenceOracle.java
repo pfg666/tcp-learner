@@ -1,26 +1,20 @@
 package abslearning.learner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import sut.action.InputAction;
 import sut.action.OutputAction;
 import sut.action.Parameter;
-
-
+import sut.info.SutInfo;
+import sut.info.SutInterface;
 import de.ls5.jlearn.abstractclasses.LearningException;
-import de.ls5.jlearn.interfaces.Alphabet;
 import de.ls5.jlearn.interfaces.Oracle;
 import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.interfaces.Word;
-import de.ls5.jlearn.shared.AlphabetImpl;
 import de.ls5.jlearn.shared.SymbolImpl;
 import de.ls5.jlearn.shared.WordImpl;
-
-import sut.info.SutInfo;
-import sut.info.SutInterface;
 
 
 public class BasicEquivalenceOracle implements Oracle {
