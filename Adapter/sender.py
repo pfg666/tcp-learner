@@ -22,14 +22,15 @@ class Sender:
     # information of the SUT
     def __init__(self, serverMAC=ethController, serverIP = ethServerIp, serverPort = 7991,
                  networkInterface="eth1", networkInterfaceType=InterfaceType.Ethernet, networkPort=15000, networkPortMinimum=20000,
-                 networkPortMaximum=40000, useTracking=False,
-                 isVerbose=0, waitTime=0.004, resetMechanism=0):
+                 networkPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
+                 isVerbose=0, waitTime=0.006, resetMechanism=0):
         self.serverIP = serverIP
         self.serverPort = serverPort
         self.serverMAC = serverMAC
         self.networkPort = networkPort
         self.networkPortMinimum = networkPortMinimum
         self.networkPortMaximum = networkPortMaximum
+        self.portNumberFile = portNumberFile;
         #time to wait for a response from the SUT before concluding a timeout
         self.waitTime = waitTime
         #set verbosity (0/1)
@@ -37,7 +38,7 @@ class Sender:
         self.isVerbose = isVerbose
         self.useTracking = useTracking
         if self.useTracking == True:
-            self.tracker = Tracker(networkInterface, self.serverPort, )
+            self.tracker = Tracker(networkInterface, self.serverPort, self.serverIP)
             self.tracker.start()
         else:
             self.tracker = None
@@ -45,11 +46,30 @@ class Sender:
     # chooses a new port to send packets from
     def refreshNetworkPort(self):
         print("previous local port: " + str(self.networkPort))
-        if self.networkPort == self.networkPortMaximum or self.networkPort < self.networkPortMinimum:
-            self.networkPort = self.networkPortMinimum
-        else:
-            self.networkPort = self.networkPort + 1
+        self.networkPort = self.getNextPort()
         print("next local port: " + str(self.networkPort)+"\n")
+        return self.networkPort
+        # print("previous local port: " + str(self.networkPort))
+        # if self.networkPort == self.networkPortMaximum or self.networkPort < self.networkPortMinimum:
+        #     self.networkPort = self.networkPortMinimum
+        # else:
+        #     self.networkPort = self.networkPort + 1
+        # print("next local port: " + str(self.networkPort)+"\n")
+
+    # gets a new port number, an increment of the old. Replaces it in the portNumber file.
+    def getNextPort(self):
+        f = open(self.portNumberFile,"a+")
+        f.seek(0)
+        line = f.readline()
+        if line == '' or int(line) < self.networkPortMinimum:
+            networkPort = self.networkPortMinimum
+        else:
+            networkPort = (int(line)+1)%self.networkPortMaximum
+        f.closed
+        f = open(self.portNumberFile, "w")
+        f.write(str(networkPort))
+        f.closed
+        return networkPort
 
     # send a packet onto the network with the given parameters, and return the response packet
     # uses two scapy to create and send packets, while responses are gathered first through scapy's response, should
@@ -73,7 +93,7 @@ class Sender:
             p = pIP / pTCP / Raw(load="cc")
             scapyResponse = sr1(p, timeout=self.waitTime, verbose=self.isVerbose)
         else:
-            p = pIP / pTCP
+            p = pIP / pTCP #/ Raw(load="cccc")
             scapyResponse = sr1(p, timeout = self.waitTime, verbose = self.isVerbose)
         if scapyResponse is not None:
             response = self.scapyResponseParse(scapyResponse)
@@ -86,6 +106,7 @@ class Sender:
                 response = self.tracker.getLastResponse(self.networkPort)
                 if type(response) is not Timeout:
                     captureMethod = "tracker"
+
         if captureMethod != "":
             captureMethod = "("+captureMethod+")"
         print response.serialize() + "  "+captureMethod
@@ -124,7 +145,7 @@ class Sender:
         if self.checkForFlag(x, 4):
             result = result + "A"
         return result
-
+    #
     # tells whether tracking is still active
     def isTracking(self):
         return self.useTracking and (not self.tracker.isStopped())
@@ -146,6 +167,7 @@ class Sender:
         # used every iteration, otherwise the entry somehow
         # w disappears after a while
         conf.netcache.arp_cache[self.serverIP] = self.serverMAC
+
         response = None
         timeBefore = time.time()
         if input1 != "nil":
@@ -188,8 +210,9 @@ if __name__ == "__main__":
     sender = Sender(useTracking=True, isVerbose=0, networkPortMinimum=20000, waitTime=0.1)
     seq = 50
     sender.refreshNetworkPort()
-    sender.sendInput("SP", seq, 1) #SA svar seq+1 | SYN_REC
+    sender.sendInput("S", seq, 1) #SA svar seq+1 | SYN_REC
     sender.sendInput("A", seq + 1, seqVar + 1) #A svar+1 seq+2 | CLOSE_WAIT
+    sender.sendInput("A", seq - 1, seqVar + 1)
     #sender.sendInput("AP", seq+1, seqVar+1)
    # sender.sendInput("AP", seq+3, seqVar+1)
    # sender.sendInput("AP", seq+5, seqVar+1)

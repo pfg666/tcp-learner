@@ -12,6 +12,9 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * Class used to generate TCP yaml files by combining flags with abstract values for sequence and acknowledgment numbers. 
+ */
 public class YamlWriter {
 
 	public static final String [] synInputAbs = {"V","INV"};
@@ -21,16 +24,15 @@ public class YamlWriter {
 	public static final String [] flags = {"","SYN","ACK"};//,"RST", "FIN"};
 	public static final String [][] invalidFlagPairs = {{"SYN","FIN"},{"SYN","RST"},{"FIN","RST"},
 	{"SYN","SYN"},{"RST","RST"},{"FIN","FIN"},{"ACK","ACK"},{"",""}};
+	
 	public YamlWriter() {
 	}
 	
-
 	public static void main(String args[]) throws Exception {
 		YamlWriter yaml = new YamlWriter();
 		String filePath = (args.length == 1)? args[0]: "sut.yaml";
 		yaml.writeTCPYaml(filePath);
 	}
-	
 	
 	public void writeTCPYaml(String filePath) throws Exception {
 		Map<String,Object> yamlMap = buildTCPMap();
@@ -138,6 +140,15 @@ public class YamlWriter {
 		return true;
 	}
 	
+	public void buildFile(Map<String, Object> yamlMap, String filePath) throws Exception{
+		File file = new File(filePath);
+		if(file.exists() == false) {
+			file.createNewFile();
+		}
+		Yaml yaml = new Yaml();
+		yaml.dump(yamlMap, new PrintWriter(file));
+	}
+	
 	static interface Combiner {
 		String combine(String str1, String str2);
 	} 
@@ -173,14 +184,5 @@ public class YamlWriter {
 				else
 					return super.combine(str1, str2);
 		}	
-	}
-	
-	public void buildFile(Map<String, Object> yamlMap, String filePath) throws Exception{
-		File file = new File(filePath);
-		if(file.exists() == false) {
-			file.createNewFile();
-		}
-		Yaml yaml = new Yaml();
-		yaml.dump(yamlMap, new PrintWriter(file));
 	}
 }

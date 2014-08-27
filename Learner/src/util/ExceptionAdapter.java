@@ -1,8 +1,8 @@
 package util;
 
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.PrintStream;
 
 /* ExceptionAdapter - adapter class to make an unchecked exception from a checked exception
  * 

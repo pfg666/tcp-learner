@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import sut.interfacing.Serializer;
 import sut.interfacing.init.InitOracle;
-import util.Gen;
+import util.Calculator;
 
 /**
  * Mapper component from abs to conc and conc to abs. Does NOT handle TIMEOUTS.
@@ -97,12 +97,12 @@ public class TCPMapper {
 	}
 	
 	private long newInvalidWithinWindow(long refNumber) {
-		return Gen.randWithinRange(Gen.sum(refNumber, Gen.MAX_NUM - WIN_SIZE + 2), Gen.sum(refNumber, Gen.MAX_NUM/2 + 1));
+		return Calculator.randWithinRange(Calculator.sum(refNumber, Calculator.MAX_NUM - WIN_SIZE + 2), Calculator.sum(refNumber, Calculator.MAX_NUM/2 + 1));
 	}
 	
 	//modSum(serverSeq, maxNum/2+2), modSum(serverSeq, maxNum - win + 1), modSum(serverSeq, -8191)
 	private long newInvalidOutsideWindow(long refNumber) {
-		return Gen.randWithinRange(Gen.sum(refNumber, Gen.MAX_NUM/2 + 2), Gen.sum(refNumber, Gen.MAX_NUM - WIN_SIZE + 1));
+		return Calculator.randWithinRange(Calculator.sum(refNumber, Calculator.MAX_NUM/2 + 2), Calculator.sum(refNumber, Calculator.MAX_NUM - WIN_SIZE + 1));
 	}
 	
 	private long getConcrete(Symbol absToSend, long nextValidNumber) {
@@ -112,7 +112,7 @@ public class TCPMapper {
 			nextNumber = nextValidNumber;
 			break;
 		case INV:
-			nextNumber = Gen.newOtherThan(nextValidNumber);
+			nextNumber = Calculator.newOtherThan(nextValidNumber);
 			break;
 		case IWIN:
 			nextNumber = newInvalidWithinWindow(this.initialServerSeq);
@@ -122,7 +122,7 @@ public class TCPMapper {
 			break;
 		case WIN:  //not yet tried
 			//nextNumber = Gen.randWithinRange(Gen.sum(1, nextValidNumber), Gen.sum(WIN_SIZE, nextValidNumber));
-			nextNumber = Gen.randWithinRange(Gen.sub(nextValidNumber, WIN_SIZE ), Gen.sub(nextValidNumber, 1));
+			nextNumber = Calculator.randWithinRange(Calculator.sub(nextValidNumber, WIN_SIZE ), Calculator.sub(nextValidNumber, 1));
 			break;
 		default:
 			throw new RuntimeException("Invalid parameter \"" + absToSend
@@ -134,7 +134,7 @@ public class TCPMapper {
 	public long getNextValidSeq() {
 		long nextSeq;
 		if (this.isInit == true) {
-			nextSeq = Gen.newValue();
+			nextSeq = Calculator.newValue();
 		} else {
 			nextSeq = this.lastValidClientSeq;
 		}
@@ -144,9 +144,9 @@ public class TCPMapper {
 	public long getNextValidAck() {
 		long nextAck;
 		if (this.isInit == true) {
-			nextAck = Gen.newValue();
+			nextAck = Calculator.newValue();
 		} else {
-			nextAck = Gen.next(this.initialServerSeq);
+			nextAck = Calculator.next(this.initialServerSeq);
 		}
 		return nextAck;
 	}
@@ -189,13 +189,13 @@ public class TCPMapper {
 
 	private Symbol getAbstract(long nrReceived) {
 		Symbol checkedSymbol;
-		if (nrReceived == Gen.next(this.lastValidClientSeq)) {
+		if (nrReceived == Calculator.next(this.lastValidClientSeq)) {
 			checkedSymbol = Symbol.SNCLIENTP1;
 		} else if (nrReceived == this.lastValidClientSeq) {
 			checkedSymbol = Symbol.SNCLIENT;
 		} else if (nrReceived == this.initialServerSeq) {
 			checkedSymbol = Symbol.SNSERVER;
-		} else if (nrReceived == Gen.next(this.initialServerSeq)) {
+		} else if (nrReceived == Calculator.next(this.initialServerSeq)) {
 			checkedSymbol = Symbol.SNSERVERP1;
 		} else if (nrReceived == this.lastSeqSent) {
 			checkedSymbol = Symbol.SNSENT;

@@ -12,9 +12,10 @@ from argparser import *
 # SYN(V, V)
 # ...
 # Change the following 4 settings to suit your own setup.
-cexPath = "../NetworkSetup/traceFiles/cex.txt" # the path to the file containing the trace to be executed
+tracePath = "traces.txt" # the path to the file containing the trace to be executed
 jvmPath = "/usr/lib/jvm/jdk1.7.0_45/jre/lib/amd64/server/libjvm.so" # path to libjm.so for ubuntu or jvm.dll for windows
 learnerProjectBinPath = "-Djava.class.path=../NetworkSetup/bin" # path to the java learner setup binaries
+mapClass = "sut.mapper.tested.U1310Mapper"
 portNumberFile = "sn.txt" # used for always generating a new port number. The previously used port number is stored and the
 # next will be its increment.
 global mapper
@@ -22,7 +23,7 @@ mapper= None
 global sender
 sender = None
 global waitTime
-waitTime = 0
+waitTime = 0.1
 def startJava():
     jpype.startJVM(jvmPath, "-ea",learnerProjectBinPath)
 def stopJava():
@@ -32,7 +33,7 @@ def stopJava():
 def getMapper():
     global mapper
     if mapper is None:
-        Mapper = jpype.JClass("sut.interfacing.Mapper")
+        Mapper = jpype.JClass(mapClass)
         mapper = Mapper()
     return mapper
 
@@ -43,6 +44,7 @@ def getSender():
         argumentParser = ArgumentParser()
         argumentParser.parseArguments()
         sender = argumentParser.buildSender()
+        print sender.__dict__
     return sender
 
 def processRequest(flags, syn, ack):
@@ -53,6 +55,8 @@ def processResponse(response):
         #flags = jpype.JString(str(response.flags))
         responseString = getMapper().processIncomingResponseComp(response.flags, str(response.seq), str(response.ack))
     else:
+        if type(response) is Timeout:
+            getMapper().processIncomingTimeout()
         responseString = response.serialize().upper()
     return responseString
 
@@ -96,6 +100,7 @@ def executeTraceFile(filePath, step=2):
     count = 0
     ack = 0
     reset()
+    print filePath
     for line in open(filePath, "r"):
         if line == "\n":
             return
@@ -136,5 +141,5 @@ def executeTraceFile(filePath, step=2):
 if __name__ == "__main__":
     startJava()
     for i in range(0,1):
-        executeTraceFile(cexPath, 2)
+        executeTraceFile(tracePath, 2)
     stopJava()

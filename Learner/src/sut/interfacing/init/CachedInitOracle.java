@@ -8,6 +8,10 @@ import sut.interfacing.Serializer;
 import sut.mapper.Flag;
 import sut.mapper.TCPMapper;
 
+/***
+ * An initialization oracle which keeps track of input history via an initCache.
+ * We define trace as the inputs checked after the last reset.
+ */
 public class CachedInitOracle implements InitOracle {
 	private List<String> inputs = new ArrayList<String>();
 	private InitCache initCache;
@@ -19,9 +23,11 @@ public class CachedInitOracle implements InitOracle {
 	}
 
 	/**
-	 * Checks whether the mapper is in a reset state by checking the trace
-	 * cache. The default implementation never adds to the cache.
+	 * Checks whether the input is resetting. 
+	 * If the trace is already present in the trace cache, then return the resetting state from the cache.
+	 * Otherwise, use the checker to compute the reset state of the trace and store it in the cache.
 	 */
+	//TODO This taking the mapper and building the last input sent is not pretty. 
 	public boolean isResetting(TCPMapper mapper) {
 		boolean isResetting = false;
 		String input = Serializer.abstractMessageToString(mapper.lastFlagsSent,
@@ -35,7 +41,9 @@ public class CachedInitOracle implements InitOracle {
 				isResetting = initChecker.checkInitial(mapper);
 				storeTrace(isResetting);
 			} else {
-				isResetting = getLastStoredState();
+				// if the input is deemed non-resetting, then the reset state of the trace is equal to the reset state of the trace before the input
+				// that is, resetState(i1, i2... i(n-1), i(n)) -> resetState(i1, i2... i(n-1)) (since i(n) is non resetting)
+				isResetting = getPreviousResettingState();
 				storeTrace(isResetting);
 			}
 		}
@@ -47,8 +55,8 @@ public class CachedInitOracle implements InitOracle {
 	
 
 	/**
-	 * Checks whether the input is candidate for a resetting state. We assume that only packets with RST or SYN flags can
-	 * reset the system.
+	 * Checks whether the package inputed can reset. We assume that only packets with RST or SYN flags can
+	 * reset the system. This reduces the number of checks needed.
 	 */
 	private boolean isResetCandidate(String input) {
 		return input.contains(Flag.RST.name()) || input.contains(Flag.SYN.name()) ;
@@ -71,7 +79,7 @@ public class CachedInitOracle implements InitOracle {
 		return initCache.getTrace(getInputs());
 	}
 	
-	protected boolean getLastStoredState() {
+	protected boolean getPreviousResettingState() {
 		String [] inputs = getInputs();
 		Boolean lastStoredState = null;
 		while(inputs.length > 0 && initCache.getTrace(inputs) == null) {

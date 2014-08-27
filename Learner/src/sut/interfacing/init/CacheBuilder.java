@@ -3,7 +3,6 @@ package sut.interfacing.init;
 import java.util.Stack;
 
 /***
- * @author Paul
  * Sets up the init cache. Can be used before calling starting learning, so that all init traces are available. 
  */
 public class CacheBuilder {

@@ -1,5 +1,8 @@
 package sut.interfacing.init;
 
+/**
+ * Cache which can retrieve the trace status from the centralized cache but doesn't store anything.
+ */
 public class NonStoringInitCache implements InitCache{
 	private CacheManager cacheManager;
 	

@@ -6,10 +6,7 @@ import sut.mapper.Flag;
 import sut.mapper.Symbol;
 
 /**
- * Windows 8 Mapper component
- * 
- * @author paul
- *
+ * TCPMapper for Windows 8
  */
 
 public class WIN8Mapper extends TCPMapper{

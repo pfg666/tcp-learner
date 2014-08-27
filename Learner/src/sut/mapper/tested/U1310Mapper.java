@@ -6,9 +6,7 @@ import sut.mapper.Flag;
 import sut.mapper.Symbol;
 
 /**
- * Mapper component from abs to conc and conc to abs. Does NOT handle TIMEOUTS.
- * 
- * @author paul
+ * TCP Mapper for Ubuntu. Works with all valid combinations and some invalid combinations.
  */
 
 public class U1310Mapper extends TCPMapper{

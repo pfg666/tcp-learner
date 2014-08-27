@@ -9,8 +9,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import abslearning.learner.Statistics;
-
 import sut.info.SutInterface;
 
 /* 

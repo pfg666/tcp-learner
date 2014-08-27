@@ -24,13 +24,15 @@ class ArgumentParser:
         Argument("csec","configSection", str, "tcp", "The section in the configuration file."),
         Argument("cfile","configFile", str, "config.cfg", "The configuration file used. Preferably left as the default value.")]
     senderArguments = [
+        Argument("ni","networkInterface", str, "eth0","The net interface through which the client communicates"),
         Argument("np","networkPort", int, 15000,"Active adapter port "),
         Argument("npmin","networkPortMinimum", int, 20000, "Set the minimum boundary and starting number for "
                                                        "the network port"),
         Argument("npmax","networkPortMaximum", int, 40000, "Set the maximum boundary after which it reverts back to "
                                                        "networkPortMinimum"),
+        Argument("pnf","portNumberFile", str, "sn.txt", "File with the port number"),
         Argument("ut","useTracking", bool, True, "If set, then the tracker is used along with the Scapy tool"),
-        Argument("wt","waitTime",float, 0.004, "Sets the time the adapter waits for a response before concluding a timeout"),
+        Argument("wt","waitTime",float, 0.006, "Sets the time the adapter waits for a response before concluding a timeout"),
         Argument("sip","serverIP", str, "131.174.142.204", "The server TCP"),
         Argument("sport","serverPort", int, 7991, "The server port"),
         Argument("smac","serverMAC", str, "50:46:5D:DE:44:C7", "The server MAC address"),

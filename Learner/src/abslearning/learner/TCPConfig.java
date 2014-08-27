@@ -1,7 +1,8 @@
 package abslearning.learner;
 
-
-
+/***
+ * Configuration parameters used for learning TCP.
+ */
 public class TCPConfig{
 
 	private static TCPConfig tcpConfig;

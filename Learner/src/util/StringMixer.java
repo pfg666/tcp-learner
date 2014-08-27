@@ -6,11 +6,6 @@ import java.util.List;
 
 public class StringMixer {
 	
-	
-	private static String [] arr(List<String> list) {
-		return list.toArray(new String [list.size()]);
-	}
-	
 	public List<String> generatePermutations(String [] list1, String [] list2, Combiner combiner) {
 		return generatePermutations(list1,list2,combiner, new String [][]{});
 	}

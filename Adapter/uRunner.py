@@ -6,15 +6,25 @@ from response import *
 from argparser import *
 
 # Tool used to run a single abstract trace from a file. It communicates directly with the Java mapper. Example of
-# an abstract trace ('#' excluded):
+# an abstract trace:
 # SYN(INV, INV)
 # ACK(V, V)
-# SYN(V, V)
+# SYN(V, V)SYN(V,V)
+# SYN+ACK(V,V)
+# FIN+ACK(V,V)
+# ACK(V,V)
+# SYN+ACK(V,V)
+# ACK(INV,V)SYN(V,V)
+# SYN+ACK(V,V)
+# FIN+ACK(V,V)
+# ACK(V,V)
+# SYN+ACK(V,V)
+# ACK(INV,V)
 # ...
 # Change the following 4 settings to suit your own setup.
-cexPath = "/home/paul/workspace/NetworkSetupUbuntu/traceFiles/cex.txt" # the path to the file containing the trace to be executed
+cexPath = "inputTrace.txt" # the path to the file containing the trace to be executed
 jvmPath = "/usr/lib/jvm/jdk1.7.0_45/jre/lib/amd64/server/libjvm.so" # path to libjm.so for ubuntu or jvm.dll for windows
-learnerProjectBinPath = "-Djava.class.path=/home/paul/workspace/NetworkSetupUbuntu/bin" # path to the java learner setup binaries
+learnerProjectBinPath = "-Djava.class.path=../Learner/bin" # path to the java learner setup binaries
 portNumberFile = "sn.txt" # used for always generating a new port number. The previously used port number is stored and the
 # next will be its increment.
 global mapper

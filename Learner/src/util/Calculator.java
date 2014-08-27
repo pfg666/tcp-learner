@@ -1,8 +1,10 @@
 package util;
 
-import java.util.Arrays;
-
-public class Gen {
+/**
+ * Calculator class used for generating random numbers and generating random numbers within a given interval. It can apply a bias to 
+ * its selection, so numbers near the borders are chosen more frequently.
+ */
+public class Calculator {
 	public static final long MAX_NUM = (long) (Math.pow(2, 32) - 1);
 	public static long newValue() {
 		return (long) (Math.random() * MAX_NUM);
@@ -36,21 +38,9 @@ public class Gen {
 		return sum(op1, (-1) * op2);
 	}
 
-	/***
+	/**
 	 * Gen. random number within a set of intervals
 	 */
-//	public static long randWithinRanges(long [] rangeMins, long [] rangeMaxes) {
-//		long rand;
-//		int randIndex;
-//		long [] rands = new long [rangeMins.length];
-//		for (int i = 0; i < rangeMins.length; i ++ ) {
-//			rands[i] = randWithinRange(rangeMins[i], rangeMaxes[i]);
-//		}
-//		randIndex = (int)randWithinRange(0, rangeMins.length);
-//		rand = rands[randIndex];
-//		return rand;
-//	}
-	
 	public static long randWithinRanges(long [] ... ranges) { 
 		long rand;
 		int randIndex;
@@ -63,6 +53,14 @@ public class Gen {
 		return rand;
 	}
 	
+	/**
+	 * Gen. 
+	 * @param rangeMin
+	 * @param rangeMax
+	 * @param boundaryProximity
+	 * @param nearBoundaryChance
+	 * @return
+	 */
 	public static long randWithinRange(long rangeMin, long rangeMax, long boundaryProximity, long nearBoundaryChance) {
 		//System.out.println("[" + rangeMin + "-"+ rangeMax + "]");
 		long rand;

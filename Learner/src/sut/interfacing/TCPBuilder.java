@@ -14,6 +14,11 @@ import sut.interfacing.init.StoringInitCache;
 import sut.mapper.TCPMapper;
 import abslearning.learner.TCPConfig;
 
+/**
+ * Factory which builds the main components needed to learn TCP from a TCP configuration object. 
+ * That is: the <b>TCP mapper</b> which uses an <b> initialization oracle </b> to update its state variables
+ * after every input. 
+ */
 public class TCPBuilder {
 	
 	public static TCPMapper buildMapper(TCPConfig config) {
@@ -49,6 +54,9 @@ public class TCPBuilder {
 		return builtOracle;
 	}
 	
+	/**
+	 * An active oracle is an oracle which infers responses actively, by querying the system.
+	 */
 	private static InitOracle buildAdaptiveOracle(TCPConfig config) {
 		InitChecker initChecker = new ActiveInitChecker(config.learningPort);
 		InitCache initCache = new StoringInitCache();

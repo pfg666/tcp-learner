@@ -66,9 +66,4 @@ public class BasicEquivalenceOracle implements Oracle {
 		if ( logger_equivQueries.isDebugEnabled() ) logger_equivQueries.debug("Output: " + result);	
 		return result;
 	}
-	
-
-
-	
-
 }

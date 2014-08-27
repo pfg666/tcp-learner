@@ -38,7 +38,6 @@ public class SutSocketWrapper implements SutInterface {
 
 	/**
 	 * called by the learner when an input needs to be processed
-	 * 
 	 * @param concreteInput
 	 *            the abstract query
 	 * @return the corresponding abstract response

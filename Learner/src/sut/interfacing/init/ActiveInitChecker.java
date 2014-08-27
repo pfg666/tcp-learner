@@ -12,8 +12,6 @@ public class ActiveInitChecker implements InitChecker {
 
 	public ActiveInitChecker(MapperSocketWrapper wrapper) {
 		this.testWrapper = wrapper;
-		//CachedInitOracle oracleCopy = new CachedInitOracle(new DummyInitChecker(),new NonStoringInitCache());
-		//testWrapper.setMapper(new TCPMapper(oracleCopy));
 	}
 	
 	public ActiveInitChecker(int testPort) {
@@ -65,8 +63,6 @@ public class ActiveInitChecker implements InitChecker {
 		TCPMapper testMapper = buildTestMapper();
 		testWrapper.setMapper(testMapper);
 		boolean isResetting = testDistinguishingTrace();
-		System.out.println("RST="+isResetting);
-	//	System.exit(0);
 		return isResetting;
 	}
 	

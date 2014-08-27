@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/***
+ * Provides trace state storing and fetching over a global static trace map. Traces are serialized and deserialized via separators.
+ */
 public class CacheManager {
 	private static final String SEP = "_";
 	private static final String SEP2 = " ";

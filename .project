@@ -26,4 +26,33 @@
 		<nature>net.sourceforge.metrics.nature</nature>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1409158829166</id>
+			<name></name>
+			<type>22</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-.gout*</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1409158829171</id>
+			<name></name>
+			<type>26</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-.git*</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1409158829177</id>
+			<name></name>
+			<type>22</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-.gout*</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

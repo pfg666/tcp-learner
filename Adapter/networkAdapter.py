@@ -95,25 +95,28 @@ class Adapter:
             input1 = self.receiveInput()
             seqNr = 0
             ackNr = 0
-            if input1 != "reset":
-                print "*****"
-                if input1 != "nil":
-                    seqNr = int(self.receiveInput())
-                    ackNr = int(self.receiveInput())
-                    print (" " +input1 + " " + str(seqNr) + " " + str(ackNr))
-                    response = sender.sendInput(input1, seqNr, ackNr);
-
-                if response is not None:
-                    print ' ' + response.serialize()
-                    self.sendOutput(response.serialize())
-                else:
-                    print "timeout"
-                    self.sendOutput("timeout")
-            else:
+            if input1 == "reset":
                 print "reset"
                 print "********** reset **********"
                 seqNr = int(self.receiveInput())
                 sender.sendValidReset(seqNr)
+            else:
+                if input1 == "exit":
+                    self.closeSockets()
+                else:
+                    print "*****"
+                    if input1 != "nil":
+                        seqNr = int(self.receiveInput())
+                        ackNr = int(self.receiveInput())
+                        print (" " +input1 + " " + str(seqNr) + " " + str(ackNr))
+                        response = sender.sendInput(input1, seqNr, ackNr);
+
+                    if response is not None:
+                        print ' ' + response.serialize()
+                        self.sendOutput(response.serialize())
+                    else:
+                        print "timeout"
+                        self.sendOutput("timeout")
 
     # sends a string to the learner, and simply adds a newline to denote the end of the string
     def sendOutput(self, outputString):

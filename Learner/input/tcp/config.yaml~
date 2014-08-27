@@ -5,11 +5,6 @@ learning:
     maxValue: 300
     preferFirst: true
 testing:
-    minTraceLength: 5
-    maxTraceLength: 5
+    minTraceLength: 10
+    maxTraceLength: 15
     maxNumTraces: 100
-tcp:
-    cacheFile: "cache.txt"
-    verbose: true
-    prebuildCache: false
-    oracle: u1310
