@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -14,13 +13,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONValue;
 
-import abslearning.exceptions.OutOfTimeException;
-
-import de.ls5.jlearn.interfaces.Word;
-
 import ru.yandex.lc.jbd.Dumper;
 import util.JsonWriter;
 import util.Time;
+import abslearning.exceptions.OutOfTimeException;
 
 //	String runtime_hms= runtime_hours + ":" + runtime_minutes + ":"  + runtime_seconds;
 //  statisticsFileStream.println("Total running time: "  + runtime_hms + " (h:m:s)");
