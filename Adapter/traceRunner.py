@@ -15,9 +15,12 @@ from argparser import *
 tracePath = "traces.txt" # the path to the file containing the trace to be executed
 jvmPath = "/usr/lib/jvm/jdk1.7.0_45/jre/lib/amd64/server/libjvm.so" # path to libjm.so for ubuntu or jvm.dll for windows
 learnerProjectBinPath = "-Djava.class.path=../NetworkSetup/bin" # path to the java learner setup binaries
-mapClass = "sut.mapper.tested.U1310Mapper"
-portNumberFile = "sn.txt" # used for always generating a new port number. The previously used port number is stored and the
-# next will be its increment.
+mapClass = "sut.mapper.tested.U1310Mapper" # mapper class used
+# mapper interface:
+#     processOutgoingRequest(string, int, int)
+#     processIncomingResponseComp()
+#     processIncomingTimeout()
+portNumberFile = "sn.txt" # used for generating a new port number by incrementing the old
 global mapper
 mapper= None
 global sender

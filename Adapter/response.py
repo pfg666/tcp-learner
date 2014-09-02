@@ -6,7 +6,7 @@ class Response(object):
     def serialize(self):
         return "NOT_IMPLEMENTED"
 
-
+# concrete responses are used if packets are returned
 class ConcreteResponse(Response):
     flags = ''
     ack = 0
@@ -22,6 +22,7 @@ class ConcreteResponse(Response):
         outputString = self.flags + " " + str(self.seq) + " " + str(self.ack)
         return outputString
 
+# timeouts are used if no packets are returned
 class Timeout(Response):
     def __init__(self):
         super(Timeout, self).__init__("TIMEOUT")
@@ -29,6 +30,7 @@ class Timeout(Response):
         outputString = "timeout"
         return  outputString
 
+# undefineds are used for malformed packets (not used currently) 
 class Undefined(Response):
     def __init__(self):
         super(Undefined, self).__init__("UNDEFINED")

@@ -1,4 +1,4 @@
-__author__ = 'ramon, paul'
+__author__ = 'paul,ramon'
 import socket
 import time
 import sys
@@ -8,19 +8,14 @@ from scapy.all import *
 from response import *
 from tracker import Tracker, InterfaceType
 
+# variables used to retain last sequence/acknowledgment sent
 seqVar = 0
 ackVar = 0
-ethController = "50:46:5D:DE:44:C7"
-#ethController = "08:00:27:26:8D:6B"
-ethServerIp = "131.174.142.204"
-#ethServerIp = "131.174.142.157"
-wController = "DC:85:DE:8D:55:58"
-vboxController = "08:00:27:00:F8:FD"
-vboxServerIp = "192.168.56.1"
 
+# the sender sends packets with configurable parameters to a server and retrieves responses
 class Sender:
     # information of the SUT
-    def __init__(self, serverMAC=ethController, serverIP = ethServerIp, serverPort = 7991,
+    def __init__(self, serverMAC, serverIP, serverPort = 7991,
                  networkInterface="eth1", networkInterfaceType=InterfaceType.Ethernet, networkPort=15000, networkPortMinimum=20000,
                  networkPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
                  isVerbose=0, waitTime=0.006, resetMechanism=0):
@@ -49,14 +44,8 @@ class Sender:
         self.networkPort = self.getNextPort()
         print("next local port: " + str(self.networkPort)+"\n")
         return self.networkPort
-        # print("previous local port: " + str(self.networkPort))
-        # if self.networkPort == self.networkPortMaximum or self.networkPort < self.networkPortMinimum:
-        #     self.networkPort = self.networkPortMinimum
-        # else:
-        #     self.networkPort = self.networkPort + 1
-        # print("next local port: " + str(self.networkPort)+"\n")
 
-    # gets a new port number, an increment of the old. Replaces it in the portNumber file.
+    # gets a new port number, an increment of the old. Write new number over the old number in the portNumber file.
     def getNextPort(self):
         f = open(self.portNumberFile,"a+")
         f.seek(0)
@@ -72,8 +61,10 @@ class Sender:
         return networkPort
 
     # send a packet onto the network with the given parameters, and return the response packet
-    # uses two scapy to create and send packets, while responses are gathered first through scapy's response, should
-    # scapy return None, then a tracker is used to retrieve whatever packets scapy has missed (in case it did)
+    # uses scapy to create and send packets
+    # response packets are gathered first through scapy's response
+    # should scapy return None, then a tracker is used to retrieve whatever packets scapy has missed (in case it did)
+    # TODO Why does scapy miss some packets?
     def sendPacket(self,flagsSet, seqNr, ackNr):
         captureMethod = ""
         if self.useTracking == True :
@@ -101,7 +92,7 @@ class Sender:
         else:
             response = None
             if self.useTracking == True:
-                # timeout case, return the response (if caught) by the tracker and missed by scappy
+                # timeout case, return the response (if caught) by the tracker and missed by scapy
                 time.sleep(self.waitTime)
                 response = self.tracker.getLastResponse(self.networkPort)
                 if type(response) is not Timeout:
@@ -114,7 +105,7 @@ class Sender:
             self.tracker.clearLastResponse()
         return response
 
-    # transforms a scappy TCP response packet into an abstract response
+    # transforms a scapy TCP response packet into an abstract response
     def scapyResponseParse(self, scapyResponse):
         flags = scapyResponse[TCP].flags
         seq = scapyResponse[TCP].seq
@@ -145,7 +136,7 @@ class Sender:
         if self.checkForFlag(x, 4):
             result = result + "A"
         return result
-    #
+
     # tells whether tracking is still active
     def isTracking(self):
         return self.useTracking and (not self.tracker.isStopped())
@@ -206,6 +197,7 @@ class Sender:
         if self.useTracking == True:
             self.tracker.clearLastResponse()
 
+# example on how to run the sender
 if __name__ == "__main__":
     sender = Sender(useTracking=True, isVerbose=0, networkPortMinimum=20000, waitTime=0.1)
     seq = 50
@@ -213,8 +205,4 @@ if __name__ == "__main__":
     sender.sendInput("S", seq, 1) #SA svar seq+1 | SYN_REC
     sender.sendInput("A", seq + 1, seqVar + 1) #A svar+1 seq+2 | CLOSE_WAIT
     sender.sendInput("A", seq - 1, seqVar + 1)
-    #sender.sendInput("AP", seq+1, seqVar+1)
-   # sender.sendInput("AP", seq+3, seqVar+1)
-   # sender.sendInput("AP", seq+5, seqVar+1)
-   # sender.sendInput("AP", seq+7, seqVar+1)
     sender.stopTracking()

@@ -1,4 +1,4 @@
-__author__ = 'paul'
+__author__ = 'paul,ramon'
 import signal
 from argparser import ArgumentParser
 from sender import Sender

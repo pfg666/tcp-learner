@@ -1,3 +1,4 @@
+__author__ = 'paul,ramon'
 import socket
 from select import select
 import time
@@ -12,7 +13,10 @@ from tracker import InterfaceType
 global data
 data = ""
 
-
+# The adapter exposes the sender functionality over sockets.
+# It  reads packet strings from a socket and sends them to the sender
+#     serializes responses retrieved by the sender and writes them back to the socket
+# Currently, the adapter 
 class Adapter:
     mapperSocket = None
     serverSocket = None
@@ -35,7 +39,9 @@ class Adapter:
         (clientSocket, address) = self.serverSocket.accept()
         print "python server: address connected: " + str(address)
         self.mapperSocket = clientSocket
-
+        
+    # closes all open sockets
+    # TODO doesn't work all the time 
     def closeSockets(self):
         print self.serverSocket
         print self.mapperSocket
@@ -63,7 +69,8 @@ class Adapter:
             sys.exit(1)
         except KeyboardInterrupt:
             sys.exit(1)
-    # gets a string from the socket, up until a space/newline
+            
+    # reads string from socket until it reads a space/newline
     def receiveInput(self):
         inputstring = '';
         finished = False
@@ -87,7 +94,7 @@ class Adapter:
                     inputstring = inputstring + c
         return inputstring
 
-    # accept input from the learner, and process it. Sends network packets, looks at the
+    # accepts input from the learner, and process it. Sends network packets, looks at the
     # response, extracts the relevant parameters and sends them back to the learner
     def handleInput(self, sender):
         self.sender = sender
@@ -121,7 +128,8 @@ class Adapter:
     # sends a string to the learner, and simply adds a newline to denote the end of the string
     def sendOutput(self, outputString):
         self.mapperSocket.send(outputString + "\n")
-
+    
+    # start adapter by list
     def startAdapter(self, sender):
         print "listening on "+str(self.localCommunicationPort)
         origSigInt = signal.getsignal(signal.SIGINT)

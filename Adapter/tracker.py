@@ -5,7 +5,7 @@ from response import *
 import threading
 import sys
 
-
+# class for interfaces Only ethernet works thus far
 class InterfaceType:
     Wireless, Ethernet = range(0,2)
     @staticmethod
@@ -53,7 +53,7 @@ class Tracker(threading.Thread):
     # This is method is called periodically by pcapy
     def callback(self,hdr,data):
         if self.isStopped() == True:
-            print("Tracker was stopped at ")
+            print("Tracker was stopped")
 #            sys.exit(1)
         else:
             packet=self.decoder.decode(data)
@@ -89,9 +89,12 @@ class Tracker(threading.Thread):
             response = ConcreteResponse(flags, tcp_syn, tcp_ack)
         return response
     
+    # clears all last responses for all ports (keep that in mind if you have responses on several ports)
+    # this is done because when learning, we only care about one port
     def clearLastResponse(self):
         self.lastResponses.clear()
     
+    # fetches the last response from an active port. If no response was sent, then it returns Timeout
     def getLastResponse(self, localPort):
         lastResponse = self.lastResponses.get(localPort)
         if lastResponse is None:
