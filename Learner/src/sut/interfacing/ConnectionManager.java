@@ -4,6 +4,9 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages connections wrappers, so that only one wrapper is used for each port. Also adds a shutdown hook.
+ */
 public class ConnectionManager {
 	
 	private static Map<Integer, ConnectionWrapper> socketMap = new HashMap<Integer, ConnectionWrapper>();

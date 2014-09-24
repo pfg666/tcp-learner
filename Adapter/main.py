@@ -25,6 +25,7 @@ if __name__ == "__main__":
     argumentParser = ArgumentParser()
     argumentParser.parseArguments()
     sender = argumentParser.buildSender()
+    print "sender setup"
     print sender.__dict__
     adapter = argumentParser.buildAdapter()
     adapter.startAdapter(sender)

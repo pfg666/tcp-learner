@@ -8,10 +8,9 @@ import argparse
 import signal
 from scapy.all import *
 from sender import Sender
-from tracker import InterfaceType
+import interfaceType
 
-global data
-data = ""
+
 
 # The adapter exposes the sender functionality over sockets.
 # It  reads packet strings from a socket and sends them to the sender
@@ -72,6 +71,7 @@ class Adapter:
             
     # reads string from socket until it reads a space/newline
     def receiveInput(self):
+        data = None
         inputstring = '';
         finished = False
         while not finished:
@@ -86,7 +86,6 @@ class Adapter:
                     sys.exit()
             else:
                 c = data[0]
-                global data
                 data = data[1:]
                 if c == '\n' or c == ' ':
                     finished = True

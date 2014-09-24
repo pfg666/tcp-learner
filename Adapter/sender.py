@@ -4,9 +4,10 @@ import time
 import sys
 import subprocess
 import threading
+import platform
+from interfaceType import InterfaceType
 from scapy.all import *
 from response import *
-from tracker import Tracker, InterfaceType
 
 # variables used to retain last sequence/acknowledgment sent
 seqVar = 0
@@ -33,8 +34,13 @@ class Sender:
         self.isVerbose = isVerbose
         self.useTracking = useTracking
         if self.useTracking == True:
-            self.tracker = Tracker(networkInterface, self.serverPort, self.serverIP)
-            self.tracker.start()
+            if platform.system() != "Linux":
+                print("Tracker is not compatible with Windows can only function on Linux")
+                self.useTracking = False
+            else:
+                from tracker import Tracker, InterfaceType
+                self.tracker = Tracker(networkInterface, self.serverPort, self.serverIP)
+                self.tracker.start()
         else:
             self.tracker = None
 
@@ -85,7 +91,50 @@ class Sender:
             scapyResponse = sr1(p, timeout=self.waitTime, verbose=self.isVerbose)
         else:
             p = pIP / pTCP #/ Raw(load="cccc")
-            scapyResponse = sr1(p, timeout = self.waitTime, verbose = self.isVerbose)
+            print "sending"
+            scapyResponse = sr1(p, timeout = self.waitTime, verbose = 1)
+        if scapyResponse is not None:
+            response = self.scapyResponseParse(scapyResponse)
+            captureMethod = "scapy"
+        else:
+            if self.useTracking == True:
+                # timeout case, return the response (if caught) by the tracker and missed by scapy
+                time.sleep(self.waitTime)
+                response = self.tracker.getLastResponse(self.networkPort)
+                if type(response) is not Timeout:
+                    captureMethod = "tracker"
+            else:
+                response = Timeout()
+
+        if captureMethod != "":
+            captureMethod = "("+captureMethod+")"
+        print response.serialize() + "  "+captureMethod
+        if self.useTracking == True:
+            self.tracker.clearLastResponse()
+        return response
+    
+    # function that creates packet from data strings/integers
+    def createPacket(self, tcpFlagsSet, seqNr, ackNr, 
+                     ipFlagsSet="DF", data="cc"):
+        pIP = IP(dst=self.serverIP, flags=ipFlagsSet)
+        pTCP = TCP(sport=self.networkPort,
+        dport=self.serverPort,
+        seq=seqNr,
+        ack=ackNr,
+        flags=tcpFlagsSet)
+        if "P" in flagsSet or "p" in flagsSet:
+            p = pIP / pTCP / Raw(load="cc")
+        else:
+            p = pIP / pTCP 
+        return p
+    
+    # sends packets and ensures both reception tools are used so as to retrieve the response when such response is given
+    def sendAndRetrieveResponse(self, packet):
+        # we need first to clear the last response cached in the tracker 
+        if self.useTracking == True :
+            self.tracker.clearLastResponse()
+        # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
+        scapyResponse = sr1(packet, timeout=self.waitTime, verbose=self.isVerbose)
         if scapyResponse is not None:
             response = self.scapyResponseParse(scapyResponse)
             captureMethod = "scapy"
@@ -104,14 +153,19 @@ class Sender:
         if self.useTracking == True:
             self.tracker.clearLastResponse()
         return response
-
+    
     # transforms a scapy TCP response packet into an abstract response
     def scapyResponseParse(self, scapyResponse):
         flags = scapyResponse[TCP].flags
         seq = scapyResponse[TCP].seq
         ack = scapyResponse[TCP].ack
-        response = ConcreteResponse(self.intToFlags(flags), seq, ack)
-        return response
+        concreteResponse = ConcreteResponse(self.intToFlags(flags), seq, ack)
+        self.bijectionCheck(scapyResponse, concreteResponse)
+        return concreteResponse
+    
+    # check if we can reproduce the response packet from the received response 
+    def bijectionCheck(self, scapyResponse, concreteResponse):
+        return True
 
     # check whether there is a 1 at the given bit-position of the integer
     def checkForFlag(self, x, flagPosition):
@@ -158,6 +212,7 @@ class Sender:
         # used every iteration, otherwise the entry somehow
         # w disappears after a while
         conf.netcache.arp_cache[self.serverIP] = self.serverMAC
+        conf.sniff_promisc=False
 
         response = None
         timeBefore = time.time()
@@ -199,10 +254,10 @@ class Sender:
 
 # example on how to run the sender
 if __name__ == "__main__":
-    sender = Sender(useTracking=True, isVerbose=0, networkPortMinimum=20000, waitTime=0.1)
+    print "main test"
+    sender = Sender(serverMAC="08:00:27:23:AA:AF", serverIP="131.174.142.227", serverPort=8000, useTracking=False, isVerbose=0, networkPortMinimum=20000, waitTime=0.5)
     seq = 50
     sender.refreshNetworkPort()
     sender.sendInput("S", seq, 1) #SA svar seq+1 | SYN_REC
     sender.sendInput("A", seq + 1, seqVar + 1) #A svar+1 seq+2 | CLOSE_WAIT
     sender.sendInput("A", seq - 1, seqVar + 1)
-    sender.stopTracking()

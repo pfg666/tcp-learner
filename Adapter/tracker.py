@@ -1,22 +1,10 @@
 from pcapy import open_live
 from impacket.ImpactDecoder import EthDecoder,Dot11WPA2Decoder
 from impacket.ImpactPacket import IP, TCP, UDP, ICMP
+import interfaceType
 from response import *
 import threading
 import sys
-
-# class for interfaces Only ethernet works thus far
-class InterfaceType:
-    Wireless, Ethernet = range(0,2)
-    @staticmethod
-    def getDecoder(interfaceType):
-        if interfaceType == InterfaceType.Ethernet:
-            return EthDecoder()
-        else:
-            return Dot11WPA2Decoder()
-            # if interfaceType == InterfaceType.Wireless:
-            #     print "In Tracker.py: Wireless not yet supported, sorry"
-            #     exit(0)
 
 # Tool that monitors communication of a server port and interface, built on the "pcapy" framework.
 # It always stores the last response received from the server. The sender tool, in  case scapy did not receive
@@ -36,13 +24,22 @@ class Tracker(threading.Thread):
         super(Tracker, self).__init__()
         self.interface = interface
         self.serverPort = serverPort
-        self.decoder = InterfaceType.getDecoder(interfaceType) # Wireless not yet supported
+        self.decoder = self.getDecoder(interfaceType) # Wireless not yet supported
         self._stop = threading.Event()
         self.daemon = True
         self.readTimeout = readTimeout
         self.serverIp = serverIp
         print "stopping state"
         print self._stop.isSet()
+        
+    def getDecoder(self, interfaceType):
+        if interfaceType == InterfaceType.Ethernet:
+            return EthDecoder()
+        else:
+            return Dot11WPA2Decoder()
+            # if interfaceType == InterfaceType.Wireless:
+            #     print "In Tracker.py: Wireless not yet supported, sorry"
+            #     exit(0)
 
     def stop(self):
         self._stop.set()

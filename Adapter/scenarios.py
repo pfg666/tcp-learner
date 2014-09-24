@@ -260,3 +260,4 @@ def scenario101():
         sender.sendInput("A", seq+1, seqVar+1)
         sender.sendInput("S", seq-100, seqVar-100)
     #sender.sendInput("SA", seq+100, seqVar+1)
+

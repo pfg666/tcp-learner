@@ -1,8 +1,14 @@
 __author__ = 'paul'
-import argparse
+try:
+    import argparse
+    has_argparse = True
+except ImportError:
+    print 'argparse is not available, will use command line interface only'
+    has_argparse = False
+    
 import ConfigParser
 import sys
-from tracker import InterfaceType
+import interfaceType
 from sender import Sender
 from networkAdapter import Adapter
 
@@ -64,9 +70,13 @@ class ArgumentParser:
         return ns
 
     def parseArguments(self):
+        global has_argparse
         ns = self.parseCmdArguments(sys.argv[1:])
         cmdValues = ns.__dict__
         if ns.useConfig == True:
+            if has_argparse == True:
+                print "cannot use the configuration parser because the \"argparse\" module couldn't be located"
+                exit()
             print "parsing config"
             configValues = self.parseConfigArguments(ns.configFile, ns.configSection)
             cmdValues.update(configValues)
