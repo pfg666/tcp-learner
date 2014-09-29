@@ -1,15 +1,15 @@
 package sut.interfacing;
 
-import sut.mapper.Symbol;
-import sut.mapper.TCPMapper;
+import sut.interfacing.tcp.Symbol;
+import sut.interfacing.tcp.TCPMapper;
 
 public class MapperSocketWrapper {
-	private ConnectionWrapper socket;
+	private SocketWrapper socket;
 	
 	private TCPMapper mapper;
 
 	public MapperSocketWrapper(int portNumber) {
-		socket = ConnectionManager.getConnection(portNumber);
+		socket = SocketManager.newSocket(portNumber);
 	}
 	
 	public void setMapper(TCPMapper mapper) {
@@ -46,8 +46,6 @@ public class MapperSocketWrapper {
 	 * called by the learner to reset the automaton
 	 */
 	public void sendReset() {  
-		long seq = mapper.getNextValidSeq();
-		socket.sendOutput("reset "+seq);
 		mapper.setDefault();
 	}
 
@@ -77,8 +75,8 @@ public class MapperSocketWrapper {
 		if(Symbol.UNDEFINED.equals(concreteRequest)) {
 			concreteResponse =  Symbol.UNDEFINED.toString();
 		} else {
-			socket.sendOutput(concreteRequest);
-			concreteResponse = socket.receiveInput();
+			socket.writeInput(concreteRequest);
+			concreteResponse = socket.readOutput();
 		}
 		return concreteResponse;
 	}

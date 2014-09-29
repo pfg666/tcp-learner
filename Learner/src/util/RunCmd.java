@@ -10,7 +10,6 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-import abslearning.learner.Main;
 
 public class RunCmd {
 	private static final Logger logger = Logger.getLogger(RunCmd.class);

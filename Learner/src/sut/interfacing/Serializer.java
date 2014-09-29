@@ -1,9 +1,7 @@
 package sut.interfacing;
 
-import sut.interfacing.io.AbstractRequest;
-import sut.interfacing.io.ConcreteResponse;
-import sut.mapper.FlagSet;
-import sut.mapper.Symbol;
+import sut.interfacing.tcp.FlagSet;
+import sut.interfacing.tcp.Symbol;
 
 public class Serializer {
 
@@ -61,26 +59,6 @@ public class Serializer {
 		String ackString = ackValidity.name();
 		String result = abstractMessageToString(flagInitials, seqString, ackString);
 		return result;
-	}
-	
-	public static AbstractRequest stringToAbstractRequest(String abstractRequestString) {
-		String[] inputValues = abstractRequestString.split("\\(|,|\\)"); 
-		FlagSet flags = new FlagSet(inputValues[0]); 
-		Symbol abstractSeq = Symbol.toSymbol(inputValues[1]);
-		Symbol abstractAck = Symbol.toSymbol(inputValues[2]);
-		return new AbstractRequest(flags, abstractSeq, abstractAck);
-	}
-	
-	public static ConcreteResponse stringToConcreteResponse(String concreteResponseString) {
-		String[] inputValues = concreteResponseString.split(" ");
-		FlagSet flags = new FlagSet(inputValues[0].toCharArray());
-		long seqReceived = Long.parseLong(inputValues[1]);
-		long ackReceived = Long.parseLong(inputValues[2]);
-		return new ConcreteResponse(flags, seqReceived, ackReceived);
-	}
-	
-	public static String concreteResponseToString(ConcreteResponse response) {
-		return concreteMessageToString(response.flags, response.seqNumber, response.ackNumber);
 	}
 	
 	public static String charToFlag(char c) {

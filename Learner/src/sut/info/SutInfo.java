@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import learner.SutInfoYaml;
+import learner.TCPConfig;
+
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -16,13 +19,11 @@ import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.shared.AlphabetImpl;
 import de.ls5.jlearn.shared.SymbolImpl;
 
-import sut.interfacing.SutSocketWrapper;
+import sut.interfacing.tcp.TCPSutWrapper;
 import util.ExceptionAdapter;
 import util.Filesystem;
 
 import sut.info.ActionSignature;
-import abslearning.learner.SutInfoYaml;
-import abslearning.learner.TCPConfig;
 
 public class SutInfo {
 	public static String name;
@@ -165,7 +166,7 @@ public class SutInfo {
 
 		SutInterface sutWrapper = null;
 		if (SutInfo.sutWrapperClassName.equals("SutSocketWrapper")) {
-			sutWrapper = new SutSocketWrapper(tcpConfig);
+			sutWrapper = new TCPSutWrapper(tcpConfig);
 		} else {
 			System.err.println("\nAbort:\n  Invalid sut wrapper class : \""
 					+ SutInfo.sutWrapperClassName + "\"");
