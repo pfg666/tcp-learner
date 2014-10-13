@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import de.ls5.jlearn.interfaces.Alphabet;
+import de.ls5.jlearn.shared.AlphabetImpl;
+import de.ls5.jlearn.shared.SymbolImpl;
+
 
 public class SutInfo {
     private static int minValue = 0;
@@ -71,6 +75,30 @@ public class SutInfo {
         }
         return null;
     }
+    
+
+	public static Alphabet generateInputAlphabet() {
+		Alphabet result = new AlphabetImpl();
+
+		for (ActionSignature sig : SutInfo.getInputSignatures()) {
+			List<String> currentAlpha = new ArrayList<String>();
+			currentAlpha.add(sig.getMethodName());
+			for (String currentSymbol : currentAlpha) {
+				result.addSymbol(new SymbolImpl(currentSymbol));
+			}
+		}
+		return result;
+	}
+
+	public static Alphabet generateOutputAlphabet() {
+		Alphabet result = new AlphabetImpl();
+
+		for (ActionSignature sig : SutInfo.getOutputSignatures()) {
+			result.addSymbol(new SymbolImpl(sig.getMethodName()));
+		}
+		return result;
+	}
+
 
     public static void addOutputSignature(String methodName, List < String > parameters) {
         SutInfo.outputSignatures.add(new ActionSignature(methodName, parameters));

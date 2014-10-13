@@ -11,5 +11,3 @@ testing:
 tcp:
     cacheFile: "cache.txt"
     verbose: true
-    prebuildCache: false
-    oracle: u1310

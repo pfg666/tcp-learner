@@ -4,7 +4,6 @@ import util.InputAction;
 import util.OutputAction;
 
 // SutWrapper which connects the learner directly to the i/o sut. 
-// Used for learning CandyMachine and BoundedRetransmissionProtocol systems 
 public class SimpleSutWrapper implements SutWrapper {
 	private SocketWrapper socket;
 	

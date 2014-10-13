@@ -1,78 +1,83 @@
 package learner;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.PrintStream;
-import java.util.Random;
-
-import de.ls5.jlearn.abstractclasses.LearningException;
-import de.ls5.jlearn.algorithms.packs.ObservationPack;
-import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
-
-import de.ls5.jlearn.interfaces.Automaton;
-import de.ls5.jlearn.interfaces.EquivalenceOracleOutput;
-import de.ls5.jlearn.interfaces.Learner;
-import de.ls5.jlearn.logging.LearnLog;
-import de.ls5.jlearn.logging.LogLevel;
-import de.ls5.jlearn.logging.PrintStreamLoggingAppender;
-import de.ls5.jlearn.util.DotUtil;
-import de.ls5.jlearn.interfaces.State;
-import java.util.LinkedList;
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.Random;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import sutInterface.SimpleSutWrapper;
 import sutInterface.SutInfo;
 import sutInterface.SutWrapper;
+import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
+import sutInterface.tcp.init.AdaptiveTCPOracleWrapper;
+import sutInterface.tcp.init.CachedInitOracle;
+import sutInterface.tcp.init.FunctionInitOracle;
+import sutInterface.tcp.init.InitCacheManager;
+import sutInterface.tcp.init.InitOracle;
 import util.RunCmd;
+import de.ls5.jlearn.abstractclasses.LearningException;
+import de.ls5.jlearn.algorithms.packs.ObservationPack;
+import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
+import de.ls5.jlearn.interfaces.Automaton;
+import de.ls5.jlearn.interfaces.EquivalenceOracleOutput;
+import de.ls5.jlearn.interfaces.Learner;
+import de.ls5.jlearn.interfaces.Oracle;
+import de.ls5.jlearn.interfaces.State;
+import de.ls5.jlearn.logging.LearnLog;
+import de.ls5.jlearn.logging.LogLevel;
+import de.ls5.jlearn.logging.PrintStreamLoggingAppender;
+import de.ls5.jlearn.util.DotUtil;
 
 public class Main {
 	private static File sutConfigFile = null;
-	private static int sutPort;
 	private static int maxNumTraces;
 	private static int minTraceLength;
 	private static int maxTraceLength;
+	private static LearningParams learning;
+	private static TCPParams tcp;
 	private static long seed = System.currentTimeMillis();
 	private static String seedStr = Long.toString(seed);
 	public static PrintStream stdout = System.out;
+	public static PrintStream stderr = System.err;
 
 	public static void main(String[] args) throws FileNotFoundException {
 
 		handleArgs(args);
 
-		// output learned state machine as dot and pdf file :
-		File dotfile = new File("learnresult.dot");
-		File pdffile = new File("learnresult.pdf");
-
 		stdout.println("Start Learning");
 
-		InputStream input = new FileInputStream(sutConfigFile);
+		InputStream configInput = new FileInputStream(sutConfigFile);
 		Yaml yaml = new Yaml(new Constructor(Config.class));
-		Config config = (Config) yaml.load(input);
+		Config config = (Config) yaml.load(configInput);
 
-		// read in config params for learner
-		maxNumTraces = config.configParams.maxNumTraces;
-		minTraceLength = config.configParams.minTraceLength;
-		maxTraceLength = config.configParams.maxTraceLength;
-		seed = config.configParams.seed;
-		sutPort = config.configParams.sutPort;
-		if(sutPort == 0) {
-			System.err.println("Warning: the sut port is 0 / hasn't been given");
-		}
+		File sutInterfaceFile = new File(sutConfigFile
+				.getParentFile().getAbsolutePath()
+				+ File.separator 
+				+ config.learningParams.sutInterface);
+		InputStream sutInterfaceInput = new FileInputStream(sutInterfaceFile);
+		yaml = new Yaml(new Constructor(SutInterface.class));
+		SutInterface sutInterface = (SutInterface) yaml.load(sutInterfaceInput);
+	
+		// read/disp config params for learner
+		learning = config.learningParams;
+		learning.printParams(stdout);
 
-		// read in information give about sut
-		SutInfo.setMinValue(config.configParams.min_value);
-		SutInfo.setMaxValue(config.configParams.max_value);
-		SutInfo.setInputSignatures(config.inputInterfaces);
-		SutInfo.setOutputSignatures(config.outputInterfaces);
+		// read sut interface information
+		SutInfo.setMinValue(learning.minValue);
+		SutInfo.setMaxValue(learning.maxValue);
+
+		SutInfo.setInputSignatures(sutInterface.inputInterfaces);
+		SutInfo.setOutputSignatures(sutInterface.outputInterfaces);
 
 		LearnLog.addAppender(new PrintStreamLoggingAppender(LogLevel.INFO,
 				System.out));
@@ -81,34 +86,45 @@ public class Main {
 		System.setOut(fileStream);
 		PrintStream statisticsFileStream = new PrintStream(
 				new FileOutputStream("statistics.txt", false));
-
-		seedStr = Long.toString(seed) + " - Set statically";
-
-		System.out.println("SUT port: " + sutPort);
-		System.out.println("SUT desc: " + (config.configParams.learn_tcp?"tcp":"mealy machine sut"));
-		System.out.println("Maximum number of traces: " + maxNumTraces);
-		System.out.println("Minimum length of traces: " + minTraceLength);
-		System.out.println("Maximim length of traces: " + maxTraceLength);
-		System.out.println("Seed: " + seedStr);
-		System.exit(0);
-		Random random = new Random(seed);
 		
-		// build the sut wrapper (either for simple systems or for tcp)
-		SutWrapper sutWrapper = null;
-		if(config.configParams.learn_tcp == true) {
-			sutWrapper = new TCPSutWrapper(sutPort);
-		} else {
-			sutWrapper = new SimpleSutWrapper(sutPort);
-		}
+		Random random = new Random(seed);
 
-		EquivalenceOracle mapper = new EquivalenceOracle(sutWrapper);
-		MembershipOracle memberOracle = new MembershipOracle(sutWrapper);
-		mapper.setMembershipOracle(memberOracle);
-		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle;
+		// read/disp TCP config
+		tcp = config.tcpParams;
+		tcp.printParams(stdout);
+		
+		// setup tcp oracles/wrappers
+		SutWrapper sutWrapper = null;
+		Oracle eqOracleRunner = null;
+		Oracle memOracleRunner = null;
+		
+		// in a normal init-oracle ("functional") TCP setup, we use the conventional eq/mem oracles
+		if(! "adaptive".equalsIgnoreCase(tcp.oracle)) {
+			eqOracleRunner = new EquivalenceOracle(sutWrapper);
+			memOracleRunner = new MembershipOracle(sutWrapper);
+			InitOracle initOracle = new FunctionInitOracle();
+			TCPMapper tcpMapper = new TCPMapper(initOracle);
+			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper);
+			
+		} 
+		
+		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class
+		// this class, along with passing regular queries, also applies the SYN extension to determine the init-status
+		// it updates the init status in a cache
+		// a CachedInitOracle will then read from this cache and is used by the mapper instead of the FunctionInitOracle
+		else {
+			eqOracleRunner = new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper));
+			memOracleRunner = new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper));
+			InitOracle initOracle = new CachedInitOracle(new InitCacheManager());
+			TCPMapper tcpMapper = new TCPMapper(initOracle);
+			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper);
+		}
+		
 		Learner learner = null;
 		boolean done = false;
-		
+
 		// variables used for stats
+		Statistics stats = Statistics.getStats();
 		int hypCounter = 0;
 		int refinementCounter = 0;
 		int memQueries = 0;
@@ -122,21 +138,21 @@ public class Main {
 		long endtmp;
 
 		while (!done) {
-			eqOracle = new RandomWalkEquivalenceOracle(maxNumTraces,
+			de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = new RandomWalkEquivalenceOracle(maxNumTraces,
 					minTraceLength, maxTraceLength);
-			eqOracle.setOracle(mapper);
+			eqOracle.setOracle(eqOracleRunner);
 			((RandomWalkEquivalenceOracle) eqOracle).setRandom(random);
 
 			learner = new ObservationPack();
-			learner.setOracle(memberOracle);
+			learner.setOracle(memOracleRunner);
 
-			learner.setAlphabet(mapper.generateInputAlphabet());
-			mapper.generateOutputAlphabet();
+			learner.setAlphabet(SutInfo.generateInputAlphabet());
+			SutInfo.generateOutputAlphabet();
 
 			try {
 				while (!done) {
-					System.out.println("starting learning");
-					System.out.println("");
+					stdout.println("starting learning");
+					stdout.println("");
 					System.out.flush();
 					System.err.flush();
 
@@ -144,9 +160,8 @@ public class Main {
 					learner.learn();
 					System.out.flush();
 					System.err.flush();
-					System.out.println("done learning");
+					stdout.println("done learning");
 
-					memQueries = memberOracle.getNumMembQueries();
 					statisticsFileStream.println("Membership queries: "
 							+ memQueries);
 					totalMemQueries += memQueries;
@@ -163,7 +178,7 @@ public class Main {
 					DotUtil.writeDot(hyp, new File("tmp-learnresult"
 							+ hypCounter++ + ".dot"));
 
-					System.out.println("starting equivalence query");
+					stdout.println("starting equivalence query");
 					System.out.flush();
 					System.err.flush();
 					// search for counterexample
@@ -171,11 +186,11 @@ public class Main {
 							.findCounterExample(hyp);
 					System.out.flush();
 					System.err.flush();
-					System.out.println("done equivalence query");
+					stdout.println("done equivalence query");
 					statisticsFileStream
 							.println("Membership queries in Equivalence query: "
-									+ mapper.getNumEquivQueries());
-					totalEquivQueries += mapper.getNumEquivQueries();
+									+ stats.numMembQueries);
+					totalEquivQueries += stats.numEquivQueries;
 					endtmp = System.currentTimeMillis();
 					statisticsFileStream
 							.println("Running time of equivalence query: "
@@ -189,7 +204,7 @@ public class Main {
 						continue;
 					}
 					statisticsFileStream.println("Sending CE to LearnLib.");
-					System.out.println("Counter Example: "
+					stdout.println("Counter Example: "
 							+ o.getCounterExample().toString());
 					System.out.flush();
 					System.err.flush();
@@ -201,13 +216,13 @@ public class Main {
 					System.err.flush();
 				}
 			} catch (LearningException ex) {
-				System.out.println("LearningException ex in Main!");
+				stdout.println("LearningException ex in Main!");
 				ex.printStackTrace();
 			} catch (Exception ex) {
 				statisticsFileStream.println("Exception!");
-				System.out.println("Exception!");
-				System.out.println("Seed: " + seedStr);
-				System.err.println("Seed: " + seedStr);
+				stdout.println("Exception!");
+				stdout.println("Seed: " + seedStr);
+				stderr.println("Seed: " + seedStr);
 				ex.printStackTrace();
 				System.exit(-1);
 			}
@@ -232,10 +247,10 @@ public class Main {
 						+ totalEquivQueries);
 
 		// final output to out.txt
-		System.out.println("Seed: " + seedStr);
-		System.err.println("Seed: " + seedStr);
-		System.out.println("Done.");
-		System.err.println("Successful run.");
+		stdout.println("Seed: " + seedStr);
+		stderr.println("Seed: " + seedStr);
+		stdout.println("Done.");
+		stderr.println("Successful run.");
 
 		// output needed for equivalence checking
 		// - learnresult.dot : learned state machine
@@ -256,8 +271,17 @@ public class Main {
 		LinkedList<State> highlights = new LinkedList<State>();
 		highlights.add(startState);
 		BufferedWriter out = null;
+		
+		
+		// output learned state machine as dot and pdf file :
+		File outputFolder = new File("output"+File.separator + String.valueOf(seed));
+		outputFolder.mkdirs();
+		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
+		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
+
+		
 		try {
-			out = new BufferedWriter(new FileWriter(dotfile));
+			out = new BufferedWriter(new FileWriter(dotFile));
 
 			DotUtil.writeDot(learnedModel, out, learnedModel.getAlphabet()
 					.size(), highlights, "");
@@ -275,12 +299,12 @@ public class Main {
 		}
 
 		// write pdf
-		DotUtil.invokeDot(dotfile, "pdf", pdffile);
+		DotUtil.invokeDot(dotFile, "pdf", pdfFile);
 
 		RunCmd.runCmd("python learnlib_dot2jtorx_aut.py learnresult.dot",
 				stdout, false);
 
-		System.err.println("Learner Finished!");
+		stderr.println("Learner Finished!");
 
 		// you can uncomment this if you want some bips to notify you when
 		// learning is done :)
@@ -288,27 +312,20 @@ public class Main {
 	}
 
 	private static void handleArgs(String[] args) {
-		if (args.length != 2) {
-			System.err.println("Use: java Main --sut-config config_file");
+		if (args.length == 0) {
+			stderr.println("Use: java Main config_file");
 			System.exit(-1);
 		}
-		if ("--sut-config".equals(args[0])) {
-			if (1 == args.length) {
-				System.err.println("Missing argument for --sut-config.");
-				printUsage();
-				System.exit(-1);
-			}
-			sutConfigFile = new File(args[1]);
-			if (sutConfigFile.exists() == false) {
-				System.err.println("The sut config file " + args[1]
-						+ " does not exist");
-				System.exit(-1);
-			}
+		sutConfigFile = new File(args[0]);
+		if (sutConfigFile.exists() == false) {
+			stderr.println("The sut config file " + args[0]
+					+ " does not exist");
+			System.exit(-1);
 		}
 	}
 
 	public static void printUsage() {
 		System.out
-				.println(" --sut-config  config_file     - .yaml config file describing the sut/learning.");
+				.println(" config_file     - .yaml config file describing the sut/learning.");
 	}
 }

@@ -2,7 +2,6 @@ package sutInterface.tcp;
 
 import sutInterface.SocketWrapper;
 import sutInterface.SutWrapper;
-import sutInterface.tcp.init.FunctionInitOracle;
 import util.InputAction;
 import util.OutputAction;
 
@@ -13,9 +12,9 @@ public class TCPSutWrapper implements SutWrapper{
 	private SocketWrapper socket;
 	private TCPMapper mapper;
 
-	public TCPSutWrapper(int tcpServerPort) {
-		socket = new SocketWrapper(tcpServerPort);
-		mapper = new TCPMapper(new FunctionInitOracle());
+	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
+		this.socket = new SocketWrapper(tcpServerPort);
+		this.mapper = mapper;
 	}
 
 	public void setMapper(TCPMapper mapper) {

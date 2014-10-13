@@ -1,4 +1,4 @@
-package tcp.learner;
+package sutInterface.tcp.init;
 
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.interfaces.Oracle;

@@ -13,7 +13,6 @@ import de.ls5.jlearn.shared.WordImpl;
 public class MembershipOracle implements Oracle {
 	private static final long serialVersionUID = -1374892499287788040L;
 	private SutWrapper sutWrapper;
-	private int numMembQueries = 0;
 
 	public MembershipOracle(SutWrapper sutWrapper) {
 		this.sutWrapper = sutWrapper;
@@ -28,8 +27,7 @@ public class MembershipOracle implements Oracle {
 		InputAction input;
 		OutputAction output;
 		
-		numMembQueries++;
-		System.out.println("Member query number: " + numMembQueries);
+		System.out.println("Member query number: " + ++Statistics.getStats().numMembQueries);
 
 		for (Symbol currentSymbol : query.getSymbolList()) {
 			System.out.println("Learning symbol: " + currentSymbol + " of query: " + query.getSymbolList() + " in MembershipOracle");
@@ -45,12 +43,6 @@ public class MembershipOracle implements Oracle {
 
 		System.out.println("Returning to LearnLib: " + result);
 
-		return result;
-	}
-
-	public int getNumMembQueries() {
-		int result = numMembQueries;
-		numMembQueries = 0;
 		return result;
 	}
 }
