@@ -24,6 +24,7 @@ class Sender:
         self.serverIP = serverIP
         self.serverPort = serverPort
         self.serverMAC = serverMAC
+        self.networkInterface = networkInterface
         self.networkPort = networkPort
         self.networkPortMinimum = networkPortMinimum
         self.networkPortMaximum = networkPortMaximum
@@ -35,8 +36,10 @@ class Sender:
         # use tracking mechanism to aid Scapy
         self.useTracking = useTracking
         
-        #set verbosity (0/1)
+        # TODO: need to remove this, the client should decide on the reset mechanism.
         self.resetMechanism = resetMechanism
+        
+        #set verbosity (0/1)
         self.isVerbose = isVerbose
         
         if self.useTracking == True:
@@ -46,7 +49,7 @@ class Sender:
                 self.useTracking = False
             else:
                 from tracker import Tracker
-                self.tracker = Tracker(networkInterface, self.serverPort, self.serverIP)
+                self.tracker = Tracker(self.networkInterface, self.serverPort, self.serverIP)
                 self.tracker.start()
         else:
             self.tracker = None
@@ -79,7 +82,6 @@ class Sender:
     # should scapy return None, then a tracker is used to retrieve whatever packets scapy has missed (in case it did)
     # TODO Why does scapy miss some packets?
     def sendPacket(self,flagsSet, seqNr, ackNr):
-        captureMethod = ""
         if self.useTracking == True :
             self.tracker.clearLastResponse()
         #if self.isVerbose == 1 :
@@ -117,7 +119,8 @@ class Sender:
         #todo find a more elegant way of finding the client IP?
         self.clientIP = packet[IP].src
         # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
-        scapyResponse = sr1(packet, timeout=self.waitTime, verbose=self.isVerbose)
+        scapyResponse = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
+        captureMethod = ""
         if scapyResponse is not None:
             response = self.scapyResponseParse(scapyResponse)
             captureMethod = "scapy"
@@ -130,7 +133,6 @@ class Sender:
                     captureMethod = "tracker"
             else:
                 response = Timeout()
-                captureMethod = "scapy"
 
         if captureMethod != "":
             captureMethod = "("+captureMethod+")"

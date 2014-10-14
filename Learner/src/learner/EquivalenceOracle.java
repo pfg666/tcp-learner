@@ -31,8 +31,6 @@ public class EquivalenceOracle implements Oracle {
 		System.out.println("Equivalence query number: " + ++Statistics.getStats().numEquivQueries);
 
 		for (Symbol currentSymbol : query.getSymbolList()) {
-			System.out.println("Learning symbol: " + currentSymbol
-					+ " of query: " + query.getSymbolList() + " in Mapper");
 			input = new InputAction(currentSymbol.toString());
 			System.out.println("Sending: " + input);
 

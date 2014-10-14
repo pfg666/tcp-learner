@@ -21,7 +21,7 @@ public class YamlWriter {
 	public static final String [] ackInputAbs = {"V","INV"};
 	public static final String [] synOutputAbs = {"FRESH","SRECV","S+1RECV","ARECV","ZERO","INV"};
 	public static final String [] ackOutputAbs = {"S+1SENT","S+DSENT","S+D+1SENT","ASENT","ARECV","INV"};
-	public static final String [] flags = {"","SYN","ACK"};//,"RST", "FIN"};
+	public static final String [] flags = {"","SYN","ACK","RST", "FIN"};
 	public static final String [][] invalidFlagPairs = {{"SYN","FIN"},{"SYN","RST"},{"FIN","RST"},
 	{"SYN","SYN"},{"RST","RST"},{"FIN","FIN"},{"ACK","ACK"},{"",""}};
 	
@@ -30,7 +30,7 @@ public class YamlWriter {
 	
 	public static void main(String args[]) throws Exception {
 		YamlWriter yaml = new YamlWriter();
-		String filePath = (args.length == 1)? args[0]: "sut.yaml";
+		String filePath = (args.length == 1)? args[0]: "sutinfo.yaml";
 		yaml.writeTCPYaml(filePath);
 	}
 	

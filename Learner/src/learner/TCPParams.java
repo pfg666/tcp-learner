@@ -43,6 +43,11 @@ public class TCPParams{
 	 * This is done before sending executing the membership/equiv queries. 
 	 */
 	public String oracle = "adaptive";
+	
+	/**
+	 * Escape in case one of the numbers received from server cannot be matched, signaling that learning is out-of-synch
+	 */
+	public boolean exitIfInvalid = true;
 
 	public void printParams(PrintStream stdout) {
 		stdout.printf("TCP endpoint: (%s,%s)\n", this.sutIP, String.valueOf(this.sutPort));

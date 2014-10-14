@@ -38,10 +38,10 @@ class ArgumentParser:
                                                        "networkPortMinimum"),
         Argument("pnf","portNumberFile", str, "sn.txt", "File with the port number"),
         Argument("ut","useTracking", bool, True, "If set, then the tracker is used along with the Scapy tool"),
-        Argument("wt","waitTime",float, 0.006, "Sets the time the adapter waits for a response before concluding a timeout"),
-        Argument("sip","serverIP", str, "131.174.142.204", "The server TCP"),
-        Argument("sport","serverPort", int, 7991, "The server port"),
-        Argument("smac","serverMAC", str, "50:46:5D:DE:44:C7", "The server MAC address"),
+        Argument("wt","waitTime",float, 0.06, "Sets the time the adapter waits for a response before concluding a timeout"),
+        Argument("sip","serverIP", str, "192.168.56.1", "The TCP server"),
+        Argument("sport","serverPort", int, 20000, "The server port"),
+        Argument("smac","serverMAC", str, None, "The server MAC address"),
         Argument("rst","resetMechanism", int, 0, "0 selects reset by sending a valid RST and not changing the port,"
                                                    "1 selects reset by changing the port (+1)"
                                                     "2 selects a hybrid, where a valid RST is sent and the port is changed")]
@@ -110,6 +110,7 @@ class ArgumentParser:
 
     def buildSender(self):
         values = self.getValueMapForArguments(self.senderArguments, self.parsedValues)
+        print values
         sender = Sender(**values)
         return sender
     def buildAdapter(self):

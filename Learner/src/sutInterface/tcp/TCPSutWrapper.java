@@ -11,10 +11,21 @@ public class TCPSutWrapper implements SutWrapper{
 
 	private SocketWrapper socket;
 	private TCPMapper mapper;
+	private boolean exitIfInvalid = false;
 
 	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
 		this.socket = new SocketWrapper(tcpServerPort);
 		this.mapper = mapper;
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				System.err.println("Closing stuff");
+				System.err.flush();
+				if (socket != null) {
+					socket.writeInput("exit");
+					socket.close();
+				}
+			}
+		});
 	}
 
 	public void setMapper(TCPMapper mapper) {
@@ -23,6 +34,10 @@ public class TCPSutWrapper implements SutWrapper{
 
 	public TCPMapper getMapper() {
 		return mapper;
+	}
+	
+	public void setInvalidExit(boolean exitWhenInvalid) {
+		this.exitIfInvalid = exitWhenInvalid;
 	}
 	
 	public OutputAction sendInput(InputAction symbolicInput) {
@@ -41,7 +56,10 @@ public class TCPSutWrapper implements SutWrapper{
 	 * called by the learner to reset the automaton
 	 */
 	public void sendReset() {
+		String rstMessage = mapper.processOutgoingReset();
+		socket.writeInput(rstMessage);
 		socket.writeInput("reset");
+		socket.readOutput();
 		mapper.setDefault();
 	}
 
@@ -91,6 +109,9 @@ public class TCPSutWrapper implements SutWrapper{
 			long ackReceived = Long.parseLong(inputValues[2]);
 			abstractResponse = mapper.processIncomingResponse(flags,
 					seqReceived, ackReceived);
+			if(abstractResponse.contains(Symbol.INV.name()) && this.exitIfInvalid) {
+				System.exit(0);
+			}
 		}
 		return abstractResponse;
 	}

@@ -17,9 +17,10 @@ import interfaceType
 #     serializes responses retrieved by the sender and writes them back to the socket
 # Currently, the adapter 
 class Adapter:
-    mapperSocket = None
+    learnerSocket = None
     serverSocket = None
     sender = None
+    data = None
 
     def __init__(self, localCommunicationPort = 18200):
         self.localCommunicationPort = localCommunicationPort
@@ -37,18 +38,18 @@ class Adapter:
         # accept connections from outside
         (clientSocket, address) = self.serverSocket.accept()
         print "python server: address connected: " + str(address)
-        self.mapperSocket = clientSocket
+        self.learnerSocket = clientSocket
         
     # closes all open sockets
     # TODO doesn't work all the time 
     def closeSockets(self):
         print self.serverSocket
-        print self.mapperSocket
+        print self.learnerSocket
         try:
             try:
-                if self.mapperSocket is not None:
+                if self.learnerSocket is not None:
                     print "Closing local server socket"
-                    self.mapperSocket.close()
+                    self.learnerSocket.close()
             except IOError:
                 print "Error closing"
                 sys.exit(1)
@@ -71,27 +72,34 @@ class Adapter:
             
     # reads string from socket until it reads a space/newline
     def receiveInput(self):
-        data = None
         inputstring = '';
         finished = False
         while not finished:
-            if not data:
+            if not self.data:
                 try:
-                    ready = select([self.mapperSocket], [self.mapperSocket], [], 3)
+                    ready = select([self.learnerSocket], [], [], 3)
                     if ready[0]:
-                        data = self.mapperSocket.recv(1024)
+                        self.data = self.learnerSocket.recv(1024)
+                    else:
+                        self.fault("Learner socket has been unreadable for too long")
                 except IOError:
-                    print "No output received from client, closing"
-                    self.mapperSocket.close();
-                    sys.exit()
+                    self.fault("No output received from client, closing")
             else:
-                c = data[0]
-                data = data[1:]
+                c = self.data[0]
+                self.data = self.data[1:]
                 if c == '\n' or c == ' ':
                     finished = True
                 else:
                     inputstring = inputstring + c
         return inputstring
+    
+    def receiveNumber(self):
+        inputString = self.receiveInput()
+        if inputString.isdigit() == False:
+            self.fault("Received "+inputString + " but expected a number")
+        else:
+            return int(inputString)
+             
 
     # accepts input from the learner, and process it. Sends network packets, looks at the
     # response, extracts the relevant parameters and sends them back to the learner
@@ -104,19 +112,20 @@ class Adapter:
             if input1 == "reset":
                 print "reset"
                 print "********** reset **********"
-                seqNr = int(self.receiveInput())
-                sender.sendValidReset(seqNr)
+                self.sender.refreshNetworkPort()
+               # seqNr = int(self.receiveInput())
+               # sender.sendValidReset(seqNr)
             else:
                 if input1 == "exit":
                     self.closeSockets()
+                    return
                 else:
                     print "*****"
                     if input1 != "nil":
-                        seqNr = int(self.receiveInput())
-                        ackNr = int(self.receiveInput())
+                        seqNr = self.receiveNumber()
+                        ackNr = self.receiveNumber()
                         print (" " +input1 + " " + str(seqNr) + " " + str(ackNr))
                         response = sender.sendInput(input1, seqNr, ackNr);
-
                     if response is not None:
                         print ' ' + response.serialize()
                         self.sendOutput(response.serialize())
@@ -126,7 +135,14 @@ class Adapter:
 
     # sends a string to the learner, and simply adds a newline to denote the end of the string
     def sendOutput(self, outputString):
-        self.mapperSocket.send(outputString + "\n")
+        self.learnerSocket.send(outputString + "\n")
+    
+    # prints error message, closes sockets and terminates
+    def fault(self, msg):
+        print '===FAULT EXIT WITH MESSAGE==='
+        print msg
+        self.closeSockets()
+        sys.exit()
     
     # start adapter by list
     def startAdapter(self, sender):

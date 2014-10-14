@@ -1,7 +1,7 @@
 from pcapy import open_live
 from impacket.ImpactDecoder import EthDecoder,Dot11WPA2Decoder
 from impacket.ImpactPacket import IP, TCP, UDP, ICMP
-import interfaceType
+from interfaceType import InterfaceType
 from response import *
 import threading
 import sys

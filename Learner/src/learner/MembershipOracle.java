@@ -30,7 +30,6 @@ public class MembershipOracle implements Oracle {
 		System.out.println("Member query number: " + ++Statistics.getStats().numMembQueries);
 
 		for (Symbol currentSymbol : query.getSymbolList()) {
-			System.out.println("Learning symbol: " + currentSymbol + " of query: " + query.getSymbolList() + " in MembershipOracle");
 			input = new InputAction(currentSymbol.toString());
 			
 			System.out.println("Sending: " + input);

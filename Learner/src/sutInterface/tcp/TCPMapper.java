@@ -90,10 +90,14 @@ public class TCPMapper {
 		this.lastAbstractSeqSent = abstractSeq;
 		this.lastAbstractAckSent = abstractAck;
 
-		/* build abstract input */
+		/* build concrete input */
 		String concreteInput = Serializer.concreteMessageToString(flags,
 				concreteSeq, concreteAck);
 		return concreteInput;
+	}
+	
+	public String processOutgoingReset() {
+		return Serializer.concreteMessageToString(new FlagSet(Flag.RST), (lastValidClientSeq == NOT_SET)?0:lastValidClientSeq, 0);
 	}
 	
 	private long newInvalidWithinWindow(long refNumber) {

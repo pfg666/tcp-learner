@@ -24,7 +24,7 @@ import sutInterface.tcp.init.CachedInitOracle;
 import sutInterface.tcp.init.FunctionInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
-import util.RunCmd;
+import util.SoundUtils;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
@@ -80,10 +80,11 @@ public class Main {
 		SutInfo.setOutputSignatures(sutInterface.outputInterfaces);
 
 		LearnLog.addAppender(new PrintStreamLoggingAppender(LogLevel.INFO,
-				System.out));
-		PrintStream fileStream = new PrintStream(new FileOutputStream(
-				"out.txt", false));
-		System.setOut(fileStream);
+				stdout));
+		
+//		PrintStream fileStream = new PrintStream(new FileOutputStream(
+//				"out.txt", false));
+//		System.setOut(fileStream);
 		PrintStream statisticsFileStream = new PrintStream(
 				new FileOutputStream("statistics.txt", false));
 		
@@ -100,11 +101,11 @@ public class Main {
 		
 		// in a normal init-oracle ("functional") TCP setup, we use the conventional eq/mem oracles
 		if(! "adaptive".equalsIgnoreCase(tcp.oracle)) {
-			eqOracleRunner = new EquivalenceOracle(sutWrapper);
-			memOracleRunner = new MembershipOracle(sutWrapper);
 			InitOracle initOracle = new FunctionInitOracle();
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper);
+			eqOracleRunner = new EquivalenceOracle(sutWrapper);
+			memOracleRunner = new MembershipOracle(sutWrapper);
 			
 		} 
 		
@@ -153,13 +154,13 @@ public class Main {
 				while (!done) {
 					stdout.println("starting learning");
 					stdout.println("");
-					System.out.flush();
-					System.err.flush();
+					stdout.flush();
+					stderr.flush();
 
 					// execute membership queries
 					learner.learn();
-					System.out.flush();
-					System.err.flush();
+					stdout.flush();
+					stderr.flush();
 					stdout.println("done learning");
 
 					statisticsFileStream.println("Membership queries: "
@@ -171,7 +172,7 @@ public class Main {
 									+ (endtmp - starttmp) + "ms.");
 					totalTimeMemQueries += endtmp - starttmp;
 					starttmp = System.currentTimeMillis();
-					System.out.flush();
+					stdout.flush();
 
 					// stable hypothesis after membership queries
 					Automaton hyp = learner.getResult();
@@ -179,13 +180,13 @@ public class Main {
 							+ hypCounter++ + ".dot"));
 
 					stdout.println("starting equivalence query");
-					System.out.flush();
-					System.err.flush();
+					stdout.flush();
+					stderr.flush();
 					// search for counterexample
 					EquivalenceOracleOutput o = eqOracle
 							.findCounterExample(hyp);
-					System.out.flush();
-					System.err.flush();
+					stdout.flush();
+					stderr.flush();
 					stdout.println("done equivalence query");
 					statisticsFileStream
 							.println("Membership queries in Equivalence query: "
@@ -206,14 +207,14 @@ public class Main {
 					statisticsFileStream.println("Sending CE to LearnLib.");
 					stdout.println("Counter Example: "
 							+ o.getCounterExample().toString());
-					System.out.flush();
-					System.err.flush();
+					stdout.flush();
+					stderr.flush();
 					// return counter example to the learner, so that it can use
 					// it to generate new membership queries
 					learner.addCounterExample(o.getCounterExample(),
 							o.getOracleOutput());
-					System.out.flush();
-					System.err.flush();
+					stdout.flush();
+					stderr.flush();
 				}
 			} catch (LearningException ex) {
 				stdout.println("LearningException ex in Main!");
@@ -274,7 +275,7 @@ public class Main {
 		
 		
 		// output learned state machine as dot and pdf file :
-		File outputFolder = new File("output"+File.separator + String.valueOf(seed));
+		File outputFolder = new File("output"+File.separator + start);
 		outputFolder.mkdirs();
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
@@ -301,14 +302,11 @@ public class Main {
 		// write pdf
 		DotUtil.invokeDot(dotFile, "pdf", pdfFile);
 
-		RunCmd.runCmd("python learnlib_dot2jtorx_aut.py learnresult.dot",
-				stdout, false);
-
 		stderr.println("Learner Finished!");
 
 		// you can uncomment this if you want some bips to notify you when
 		// learning is done :)
-		// SoundUtils.announce();
+		SoundUtils.announce();
 	}
 
 	private static void handleArgs(String[] args) {
@@ -322,6 +320,7 @@ public class Main {
 					+ " does not exist");
 			System.exit(-1);
 		}
+		sutConfigFile = sutConfigFile.getAbsoluteFile();
 	}
 
 	public static void printUsage() {

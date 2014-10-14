@@ -28,6 +28,7 @@ public class FunctionInitOracle implements InitOracle{
 			isInitial = (mapper.lastFlagsReceived.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) &&
 					mapper.lastFlagsSent.has(Flag.SYN); 
 		}
+		System.out.println(isInitial);
 		return isInitial;
 	}
 
