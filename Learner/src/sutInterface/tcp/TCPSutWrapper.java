@@ -41,14 +41,24 @@ public class TCPSutWrapper implements SutWrapper{
 	}
 	
 	public OutputAction sendInput(InputAction symbolicInput) {
-		// Send input to SUT
+		OutputAction symbolicOutput;
+		
+		// Build concrete input
 		String abstractRequest = symbolicInput.getValuesAsString(); 
 		String concreteRequest = processOutgoingPacket(abstractRequest);
 		
-		// Receive output from SUT
-		String concreteResponse = sendPacket(concreteRequest);
-		String abstractResponse = processIncomingPacket(concreteResponse);
-		return new OutputAction(abstractResponse);
+		// Handle non-concretizable abstract input case
+		if(concreteRequest.equalsIgnoreCase(Symbol.UNDEFINED.name())) {
+			symbolicOutput = new OutputAction(Symbol.UNDEFINED.name());
+		} 
+		
+		// Send concrete input, receive output from SUT and make abs
+		else {
+			String concreteResponse = sendPacket(concreteRequest);
+			String abstractResponse = processIncomingPacket(concreteResponse);
+			symbolicOutput = new OutputAction(abstractResponse);
+		}
+		return symbolicOutput;
 	}
 
 	

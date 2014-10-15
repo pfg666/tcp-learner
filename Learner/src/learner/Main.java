@@ -304,8 +304,7 @@ public class Main {
 
 		stderr.println("Learner Finished!");
 
-		// you can uncomment this if you want some bips to notify you when
-		// learning is done :)
+		// bips to notify that learning is done :)
 		SoundUtils.announce();
 	}
 
