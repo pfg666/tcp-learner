@@ -7,21 +7,15 @@ class Argument:
         self.type = type
 
 # list of arguments for each component in the setup
-# the definition and order of the parameters follows the Argument constructor signature:
-# Argument(self, definition, fullDefinition, type, defaultValue, description)
 
 adapterArguments = [
     Argument("lcp","localCommunicationPort", int, 18200, "Listening adapter port which the learner connects to")
 ]
+
 configArguments = [
     Argument("c","useConfig", None, None, "Sets whether the tool will read sender args from a configuration file"),
     Argument("csec","configSection", str, "tcp", "The section in the configuration file."),
     Argument("cfile","configFile", str, "../config.cfg", "The configuration file used. Preferably left as the default value.")]
-
-#     def __init__(self, serverMAC, serverIP, serverPort = 7991,
-#                  networkInterface="eth1", networkInterfaceType=InterfaceType.Ethernet, senderPort=15000, senderPortMinimum=20000,
-#                  senderPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
-#                  isVerbose=0, waitTime=0.006, resetMechanism=0):
 
 senderArguments = [
     Argument("ni","networkInterface", str, "lo","The net interface through which the client communicates"),
