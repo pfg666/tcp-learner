@@ -45,7 +45,10 @@ class ArgumentParser:
             parsedValues.update(configValues)
             
         # stamp cmd  values read from cmd line to map (they will overwrite options set via config)
-        cmdValues = self.parseCmdArguments(sys.argv[1:], settableArguments, fillWithDefault=False)
+        if configOptions["useConfig"] == True:
+            cmdValues = self.parseCmdArguments(sys.argv[1:], settableArguments, fillWithDefault=False)
+        else:
+            cmdValues = self.parseCmdArguments(sys.argv[1:], settableArguments, fillWithDefault=True)
         parsedValues.update(cmdValues)
         return parsedValues
         
@@ -58,14 +61,14 @@ class ArgumentParser:
         "and transforms them back to abstract messages")
         for argument in settableArguments:
             if argument.type is None:
-                parser.add_argument("-"+argument.definition, "--"+argument.fullDefinition, action="store_true", help=argument.description)
+                parser.add_argument("-"+argument.definition, "--"+argument.fullDefinition, action="store_const", const=True, default=False, help=argument.description)
             else:
                 if fillWithDefault == True:
                     parser.add_argument("-"+argument.definition, "--"+argument.fullDefinition, type=argument.type, default = argument.default, help=argument.description)
                 else: 
                     parser.add_argument("-"+argument.definition, "--"+argument.fullDefinition, type=argument.type, help=argument.description)
         ns, unknown = parser.parse_known_args(cmdOptions)
-        reducedValues = dict((k, v) for k, v in ns.__dict__.iteritems() if v) # build dict from namespace without None values
+        reducedValues = dict((k, v) for k, v in vars(ns).iteritems() if v is not None) # build dict from namespace without None values
         return reducedValues
 
     # parses arguments received via a configuration file using the argparse module (see https://docs.python.org/2.7/library/argparse.html)
@@ -105,7 +108,6 @@ class ArgumentParser:
     # builds the sender component of the learning setup
     def buildSender(self):
         values = self.parseArguments(args.senderArguments)
-        # values = self.getValueMapForArguments(self.senderArguments, values)
         sender = Sender(**values)
         return sender
     

@@ -26,9 +26,9 @@ if __name__ == "__main__":
     argumentParser = ArgumentParser()
     sender = argumentParser.buildSender()
     print "\n==Sender Setup=="
-    print sender.__dict__
+    print vars(sender)
     adapter = argumentParser.buildAdapter()
     print "\n==Adapter Setup=="
-    print adapter.__dict__
+    print vars(adapter)
     print "\n==Starting Adapter=="
     adapter.startAdapter(sender)

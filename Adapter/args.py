@@ -17,13 +17,20 @@ configArguments = [
     Argument("c","useConfig", None, None, "Sets whether the tool will read sender args from a configuration file"),
     Argument("csec","configSection", str, "tcp", "The section in the configuration file."),
     Argument("cfile","configFile", str, "../config.cfg", "The configuration file used. Preferably left as the default value.")]
+
+#     def __init__(self, serverMAC, serverIP, serverPort = 7991,
+#                  networkInterface="eth1", networkInterfaceType=InterfaceType.Ethernet, senderPort=15000, senderPortMinimum=20000,
+#                  senderPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
+#                  isVerbose=0, waitTime=0.006, resetMechanism=0):
+
 senderArguments = [
-    Argument("ni","networkInterface", str, "eth0","The net interface through which the client communicates"),
-    Argument("np","networkPort", int, 15000,"Active adapter port "),
-    Argument("npmin","networkPortMinimum", int, 20000, "Set the minimum boundary and starting number for "
+    Argument("ni","networkInterface", str, "lo","The net interface through which the client communicates"),
+    Argument("sp","senderPort", int, 15000,"Active adapter port "),
+    Argument("spmin","senderPortMinimum", int, 20000, "Set the minimum boundary and starting number for "
                                                    "the network port"),
-    Argument("npmax","networkPortMaximum", int, 40000, "Set the maximum boundary after which it reverts back to "
+    Argument("spmax","senderPortMaximum", int, 40000, "Set the maximum boundary after which it reverts back to "
                                                    "networkPortMinimum"),
+    Argument("v","isVerbose", bool, True, "If true then more text will be displayed"),
     Argument("pnf","portNumberFile", str, "sn.txt", "File with the port number"),
     Argument("ut","useTracking", bool, True, "If set, then the tracker is used along with the Scapy tool"),
     Argument("wt","waitTime",float, 0.06, "Sets the time the adapter waits for a response before concluding a timeout"),
