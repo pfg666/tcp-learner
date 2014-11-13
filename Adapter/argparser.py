@@ -39,9 +39,10 @@ class ArgumentParser:
         Argument("pnf","portNumberFile", str, "sn.txt", "File with the port number"),
         Argument("ut","useTracking", bool, True, "If set, then the tracker is used along with the Scapy tool"),
         Argument("wt","waitTime",float, 0.06, "Sets the time the adapter waits for a response before concluding a timeout"),
-        Argument("sip","serverIP", str, "192.168.56.1", "The TCP server"),
+        Argument("sip","serverIP", str, "10.42.0.42", "The TCP server"),
         Argument("sport","serverPort", int, 20000, "The server port"),
-        Argument("smac","serverMAC", str, None, "The server MAC address"),
+#         Argument("saport" , "serverAdapterPort", int, 19999, "the server adapter port"),
+        Argument("smac","serverMAC", str, "00:0C:29:22:B9:6B", "The server MAC address"),
         Argument("rst","resetMechanism", int, 0, "0 selects reset by sending a valid RST and not changing the port,"
                                                    "1 selects reset by changing the port (+1)"
                                                     "2 selects a hybrid, where a valid RST is sent and the port is changed")]
@@ -74,7 +75,7 @@ class ArgumentParser:
         ns = self.parseCmdArguments(sys.argv[1:])
         cmdValues = ns.__dict__
         if ns.useConfig == True:
-            if has_argparse == True:
+            if has_argparse != True:
                 print "cannot use the configuration parser because the \"argparse\" module couldn't be located"
                 exit()
             print "parsing config"
@@ -94,6 +95,7 @@ class ArgumentParser:
                 if argument.type is int:
                     values.update({argument.fullDefinition : config.getint(configSection,argument.definition)})
                 elif argument.type is bool:
+                    print argument.definition
                     values.update({argument.fullDefinition : config.getboolean(configSection,argument.definition)})
                 elif argument.type is float:
                     values.update({argument.fullDefinition : config.getfloat(configSection,argument.definition)})

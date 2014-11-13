@@ -19,14 +19,17 @@ import interfaceType
 class Adapter:
     learnerSocket = None
     serverSocket = None
+    cmdSocket = None
     sender = None
     data = None
 
-    def __init__(self, localCommunicationPort = 18200):
+    def __init__(self, localCommunicationPort = 18200, cmdIp = "10.42.0.42", cmdPort="5000"):
         self.localCommunicationPort = localCommunicationPort
+        self.cmdPort = cmdPort
+        self.cmdIp = cmdIp
 
     # returns a new socket to the mapper/learner
-    def setUpSocket(self, commPort):
+    def setUpSocket(self, commPort, cmdIp, cmdPort):
         # create an INET, STREAMing socket
         self.serverSocket = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)
@@ -39,6 +42,7 @@ class Adapter:
         (clientSocket, address) = self.serverSocket.accept()
         print "python server: address connected: " + str(address)
         self.learnerSocket = clientSocket
+        #self.cmdSocket = socket.create_connection((cmdIp, cmdPort), 0, 0)
         
     # closes all open sockets
     # TODO doesn't work all the time 
@@ -58,6 +62,14 @@ class Adapter:
                 if self.serverSocket is not None:
                     print "Closing gateway server socket"
                     self.serverSocket.close()
+            except IOError:
+                print "Error closing"
+                sys.exit(1)
+            try:
+                print(self.cmdSocket)
+                if self.cmdSocket is not None:
+                    print "Closing gateway server command socket"
+                    self.cmdSocket.close()
             except IOError:
                 print "Error closing"
                 sys.exit(1)
@@ -148,6 +160,6 @@ class Adapter:
     def startAdapter(self, sender):
         print "listening on "+str(self.localCommunicationPort)
         origSigInt = signal.getsignal(signal.SIGINT)
-        self.setUpSocket(self.localCommunicationPort)
+        self.setUpSocket(self.localCommunicationPort, self.cmdIp, self.cmdPort)
         self.handleInput(sender)
 
