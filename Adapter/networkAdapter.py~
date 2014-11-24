@@ -23,7 +23,7 @@ class Adapter:
     sender = None
     data = None
 
-    def __init__(self, localCommunicationPort = 18200, cmdIp = "10.42.0.42", cmdPort=5000):
+    def __init__(self, localCommunicationPort = 18200, cmdIp = "10.42.0.42", cmdPort=5025):
         self.localCommunicationPort = localCommunicationPort
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp
@@ -46,7 +46,6 @@ class Adapter:
         self.cmdSocket = socket.create_connection((cmdIp, cmdPort))
         self.cmdSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
         print "python connected to server Adapter at " + cmdIp + " " + (str(cmdPort))
-        self.listenForServerPort()
         
     # closes all open sockets
     # TODO doesn't work all the time 
@@ -115,20 +114,6 @@ class Adapter:
             return int(inputString)
              
 
-    def listenForServerPort(self):
-        newPortFound = False
-        newPortString = ""
-        while True:
-            newPortString = self.cmdSocket.recv(1024)
-            for word in newPortString.split(): # TODO check if this really always works with a stream
-                print "recvd " + word
-                if newPortFound:
-                    self.serverPort = int(word)
-                    print "next server port: " + word
-                    return
-                if word == "port":
-                    newPortFound = True
-
     # accepts input from the learner, and process it. Sends network packets, looks at the
     # response, extracts the relevant parameters and sends them back to the learner
     def handleInput(self, sender):
@@ -141,9 +126,6 @@ class Adapter:
                 print "reset"
                 print "********** reset **********"
                 self.sender.refreshNetworkPort()
-                self.cmdSocket.send("reset\n")
-                self.listenForServerPort()
-                self.sender.setServerPort(self.serverPort)
                # seqNr = int(self.receiveInput())
                # sender.sendValidReset(seqNr)
             elif input1 == "exit":
