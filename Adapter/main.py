@@ -9,6 +9,7 @@ adapter = None
 # routine used to close the server socket, so you don't have to
 def signal_handler(sign, frame):
     signal.signal(sign, origSigInt)
+    print "\n==Processing Interrupt=="
     print 'You pressed Ctrl+C, meaning you want to stop the system!'
     adapter.closeSockets()
     signal.signal(sign, signal_handler)
@@ -19,13 +20,15 @@ def setupSignalHandler():
 
 # main method. An initial local port can be given as parameter for the program
 if __name__ == "__main__":
-    print "running"
+    print "==Preparation=="
     origSigInt = signal.getsignal(signal.SIGINT)
     setupSignalHandler()
     argumentParser = ArgumentParser()
-    argumentParser.parseArguments()
     sender = argumentParser.buildSender()
-    print "sender setup"
-    print sender.__dict__
+    print "\n==Sender Setup=="
+    print vars(sender)
     adapter = argumentParser.buildAdapter()
+    print "\n==Adapter Setup=="
+    print vars(adapter)
+    print "\n==Starting Adapter=="
     adapter.startAdapter(sender)
