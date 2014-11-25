@@ -89,6 +89,9 @@ class Sender:
         response = self.sendPacketAndRetrieveResponse(packet)
         return response
     
+    def setServerPort(self, newPort):
+        self.serverPort = newPort;
+    
     # function that creates packet from data strings/integers
     def createPacket(self, tcpFlagsSet, seqNr, ackNr, destIP = None, destPort = None, srcPort = None,
                      ipFlagsSet="DF", data="cc"):
@@ -112,14 +115,20 @@ class Sender:
         return p
     
     # sends packets and ensures both reception tools are used so as to retrieve the response when such response is given
+    # use packet = None for sniffing without sending a packet
     def sendPacketAndRetrieveResponse(self, packet):
         # we need first to clear the last response cached in the tracker 
         if self.useTracking == True :
             self.tracker.clearLastResponse()
-        #todo find a more elegant way of finding the client IP?
-        self.clientIP = packet[IP].src
-        # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
-        scapyResponse = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
+        
+        scapyResponse = None
+        if packet != None:
+            #todo find a more elegant way of finding the client IP?
+            self.clientIP = packet[IP].src
+            # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
+            scapyResponse = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
+        else:
+            time.sleep(self.waitTime)
         captureMethod = ""
         if scapyResponse is not None:
             response = self.scapyResponseParse(scapyResponse)
@@ -209,6 +218,10 @@ class Sender:
         print 'sniffed'
         return sniffedPackets
 
+    # captures a response without sendin a packet first, in the same way as though a packet was sent
+    def captureResponse(self):
+        return self.sendInput("nil", None, None);
+
     # sends input over the network to the server
     def sendInput(self, input1, seqNr, ackNr):
         # add the MAC-address of the server to scapy's ARP-table to use LAN
@@ -219,14 +232,24 @@ class Sender:
 
         response = None
         timeBefore = time.time()
+        
         if input1 != "nil":
-            response = self.sendPacket(input1, seqNr, ackNr)
+            #response = self.sendPacket(input1, seqNr, ackNr)
+            ###
+            packet = self.createPacket(input1, seqNr, ackNr)
+            ###
         else:
-            sniffed = self.sniffPackets()
-            if len(sniffed) > 0:
-                response = self.scapyResponseParse(sniffed[0])
-            else:
-                response = Timeout()
+            packet = None
+        response = self.sendPacketAndRetrieveResponse(packet)
+#         
+#         if input1 != "nil":
+#             response = self.sendPacket(input1, seqNr, ackNr)
+#         else:
+#             sniffed = self.sniffPackets()
+#             if len(sniffed) > 0:
+#                 response = self.scapyResponseParse(sniffed[0])
+#             else:
+#                 response = Timeout()
         timeAfter = time.time()
         timeSpent = timeAfter - timeBefore
         if timeSpent < self.waitTime:

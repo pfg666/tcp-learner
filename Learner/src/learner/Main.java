@@ -304,8 +304,8 @@ public class Main {
 
 		stderr.println("Learner Finished!");
 
-		// bips to notify that learning is done :)
-		SoundUtils.announce();
+		// bips to notify that learning is done :) But my VM doesn't support it somehow :(
+		//SoundUtils.announce();
 	}
 
 	private static void handleArgs(String[] args) {

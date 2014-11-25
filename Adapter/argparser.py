@@ -39,9 +39,9 @@ class ArgumentParser:
         Argument("pnf","portNumberFile", str, "sn.txt", "File with the port number"),
         Argument("ut","useTracking", bool, True, "If set, then the tracker is used along with the Scapy tool"),
         Argument("wt","waitTime",float, 0.06, "Sets the time the adapter waits for a response before concluding a timeout"),
-        Argument("sip","serverIP", str, "10.42.0.42", "The TCP server"),
+        Argument("sip","serverIP", str, "10.42.0.3", "The TCP server"),
         Argument("sport","serverPort", int, 20000, "The server port"),
-#         Argument("saport" , "serverAdapterPort", int, 19999, "the server adapter port"),
+        # Argument("saport" , "serverAdapterPort", int, 19999, "the server adapter port"),
         Argument("smac","serverMAC", str, "00:0C:29:22:B9:6B", "The server MAC address"),
         Argument("rst","resetMechanism", int, 0, "0 selects reset by sending a valid RST and not changing the port,"
                                                    "1 selects reset by changing the port (+1)"
