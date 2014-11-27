@@ -29,8 +29,6 @@ class Tracker(threading.Thread):
         self.daemon = True
         self.readTimeout = readTimeout
         self.serverIp = serverIp
-        print "stopping state"
-        print self._stop.isSet()
         
     def getDecoder(self, interfaceType):
         if interfaceType == InterfaceType.Ethernet:

@@ -16,18 +16,18 @@ ackVar = 0
 # the sender sends packets with configurable parameters to a server and retrieves responses
 class Sender:
     # information of the SUT
-    def __init__(self, serverMAC, serverIP, serverPort = 7991,
-                 networkInterface="eth1", networkInterfaceType=InterfaceType.Ethernet, networkPort=15000, networkPortMinimum=20000,
-                 networkPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
+    def __init__(self, serverMAC=None, serverIP="191.168.10.1", serverPort = 7991,
+                 networkInterface="lo", networkInterfaceType=InterfaceType.Ethernet, senderPort=15000, senderPortMinimum=20000,
+                 senderPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
                  isVerbose=0, waitTime=0.006, resetMechanism=0):
         # data on sender and server needed to send packets 
         self.serverIP = serverIP
         self.serverPort = serverPort
         self.serverMAC = serverMAC
         self.networkInterface = networkInterface
-        self.networkPort = networkPort
-        self.networkPortMinimum = networkPortMinimum
-        self.networkPortMaximum = networkPortMaximum
+        self.senderPort = senderPort
+        self.senderPortMinimum = senderPortMinimum
+        self.senderPortMaximum = senderPortMaximum
         self.portNumberFile = portNumberFile;
         
         # time to wait for a response from the server before concluding a timeout
@@ -56,20 +56,20 @@ class Sender:
 
     # chooses a new port to send packets from
     def refreshNetworkPort(self):
-        print("previous local port: " + str(self.networkPort))
-        self.networkPort = self.getNextPort()
-        print("next local port: " + str(self.networkPort)+"\n")
-        return self.networkPort
+        print("previous local port: " + str(self.senderPort))
+        self.senderPort = self.getNextPort()
+        print("next local port: " + str(self.senderPort)+"\n")
+        return self.senderPort
 
     # gets a new port number, an increment of the old. Write new number over the old number in the portNumber file.
     def getNextPort(self):
         f = open(self.portNumberFile,"a+")
         f.seek(0)
         line = f.readline()
-        if line == '' or int(line) < self.networkPortMinimum:
-            networkPort = self.networkPortMinimum
+        if line == '' or int(line) < self.senderPortMinimum:
+            networkPort = self.senderPortMinimum
         else:
-            networkPort = (int(line)+1)%self.networkPortMaximum
+            networkPort = (int(line)+1)%self.senderPortMaximum
         f.closed
         f = open(self.portNumberFile, "w")
         f.write(str(networkPort))
@@ -100,7 +100,7 @@ class Sender:
         if destPort is None:
             destPort = self.serverPort
         if srcPort is None:
-            srcPort = self.networkPort
+            srcPort = self.senderPort
         print "" +tcpFlagsSet + " " + str(seqNr) + " " + str(ackNr)
         pIP = IP(dst=destIP, flags=ipFlagsSet)
         pTCP = TCP(sport=srcPort,
@@ -137,7 +137,7 @@ class Sender:
             response = None
             if self.useTracking == True:
                 # timeout case, return the response (if caught) by the tracker and missed by scapy
-                response = self.tracker.getLastResponse(self.networkPort)
+                response = self.tracker.getLastResponse(self.senderPort)
                 if type(response) is not Timeout:
                     captureMethod = "tracker"
             else:
@@ -213,7 +213,7 @@ class Sender:
     # uses scapy packet sniffer to sniff whatever TCP/IP packets there are on the network that are of interest
     def sniffPackets(self):
         sniffedPackets = sniff(lfilter=lambda x: IP in x and x[IP].src == self.serverIP and
-                                                 TCP in x and x[TCP].dport == self.networkPort,
+                                                 TCP in x and x[TCP].dport == self.senderPort,
                                timeout=self.waitTime)
         print 'sniffed'
         return sniffedPackets

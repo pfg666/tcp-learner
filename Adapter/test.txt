@@ -1,0 +1,10458 @@
+running
+Setting up SIG Handlers
+{'networkPort': 15000, 'serverMAC': '00:0C:29:22:B9:6B', 'resetMechanism': 0, 'serverIP': '10.42.0.42', 'networkInterface': 'eth0', 'waitTime': 0.06, 'useTracking': True, 'networkPortMinimum': 20000, 'networkPortMaximum': 40000, 'serverPort': 20000, 'portNumberFile': 'sn.txt'}
+stopping state
+False
+sender setup
+{'networkPort': 15000, 'serverMAC': '00:0C:29:22:B9:6B', 'resetMechanism': 0, 'serverIP': '10.42.0.42', 'networkInterface': 'eth0', 'waitTime': 0.06, 'useTracking': True, 'networkPortMinimum': 20000, 'networkPortMaximum': 40000, 'serverPort': 20000, 'isVerbose': 0, 'portNumberFile': 'sn.txt', 'tracker': <Tracker(Thread-1, started daemon -1232508096)>}
+listening on 18200
+python server: address connected: ('127.0.0.1', 56016)
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 15000
+next local port: 36846
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36846
+next local port: 36847
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36847
+next local port: 36848
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36848
+next local port: 36849
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36849
+next local port: 36850
+
+*****
+ A 1802209658 2761938142
+A 1802209658 2761938142
+timeout  
+ timeout
+*****
+ R 1802209658 0
+R 1802209658 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36850
+next local port: 36851
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36851
+next local port: 36852
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36852
+next local port: 36853
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36853
+next local port: 36854
+
+*****
+ AF 3709861582 4177603152
+AF 3709861582 4177603152
+timeout  
+ timeout
+*****
+ R 3709861582 0
+R 3709861582 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36854
+next local port: 36855
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36855
+next local port: 36856
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36856
+next local port: 36857
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36857
+next local port: 36858
+
+*****
+ AR 1557614532 2538027738
+AR 1557614532 2538027738
+timeout  
+ timeout
+*****
+ R 1557614532 0
+R 1557614532 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36858
+next local port: 36859
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36859
+next local port: 36860
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36860
+next local port: 36861
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36861
+next local port: 36862
+
+*****
+ F 3636610642 1893919657
+F 3636610642 1893919657
+timeout  
+ timeout
+*****
+ R 3636610642 0
+R 3636610642 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36862
+next local port: 36863
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36863
+next local port: 36864
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36864
+next local port: 36865
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36865
+next local port: 36866
+
+*****
+ R 4072208738 1893464722
+R 4072208738 1893464722
+timeout  
+ timeout
+*****
+ R 4072208738 0
+R 4072208738 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36866
+next local port: 36867
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36867
+next local port: 36868
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36868
+next local port: 36869
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36869
+next local port: 36870
+
+*****
+ S 1704574172 3701619944
+S 1704574172 3701619944
+timeout  
+ timeout
+*****
+ R 1704574172 0
+R 1704574172 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36870
+next local port: 36871
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36871
+next local port: 36872
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36872
+next local port: 36873
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36873
+next local port: 36874
+
+*****
+ SA 2334031684 2645962736
+SA 2334031684 2645962736
+timeout  
+ timeout
+*****
+ R 2334031684 0
+R 2334031684 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36874
+next local port: 36875
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36875
+next local port: 36876
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36876
+next local port: 36877
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36877
+next local port: 36878
+
+*****
+ A 2199529368 1191611140
+A 2199529368 1191611140
+timeout  
+ timeout
+*****
+ R 2199529368 0
+R 2199529368 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36878
+next local port: 36879
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36879
+next local port: 36880
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36880
+next local port: 36881
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36881
+next local port: 36882
+
+*****
+ AF 2719271313 210225772
+AF 2719271313 210225772
+timeout  
+ timeout
+*****
+ R 2719271313 0
+R 2719271313 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36882
+next local port: 36883
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36883
+next local port: 36884
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36884
+next local port: 36885
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36885
+next local port: 36886
+
+*****
+ AR 894878281 2456150753
+AR 894878281 2456150753
+timeout  
+ timeout
+*****
+ R 894878281 0
+R 894878281 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36886
+next local port: 36887
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36887
+next local port: 36888
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36888
+next local port: 36889
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36889
+next local port: 36890
+
+*****
+ F 4074771389 1920964562
+F 4074771389 1920964562
+timeout  
+ timeout
+*****
+ R 4074771389 0
+R 4074771389 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36890
+next local port: 36891
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36891
+next local port: 36892
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36892
+next local port: 36893
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36893
+next local port: 36894
+
+*****
+ R 3318386240 1306403338
+R 3318386240 1306403338
+timeout  
+ timeout
+*****
+ R 3318386240 0
+R 3318386240 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36894
+next local port: 36895
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36895
+next local port: 36896
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36896
+next local port: 36897
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36897
+next local port: 36898
+
+*****
+ S 409642063 3688046462
+S 409642063 3688046462
+timeout  
+ timeout
+*****
+ R 409642063 0
+R 409642063 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36898
+next local port: 36899
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36899
+next local port: 36900
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36900
+next local port: 36901
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36901
+next local port: 36902
+
+*****
+ SA 1584132438 2224159740
+SA 1584132438 2224159740
+timeout  
+ timeout
+*****
+ R 1584132438 0
+R 1584132438 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36902
+next local port: 36903
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36903
+next local port: 36904
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36904
+next local port: 36905
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36905
+next local port: 36906
+
+*****
+ A 3747861387 12143548
+A 3747861387 12143548
+timeout  
+ timeout
+*****
+ R 3747861387 0
+R 3747861387 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36906
+next local port: 36907
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36907
+next local port: 36908
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36908
+next local port: 36909
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36909
+next local port: 36910
+
+*****
+ AF 2670044013 898877618
+AF 2670044013 898877618
+timeout  
+ timeout
+*****
+ R 2670044013 0
+R 2670044013 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36910
+next local port: 36911
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36911
+next local port: 36912
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36912
+next local port: 36913
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36913
+next local port: 36914
+
+*****
+ AR 2445893908 236971232
+AR 2445893908 236971232
+timeout  
+ timeout
+*****
+ R 2445893908 0
+R 2445893908 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36914
+next local port: 36915
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36915
+next local port: 36916
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36916
+next local port: 36917
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36917
+next local port: 36918
+
+*****
+ F 4144950654 2389191467
+F 4144950654 2389191467
+timeout  
+ timeout
+*****
+ R 4144950654 0
+R 4144950654 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36918
+next local port: 36919
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36919
+next local port: 36920
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36920
+next local port: 36921
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36921
+next local port: 36922
+
+*****
+ R 13966190 1889917967
+R 13966190 1889917967
+timeout  
+ timeout
+*****
+ R 13966190 0
+R 13966190 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36922
+next local port: 36923
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36923
+next local port: 36924
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36924
+next local port: 36925
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36925
+next local port: 36926
+
+*****
+ S 2617063549 2504687881
+S 2617063549 2504687881
+timeout  
+ timeout
+*****
+ R 2617063549 0
+R 2617063549 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36926
+next local port: 36927
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36927
+next local port: 36928
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36928
+next local port: 36929
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36929
+next local port: 36930
+
+*****
+ SA 4152939824 3081004232
+SA 4152939824 3081004232
+timeout  
+ timeout
+*****
+ R 4152939824 0
+R 4152939824 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36930
+next local port: 36931
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36931
+next local port: 36932
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36932
+next local port: 36933
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36933
+next local port: 36934
+
+*****
+ A 4098419411 2879203072
+A 4098419411 2879203072
+timeout  
+ timeout
+*****
+ R 4098419411 0
+R 4098419411 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36934
+next local port: 36935
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36935
+next local port: 36936
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36936
+next local port: 36937
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36937
+next local port: 36938
+
+*****
+ AF 223521955 3578847397
+AF 223521955 3578847397
+timeout  
+ timeout
+*****
+ R 223521955 0
+R 223521955 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36938
+next local port: 36939
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36939
+next local port: 36940
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36940
+next local port: 36941
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36941
+next local port: 36942
+
+*****
+ AR 668965032 875530700
+AR 668965032 875530700
+timeout  
+ timeout
+*****
+ R 668965032 0
+R 668965032 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36942
+next local port: 36943
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36943
+next local port: 36944
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36944
+next local port: 36945
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36945
+next local port: 36946
+
+*****
+ F 2239996360 3628177569
+F 2239996360 3628177569
+timeout  
+ timeout
+*****
+ R 2239996360 0
+R 2239996360 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36946
+next local port: 36947
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36947
+next local port: 36948
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36948
+next local port: 36949
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36949
+next local port: 36950
+
+*****
+ R 1459453948 3024357749
+R 1459453948 3024357749
+timeout  
+ timeout
+*****
+ R 1459453948 0
+R 1459453948 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36950
+next local port: 36951
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36951
+next local port: 36952
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36952
+next local port: 36953
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36953
+next local port: 36954
+
+*****
+ S 93486522 3118417991
+S 93486522 3118417991
+timeout  
+ timeout
+*****
+ R 93486522 0
+R 93486522 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36954
+next local port: 36955
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36955
+next local port: 36956
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36956
+next local port: 36957
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36957
+next local port: 36958
+
+*****
+ SA 2787662053 4185893848
+SA 2787662053 4185893848
+timeout  
+ timeout
+*****
+ R 2787662053 0
+R 2787662053 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36958
+next local port: 36959
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36959
+next local port: 36960
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36960
+next local port: 36961
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36961
+next local port: 36962
+
+*****
+ A 1902446289 76380292
+A 1902446289 76380292
+timeout  
+ timeout
+*****
+ R 1902446289 0
+R 1902446289 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36962
+next local port: 36963
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36963
+next local port: 36964
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36964
+next local port: 36965
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36965
+next local port: 36966
+
+*****
+ AF 3896865632 707632862
+AF 3896865632 707632862
+timeout  
+ timeout
+*****
+ R 3896865632 0
+R 3896865632 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36966
+next local port: 36967
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36967
+next local port: 36968
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36968
+next local port: 36969
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36969
+next local port: 36970
+
+*****
+ AR 706316960 3818105158
+AR 706316960 3818105158
+timeout  
+ timeout
+*****
+ R 706316960 0
+R 706316960 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36970
+next local port: 36971
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36971
+next local port: 36972
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36972
+next local port: 36973
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36973
+next local port: 36974
+
+*****
+ F 820323923 679513019
+F 820323923 679513019
+timeout  
+ timeout
+*****
+ R 820323923 0
+R 820323923 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36974
+next local port: 36975
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36975
+next local port: 36976
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36976
+next local port: 36977
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36977
+next local port: 36978
+
+*****
+ R 1091219690 2786151610
+R 1091219690 2786151610
+timeout  
+ timeout
+*****
+ R 1091219690 0
+R 1091219690 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36978
+next local port: 36979
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36979
+next local port: 36980
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36980
+next local port: 36981
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36981
+next local port: 36982
+
+*****
+ S 35491314 1555806181
+S 35491314 1555806181
+timeout  
+ timeout
+*****
+ R 35491314 0
+R 35491314 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36982
+next local port: 36983
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36983
+next local port: 36984
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36984
+next local port: 36985
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36985
+next local port: 36986
+
+*****
+ SA 3993478323 3716583723
+SA 3993478323 3716583723
+timeout  
+ timeout
+*****
+ R 3993478323 0
+R 3993478323 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36986
+next local port: 36987
+
+*****
+ A 445552883 3446536457
+A 445552883 3446536457
+timeout  
+ timeout
+*****
+ R 445552883 0
+R 445552883 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36987
+next local port: 36988
+
+*****
+ A 3170535763 129760249
+A 3170535763 129760249
+timeout  
+ timeout
+*****
+ R 3170535763 0
+R 3170535763 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36988
+next local port: 36989
+
+*****
+ A 560556170 1747482536
+A 560556170 1747482536
+timeout  
+ timeout
+*****
+ R 560556170 0
+R 560556170 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36989
+next local port: 36990
+
+*****
+ A 1953972750 588436546
+A 1953972750 588436546
+timeout  
+ timeout
+*****
+ A 2408906737 2153463655
+A 2408906737 2153463655
+timeout  
+ timeout
+*****
+ R 2408906737 0
+R 2408906737 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36990
+next local port: 36991
+
+*****
+ A 2884405128 2743622885
+A 2884405128 2743622885
+timeout  
+ timeout
+*****
+ R 2884405128 0
+R 2884405128 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36991
+next local port: 36992
+
+*****
+ A 1045053190 3577849020
+A 1045053190 3577849020
+timeout  
+ timeout
+*****
+ R 1045053190 0
+R 1045053190 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36992
+next local port: 36993
+
+*****
+ A 1701924583 4260749101
+A 1701924583 4260749101
+timeout  
+ timeout
+*****
+ R 1701924583 0
+R 1701924583 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36993
+next local port: 36994
+
+*****
+ AF 4106302752 3808982154
+AF 4106302752 3808982154
+timeout  
+ timeout
+*****
+ A 3295182743 1717011660
+A 3295182743 1717011660
+timeout  
+ timeout
+*****
+ R 3295182743 0
+R 3295182743 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36994
+next local port: 36995
+
+*****
+ A 667532494 3734501661
+A 667532494 3734501661
+timeout  
+ timeout
+*****
+ R 667532494 0
+R 667532494 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36995
+next local port: 36996
+
+*****
+ A 661978017 1831076958
+A 661978017 1831076958
+timeout  
+ timeout
+*****
+ R 661978017 0
+R 661978017 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36996
+next local port: 36997
+
+*****
+ A 3748228011 2125187704
+A 3748228011 2125187704
+timeout  
+ timeout
+*****
+ R 3748228011 0
+R 3748228011 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36997
+next local port: 36998
+
+*****
+ AR 2172121962 3741260039
+AR 2172121962 3741260039
+timeout  
+ timeout
+*****
+ A 1608044467 2686611932
+A 1608044467 2686611932
+timeout  
+ timeout
+*****
+ R 1608044467 0
+R 1608044467 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36998
+next local port: 36999
+
+*****
+ A 3398667903 2840645366
+A 3398667903 2840645366
+timeout  
+ timeout
+*****
+ R 3398667903 0
+R 3398667903 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 36999
+next local port: 37000
+
+*****
+ A 3296329449 3870219568
+A 3296329449 3870219568
+timeout  
+ timeout
+*****
+ R 3296329449 0
+R 3296329449 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37000
+next local port: 37001
+
+*****
+ A 3345736041 2374737160
+A 3345736041 2374737160
+timeout  
+ timeout
+*****
+ R 3345736041 0
+R 3345736041 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37001
+next local port: 37002
+
+*****
+ F 883062183 3059064763
+F 883062183 3059064763
+timeout  
+ timeout
+*****
+ A 840971081 472600603
+A 840971081 472600603
+timeout  
+ timeout
+*****
+ R 840971081 0
+R 840971081 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37002
+next local port: 37003
+
+*****
+ A 3142730911 1163920749
+A 3142730911 1163920749
+timeout  
+ timeout
+*****
+ R 3142730911 0
+R 3142730911 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37003
+next local port: 37004
+
+*****
+ A 2243335639 3350643877
+A 2243335639 3350643877
+timeout  
+ timeout
+*****
+ R 2243335639 0
+R 2243335639 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37004
+next local port: 37005
+
+*****
+ A 338857740 296678829
+A 338857740 296678829
+timeout  
+ timeout
+*****
+ R 338857740 0
+R 338857740 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37005
+next local port: 37006
+
+*****
+ R 1240713815 3746459998
+R 1240713815 3746459998
+timeout  
+ timeout
+*****
+ A 4051000055 3080168943
+A 4051000055 3080168943
+timeout  
+ timeout
+*****
+ R 4051000055 0
+R 4051000055 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37006
+next local port: 37007
+
+*****
+ A 3269032427 3885089288
+A 3269032427 3885089288
+timeout  
+ timeout
+*****
+ R 3269032427 0
+R 3269032427 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37007
+next local port: 37008
+
+*****
+ A 1467002136 62135041
+A 1467002136 62135041
+timeout  
+ timeout
+*****
+ R 1467002136 0
+R 1467002136 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37008
+next local port: 37009
+
+*****
+ A 1413790157 400900700
+A 1413790157 400900700
+timeout  
+ timeout
+*****
+ R 1413790157 0
+R 1413790157 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37009
+next local port: 37010
+
+*****
+ S 2886662643 475102654
+S 2886662643 475102654
+timeout  
+ timeout
+*****
+ A 3211191336 3110311803
+A 3211191336 3110311803
+timeout  
+ timeout
+*****
+ R 3211191336 0
+R 3211191336 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37010
+next local port: 37011
+
+*****
+ A 24043987 3395697231
+A 24043987 3395697231
+timeout  
+ timeout
+*****
+ R 24043987 0
+R 24043987 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37011
+next local port: 37012
+
+*****
+ A 2635250903 3288550103
+A 2635250903 3288550103
+timeout  
+ timeout
+*****
+ R 2635250903 0
+R 2635250903 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37012
+next local port: 37013
+
+*****
+ A 4098638372 1027208735
+A 4098638372 1027208735
+timeout  
+ timeout
+*****
+ R 4098638372 0
+R 4098638372 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37013
+next local port: 37014
+
+*****
+ SA 488106138 1572562314
+SA 488106138 1572562314
+timeout  
+ timeout
+*****
+ A 806129942 522801174
+A 806129942 522801174
+timeout  
+ timeout
+*****
+ R 806129942 0
+R 806129942 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37014
+next local port: 37015
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37015
+next local port: 37016
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37016
+next local port: 37017
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37017
+next local port: 37018
+
+*****
+ A 539407293 3467696532
+A 539407293 3467696532
+timeout  
+ timeout
+*****
+ R 539407293 0
+R 539407293 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37018
+next local port: 37019
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37019
+next local port: 37020
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37020
+next local port: 37021
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37021
+next local port: 37022
+
+*****
+ AF 1267240474 1966044242
+AF 1267240474 1966044242
+timeout  
+ timeout
+*****
+ R 1267240474 0
+R 1267240474 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37022
+next local port: 37023
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37023
+next local port: 37024
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37024
+next local port: 37025
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37025
+next local port: 37026
+
+*****
+ AR 922101703 347520220
+AR 922101703 347520220
+timeout  
+ timeout
+*****
+ R 922101703 0
+R 922101703 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37026
+next local port: 37027
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37027
+next local port: 37028
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37028
+next local port: 37029
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37029
+next local port: 37030
+
+*****
+ F 988626807 2384428533
+F 988626807 2384428533
+timeout  
+ timeout
+*****
+ R 988626807 0
+R 988626807 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37030
+next local port: 37031
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37031
+next local port: 37032
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37032
+next local port: 37033
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37033
+next local port: 37034
+
+*****
+ R 4003886031 2141934686
+R 4003886031 2141934686
+timeout  
+ timeout
+*****
+ R 4003886031 0
+R 4003886031 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37034
+next local port: 37035
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37035
+next local port: 37036
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37036
+next local port: 37037
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37037
+next local port: 37038
+
+*****
+ S 72237433 968337652
+S 72237433 968337652
+timeout  
+ timeout
+*****
+ R 72237433 0
+R 72237433 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37038
+next local port: 37039
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37039
+next local port: 37040
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37040
+next local port: 37041
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37041
+next local port: 37042
+
+*****
+ SA 395944132 2809916698
+SA 395944132 2809916698
+timeout  
+ timeout
+*****
+ R 395944132 0
+R 395944132 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37042
+next local port: 37043
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37043
+next local port: 37044
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37044
+next local port: 37045
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37045
+next local port: 37046
+
+*****
+ A 3183698786 2599966427
+A 3183698786 2599966427
+timeout  
+ timeout
+*****
+ R 3183698786 0
+R 3183698786 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37046
+next local port: 37047
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37047
+next local port: 37048
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37048
+next local port: 37049
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37049
+next local port: 37050
+
+*****
+ AF 1631361256 2614724680
+AF 1631361256 2614724680
+timeout  
+ timeout
+*****
+ R 1631361256 0
+R 1631361256 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37050
+next local port: 37051
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37051
+next local port: 37052
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37052
+next local port: 37053
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37053
+next local port: 37054
+
+*****
+ AR 489396294 745070329
+AR 489396294 745070329
+timeout  
+ timeout
+*****
+ R 489396294 0
+R 489396294 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37054
+next local port: 37055
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37055
+next local port: 37056
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37056
+next local port: 37057
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37057
+next local port: 37058
+
+*****
+ F 3128589933 1692947755
+F 3128589933 1692947755
+timeout  
+ timeout
+*****
+ R 3128589933 0
+R 3128589933 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37058
+next local port: 37059
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37059
+next local port: 37060
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37060
+next local port: 37061
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37061
+next local port: 37062
+
+*****
+ R 183448548 4164170360
+R 183448548 4164170360
+timeout  
+ timeout
+*****
+ R 183448548 0
+R 183448548 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37062
+next local port: 37063
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37063
+next local port: 37064
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37064
+next local port: 37065
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37065
+next local port: 37066
+
+*****
+ S 1674859090 3413375569
+S 1674859090 3413375569
+timeout  
+ timeout
+*****
+ R 1674859090 0
+R 1674859090 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37066
+next local port: 37067
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37067
+next local port: 37068
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37068
+next local port: 37069
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37069
+next local port: 37070
+
+*****
+ SA 3126557041 2571586942
+SA 3126557041 2571586942
+timeout  
+ timeout
+*****
+ R 3126557041 0
+R 3126557041 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37070
+next local port: 37071
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37071
+next local port: 37072
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37072
+next local port: 37073
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37073
+next local port: 37074
+
+*****
+ A 2237065702 3866276524
+A 2237065702 3866276524
+timeout  
+ timeout
+*****
+ R 2237065702 0
+R 2237065702 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37074
+next local port: 37075
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37075
+next local port: 37076
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37076
+next local port: 37077
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37077
+next local port: 37078
+
+*****
+ AF 3278993874 1440447191
+AF 3278993874 1440447191
+timeout  
+ timeout
+*****
+ R 3278993874 0
+R 3278993874 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37078
+next local port: 37079
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37079
+next local port: 37080
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37080
+next local port: 37081
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37081
+next local port: 37082
+
+*****
+ AR 1743337015 450966917
+AR 1743337015 450966917
+timeout  
+ timeout
+*****
+ R 1743337015 0
+R 1743337015 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37082
+next local port: 37083
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37083
+next local port: 37084
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37084
+next local port: 37085
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37085
+next local port: 37086
+
+*****
+ F 2604811156 2266392191
+F 2604811156 2266392191
+timeout  
+ timeout
+*****
+ R 2604811156 0
+R 2604811156 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37086
+next local port: 37087
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37087
+next local port: 37088
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37088
+next local port: 37089
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37089
+next local port: 37090
+
+*****
+ R 648861971 306279201
+R 648861971 306279201
+timeout  
+ timeout
+*****
+ R 648861971 0
+R 648861971 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37090
+next local port: 37091
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37091
+next local port: 37092
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37092
+next local port: 37093
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37093
+next local port: 37094
+
+*****
+ S 2435997495 2359950884
+S 2435997495 2359950884
+timeout  
+ timeout
+*****
+ R 2435997495 0
+R 2435997495 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37094
+next local port: 37095
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37095
+next local port: 37096
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37096
+next local port: 37097
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37097
+next local port: 37098
+
+*****
+ SA 3396013644 2873498974
+SA 3396013644 2873498974
+timeout  
+ timeout
+*****
+ R 3396013644 0
+R 3396013644 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37098
+next local port: 37099
+
+*****
+ AF 683581256 3198035674
+AF 683581256 3198035674
+timeout  
+ timeout
+*****
+ R 683581256 0
+R 683581256 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37099
+next local port: 37100
+
+*****
+ AF 1179115438 259326797
+AF 1179115438 259326797
+timeout  
+ timeout
+*****
+ R 1179115438 0
+R 1179115438 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37100
+next local port: 37101
+
+*****
+ AF 1083981508 716061913
+AF 1083981508 716061913
+timeout  
+ timeout
+*****
+ R 1083981508 0
+R 1083981508 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37101
+next local port: 37102
+
+*****
+ A 3124079549 3888790526
+A 3124079549 3888790526
+timeout  
+ timeout
+*****
+ AF 4182658736 1843685252
+AF 4182658736 1843685252
+timeout  
+ timeout
+*****
+ R 4182658736 0
+R 4182658736 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37102
+next local port: 37103
+
+*****
+ AF 3034774881 564535081
+AF 3034774881 564535081
+timeout  
+ timeout
+*****
+ R 3034774881 0
+R 3034774881 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37103
+next local port: 37104
+
+*****
+ AF 3062527242 2791095160
+AF 3062527242 2791095160
+timeout  
+ timeout
+*****
+ R 3062527242 0
+R 3062527242 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37104
+next local port: 37105
+
+*****
+ AF 3961303717 3566211658
+AF 3961303717 3566211658
+timeout  
+ timeout
+*****
+ R 3961303717 0
+R 3961303717 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37105
+next local port: 37106
+
+*****
+ AF 3892771840 1280978040
+AF 3892771840 1280978040
+timeout  
+ timeout
+*****
+ AF 132018402 2694324601
+AF 132018402 2694324601
+timeout  
+ timeout
+*****
+ R 132018402 0
+R 132018402 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37106
+next local port: 37107
+
+*****
+ AF 2139893752 3172421869
+AF 2139893752 3172421869
+timeout  
+ timeout
+*****
+ R 2139893752 0
+R 2139893752 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37107
+next local port: 37108
+
+*****
+ AF 2844487159 1281452446
+AF 2844487159 1281452446
+timeout  
+ timeout
+*****
+ R 2844487159 0
+R 2844487159 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37108
+next local port: 37109
+
+*****
+ AF 459476065 1694299181
+AF 459476065 1694299181
+timeout  
+ timeout
+*****
+ R 459476065 0
+R 459476065 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37109
+next local port: 37110
+
+*****
+ AR 3456730318 2166314059
+AR 3456730318 2166314059
+timeout  
+ timeout
+*****
+ AF 4118494622 3257432091
+AF 4118494622 3257432091
+timeout  
+ timeout
+*****
+ R 4118494622 0
+R 4118494622 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37110
+next local port: 37111
+
+*****
+ AF 112762132 1108320659
+AF 112762132 1108320659
+timeout  
+ timeout
+*****
+ R 112762132 0
+R 112762132 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37111
+next local port: 37112
+
+*****
+ AF 2564975801 3949726012
+AF 2564975801 3949726012
+timeout  
+ timeout
+*****
+ R 2564975801 0
+R 2564975801 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37112
+next local port: 37113
+
+*****
+ AF 3397411196 607863322
+AF 3397411196 607863322
+timeout  
+ timeout
+*****
+ R 3397411196 0
+R 3397411196 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37113
+next local port: 37114
+
+*****
+ F 946265830 3811745489
+F 946265830 3811745489
+timeout  
+ timeout
+*****
+ AF 1299072378 1518862762
+AF 1299072378 1518862762
+timeout  
+ timeout
+*****
+ R 1299072378 0
+R 1299072378 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37114
+next local port: 37115
+
+*****
+ AF 1115644884 3237073108
+AF 1115644884 3237073108
+timeout  
+ timeout
+*****
+ R 1115644884 0
+R 1115644884 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37115
+next local port: 37116
+
+*****
+ AF 3801996356 1634009839
+AF 3801996356 1634009839
+timeout  
+ timeout
+*****
+ R 3801996356 0
+R 3801996356 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37116
+next local port: 37117
+
+*****
+ AF 2010289311 2803070608
+AF 2010289311 2803070608
+timeout  
+ timeout
+*****
+ R 2010289311 0
+R 2010289311 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37117
+next local port: 37118
+
+*****
+ R 3915743422 1956382765
+R 3915743422 1956382765
+timeout  
+ timeout
+*****
+ AF 1526161795 2390825994
+AF 1526161795 2390825994
+timeout  
+ timeout
+*****
+ R 1526161795 0
+R 1526161795 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37118
+next local port: 37119
+
+*****
+ AF 2885765283 17927969
+AF 2885765283 17927969
+timeout  
+ timeout
+*****
+ R 2885765283 0
+R 2885765283 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37119
+next local port: 37120
+
+*****
+ AF 1229517225 742081397
+AF 1229517225 742081397
+timeout  
+ timeout
+*****
+ R 1229517225 0
+R 1229517225 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37120
+next local port: 37121
+
+*****
+ AF 1664503375 4085103347
+AF 1664503375 4085103347
+timeout  
+ timeout
+*****
+ R 1664503375 0
+R 1664503375 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37121
+next local port: 37122
+
+*****
+ S 3991392151 2561046232
+S 3991392151 2561046232
+timeout  
+ timeout
+*****
+ AF 3349693927 476581414
+AF 3349693927 476581414
+timeout  
+ timeout
+*****
+ R 3349693927 0
+R 3349693927 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37122
+next local port: 37123
+
+*****
+ AF 155347400 3950521553
+AF 155347400 3950521553
+timeout  
+ timeout
+*****
+ R 155347400 0
+R 155347400 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37123
+next local port: 37124
+
+*****
+ AF 920347476 3773822614
+AF 920347476 3773822614
+timeout  
+ timeout
+*****
+ R 920347476 0
+R 920347476 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37124
+next local port: 37125
+
+*****
+ AF 3099516984 2993518754
+AF 3099516984 2993518754
+timeout  
+ timeout
+*****
+ R 3099516984 0
+R 3099516984 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37125
+next local port: 37126
+
+*****
+ SA 1998361039 388769345
+SA 1998361039 388769345
+timeout  
+ timeout
+*****
+ AF 2204115568 70618676
+AF 2204115568 70618676
+timeout  
+ timeout
+*****
+ R 2204115568 0
+R 2204115568 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37126
+next local port: 37127
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37127
+next local port: 37128
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37128
+next local port: 37129
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37129
+next local port: 37130
+
+*****
+ A 2462710093 1009434508
+A 2462710093 1009434508
+timeout  
+ timeout
+*****
+ R 2462710093 0
+R 2462710093 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37130
+next local port: 37131
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37131
+next local port: 37132
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37132
+next local port: 37133
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37133
+next local port: 37134
+
+*****
+ AF 1904238350 4097446829
+AF 1904238350 4097446829
+timeout  
+ timeout
+*****
+ R 1904238350 0
+R 1904238350 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37134
+next local port: 37135
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37135
+next local port: 37136
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37136
+next local port: 37137
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37137
+next local port: 37138
+
+*****
+ AR 414570164 685526423
+AR 414570164 685526423
+timeout  
+ timeout
+*****
+ R 414570164 0
+R 414570164 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37138
+next local port: 37139
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37139
+next local port: 37140
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37140
+next local port: 37141
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37141
+next local port: 37142
+
+*****
+ F 1593491869 1462715698
+F 1593491869 1462715698
+timeout  
+ timeout
+*****
+ R 1593491869 0
+R 1593491869 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37142
+next local port: 37143
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37143
+next local port: 37144
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37144
+next local port: 37145
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37145
+next local port: 37146
+
+*****
+ R 1285398506 175346000
+R 1285398506 175346000
+timeout  
+ timeout
+*****
+ R 1285398506 0
+R 1285398506 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37146
+next local port: 37147
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37147
+next local port: 37148
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37148
+next local port: 37149
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37149
+next local port: 37150
+
+*****
+ S 2287894816 462808545
+S 2287894816 462808545
+timeout  
+ timeout
+*****
+ R 2287894816 0
+R 2287894816 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37150
+next local port: 37151
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37151
+next local port: 37152
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37152
+next local port: 37153
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37153
+next local port: 37154
+
+*****
+ SA 2012183637 2852395351
+SA 2012183637 2852395351
+timeout  
+ timeout
+*****
+ R 2012183637 0
+R 2012183637 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37154
+next local port: 37155
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37155
+next local port: 37156
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37156
+next local port: 37157
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37157
+next local port: 37158
+
+*****
+ A 218447554 4103668649
+A 218447554 4103668649
+timeout  
+ timeout
+*****
+ R 218447554 0
+R 218447554 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37158
+next local port: 37159
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37159
+next local port: 37160
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37160
+next local port: 37161
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37161
+next local port: 37162
+
+*****
+ AF 2555906764 4268338760
+AF 2555906764 4268338760
+timeout  
+ timeout
+*****
+ R 2555906764 0
+R 2555906764 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37162
+next local port: 37163
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37163
+next local port: 37164
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37164
+next local port: 37165
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37165
+next local port: 37166
+
+*****
+ AR 3240539340 3102836802
+AR 3240539340 3102836802
+timeout  
+ timeout
+*****
+ R 3240539340 0
+R 3240539340 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37166
+next local port: 37167
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37167
+next local port: 37168
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37168
+next local port: 37169
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37169
+next local port: 37170
+
+*****
+ F 517109747 2596441452
+F 517109747 2596441452
+timeout  
+ timeout
+*****
+ R 517109747 0
+R 517109747 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37170
+next local port: 37171
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37171
+next local port: 37172
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37172
+next local port: 37173
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37173
+next local port: 37174
+
+*****
+ R 876852047 2730073510
+R 876852047 2730073510
+timeout  
+ timeout
+*****
+ R 876852047 0
+R 876852047 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37174
+next local port: 37175
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37175
+next local port: 37176
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37176
+next local port: 37177
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37177
+next local port: 37178
+
+*****
+ S 1328866390 3406197021
+S 1328866390 3406197021
+timeout  
+ timeout
+*****
+ R 1328866390 0
+R 1328866390 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37178
+next local port: 37179
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37179
+next local port: 37180
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37180
+next local port: 37181
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37181
+next local port: 37182
+
+*****
+ SA 1099067721 2421808933
+SA 1099067721 2421808933
+timeout  
+ timeout
+*****
+ R 1099067721 0
+R 1099067721 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37182
+next local port: 37183
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37183
+next local port: 37184
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37184
+next local port: 37185
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37185
+next local port: 37186
+
+*****
+ A 359865315 394554793
+A 359865315 394554793
+timeout  
+ timeout
+*****
+ R 359865315 0
+R 359865315 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37186
+next local port: 37187
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37187
+next local port: 37188
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37188
+next local port: 37189
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37189
+next local port: 37190
+
+*****
+ AF 3637913861 2180668343
+AF 3637913861 2180668343
+timeout  
+ timeout
+*****
+ R 3637913861 0
+R 3637913861 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37190
+next local port: 37191
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37191
+next local port: 37192
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37192
+next local port: 37193
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37193
+next local port: 37194
+
+*****
+ AR 3541146401 2001836625
+AR 3541146401 2001836625
+timeout  
+ timeout
+*****
+ R 3541146401 0
+R 3541146401 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37194
+next local port: 37195
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37195
+next local port: 37196
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37196
+next local port: 37197
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37197
+next local port: 37198
+
+*****
+ F 4044097530 3525405103
+F 4044097530 3525405103
+timeout  
+ timeout
+*****
+ R 4044097530 0
+R 4044097530 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37198
+next local port: 37199
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37199
+next local port: 37200
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37200
+next local port: 37201
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37201
+next local port: 37202
+
+*****
+ R 3162695493 2968685796
+R 3162695493 2968685796
+timeout  
+ timeout
+*****
+ R 3162695493 0
+R 3162695493 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37202
+next local port: 37203
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37203
+next local port: 37204
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37204
+next local port: 37205
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37205
+next local port: 37206
+
+*****
+ S 3155651430 325732499
+S 3155651430 325732499
+timeout  
+ timeout
+*****
+ R 3155651430 0
+R 3155651430 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37206
+next local port: 37207
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37207
+next local port: 37208
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37208
+next local port: 37209
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37209
+next local port: 37210
+
+*****
+ SA 3681104718 1204396726
+SA 3681104718 1204396726
+timeout  
+ timeout
+*****
+ R 3681104718 0
+R 3681104718 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37210
+next local port: 37211
+
+*****
+ AR 1211593208 276665091
+AR 1211593208 276665091
+timeout  
+ timeout
+*****
+ R 1211593208 0
+R 1211593208 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37211
+next local port: 37212
+
+*****
+ AR 2952157010 3692305609
+AR 2952157010 3692305609
+timeout  
+ timeout
+*****
+ R 2952157010 0
+R 2952157010 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37212
+next local port: 37213
+
+*****
+ AR 2983188191 649429667
+AR 2983188191 649429667
+timeout  
+ timeout
+*****
+ R 2983188191 0
+R 2983188191 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37213
+next local port: 37214
+
+*****
+ A 3101955766 310381041
+A 3101955766 310381041
+timeout  
+ timeout
+*****
+ AR 3943637719 387449151
+AR 3943637719 387449151
+timeout  
+ timeout
+*****
+ R 3943637719 0
+R 3943637719 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37214
+next local port: 37215
+
+*****
+ AR 3737040398 4020567970
+AR 3737040398 4020567970
+timeout  
+ timeout
+*****
+ R 3737040398 0
+R 3737040398 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37215
+next local port: 37216
+
+*****
+ AR 3887868254 1955630017
+AR 3887868254 1955630017
+timeout  
+ timeout
+*****
+ R 3887868254 0
+R 3887868254 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37216
+next local port: 37217
+
+*****
+ AR 3699106626 317302459
+AR 3699106626 317302459
+timeout  
+ timeout
+*****
+ R 3699106626 0
+R 3699106626 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37217
+next local port: 37218
+
+*****
+ AF 2898581323 160687464
+AF 2898581323 160687464
+timeout  
+ timeout
+*****
+ AR 1150806713 1671435551
+AR 1150806713 1671435551
+timeout  
+ timeout
+*****
+ R 1150806713 0
+R 1150806713 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37218
+next local port: 37219
+
+*****
+ AR 1550340625 3935803623
+AR 1550340625 3935803623
+timeout  
+ timeout
+*****
+ R 1550340625 0
+R 1550340625 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37219
+next local port: 37220
+
+*****
+ AR 2939370913 2455959486
+AR 2939370913 2455959486
+timeout  
+ timeout
+*****
+ R 2939370913 0
+R 2939370913 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37220
+next local port: 37221
+
+*****
+ AR 3642123521 1845971951
+AR 3642123521 1845971951
+timeout  
+ timeout
+*****
+ R 3642123521 0
+R 3642123521 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37221
+next local port: 37222
+
+*****
+ AR 4075440553 1207799140
+AR 4075440553 1207799140
+timeout  
+ timeout
+*****
+ AR 39731537 3986809308
+AR 39731537 3986809308
+timeout  
+ timeout
+*****
+ R 39731537 0
+R 39731537 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37222
+next local port: 37223
+
+*****
+ AR 123838137 4201148888
+AR 123838137 4201148888
+timeout  
+ timeout
+*****
+ R 123838137 0
+R 123838137 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37223
+next local port: 37224
+
+*****
+ AR 3766913777 141061326
+AR 3766913777 141061326
+timeout  
+ timeout
+*****
+ R 3766913777 0
+R 3766913777 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37224
+next local port: 37225
+
+*****
+ AR 1438672077 665139026
+AR 1438672077 665139026
+timeout  
+ timeout
+*****
+ R 1438672077 0
+R 1438672077 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37225
+next local port: 37226
+
+*****
+ F 1286125745 394850852
+F 1286125745 394850852
+timeout  
+ timeout
+*****
+ AR 3365086367 629330495
+AR 3365086367 629330495
+timeout  
+ timeout
+*****
+ R 3365086367 0
+R 3365086367 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37226
+next local port: 37227
+
+*****
+ AR 3295265127 2884565786
+AR 3295265127 2884565786
+timeout  
+ timeout
+*****
+ R 3295265127 0
+R 3295265127 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37227
+next local port: 37228
+
+*****
+ AR 3788561293 3432305076
+AR 3788561293 3432305076
+timeout  
+ timeout
+*****
+ R 3788561293 0
+R 3788561293 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37228
+next local port: 37229
+
+*****
+ AR 564796162 895744142
+AR 564796162 895744142
+timeout  
+ timeout
+*****
+ R 564796162 0
+R 564796162 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37229
+next local port: 37230
+
+*****
+ R 2063360941 65498292
+R 2063360941 65498292
+timeout  
+ timeout
+*****
+ AR 3754363224 1734964441
+AR 3754363224 1734964441
+timeout  
+ timeout
+*****
+ R 3754363224 0
+R 3754363224 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37230
+next local port: 37231
+
+*****
+ AR 2560371078 2587515347
+AR 2560371078 2587515347
+timeout  
+ timeout
+*****
+ R 2560371078 0
+R 2560371078 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37231
+next local port: 37232
+
+*****
+ AR 1900493920 2335643385
+AR 1900493920 2335643385
+timeout  
+ timeout
+*****
+ R 1900493920 0
+R 1900493920 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37232
+next local port: 37233
+
+*****
+ AR 3884069900 3905715299
+AR 3884069900 3905715299
+timeout  
+ timeout
+*****
+ R 3884069900 0
+R 3884069900 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37233
+next local port: 37234
+
+*****
+ S 3926703734 2978378715
+S 3926703734 2978378715
+timeout  
+ timeout
+*****
+ AR 262043946 1929534604
+AR 262043946 1929534604
+timeout  
+ timeout
+*****
+ R 262043946 0
+R 262043946 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37234
+next local port: 37235
+
+*****
+ AR 3949343303 2719396391
+AR 3949343303 2719396391
+timeout  
+ timeout
+*****
+ R 3949343303 0
+R 3949343303 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37235
+next local port: 37236
+
+*****
+ AR 89490609 359756673
+AR 89490609 359756673
+timeout  
+ timeout
+*****
+ R 89490609 0
+R 89490609 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37236
+next local port: 37237
+
+*****
+ AR 1352229861 2047999112
+AR 1352229861 2047999112
+timeout  
+ timeout
+*****
+ R 1352229861 0
+R 1352229861 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37237
+next local port: 37238
+
+*****
+ SA 3885330510 1578780110
+SA 3885330510 1578780110
+timeout  
+ timeout
+*****
+ AR 2478908318 633258814
+AR 2478908318 633258814
+timeout  
+ timeout
+*****
+ R 2478908318 0
+R 2478908318 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37238
+next local port: 37239
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37239
+next local port: 37240
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37240
+next local port: 37241
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37241
+next local port: 37242
+
+*****
+ A 3324192895 1457212548
+A 3324192895 1457212548
+timeout  
+ timeout
+*****
+ R 3324192895 0
+R 3324192895 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37242
+next local port: 37243
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37243
+next local port: 37244
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37244
+next local port: 37245
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37245
+next local port: 37246
+
+*****
+ AF 1142454063 1160171272
+AF 1142454063 1160171272
+timeout  
+ timeout
+*****
+ R 1142454063 0
+R 1142454063 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37246
+next local port: 37247
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37247
+next local port: 37248
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37248
+next local port: 37249
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37249
+next local port: 37250
+
+*****
+ AR 3772384188 1650897255
+AR 3772384188 1650897255
+timeout  
+ timeout
+*****
+ R 3772384188 0
+R 3772384188 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37250
+next local port: 37251
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37251
+next local port: 37252
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37252
+next local port: 37253
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37253
+next local port: 37254
+
+*****
+ F 806164369 2526946611
+F 806164369 2526946611
+timeout  
+ timeout
+*****
+ R 806164369 0
+R 806164369 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37254
+next local port: 37255
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37255
+next local port: 37256
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37256
+next local port: 37257
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37257
+next local port: 37258
+
+*****
+ R 2379720830 3410286563
+R 2379720830 3410286563
+timeout  
+ timeout
+*****
+ R 2379720830 0
+R 2379720830 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37258
+next local port: 37259
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37259
+next local port: 37260
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37260
+next local port: 37261
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37261
+next local port: 37262
+
+*****
+ S 380845809 3042162379
+S 380845809 3042162379
+timeout  
+ timeout
+*****
+ R 380845809 0
+R 380845809 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37262
+next local port: 37263
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37263
+next local port: 37264
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37264
+next local port: 37265
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37265
+next local port: 37266
+
+*****
+ SA 4191044665 1269676404
+SA 4191044665 1269676404
+timeout  
+ timeout
+*****
+ R 4191044665 0
+R 4191044665 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37266
+next local port: 37267
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37267
+next local port: 37268
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37268
+next local port: 37269
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37269
+next local port: 37270
+
+*****
+ A 3446982546 3579176753
+A 3446982546 3579176753
+timeout  
+ timeout
+*****
+ R 3446982546 0
+R 3446982546 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37270
+next local port: 37271
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37271
+next local port: 37272
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37272
+next local port: 37273
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37273
+next local port: 37274
+
+*****
+ AF 1660359199 608374251
+AF 1660359199 608374251
+timeout  
+ timeout
+*****
+ R 1660359199 0
+R 1660359199 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37274
+next local port: 37275
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37275
+next local port: 37276
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37276
+next local port: 37277
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37277
+next local port: 37278
+
+*****
+ AR 3356859012 699718266
+AR 3356859012 699718266
+timeout  
+ timeout
+*****
+ R 3356859012 0
+R 3356859012 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37278
+next local port: 37279
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37279
+next local port: 37280
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37280
+next local port: 37281
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37281
+next local port: 37282
+
+*****
+ F 1147089063 1324697537
+F 1147089063 1324697537
+timeout  
+ timeout
+*****
+ R 1147089063 0
+R 1147089063 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37282
+next local port: 37283
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37283
+next local port: 37284
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37284
+next local port: 37285
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37285
+next local port: 37286
+
+*****
+ R 3664211517 3433863940
+R 3664211517 3433863940
+timeout  
+ timeout
+*****
+ R 3664211517 0
+R 3664211517 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37286
+next local port: 37287
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37287
+next local port: 37288
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37288
+next local port: 37289
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37289
+next local port: 37290
+
+*****
+ S 612944101 4204617208
+S 612944101 4204617208
+timeout  
+ timeout
+*****
+ R 612944101 0
+R 612944101 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37290
+next local port: 37291
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37291
+next local port: 37292
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37292
+next local port: 37293
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37293
+next local port: 37294
+
+*****
+ SA 3695629191 1426131767
+SA 3695629191 1426131767
+timeout  
+ timeout
+*****
+ R 3695629191 0
+R 3695629191 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37294
+next local port: 37295
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37295
+next local port: 37296
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37296
+next local port: 37297
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37297
+next local port: 37298
+
+*****
+ A 1603962050 3272959415
+A 1603962050 3272959415
+timeout  
+ timeout
+*****
+ R 1603962050 0
+R 1603962050 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37298
+next local port: 37299
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37299
+next local port: 37300
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37300
+next local port: 37301
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37301
+next local port: 37302
+
+*****
+ AF 2444990204 3203770106
+AF 2444990204 3203770106
+timeout  
+ timeout
+*****
+ R 2444990204 0
+R 2444990204 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37302
+next local port: 37303
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37303
+next local port: 37304
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37304
+next local port: 37305
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37305
+next local port: 37306
+
+*****
+ AR 1385649505 148504230
+AR 1385649505 148504230
+timeout  
+ timeout
+*****
+ R 1385649505 0
+R 1385649505 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37306
+next local port: 37307
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37307
+next local port: 37308
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37308
+next local port: 37309
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37309
+next local port: 37310
+
+*****
+ F 3663096788 4069201570
+F 3663096788 4069201570
+timeout  
+ timeout
+*****
+ R 3663096788 0
+R 3663096788 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37310
+next local port: 37311
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37311
+next local port: 37312
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37312
+next local port: 37313
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37313
+next local port: 37314
+
+*****
+ R 3260582317 1652460443
+R 3260582317 1652460443
+timeout  
+ timeout
+*****
+ R 3260582317 0
+R 3260582317 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37314
+next local port: 37315
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37315
+next local port: 37316
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37316
+next local port: 37317
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37317
+next local port: 37318
+
+*****
+ S 3022384743 4226585266
+S 3022384743 4226585266
+timeout  
+ timeout
+*****
+ R 3022384743 0
+R 3022384743 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37318
+next local port: 37319
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37319
+next local port: 37320
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37320
+next local port: 37321
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37321
+next local port: 37322
+
+*****
+ SA 910439643 1635663408
+SA 910439643 1635663408
+timeout  
+ timeout
+*****
+ R 910439643 0
+R 910439643 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37322
+next local port: 37323
+
+*****
+ F 266137328 4265022613
+F 266137328 4265022613
+timeout  
+ timeout
+*****
+ R 266137328 0
+R 266137328 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37323
+next local port: 37324
+
+*****
+ F 1140450640 3409178772
+F 1140450640 3409178772
+timeout  
+ timeout
+*****
+ R 1140450640 0
+R 1140450640 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37324
+next local port: 37325
+
+*****
+ F 3439596244 67394208
+F 3439596244 67394208
+timeout  
+ timeout
+*****
+ R 3439596244 0
+R 3439596244 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37325
+next local port: 37326
+
+*****
+ A 1987029634 4127379817
+A 1987029634 4127379817
+timeout  
+ timeout
+*****
+ F 1985003888 342079727
+F 1985003888 342079727
+timeout  
+ timeout
+*****
+ R 1985003888 0
+R 1985003888 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37326
+next local port: 37327
+
+*****
+ F 2419682235 838458391
+F 2419682235 838458391
+timeout  
+ timeout
+*****
+ R 2419682235 0
+R 2419682235 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37327
+next local port: 37328
+
+*****
+ F 2138792876 1579859353
+F 2138792876 1579859353
+timeout  
+ timeout
+*****
+ R 2138792876 0
+R 2138792876 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37328
+next local port: 37329
+
+*****
+ F 1710526117 58467653
+F 1710526117 58467653
+timeout  
+ timeout
+*****
+ R 1710526117 0
+R 1710526117 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37329
+next local port: 37330
+
+*****
+ AF 3610177969 3737625170
+AF 3610177969 3737625170
+timeout  
+ timeout
+*****
+ F 1930554701 2109207572
+F 1930554701 2109207572
+timeout  
+ timeout
+*****
+ R 1930554701 0
+R 1930554701 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37330
+next local port: 37331
+
+*****
+ F 2565591443 2768211547
+F 2565591443 2768211547
+timeout  
+ timeout
+*****
+ R 2565591443 0
+R 2565591443 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37331
+next local port: 37332
+
+*****
+ F 2558008929 972467509
+F 2558008929 972467509
+timeout  
+ timeout
+*****
+ R 2558008929 0
+R 2558008929 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37332
+next local port: 37333
+
+*****
+ F 2348287677 3007490750
+F 2348287677 3007490750
+timeout  
+ timeout
+*****
+ R 2348287677 0
+R 2348287677 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37333
+next local port: 37334
+
+*****
+ AR 699926680 1074761121
+AR 699926680 1074761121
+timeout  
+ timeout
+*****
+ F 3853954671 2424308288
+F 3853954671 2424308288
+timeout  
+ timeout
+*****
+ R 3853954671 0
+R 3853954671 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37334
+next local port: 37335
+
+*****
+ F 2328743022 3011982350
+F 2328743022 3011982350
+timeout  
+ timeout
+*****
+ R 2328743022 0
+R 2328743022 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37335
+next local port: 37336
+
+*****
+ F 1996542110 3382916940
+F 1996542110 3382916940
+timeout  
+ timeout
+*****
+ R 1996542110 0
+R 1996542110 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37336
+next local port: 37337
+
+*****
+ F 631765110 1076231518
+F 631765110 1076231518
+timeout  
+ timeout
+*****
+ R 631765110 0
+R 631765110 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37337
+next local port: 37338
+
+*****
+ F 89750829 19268255
+F 89750829 19268255
+timeout  
+ timeout
+*****
+ F 1810829529 269429834
+F 1810829529 269429834
+timeout  
+ timeout
+*****
+ R 1810829529 0
+R 1810829529 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37338
+next local port: 37339
+
+*****
+ F 303512037 2908719320
+F 303512037 2908719320
+timeout  
+ timeout
+*****
+ R 303512037 0
+R 303512037 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37339
+next local port: 37340
+
+*****
+ F 4006045082 2359486257
+F 4006045082 2359486257
+timeout  
+ timeout
+*****
+ R 4006045082 0
+R 4006045082 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37340
+next local port: 37341
+
+*****
+ F 3135029858 1367046920
+F 3135029858 1367046920
+timeout  
+ timeout
+*****
+ R 3135029858 0
+R 3135029858 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37341
+next local port: 37342
+
+*****
+ R 1401370860 1253375855
+R 1401370860 1253375855
+timeout  
+ timeout
+*****
+ F 2952467757 3494054652
+F 2952467757 3494054652
+timeout  
+ timeout
+*****
+ R 2952467757 0
+R 2952467757 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37342
+next local port: 37343
+
+*****
+ F 295384448 1239584310
+F 295384448 1239584310
+timeout  
+ timeout
+*****
+ R 295384448 0
+R 295384448 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37343
+next local port: 37344
+
+*****
+ F 1989596014 1931586413
+F 1989596014 1931586413
+timeout  
+ timeout
+*****
+ R 1989596014 0
+R 1989596014 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37344
+next local port: 37345
+
+*****
+ F 1930639036 504389093
+F 1930639036 504389093
+timeout  
+ timeout
+*****
+ R 1930639036 0
+R 1930639036 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37345
+next local port: 37346
+
+*****
+ S 1303047840 1661969546
+S 1303047840 1661969546
+timeout  
+ timeout
+*****
+ F 1183931340 2975605911
+F 1183931340 2975605911
+timeout  
+ timeout
+*****
+ R 1183931340 0
+R 1183931340 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37346
+next local port: 37347
+
+*****
+ F 373466937 2622256637
+F 373466937 2622256637
+timeout  
+ timeout
+*****
+ R 373466937 0
+R 373466937 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37347
+next local port: 37348
+
+*****
+ F 244675128 202018710
+F 244675128 202018710
+timeout  
+ timeout
+*****
+ R 244675128 0
+R 244675128 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37348
+next local port: 37349
+
+*****
+ F 2424626054 3641903109
+F 2424626054 3641903109
+timeout  
+ timeout
+*****
+ R 2424626054 0
+R 2424626054 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37349
+next local port: 37350
+
+*****
+ SA 1063168187 4147911770
+SA 1063168187 4147911770
+timeout  
+ timeout
+*****
+ F 409642519 2326900913
+F 409642519 2326900913
+timeout  
+ timeout
+*****
+ R 409642519 0
+R 409642519 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37350
+next local port: 37351
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37351
+next local port: 37352
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37352
+next local port: 37353
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37353
+next local port: 37354
+
+*****
+ A 1239259152 1584579527
+A 1239259152 1584579527
+timeout  
+ timeout
+*****
+ R 1239259152 0
+R 1239259152 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37354
+next local port: 37355
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37355
+next local port: 37356
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37356
+next local port: 37357
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37357
+next local port: 37358
+
+*****
+ AF 3459992336 3148874547
+AF 3459992336 3148874547
+timeout  
+ timeout
+*****
+ R 3459992336 0
+R 3459992336 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37358
+next local port: 37359
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37359
+next local port: 37360
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37360
+next local port: 37361
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37361
+next local port: 37362
+
+*****
+ AR 3346045261 187856360
+AR 3346045261 187856360
+timeout  
+ timeout
+*****
+ R 3346045261 0
+R 3346045261 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37362
+next local port: 37363
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37363
+next local port: 37364
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37364
+next local port: 37365
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37365
+next local port: 37366
+
+*****
+ F 3223812393 2699850992
+F 3223812393 2699850992
+timeout  
+ timeout
+*****
+ R 3223812393 0
+R 3223812393 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37366
+next local port: 37367
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37367
+next local port: 37368
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37368
+next local port: 37369
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37369
+next local port: 37370
+
+*****
+ R 392456950 3041288549
+R 392456950 3041288549
+timeout  
+ timeout
+*****
+ R 392456950 0
+R 392456950 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37370
+next local port: 37371
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37371
+next local port: 37372
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37372
+next local port: 37373
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37373
+next local port: 37374
+
+*****
+ S 1000199521 3000749651
+S 1000199521 3000749651
+timeout  
+ timeout
+*****
+ R 1000199521 0
+R 1000199521 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37374
+next local port: 37375
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37375
+next local port: 37376
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37376
+next local port: 37377
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37377
+next local port: 37378
+
+*****
+ SA 611526796 1769279813
+SA 611526796 1769279813
+timeout  
+ timeout
+*****
+ R 611526796 0
+R 611526796 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37378
+next local port: 37379
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37379
+next local port: 37380
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37380
+next local port: 37381
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37381
+next local port: 37382
+
+*****
+ A 3862092549 1666477794
+A 3862092549 1666477794
+timeout  
+ timeout
+*****
+ R 3862092549 0
+R 3862092549 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37382
+next local port: 37383
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37383
+next local port: 37384
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37384
+next local port: 37385
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37385
+next local port: 37386
+
+*****
+ AF 3585839528 4155331975
+AF 3585839528 4155331975
+timeout  
+ timeout
+*****
+ R 3585839528 0
+R 3585839528 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37386
+next local port: 37387
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37387
+next local port: 37388
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37388
+next local port: 37389
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37389
+next local port: 37390
+
+*****
+ AR 2671119089 3884932543
+AR 2671119089 3884932543
+timeout  
+ timeout
+*****
+ R 2671119089 0
+R 2671119089 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37390
+next local port: 37391
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37391
+next local port: 37392
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37392
+next local port: 37393
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37393
+next local port: 37394
+
+*****
+ F 3823804139 1895169570
+F 3823804139 1895169570
+timeout  
+ timeout
+*****
+ R 3823804139 0
+R 3823804139 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37394
+next local port: 37395
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37395
+next local port: 37396
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37396
+next local port: 37397
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37397
+next local port: 37398
+
+*****
+ R 1951295455 424226360
+R 1951295455 424226360
+timeout  
+ timeout
+*****
+ R 1951295455 0
+R 1951295455 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37398
+next local port: 37399
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37399
+next local port: 37400
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37400
+next local port: 37401
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37401
+next local port: 37402
+
+*****
+ S 1754360172 3165283748
+S 1754360172 3165283748
+timeout  
+ timeout
+*****
+ R 1754360172 0
+R 1754360172 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37402
+next local port: 37403
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37403
+next local port: 37404
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37404
+next local port: 37405
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37405
+next local port: 37406
+
+*****
+ SA 616056544 623685804
+SA 616056544 623685804
+timeout  
+ timeout
+*****
+ R 616056544 0
+R 616056544 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37406
+next local port: 37407
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37407
+next local port: 37408
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37408
+next local port: 37409
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37409
+next local port: 37410
+
+*****
+ A 2195808601 4090350281
+A 2195808601 4090350281
+timeout  
+ timeout
+*****
+ R 2195808601 0
+R 2195808601 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37410
+next local port: 37411
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37411
+next local port: 37412
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37412
+next local port: 37413
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37413
+next local port: 37414
+
+*****
+ AF 3355339953 2549183974
+AF 3355339953 2549183974
+timeout  
+ timeout
+*****
+ R 3355339953 0
+R 3355339953 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37414
+next local port: 37415
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37415
+next local port: 37416
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37416
+next local port: 37417
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37417
+next local port: 37418
+
+*****
+ AR 3662205892 2155838834
+AR 3662205892 2155838834
+timeout  
+ timeout
+*****
+ R 3662205892 0
+R 3662205892 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37418
+next local port: 37419
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37419
+next local port: 37420
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37420
+next local port: 37421
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37421
+next local port: 37422
+
+*****
+ F 776502424 1591222614
+F 776502424 1591222614
+timeout  
+ timeout
+*****
+ R 776502424 0
+R 776502424 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37422
+next local port: 37423
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37423
+next local port: 37424
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37424
+next local port: 37425
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37425
+next local port: 37426
+
+*****
+ R 2628371061 4141471047
+R 2628371061 4141471047
+timeout  
+ timeout
+*****
+ R 2628371061 0
+R 2628371061 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37426
+next local port: 37427
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37427
+next local port: 37428
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37428
+next local port: 37429
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37429
+next local port: 37430
+
+*****
+ S 2040051634 2070842357
+S 2040051634 2070842357
+timeout  
+ timeout
+*****
+ R 2040051634 0
+R 2040051634 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37430
+next local port: 37431
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37431
+next local port: 37432
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37432
+next local port: 37433
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37433
+next local port: 37434
+
+*****
+ SA 3542419500 1002832034
+SA 3542419500 1002832034
+timeout  
+ timeout
+*****
+ R 3542419500 0
+R 3542419500 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37434
+next local port: 37435
+
+*****
+ R 1083378040 2110109130
+R 1083378040 2110109130
+timeout  
+ timeout
+*****
+ R 1083378040 0
+R 1083378040 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37435
+next local port: 37436
+
+*****
+ R 2377372054 3582892769
+R 2377372054 3582892769
+timeout  
+ timeout
+*****
+ R 2377372054 0
+R 2377372054 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37436
+next local port: 37437
+
+*****
+ R 1151821935 1401129412
+R 1151821935 1401129412
+timeout  
+ timeout
+*****
+ R 1151821935 0
+R 1151821935 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37437
+next local port: 37438
+
+*****
+ A 1929994953 825956835
+A 1929994953 825956835
+timeout  
+ timeout
+*****
+ R 1723433747 2642046823
+R 1723433747 2642046823
+timeout  
+ timeout
+*****
+ R 1723433747 0
+R 1723433747 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37438
+next local port: 37439
+
+*****
+ R 3078040766 1056835431
+R 3078040766 1056835431
+timeout  
+ timeout
+*****
+ R 3078040766 0
+R 3078040766 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37439
+next local port: 37440
+
+*****
+ R 245350346 2293279808
+R 245350346 2293279808
+timeout  
+ timeout
+*****
+ R 245350346 0
+R 245350346 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37440
+next local port: 37441
+
+*****
+ R 1523397994 121637652
+R 1523397994 121637652
+timeout  
+ timeout
+*****
+ R 1523397994 0
+R 1523397994 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37441
+next local port: 37442
+
+*****
+ AF 2870184334 453089704
+AF 2870184334 453089704
+timeout  
+ timeout
+*****
+ R 3530608003 3239167623
+R 3530608003 3239167623
+timeout  
+ timeout
+*****
+ R 3530608003 0
+R 3530608003 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37442
+next local port: 37443
+
+*****
+ R 1223487549 4274168657
+R 1223487549 4274168657
+timeout  
+ timeout
+*****
+ R 1223487549 0
+R 1223487549 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37443
+next local port: 37444
+
+*****
+ R 4062418749 2181987783
+R 4062418749 2181987783
+timeout  
+ timeout
+*****
+ R 4062418749 0
+R 4062418749 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37444
+next local port: 37445
+
+*****
+ R 2177078672 471211196
+R 2177078672 471211196
+timeout  
+ timeout
+*****
+ R 2177078672 0
+R 2177078672 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37445
+next local port: 37446
+
+*****
+ AR 4214545319 3606680405
+AR 4214545319 3606680405
+timeout  
+ timeout
+*****
+ R 726592726 3117801946
+R 726592726 3117801946
+timeout  
+ timeout
+*****
+ R 726592726 0
+R 726592726 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37446
+next local port: 37447
+
+*****
+ R 924267427 1939919405
+R 924267427 1939919405
+timeout  
+ timeout
+*****
+ R 924267427 0
+R 924267427 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37447
+next local port: 37448
+
+*****
+ R 1109379245 1933560536
+R 1109379245 1933560536
+timeout  
+ timeout
+*****
+ R 1109379245 0
+R 1109379245 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37448
+next local port: 37449
+
+*****
+ R 1737784331 2949482446
+R 1737784331 2949482446
+timeout  
+ timeout
+*****
+ R 1737784331 0
+R 1737784331 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37449
+next local port: 37450
+
+*****
+ F 2207070757 181268018
+F 2207070757 181268018
+timeout  
+ timeout
+*****
+ R 2753174759 3058593736
+R 2753174759 3058593736
+timeout  
+ timeout
+*****
+ R 2753174759 0
+R 2753174759 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37450
+next local port: 37451
+
+*****
+ R 200195746 98873956
+R 200195746 98873956
+timeout  
+ timeout
+*****
+ R 200195746 0
+R 200195746 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37451
+next local port: 37452
+
+*****
+ R 4040663185 577006947
+R 4040663185 577006947
+timeout  
+ timeout
+*****
+ R 4040663185 0
+R 4040663185 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37452
+next local port: 37453
+
+*****
+ R 394116650 138457609
+R 394116650 138457609
+timeout  
+ timeout
+*****
+ R 394116650 0
+R 394116650 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37453
+next local port: 37454
+
+*****
+ R 4188641655 1193022970
+R 4188641655 1193022970
+timeout  
+ timeout
+*****
+ R 3044563814 424570000
+R 3044563814 424570000
+timeout  
+ timeout
+*****
+ R 3044563814 0
+R 3044563814 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37454
+next local port: 37455
+
+*****
+ R 3758807180 2203978815
+R 3758807180 2203978815
+timeout  
+ timeout
+*****
+ R 3758807180 0
+R 3758807180 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37455
+next local port: 37456
+
+*****
+ R 3596587042 1490405969
+R 3596587042 1490405969
+timeout  
+ timeout
+*****
+ R 3596587042 0
+R 3596587042 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37456
+next local port: 37457
+
+*****
+ R 4169528618 3569363613
+R 4169528618 3569363613
+timeout  
+ timeout
+*****
+ R 4169528618 0
+R 4169528618 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37457
+next local port: 37458
+
+*****
+ S 2674564367 732130844
+S 2674564367 732130844
+timeout  
+ timeout
+*****
+ R 2841714900 1382120623
+R 2841714900 1382120623
+timeout  
+ timeout
+*****
+ R 2841714900 0
+R 2841714900 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37458
+next local port: 37459
+
+*****
+ R 1451870248 2484721583
+R 1451870248 2484721583
+timeout  
+ timeout
+*****
+ R 1451870248 0
+R 1451870248 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37459
+next local port: 37460
+
+*****
+ R 1501450456 1482361700
+R 1501450456 1482361700
+timeout  
+ timeout
+*****
+ R 1501450456 0
+R 1501450456 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37460
+next local port: 37461
+
+*****
+ R 2341628567 1037325942
+R 2341628567 1037325942
+timeout  
+ timeout
+*****
+ R 2341628567 0
+R 2341628567 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37461
+next local port: 37462
+
+*****
+ SA 2208936654 4086265266
+SA 2208936654 4086265266
+timeout  
+ timeout
+*****
+ R 1550733274 3200634030
+R 1550733274 3200634030
+timeout  
+ timeout
+*****
+ R 1550733274 0
+R 1550733274 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37462
+next local port: 37463
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37463
+next local port: 37464
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37464
+next local port: 37465
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37465
+next local port: 37466
+
+*****
+ A 2412802946 2363710605
+A 2412802946 2363710605
+timeout  
+ timeout
+*****
+ R 2412802946 0
+R 2412802946 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37466
+next local port: 37467
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37467
+next local port: 37468
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37468
+next local port: 37469
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37469
+next local port: 37470
+
+*****
+ AF 3546833924 3011330201
+AF 3546833924 3011330201
+timeout  
+ timeout
+*****
+ R 3546833924 0
+R 3546833924 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37470
+next local port: 37471
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37471
+next local port: 37472
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37472
+next local port: 37473
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37473
+next local port: 37474
+
+*****
+ AR 148493797 3928530250
+AR 148493797 3928530250
+timeout  
+ timeout
+*****
+ R 148493797 0
+R 148493797 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37474
+next local port: 37475
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37475
+next local port: 37476
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37476
+next local port: 37477
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37477
+next local port: 37478
+
+*****
+ F 1743827548 2809806875
+F 1743827548 2809806875
+timeout  
+ timeout
+*****
+ R 1743827548 0
+R 1743827548 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37478
+next local port: 37479
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37479
+next local port: 37480
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37480
+next local port: 37481
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37481
+next local port: 37482
+
+*****
+ R 589076632 1514560194
+R 589076632 1514560194
+timeout  
+ timeout
+*****
+ R 589076632 0
+R 589076632 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37482
+next local port: 37483
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37483
+next local port: 37484
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37484
+next local port: 37485
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37485
+next local port: 37486
+
+*****
+ S 2607919885 767234800
+S 2607919885 767234800
+timeout  
+ timeout
+*****
+ R 2607919885 0
+R 2607919885 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37486
+next local port: 37487
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37487
+next local port: 37488
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37488
+next local port: 37489
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37489
+next local port: 37490
+
+*****
+ SA 1286254104 1231542645
+SA 1286254104 1231542645
+timeout  
+ timeout
+*****
+ R 1286254104 0
+R 1286254104 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37490
+next local port: 37491
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37491
+next local port: 37492
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37492
+next local port: 37493
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37493
+next local port: 37494
+
+*****
+ A 2232478551 686734437
+A 2232478551 686734437
+timeout  
+ timeout
+*****
+ R 2232478551 0
+R 2232478551 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37494
+next local port: 37495
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37495
+next local port: 37496
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37496
+next local port: 37497
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37497
+next local port: 37498
+
+*****
+ AF 2918007040 2302421206
+AF 2918007040 2302421206
+timeout  
+ timeout
+*****
+ R 2918007040 0
+R 2918007040 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37498
+next local port: 37499
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37499
+next local port: 37500
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37500
+next local port: 37501
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37501
+next local port: 37502
+
+*****
+ AR 3765754441 99929873
+AR 3765754441 99929873
+timeout  
+ timeout
+*****
+ R 3765754441 0
+R 3765754441 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37502
+next local port: 37503
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37503
+next local port: 37504
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37504
+next local port: 37505
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37505
+next local port: 37506
+
+*****
+ F 374017341 1351655151
+F 374017341 1351655151
+timeout  
+ timeout
+*****
+ R 374017341 0
+R 374017341 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37506
+next local port: 37507
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37507
+next local port: 37508
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37508
+next local port: 37509
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37509
+next local port: 37510
+
+*****
+ R 3706337432 2526350922
+R 3706337432 2526350922
+timeout  
+ timeout
+*****
+ R 3706337432 0
+R 3706337432 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37510
+next local port: 37511
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37511
+next local port: 37512
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37512
+next local port: 37513
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37513
+next local port: 37514
+
+*****
+ S 3453158168 1422926167
+S 3453158168 1422926167
+timeout  
+ timeout
+*****
+ R 3453158168 0
+R 3453158168 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37514
+next local port: 37515
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37515
+next local port: 37516
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37516
+next local port: 37517
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37517
+next local port: 37518
+
+*****
+ SA 2072151569 1301864875
+SA 2072151569 1301864875
+timeout  
+ timeout
+*****
+ R 2072151569 0
+R 2072151569 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37518
+next local port: 37519
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37519
+next local port: 37520
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37520
+next local port: 37521
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37521
+next local port: 37522
+
+*****
+ A 707084726 1731281253
+A 707084726 1731281253
+timeout  
+ timeout
+*****
+ R 707084726 0
+R 707084726 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37522
+next local port: 37523
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37523
+next local port: 37524
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37524
+next local port: 37525
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37525
+next local port: 37526
+
+*****
+ AF 3288721566 3635451458
+AF 3288721566 3635451458
+timeout  
+ timeout
+*****
+ R 3288721566 0
+R 3288721566 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37526
+next local port: 37527
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37527
+next local port: 37528
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37528
+next local port: 37529
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37529
+next local port: 37530
+
+*****
+ AR 2450807338 2929534405
+AR 2450807338 2929534405
+timeout  
+ timeout
+*****
+ R 2450807338 0
+R 2450807338 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37530
+next local port: 37531
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37531
+next local port: 37532
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37532
+next local port: 37533
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37533
+next local port: 37534
+
+*****
+ F 2043829018 2010018522
+F 2043829018 2010018522
+timeout  
+ timeout
+*****
+ R 2043829018 0
+R 2043829018 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37534
+next local port: 37535
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37535
+next local port: 37536
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37536
+next local port: 37537
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37537
+next local port: 37538
+
+*****
+ R 3501778925 4003022015
+R 3501778925 4003022015
+timeout  
+ timeout
+*****
+ R 3501778925 0
+R 3501778925 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37538
+next local port: 37539
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37539
+next local port: 37540
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37540
+next local port: 37541
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37541
+next local port: 37542
+
+*****
+ S 1124215565 4242642972
+S 1124215565 4242642972
+timeout  
+ timeout
+*****
+ R 1124215565 0
+R 1124215565 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37542
+next local port: 37543
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37543
+next local port: 37544
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37544
+next local port: 37545
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37545
+next local port: 37546
+
+*****
+ SA 905017000 1253961550
+SA 905017000 1253961550
+timeout  
+ timeout
+*****
+ R 905017000 0
+R 905017000 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37546
+next local port: 37547
+
+*****
+ S 1702086686 303740321
+S 1702086686 303740321
+timeout  
+ timeout
+*****
+ R 1702086686 0
+R 1702086686 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37547
+next local port: 37548
+
+*****
+ S 126400738 2642651994
+S 126400738 2642651994
+timeout  
+ timeout
+*****
+ R 126400738 0
+R 126400738 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37548
+next local port: 37549
+
+*****
+ S 1452073282 1076136601
+S 1452073282 1076136601
+timeout  
+ timeout
+*****
+ R 1452073282 0
+R 1452073282 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37549
+next local port: 37550
+
+*****
+ A 863768216 3362872877
+A 863768216 3362872877
+timeout  
+ timeout
+*****
+ S 1540543684 821704917
+S 1540543684 821704917
+timeout  
+ timeout
+*****
+ R 1540543684 0
+R 1540543684 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37550
+next local port: 37551
+
+*****
+ S 152853371 1526023915
+S 152853371 1526023915
+timeout  
+ timeout
+*****
+ R 152853371 0
+R 152853371 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37551
+next local port: 37552
+
+*****
+ S 1672637918 3611650000
+S 1672637918 3611650000
+timeout  
+ timeout
+*****
+ R 1672637918 0
+R 1672637918 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37552
+next local port: 37553
+
+*****
+ S 4228066658 2356332980
+S 4228066658 2356332980
+timeout  
+ timeout
+*****
+ R 4228066658 0
+R 4228066658 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37553
+next local port: 37554
+
+*****
+ AF 252768938 1970157095
+AF 252768938 1970157095
+timeout  
+ timeout
+*****
+ S 420885335 3444508810
+S 420885335 3444508810
+timeout  
+ timeout
+*****
+ R 420885335 0
+R 420885335 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37554
+next local port: 37555
+
+*****
+ S 2642445265 4207344934
+S 2642445265 4207344934
+timeout  
+ timeout
+*****
+ R 2642445265 0
+R 2642445265 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37555
+next local port: 37556
+
+*****
+ S 3809674097 570839126
+S 3809674097 570839126
+timeout  
+ timeout
+*****
+ R 3809674097 0
+R 3809674097 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37556
+next local port: 37557
+
+*****
+ S 254921451 3497910890
+S 254921451 3497910890
+timeout  
+ timeout
+*****
+ R 254921451 0
+R 254921451 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37557
+next local port: 37558
+
+*****
+ AR 3244110177 311709902
+AR 3244110177 311709902
+timeout  
+ timeout
+*****
+ S 1492973681 4215159645
+S 1492973681 4215159645
+timeout  
+ timeout
+*****
+ R 1492973681 0
+R 1492973681 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37558
+next local port: 37559
+
+*****
+ S 151565845 934881450
+S 151565845 934881450
+timeout  
+ timeout
+*****
+ R 151565845 0
+R 151565845 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37559
+next local port: 37560
+
+*****
+ S 4162589161 1772863017
+S 4162589161 1772863017
+timeout  
+ timeout
+*****
+ R 4162589161 0
+R 4162589161 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37560
+next local port: 37561
+
+*****
+ S 3982140493 1457864500
+S 3982140493 1457864500
+timeout  
+ timeout
+*****
+ R 3982140493 0
+R 3982140493 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37561
+next local port: 37562
+
+*****
+ F 2356187582 1663141429
+F 2356187582 1663141429
+timeout  
+ timeout
+*****
+ S 1379545259 2362830665
+S 1379545259 2362830665
+timeout  
+ timeout
+*****
+ R 1379545259 0
+R 1379545259 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37562
+next local port: 37563
+
+*****
+ S 1634620366 1298064523
+S 1634620366 1298064523
+timeout  
+ timeout
+*****
+ R 1634620366 0
+R 1634620366 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37563
+next local port: 37564
+
+*****
+ S 2420901723 1043137083
+S 2420901723 1043137083
+timeout  
+ timeout
+*****
+ R 2420901723 0
+R 2420901723 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37564
+next local port: 37565
+
+*****
+ S 4144355005 1795949784
+S 4144355005 1795949784
+timeout  
+ timeout
+*****
+ R 4144355005 0
+R 4144355005 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37565
+next local port: 37566
+
+*****
+ R 3081892640 1686960393
+R 3081892640 1686960393
+timeout  
+ timeout
+*****
+ S 2905065252 3359661300
+S 2905065252 3359661300
+timeout  
+ timeout
+*****
+ R 2905065252 0
+R 2905065252 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37566
+next local port: 37567
+
+*****
+ S 3282621277 1443113029
+S 3282621277 1443113029
+timeout  
+ timeout
+*****
+ R 3282621277 0
+R 3282621277 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37567
+next local port: 37568
+
+*****
+ S 2914771114 1165291976
+S 2914771114 1165291976
+timeout  
+ timeout
+*****
+ R 2914771114 0
+R 2914771114 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37568
+next local port: 37569
+
+*****
+ S 2122244839 1406181780
+S 2122244839 1406181780
+timeout  
+ timeout
+*****
+ R 2122244839 0
+R 2122244839 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37569
+next local port: 37570
+
+*****
+ S 304421617 2492229838
+S 304421617 2492229838
+timeout  
+ timeout
+*****
+ S 2325499482 80146049
+S 2325499482 80146049
+timeout  
+ timeout
+*****
+ R 2325499482 0
+R 2325499482 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37570
+next local port: 37571
+
+*****
+ S 179120336 115010239
+S 179120336 115010239
+timeout  
+ timeout
+*****
+ R 179120336 0
+R 179120336 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37571
+next local port: 37572
+
+*****
+ S 580393627 2128976849
+S 580393627 2128976849
+timeout  
+ timeout
+*****
+ R 580393627 0
+R 580393627 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37572
+next local port: 37573
+
+*****
+ S 2138130300 1045943731
+S 2138130300 1045943731
+timeout  
+ timeout
+*****
+ R 2138130300 0
+R 2138130300 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37573
+next local port: 37574
+
+*****
+ SA 2811452300 2866778640
+SA 2811452300 2866778640
+timeout  
+ timeout
+*****
+ S 1001020132 795033612
+S 1001020132 795033612
+timeout  
+ timeout
+*****
+ R 1001020132 0
+R 1001020132 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37574
+next local port: 37575
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37575
+next local port: 37576
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37576
+next local port: 37577
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37577
+next local port: 37578
+
+*****
+ A 39107155 2611429864
+A 39107155 2611429864
+timeout  
+ timeout
+*****
+ R 39107155 0
+R 39107155 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37578
+next local port: 37579
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37579
+next local port: 37580
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37580
+next local port: 37581
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37581
+next local port: 37582
+
+*****
+ AF 896163473 1674136530
+AF 896163473 1674136530
+timeout  
+ timeout
+*****
+ R 896163473 0
+R 896163473 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37582
+next local port: 37583
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37583
+next local port: 37584
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37584
+next local port: 37585
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37585
+next local port: 37586
+
+*****
+ AR 819874752 3947142677
+AR 819874752 3947142677
+timeout  
+ timeout
+*****
+ R 819874752 0
+R 819874752 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37586
+next local port: 37587
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37587
+next local port: 37588
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37588
+next local port: 37589
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37589
+next local port: 37590
+
+*****
+ F 3978896021 451757770
+F 3978896021 451757770
+timeout  
+ timeout
+*****
+ R 3978896021 0
+R 3978896021 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37590
+next local port: 37591
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37591
+next local port: 37592
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37592
+next local port: 37593
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37593
+next local port: 37594
+
+*****
+ R 393721717 1300227396
+R 393721717 1300227396
+timeout  
+ timeout
+*****
+ R 393721717 0
+R 393721717 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37594
+next local port: 37595
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37595
+next local port: 37596
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37596
+next local port: 37597
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37597
+next local port: 37598
+
+*****
+ S 834296654 3058081649
+S 834296654 3058081649
+timeout  
+ timeout
+*****
+ R 834296654 0
+R 834296654 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37598
+next local port: 37599
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37599
+next local port: 37600
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37600
+next local port: 37601
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37601
+next local port: 37602
+
+*****
+ SA 3513167099 1345011186
+SA 3513167099 1345011186
+timeout  
+ timeout
+*****
+ R 3513167099 0
+R 3513167099 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37602
+next local port: 37603
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37603
+next local port: 37604
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37604
+next local port: 37605
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37605
+next local port: 37606
+
+*****
+ A 3464953355 3701056914
+A 3464953355 3701056914
+timeout  
+ timeout
+*****
+ R 3464953355 0
+R 3464953355 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37606
+next local port: 37607
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37607
+next local port: 37608
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37608
+next local port: 37609
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37609
+next local port: 37610
+
+*****
+ AF 1255123878 2954174197
+AF 1255123878 2954174197
+timeout  
+ timeout
+*****
+ R 1255123878 0
+R 1255123878 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37610
+next local port: 37611
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37611
+next local port: 37612
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37612
+next local port: 37613
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37613
+next local port: 37614
+
+*****
+ AR 3408130543 3784711983
+AR 3408130543 3784711983
+timeout  
+ timeout
+*****
+ R 3408130543 0
+R 3408130543 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37614
+next local port: 37615
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37615
+next local port: 37616
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37616
+next local port: 37617
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37617
+next local port: 37618
+
+*****
+ F 3799587139 3236793219
+F 3799587139 3236793219
+timeout  
+ timeout
+*****
+ R 3799587139 0
+R 3799587139 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37618
+next local port: 37619
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37619
+next local port: 37620
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37620
+next local port: 37621
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37621
+next local port: 37622
+
+*****
+ R 3969911833 1254467492
+R 3969911833 1254467492
+timeout  
+ timeout
+*****
+ R 3969911833 0
+R 3969911833 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37622
+next local port: 37623
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37623
+next local port: 37624
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37624
+next local port: 37625
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37625
+next local port: 37626
+
+*****
+ S 795518808 631774787
+S 795518808 631774787
+timeout  
+ timeout
+*****
+ R 795518808 0
+R 795518808 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37626
+next local port: 37627
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37627
+next local port: 37628
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37628
+next local port: 37629
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37629
+next local port: 37630
+
+*****
+ SA 438525950 3186877716
+SA 438525950 3186877716
+timeout  
+ timeout
+*****
+ R 438525950 0
+R 438525950 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37630
+next local port: 37631
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37631
+next local port: 37632
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37632
+next local port: 37633
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37633
+next local port: 37634
+
+*****
+ A 3416459790 2116346190
+A 3416459790 2116346190
+timeout  
+ timeout
+*****
+ R 3416459790 0
+R 3416459790 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37634
+next local port: 37635
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37635
+next local port: 37636
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37636
+next local port: 37637
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37637
+next local port: 37638
+
+*****
+ AF 532274343 1081772557
+AF 532274343 1081772557
+timeout  
+ timeout
+*****
+ R 532274343 0
+R 532274343 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37638
+next local port: 37639
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37639
+next local port: 37640
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37640
+next local port: 37641
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37641
+next local port: 37642
+
+*****
+ AR 845021027 3190422298
+AR 845021027 3190422298
+timeout  
+ timeout
+*****
+ R 845021027 0
+R 845021027 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37642
+next local port: 37643
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37643
+next local port: 37644
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37644
+next local port: 37645
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37645
+next local port: 37646
+
+*****
+ F 191052785 1914382199
+F 191052785 1914382199
+timeout  
+ timeout
+*****
+ R 191052785 0
+R 191052785 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37646
+next local port: 37647
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37647
+next local port: 37648
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37648
+next local port: 37649
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37649
+next local port: 37650
+
+*****
+ R 1436853342 2566399929
+R 1436853342 2566399929
+timeout  
+ timeout
+*****
+ R 1436853342 0
+R 1436853342 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37650
+next local port: 37651
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37651
+next local port: 37652
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37652
+next local port: 37653
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37653
+next local port: 37654
+
+*****
+ S 163725573 1498468070
+S 163725573 1498468070
+timeout  
+ timeout
+*****
+ R 163725573 0
+R 163725573 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37654
+next local port: 37655
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37655
+next local port: 37656
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37656
+next local port: 37657
+
+*****
+ R 0 0
+R 0 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37657
+next local port: 37658
+
+*****
+ SA 2351045968 3422815067
+SA 2351045968 3422815067
+timeout  
+ timeout
+*****
+ R 2351045968 0
+R 2351045968 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37658
+next local port: 37659
+
+*****
+ SA 956646944 1782810271
+SA 956646944 1782810271
+timeout  
+ timeout
+*****
+ R 956646944 0
+R 956646944 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37659
+next local port: 37660
+
+*****
+ SA 3715533604 446572152
+SA 3715533604 446572152
+timeout  
+ timeout
+*****
+ R 3715533604 0
+R 3715533604 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37660
+next local port: 37661
+
+*****
+ SA 1642208228 2898758163
+SA 1642208228 2898758163
+timeout  
+ timeout
+*****
+ R 1642208228 0
+R 1642208228 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37661
+next local port: 37662
+
+*****
+ A 2156024178 2073300242
+A 2156024178 2073300242
+timeout  
+ timeout
+*****
+ SA 3888068502 1225940554
+SA 3888068502 1225940554
+timeout  
+ timeout
+*****
+ R 3888068502 0
+R 3888068502 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37662
+next local port: 37663
+
+*****
+ SA 2489560603 1360254231
+SA 2489560603 1360254231
+timeout  
+ timeout
+*****
+ R 2489560603 0
+R 2489560603 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37663
+next local port: 37664
+
+*****
+ SA 2321822035 1309651770
+SA 2321822035 1309651770
+timeout  
+ timeout
+*****
+ R 2321822035 0
+R 2321822035 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37664
+next local port: 37665
+
+*****
+ SA 3122700203 2187117923
+SA 3122700203 2187117923
+timeout  
+ timeout
+*****
+ R 3122700203 0
+R 3122700203 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37665
+next local port: 37666
+
+*****
+ AF 3301675733 931141217
+AF 3301675733 931141217
+timeout  
+ timeout
+*****
+ SA 976689932 4127631985
+SA 976689932 4127631985
+timeout  
+ timeout
+*****
+ R 976689932 0
+R 976689932 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37666
+next local port: 37667
+
+*****
+ SA 2918184449 2504750445
+SA 2918184449 2504750445
+timeout  
+ timeout
+*****
+ R 2918184449 0
+R 2918184449 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37667
+next local port: 37668
+
+*****
+ SA 3465384521 988413953
+SA 3465384521 988413953
+timeout  
+ timeout
+*****
+ R 3465384521 0
+R 3465384521 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37668
+next local port: 37669
+
+*****
+ SA 1101951932 951152872
+SA 1101951932 951152872
+timeout  
+ timeout
+*****
+ R 1101951932 0
+R 1101951932 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37669
+next local port: 37670
+
+*****
+ AR 4269657087 619899942
+AR 4269657087 619899942
+timeout  
+ timeout
+*****
+ SA 3776471250 2000780935
+SA 3776471250 2000780935
+timeout  
+ timeout
+*****
+ R 3776471250 0
+R 3776471250 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37670
+next local port: 37671
+
+*****
+ SA 938739872 3261663411
+SA 938739872 3261663411
+timeout  
+ timeout
+*****
+ R 938739872 0
+R 938739872 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37671
+next local port: 37672
+
+*****
+ SA 2865651443 1724177405
+SA 2865651443 1724177405
+timeout  
+ timeout
+*****
+ R 2865651443 0
+R 2865651443 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37672
+next local port: 37673
+
+*****
+ SA 1977383253 1433796385
+SA 1977383253 1433796385
+timeout  
+ timeout
+*****
+ R 1977383253 0
+R 1977383253 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37673
+next local port: 37674
+
+*****
+ F 87996713 1887719463
+F 87996713 1887719463
+timeout  
+ timeout
+*****
+ SA 1364788966 3975475760
+SA 1364788966 3975475760
+timeout  
+ timeout
+*****
+ R 1364788966 0
+R 1364788966 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37674
+next local port: 37675
+
+*****
+ SA 1440813886 1033093166
+SA 1440813886 1033093166
+timeout  
+ timeout
+*****
+ R 1440813886 0
+R 1440813886 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37675
+next local port: 37676
+
+*****
+ SA 3497617345 3470047244
+SA 3497617345 3470047244
+timeout  
+ timeout
+*****
+ R 3497617345 0
+R 3497617345 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37676
+next local port: 37677
+
+*****
+ SA 1774806923 3373108993
+SA 1774806923 3373108993
+timeout  
+ timeout
+*****
+ R 1774806923 0
+R 1774806923 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37677
+next local port: 37678
+
+*****
+ R 577734380 630646326
+R 577734380 630646326
+timeout  
+ timeout
+*****
+ SA 2234275690 1483198993
+SA 2234275690 1483198993
+timeout  
+ timeout
+*****
+ R 2234275690 0
+R 2234275690 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37678
+next local port: 37679
+
+*****
+ SA 3195681169 1236642380
+SA 3195681169 1236642380
+timeout  
+ timeout
+*****
+ R 3195681169 0
+R 3195681169 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37679
+next local port: 37680
+
+*****
+ SA 1756284594 894259937
+SA 1756284594 894259937
+timeout  
+ timeout
+*****
+ R 1756284594 0
+R 1756284594 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37680
+next local port: 37681
+
+*****
+ SA 134235917 2398778928
+SA 134235917 2398778928
+timeout  
+ timeout
+*****
+ R 134235917 0
+R 134235917 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37681
+next local port: 37682
+
+*****
+ S 3701132451 1201955197
+S 3701132451 1201955197
+timeout  
+ timeout
+*****
+ SA 2945826399 3037690087
+SA 2945826399 3037690087
+timeout  
+ timeout
+*****
+ R 2945826399 0
+R 2945826399 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37682
+next local port: 37683
+
+*****
+ SA 2069098871 430798530
+SA 2069098871 430798530
+timeout  
+ timeout
+*****
+ R 2069098871 0
+R 2069098871 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37683
+next local port: 37684
+
+*****
+ SA 2246417473 4191545946
+SA 2246417473 4191545946
+timeout  
+ timeout
+*****
+ R 2246417473 0
+R 2246417473 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37684
+next local port: 37685
+
+*****
+ SA 2242166014 1667475576
+SA 2242166014 1667475576
+timeout  
+ timeout
+*****
+ R 2242166014 0
+R 2242166014 0
+timeout  
+ timeout
+reset
+********** reset **********
+previous local port: 37685
+next local port: 37686
+
+*****
+ SA 1522123572 1397433744
+SA 1522123572 1397433744
+timeout  
+ timeout
+*****
+ SA 2227147989 4119390581
+SA 2227147989 4119390581
+timeout  
+ timeout
+<socket._socketobject object at 0xb6ac148c>
+<socket._socketobject object at 0xb689eaac>
+Closing local server socket
+<socket._socketobject object at 0xb6ac148c>
+Closing gateway server socket
+<socket._socketobject object at 0xb689eae4>
+Closing gateway server command socket
+Stopping monitoring thread
+Have a nice day
