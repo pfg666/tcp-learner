@@ -15,7 +15,7 @@ public class TCPSutWrapper implements SutWrapper{
 
 	private final SocketWrapper socketWrapper;
 	private TCPMapper mapper;
-	private boolean exitIfInvalid = false;
+	private boolean exitIfInvalid = true;
 	private static final Set<String> ACTION_COMMANDS = new HashSet<>(Arrays.asList(new String[]
 			{"LISTEN", "ACCEPT", "CLOSESERVER", "CLOSECONNECTION"}));
 	

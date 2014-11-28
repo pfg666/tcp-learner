@@ -23,7 +23,7 @@ class Adapter:
     sender = None
     data = None
 
-    def __init__(self, localCommunicationPort = 18200, cmdIp = "10.42.0.3", cmdPort=5000):
+    def __init__(self, localCommunicationPort = 18200, cmdIp = "192.168.56.1", cmdPort=5000):
         self.localCommunicationPort = localCommunicationPort
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp
@@ -151,11 +151,7 @@ class Adapter:
                 return
             else:
                 print "*****"
-<<<<<<< HEAD
                 if input1 in ["listen", "accept", "closeconnection", "closeserver"]:
-=======
-                if input1 in ["listen", "accept", "close connection", "close server"]:
->>>>>>> 5b072a40a689296fed97bc9bd750ea6ec24114ff
                     print(" " + input1)
                     self.cmdSocket.send(input1 + "\n") # TODO race-condition here, might go wrong: 
                     response = sender.captureResponse() # response might arrive before sender is ready
