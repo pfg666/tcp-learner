@@ -38,6 +38,6 @@ senderArguments = [
 runnerArguments = [
     Argument("tf","traceFile", str, None,"file containing a sequence of abstract inputs. The trace runner"
                                                "reads an abstract input from every line"),
-    Argument("r","runNum", int, 1,"The number of times the trace is run"),
-    Argument("h","hopNum", int, 0,"The number of lines skipped after each abstract input is read"),
-    Argument("j","jvmFile", str, 0,"Path to libjvm.so")]
+    Argument("r","runNum", int, 0,"The number of times the trace is run"),
+    Argument("s","skipNum", int, 0,"The number of lines skipped after each abstract input is read"),
+    Argument("j","jvmPath", str, "/usr/lib/jvm/java-7-openjdk-i386/jre/lib/amd64/server/libjvm.so" ,"Path to libjvm.so")]

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import sutInterface.Serializer;
+import sutInterface.tcp.init.FunctionInitOracle;
 import sutInterface.tcp.init.InitOracle;
 import util.Calculator;
 
@@ -37,6 +38,10 @@ public class TCPMapper {
 	
 	private InitOracle oracle;
 
+	public TCPMapper() {
+		this( new FunctionInitOracle());
+	}
+	
 	public TCPMapper(InitOracle oracle) {
 		this.oracle = oracle;
 		setDefault();

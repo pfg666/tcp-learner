@@ -8,10 +8,15 @@ except ImportError:
 import sys
 import interfaceType
 from ConfigParser import RawConfigParser
+
+# the stuff we can build
 from sender import Sender
 from networkAdapter import Adapter
+from traceRunner import TraceRunner
+
+
+# where arguments for each component are stored
 from args import Argument
-# for the arguments of each components
 import args
 
 class ArgumentParser:
@@ -117,3 +122,9 @@ class ArgumentParser:
         # values = self.getValueMapForArguments(self.adapterArguments, values)
         adapter = Adapter(**values)
         return adapter
+    
+    # builds the optional trace runner
+    def buildTraceRunner(self):
+        values = self.parseArguments(args.runnerArguments)
+        runner = TraceRunner(**values)
+        return runner
