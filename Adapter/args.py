@@ -34,3 +34,10 @@ senderArguments = [
     Argument("rst","resetMechanism", int, 0, "0 selects reset by sending a valid RST and not changing the port,"
                                                "1 selects reset by changing the port (+1)"
                                                 "2 selects a hybrid, where a valid RST is sent and the port is changed")]
+
+runnerArguments = [
+    Argument("tf","traceFile", str, None,"file containing a sequence of abstract inputs. The trace runner"
+                                               "reads an abstract input from every line"),
+    Argument("r","runNum", int, 1,"The number of times the trace is run"),
+    Argument("h","hopNum", int, 0,"The number of lines skipped after each abstract input is read"),
+    Argument("j","jvmFile", str, 0,"Path to libjvm.so")]

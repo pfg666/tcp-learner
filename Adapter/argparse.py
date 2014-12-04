@@ -1089,18 +1089,6 @@ class _SubParsersAction(Action):
         # parse all the remaining options into the namespace
         # store any unrecognized options on the object, so that the top
         # level parser can decide what to do with them
-<<<<<<< HEAD
-
-        # In case this subparser defines new defaults, we parse them
-        # in a new namespace object and then update the original
-        # namespace for the relevant parts.
-        subnamespace, arg_strings = parser.parse_known_args(arg_strings, None)
-        for key, value in vars(subnamespace).items():
-            setattr(namespace, key, value)
-
-=======
-        namespace, arg_strings = parser.parse_known_args(arg_strings, namespace)
->>>>>>> bb8f98b991127c40d26b3a6665e19265cf5752b7
         if arg_strings:
             vars(namespace).setdefault(_UNRECOGNIZED_ARGS_ATTR, [])
             getattr(namespace, _UNRECOGNIZED_ARGS_ATTR).extend(arg_strings)
@@ -1168,19 +1156,9 @@ class Namespace(_AttributeHolder):
     __hash__ = None
 
     def __eq__(self, other):
-<<<<<<< HEAD
-        if not isinstance(other, Namespace):
-            return NotImplemented
         return vars(self) == vars(other)
 
     def __ne__(self, other):
-        if not isinstance(other, Namespace):
-            return NotImplemented
-=======
-        return vars(self) == vars(other)
-
-    def __ne__(self, other):
->>>>>>> bb8f98b991127c40d26b3a6665e19265cf5752b7
         return not (self == other)
 
     def __contains__(self, key):

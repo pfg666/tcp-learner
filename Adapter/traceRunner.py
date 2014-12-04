@@ -1,3 +1,17 @@
+"""
+   run a sequence of abstract inputs from a file using the Java Mapper in the learner project.
+
+   usage: python traceRunner.py [--runs(-r) runs_num] [--hops(-h) skip_lines_numb] [--jvm(-j) path_to_jvm_so] --traceFile(-tf) trace_file  
+   
+   trace_file is a path to a file containing a sequence of abstract inputs. The trace runner
+   reads an abstract input from every line. 
+   
+   runs (r) is the number of times the trace is run. 
+   
+   hops (h) is the number of lines skipped after each abstract input read. 
+   (useful if your trace also contains output symbols)
+
+"""
 __author__ = 'paul'
 import jpype
 import os
@@ -140,6 +154,8 @@ def executeTraceFile(filePath, step=2):
         print "\n"
         global waitTime
         time.sleep(waitTime)
+
+
 
 if __name__ == "__main__":
     startJava()
