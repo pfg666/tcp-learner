@@ -18,7 +18,7 @@ configArguments = [
     Argument("cfile","configFile", str, "../config.cfg", "The configuration file used. Preferably left as the default value.")]
 
 senderArguments = [
-    Argument("ni","networkInterface", str, "lo","The net interface through which the client communicates"),
+    Argument("ni","networkInterface", str, "eth0","The net interface through which the client communicates"),
     Argument("sp","senderPort", int, 15000,"Active adapter port "),
     Argument("spmin","senderPortMinimum", int, 20000, "Set the minimum boundary and starting number for "
                                                    "the network port"),

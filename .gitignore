@@ -1,4 +1,5 @@
 /Adapter/*.pyc
+*~
 /Adapter/.idea
 /Learner/bin
 /Learner/traceFiles
