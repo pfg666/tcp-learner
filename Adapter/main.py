@@ -13,6 +13,7 @@ def signal_handler(sign, frame):
     print 'You pressed Ctrl+C, meaning you want to stop the system!'
     adapter.closeSockets()
     signal.signal(sign, signal_handler)
+    
      # sets up the close server socket routine
 def setupSignalHandler():
     print "Setting up SIG Handlers"
