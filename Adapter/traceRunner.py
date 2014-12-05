@@ -1,7 +1,7 @@
 """
    run a sequence of abstract inputs from a file using the Java Mapper in the learner project.
 
-   usage: python traceRunner.py [--runs(-r) runs_num] [--hops(-h) skip_lines_numb] [--jvmPath(-jvm) path_to_jvm_so] --traceFile(-tf) trace_file  
+   usage: python traceRunner.py [--runs(-r) runs_num] [--hops(-h) skip_lines_numb] [--jvmPath(-jvm) path_to_jvm_so] --traceFile(-t) trace_file  
    
    trace_file is a path to a file containing a sequence of abstract inputs. The trace runner
    reads an abstract input from every line. 
@@ -27,27 +27,32 @@ import os
 from sender import *
 from response import *
 
+waitTime = 0.1
+learnerProjectBinPath = "-Djava.class.path=../bin" # path to the java learner setup binaries
+mapClass = "sutInterface.tcp.TCPMapper" # mapper class used
 
 class TraceRunner:
 
-    def __init__(self, traceFile, jvmPath, runNum, skipNum):
-        self.traceFile = traceFile # the path to the file containing the trace to be executed
+    def __init__(self, jvmPath, runNum, skipNum):
         self.jvmPath = jvmPath # path to libjm.so for ubuntu or jvm.dll for windows
         self.runNum = runNum
         self.skipNum = skipNum
+        self.mapper = None
         
-    waitTime = 0.1
-    learnerProjectBinPath = "-Djava.class.path=../Learner/bin" # path to the java learner setup binaries
-    mapClass = "sutInterface.tcp.TCPMapper" # mapper class used
+    def __str__(self):
+        return "Trace Runner with parameters: " + str(self.__dict__)
+        
     # expected mapper interface:
     #     processOutgoingRequest(string, int, int)
     #     processIncomingResponseComp()
     #     processIncomingTimeout()
         
     def startJava(self):
-        jpype.startJVM(jvmPath, "-ea",learnerProjectBinPath)
+        print "starting JVM with parameters: " + "-ea " + learnerProjectBinPath
+        jpype.startJVM(self.jvmPath, "-ea",learnerProjectBinPath)
     
     def stopJava(self):
+        print "shutting down JVM"
         jpype.shutdownJVM()
     
     # get mapper instance
@@ -82,72 +87,68 @@ class TraceRunner:
         ack = long(parts[2])
         return self.getSender().sendInput(flags, syn, ack)
     
-    # gets a new port number, an increment of the old. Replaces it in the portNumber file.
-    def getNextPort(self):
-        f = open(portNumberFile,"a+")
-        f.seek(0)
-        line = f.readline()
-        if line == '':
-            networkPort = getSender().networkPortMinimum
-        else:
-            networkPort = (int(line)+1)%getSender().networkPortMaximum
-        f.closed
-        f = open(portNumberFile, "w")
-        f.write(str(networkPort))
-        f.closed
-        return networkPort
-    
     def validReset(self):
         validSeq = self.getMapper().getNextValidSeq()
         self.getSender().sendValidReset(validSeq)
     
     # resets by changing ports on the sender.
-    def reset():
+    def reset(self):
+
+        print self.getMapper()
         self.getMapper().setDefault()
+        
         self.getSender().sendReset()
     
     # executes the trace at path. Starting '#' is used to comment the lines. Parsing ends once an endline is hit.
     # Step is 2, so that on a normal trace log, the response line is ignored.
-    def executeTraceFile(sender, filePath):
+    def executeTraceFile(self, sender, tracePath):
+        self.startJava()
         self.sender = sender
         step = self.skipNum
         count = 0
         ack = 0
-        reset()
-        print filePath
-        for line in open(filePath, "r"):
-            if line == "\n":
-                return
-            count = count + 1
-            if line[len(line)-1] == "\n":
-                line = line[:len(line)-1]
-            if line == "reset":
-                validReset()
-                count = 0
-                continue
-            if count % step != 1:
-                continue
+        
+        self.reset()
+        for line in open(tracePath, "r"):
+            # we ignore comments
             if line[0] == "#":
                 continue
-         #   print getMapper().state()
-            print line#,"  ", getMapper().state()
+            if count>0:
+                count -= 1
+                continue
+            self.processLine(line)
+            # after each processed line we skip the following skipNum lines
+            count = self.skipNum
+        self.stopJava()
     
-            line = line.replace("(",",");
-            line = line.replace(")",",");
-            if len(line) < 2:
-                break;
-            parts = line.split(",")
-            if len(parts) == 4:
-                flags = parts[0]
-                syn = parts[1]
-                ack = parts[2]
+    def processLine(self, line):
+        # in this case we have a normal message
+        line = line.replace("(",",");
+        line = line.replace(")",",");
+        parts = line.split(",")
+        # in this case we have a message
+        if len(parts) == 4:
+            flags = parts[0]
+            syn = parts[1]
+            ack = parts[2]
+
+            concreteRequest = self.processRequest(flags, syn, ack)
+            concreteResponse = self.sendConcreteRequest(concreteRequest)
+            abstractResponse = self.processResponse(concreteResponse)
+            print self.getMapper().getState()
+            
+        # in this case we either have reset or  a higher method call
+        elif len(parts) == 1: 
+            if line == "reset":
+                self.getSender().sendReset()
+            elif line in ["CLOSESOCKET", "ACCEPT", "CLOSESERVER","CLOSECONNECTION"]:
+                print "call to server adapter: " + line
+            else:
+                print "invalid line encountered: " + line
+                exit(-1)    
+        else: 
+            print "invalid line encountered: " + line
+            exit(-1)
+                
+                
     
-                concreteRequest = self.processRequest(flags, syn, ack)
-                print concreteRequest
-                concreteResponse = self.sendConcreteRequest(concreteRequest)
-                abstractResponse = self.processResponse(concreteResponse)
-                print abstractResponse#,"  ", getMapper().state()
-                print self.getMapper().getState()
-            print "\n"
-            global waitTime
-            time.sleep(waitTime)

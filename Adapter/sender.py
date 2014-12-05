@@ -53,6 +53,9 @@ class Sender:
                 self.tracker.start()
         else:
             self.tracker = None
+    
+    def __str__(self):
+        return "Sender with parameters: " + str(self.__dict__)
 
     # chooses a new port to send packets from
     def refreshNetworkPort(self):

@@ -128,6 +128,14 @@ class Adapter:
                     return
                 if word == "port":
                     newPortFound = True
+                    
+    def sendReset(self):
+         print "reset"
+         print "********** reset **********"
+         self.sender.refreshNetworkPort()
+         self.cmdSocket.send("reset\n")
+         self.listenForServerPort()
+         self.sender.setServerPort(self.serverPort)
 
     # accepts input from the learner, and process it. Sends network packets, looks at the
     # response, extracts the relevant parameters and sends them back to the learner
@@ -138,14 +146,7 @@ class Adapter:
             seqNr = 0
             ackNr = 0
             if input1 == "reset":
-                print "reset"
-                print "********** reset **********"
-                self.sender.refreshNetworkPort()
-                self.cmdSocket.send("reset\n")
-                self.listenForServerPort()
-                self.sender.setServerPort(self.serverPort)
-               # seqNr = int(self.receiveInput())
-               # sender.sendValidReset(seqNr)
+                self.sendReset()
             elif input1 == "exit":
                 self.closeSockets()
                 return

@@ -15,7 +15,7 @@ adapterArguments = [
 configArguments = [
     Argument("c","useConfig", None, None, "Sets whether the tool will read sender args from a configuration file"),
     Argument("csec","configSection", str, "tcp", "The section in the configuration file."),
-    Argument("cfile","configFile", str, "../config.cfg", "The configuration file used. Preferably left as the default value.")]
+    Argument("cfile","configFile", str, "../input/config.cfg", "The configuration file used. Preferably left as the default value.")]
 
 senderArguments = [
     Argument("ni","networkInterface", str, "eth0","The net interface through which the client communicates"),
@@ -36,8 +36,6 @@ senderArguments = [
                                                 "2 selects a hybrid, where a valid RST is sent and the port is changed")]
 
 runnerArguments = [
-    Argument("tf","traceFile", str, None,"file containing a sequence of abstract inputs. The trace runner"
-                                               "reads an abstract input from every line"),
     Argument("r","runNum", int, 0,"The number of times the trace is run"),
     Argument("s","skipNum", int, 0,"The number of lines skipped after each abstract input is read"),
-    Argument("j","jvmPath", str, "/usr/lib/jvm/java-7-openjdk-i386/jre/lib/amd64/server/libjvm.so" ,"Path to libjvm.so")]
+    Argument("j","jvmPath", str, "/usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/server/libjvm.so" ,"Path to libjvm.so")]

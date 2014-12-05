@@ -1,7 +1,5 @@
 package sutInterface.tcp;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 import sutInterface.SocketWrapper;
@@ -16,8 +14,7 @@ public class TCPSutWrapper implements SutWrapper{
 	private final SocketWrapper socketWrapper;
 	private TCPMapper mapper;
 	private boolean exitIfInvalid = true;
-	private static final Set<String> ACTION_COMMANDS = new HashSet<>(Arrays.asList(new String[]
-			{"LISTEN", "ACCEPT", "CLOSESERVER", "CLOSECONNECTION"}));
+	private static final Set<String> ACTION_COMMANDS = Action.getActionStrings();
 	
 	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
 		this.socketWrapper = new SocketWrapper(tcpServerPort);
@@ -58,6 +55,7 @@ public class TCPSutWrapper implements SutWrapper{
 
 		// processing of action-commands
 		// note: mapper is not updated with action commands
+		
 		if(ACTION_COMMANDS.contains(abstractRequest)) {
 			concreteRequest = abstractRequest.toLowerCase();
 		}
