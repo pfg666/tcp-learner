@@ -39,3 +39,7 @@ runnerArguments = [
     Argument("r","runNum", int, 0,"The number of times the trace is run"),
     Argument("s","skipNum", int, 0,"The number of lines skipped after each abstract input is read"),
     Argument("j","jvmPath", str, "/usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/server/libjvm.so" ,"Path to libjvm.so")]
+
+actionSenderArguments = [
+    Argument("cip","cmdIp", str, "192.168.56.1","The ip of the server adapter"),
+    Argument("cport","cmdPort", int, 5000,"The port of the server adapter")]

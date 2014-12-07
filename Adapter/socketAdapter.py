@@ -1,11 +1,12 @@
 import socket
 from select import select
 
+# adapter over the socket class, not yet used
 class SocketAdapter:
     def __init__(self, socket):
         self.adaptedSocket = socket
     
-    # reads string from adaptedSocket until it reads a space/newline
+    # reads a stream of characters from adaptedSocket until it reads a space/newline
     def receiveInput(self):
         inputstring = '';
         finished = False

@@ -13,6 +13,7 @@ from ConfigParser import RawConfigParser
 from sender import Sender
 from networkAdapter import Adapter
 from traceRunner import TraceRunner
+from actionSender import ActionSender
 
 
 # where arguments for each component are stored
@@ -128,3 +129,10 @@ class ArgumentParser:
         values = self.parseArguments(args.runnerArguments)
         runner = TraceRunner(**values)
         return runner
+    
+    def buildActionSender(self):
+        sender = self.buildSender()
+        values = self.parseArguments(args.actionSenderArguments)
+        values.update({"sender" : sender})
+        actionSender = ActionSender(**values)
+        return actionSender

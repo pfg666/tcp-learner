@@ -1,4 +1,4 @@
-
+from socketAdapter import SocketAdapter
 import socket
 
 # extends sender functionality with higher level commands
@@ -11,13 +11,17 @@ class ActionSender:
         self.cmdIp = cmdIp
         self.sender = sender
         
+    def __str__(self):
+        return "ActionSender with parameters: " + str(self.__dict__)
+        
     # returns a new socket to the mapper/learner
     def setUpSocket(self):
         if self.cmdSocket is None:
             cmdSocket = socket.create_connection((self.cmdIp, self.cmdPort))
             cmdSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-            print "python connected to server Adapter at " + cmdIp + " " + (str(cmdPort))
-            self.cmdSocket = SocketAdapter(cmdSocket)
+            print "python connected to server Adapter at " + self.cmdIp + " " + (str(self.cmdPort))
+           # self.cmdSocket = SocketAdapter(cmdSocket)
+            self.cmdSocket = cmdSocket
             self.listenForServerPort()
         
     
@@ -47,6 +51,8 @@ class ActionSender:
                     newPortFound = True
                     
     def sendReset(self):
+         if self.cmdSocket is None:
+             self.setUpSocket()
          print "reset"
          print "********** reset **********"
          self.sender.refreshNetworkPort()
@@ -63,13 +69,13 @@ class ActionSender:
         response = None
         if self.isAction(input):
             self.cmdSocket.send(input + "\n") # TODO race-condition here, might go wrong: 
-            response = sender.captureResponse() # response might arrive before sender is ready
+            response = self.sender.captureResponse() # response might arrive before sender is ready
         else:
             print input + " not a valid action ( it is not one of: " + str(self.actions) + ")"
         return response
                 
     def sendInput(self, input1, seqNr, ackNr):
-        return sender.sendInput(input1, seqNr, ackNr)
+        return self.sender.sendInput(input1, seqNr, ackNr)
     
 
 

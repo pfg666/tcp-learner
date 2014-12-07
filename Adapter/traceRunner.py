@@ -1,29 +1,8 @@
-"""
-   run a sequence of abstract inputs from a file using the Java Mapper in the learner project.
-
-   usage: python traceRunner.py [--runs(-r) runs_num] [--hops(-h) skip_lines_numb] [--jvmPath(-jvm) path_to_jvm_so] --traceFile(-t) trace_file  
-   
-   trace_file is a path to a file containing a sequence of abstract inputs. The trace runner
-   reads an abstract input from every line. 
-   
-   runNum (r) is the number of times the trace is run. 
-   
-   skipNum (s) is the number of lines skipped after each abstract input read. 
-   (useful if your trace also contains output symbols)
-   
-    Example:
-    
-    file trace.txt with:
-    SYN(INV, INV)
-    ACK(V, V)
-    SYN(V, V)
-    ...
-    
-"""
-
 __author__ = 'paul'
+from string import upper
 import jpype
 import os
+import time
 from sender import *
 from response import *
 
@@ -35,8 +14,8 @@ class TraceRunner:
 
     def __init__(self, jvmPath, runNum, skipNum):
         self.jvmPath = jvmPath # path to libjm.so for ubuntu or jvm.dll for windows
-        self.runNum = runNum
-        self.skipNum = skipNum
+        self.runNum = runNum # the number of times the trace is run. 
+        self.skipNum = skipNum # the number of lines skipped after each abstract input read
         self.mapper = None
         
     def __str__(self):
@@ -139,16 +118,19 @@ class TraceRunner:
             
         # in this case we either have reset or  a higher method call
         elif len(parts) == 1: 
+            line = line.lower().replace("\n","") # removes excess baggage
             if line == "reset":
                 self.getSender().sendReset()
-            elif line in ["CLOSESOCKET", "ACCEPT", "CLOSESERVER","CLOSECONNECTION"]:
+            elif line.lower() in ["closesocket", "accept", "closeserver","closeconnection"]:
                 print "call to server adapter: " + line
+                self.getSender().sendCommand(line)
             else:
                 print "invalid line encountered: " + line
                 exit(-1)    
         else: 
             print "invalid line encountered: " + line
             exit(-1)
+        time.sleep(waitTime)
                 
                 
     
