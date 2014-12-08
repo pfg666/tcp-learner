@@ -50,7 +50,8 @@ class TraceRunner:
     
     def processResponse(self, response):
         if type(response) is ConcreteResponse:
-            responseString = self.getMapper().processIncomingResponseComp(response.flags, str(response.seq), str(response.ack))
+            responseString = self.getMapper().\
+            processIncomingResponseComp(response.flags, str(response.seq), str(response.ack))
         else:
             if type(response) is Timeout:
                 self.getMapper().processIncomingTimeout()
@@ -78,8 +79,7 @@ class TraceRunner:
         
         self.getSender().sendReset()
     
-    # executes the trace at path. Starting '#' is used to comment the lines. Parsing ends once an endline is hit.
-    # Step is 2, so that on a normal trace log, the response line is ignored.
+    # executes the trace at path. Starting '#' is used to comment the lines.
     def executeTraceFile(self, sender, tracePath):
         self.startJava()
         self.sender = sender
@@ -121,7 +121,7 @@ class TraceRunner:
             line = line.lower().replace("\n","") # removes excess baggage
             if line == "reset":
                 self.getSender().sendReset()
-            elif line.lower() in ["closesocket", "accept", "closeserver","closeconnection"]:
+            elif line.lower() in ["accept", "listen", "closesocket", "closeserver", "closeconnection"]:
                 print "call to server adapter: " + line
                 self.getSender().sendCommand(line)
             else:

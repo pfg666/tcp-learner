@@ -3,7 +3,9 @@ __author__ = 'paul,ramon'
 """
    run a sequence of abstract inputs from a file using the Java Mapper in the learner project. Currently, it runs the trace in "trace.txt"
 
-   usage: sudo python debug.py [traceRunner param] [sender param] [actionSender param]  
+   usage: sudo python debug.py [traceRunner param] [sender param] [actionSender param]
+     
+   For parameters for each component, see args.py
    
     Example:
     

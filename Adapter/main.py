@@ -3,6 +3,22 @@ import signal
 from argparser import ArgumentParser
 from sender import Sender
 
+"""
+   listens on a port for actions, packet strings or reset, forwards them to the sender component,
+   retrieves responses, processes them back to strings and writes them to the socket
+
+   usage: sudo python main.py [networkAdapter param] [sender param] [actionSender param] 
+     
+   For parameters of each component, see args.py
+   
+   for learning:
+       run the C TCP server adapter (which by itself runs a TCP server)
+       run this program which opens a connection to the adapter and starts the listener
+       run the learner tool and commence learning of the TCP server implementation
+    
+"""
+
+
 global adapter
 adapter = None
 
