@@ -24,6 +24,7 @@ import sutInterface.tcp.init.CachedInitOracle;
 import sutInterface.tcp.init.FunctionInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
+import util.Log;
 import util.SoundUtils;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.packs.ObservationPack;
@@ -54,7 +55,7 @@ public class Main {
 
 		handleArgs(args);
 
-		stdout.println("Start Learning");
+		Log.fatal("Start Learning");
 
 		InputStream configInput = new FileInputStream(sutConfigFile);
 		Yaml yaml = new Yaml(new Constructor(Config.class));
@@ -82,9 +83,6 @@ public class Main {
 		LearnLog.addAppender(new PrintStreamLoggingAppender(LogLevel.INFO,
 				stdout));
 		
-//		PrintStream fileStream = new PrintStream(new FileOutputStream(
-//				"out.txt", false));
-//		System.setOut(fileStream);
 		PrintStream statisticsFileStream = new PrintStream(
 				new FileOutputStream("statistics.txt", false));
 		
@@ -103,7 +101,7 @@ public class Main {
 		if(! "adaptive".equalsIgnoreCase(tcp.oracle)) {
 			InitOracle initOracle = new FunctionInitOracle();
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
-			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper);
+			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
 			eqOracleRunner = new EquivalenceOracle(sutWrapper);
 			memOracleRunner = new MembershipOracle(sutWrapper);
 			
@@ -118,7 +116,7 @@ public class Main {
 			memOracleRunner = new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper));
 			InitOracle initOracle = new CachedInitOracle(new InitCacheManager());
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
-			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper);
+			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
 		}
 		
 		Learner learner = null;
@@ -217,7 +215,7 @@ public class Main {
 					stderr.flush();
 				}
 			} catch (LearningException ex) {
-				stdout.println("LearningException ex in Main!");
+				stderr.println("LearningException ex in Main!");
 				ex.printStackTrace();
 			} catch (Exception ex) {
 				statisticsFileStream.println("Exception!");

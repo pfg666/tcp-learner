@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import util.Log;
+
 // Wrapper around the java Socket so we have clear segmentation of inputs and outputs
 public class SocketWrapper {
 	protected Socket sock;
@@ -29,7 +31,7 @@ public class SocketWrapper {
 	}
 
 	public void writeInput(String input) {
-		System.out.println("IN: "+ input);
+		Log.info("IN: "+ input);
 		sockout.println(input);
 		sockout.flush();
 	}
@@ -38,7 +40,7 @@ public class SocketWrapper {
 		String output = null;
 		try {
 			output = sockin.readLine();
-			System.out.println("OUT: "+ output);
+			Log.info("OUT: "+ output);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

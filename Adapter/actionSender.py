@@ -63,7 +63,7 @@ class ActionSender:
     def isAction(self, input):
         return input in self.actions
     
-    def sendCommand(self, input):
+    def sendAction(self, input):
         if self.cmdSocket is None:
             self.setUpSocket()
         response = None

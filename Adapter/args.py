@@ -7,14 +7,16 @@ class Argument:
         self.type = type
 
 # list of arguments for each component in the setup
+# apart from config, each list has a corresponding section in the config file
+# senderArguments has the section [sender], runnerArguments has the section [runner]....
 
 adapterArguments = [
     Argument("lcp","localCommunicationPort", int, 18200, "Listening adapter port which the learner connects to")
 ]
 
 configArguments = [
-    Argument("c","useConfig", None, None, "Sets whether the tool will read sender args from a configuration file"),
-    Argument("csec","configSection", str, "tcp", "The section in the configuration file."),
+    Argument("c","useConfig", bool, True, "Sets whether the tool will read sender args from a configuration file"),
+  #  Argument("csec","configSection", str, "tcp", "The section in the configuration file."),
     Argument("cfile","configFile", str, "../input/config.cfg", "The configuration file used. Preferably left as the default value.")]
 
 senderArguments = [
@@ -33,7 +35,9 @@ senderArguments = [
     Argument("smac","serverMAC", str, None, "The server MAC address"),
     Argument("rst","resetMechanism", int, 0, "0 selects reset by sending a valid RST and not changing the port,"
                                                "1 selects reset by changing the port (+1)"
-                                                "2 selects a hybrid, where a valid RST is sent and the port is changed")]
+                                                "2 selects a hybrid, where a valid RST is sent and the port is changed"),
+    Argument("sa","sendActions", bool, False, "If true then the sender will be augmented with send action capability, so that "\
+                                                "it can also send higher level actions to an command server adapter")]
 
 runnerArguments = [
     Argument("r","runNum", int, 0,"The number of times the trace is run"),

@@ -52,6 +52,5 @@ public class TCPParams{
 	public void printParams(PrintStream stdout) {
 		stdout.printf("TCP endpoint: (%s,%s)\n", this.sutIP, String.valueOf(this.sutPort));
 		stdout.println("Reset oracle: " + oracle);
-		System.out.println("Endpoint:");
 	}
 }

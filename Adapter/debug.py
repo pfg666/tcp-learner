@@ -17,27 +17,21 @@ __author__ = 'paul,ramon'
     
 """
 
-import signal
-from argparser import ArgumentParser
-from sender import Sender
-from traceRunner import TraceRunner
+from builder import Builder
 
 # debug main. Uses the trace runner to run individual traces
 if __name__ == "__main__":
     print "==Preparation=="
-    argumentParser = ArgumentParser()
+    builder = Builder()
     
 #     print "\n==Sender Setup=="
-#     sender = argumentParser.buildSender()
+#     sender = builder.buildSender()
 #     print str(sender)
-    
-    print "\n==Trace Runner Setup=="
-    runner = argumentParser.buildTraceRunner()
-    print str(runner)
-    
-    print "\n==Action Sender Setup=="
-    actionSender = argumentParser.buildActionSender()
-    print str(actionSender)
-
-    runner.executeTraceFile(actionSender, "trace.txt")
+#     
+#     print "\n==Trace Runner Setup=="
+#     runner = builder.buildTraceRunner()
+#     print str(runner)
+#     
+#     print "\n==Running Trace File=="
+#     runner.executeTraceFile(sender, "trace.txt")
     

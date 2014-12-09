@@ -6,18 +6,7 @@ except ImportError:
     print 'argparse is not available, will use command line interface only'
     has_argparse = False
 import sys
-import interfaceType
 from ConfigParser import RawConfigParser
-
-# the stuff we can build
-from sender import Sender
-from networkAdapter import Adapter
-from traceRunner import TraceRunner
-from actionSender import ActionSender
-
-
-# where arguments for each component are stored
-from args import Argument
 import args
 
 class ArgumentParser:
@@ -38,16 +27,16 @@ class ArgumentParser:
         return arguments
     
     # parses the settable arguments from command line, then from config file if option is given
-    def parseArguments(self, settableArguments):
+    def parseArguments(self, settableArguments, configSection=None):
         parsedValues = {}
         configOptions = self.getConfigValues()
         # if reading from config file is enabled, stamp argument values read from config file to parsedValuesMap
-        if configOptions["useConfig"] == True:
+        if configOptions["useConfig"] == True and configSection is not None:
             global has_argparse
             if has_argparse == False:
                 print "cannot use the configuration parser because the \"argparse\" module couldn't be located"
                 exit()
-            configValues = self.parseConfigArguments(configOptions["configFile"], configOptions["configSection"], settableArguments, fillWithDefault=True)
+            configValues = self.parseConfigArguments(configOptions["configFile"], configSection, settableArguments, fillWithDefault=True)
             parsedValues.update(configValues)
             
         # stamp cmd  values read from cmd line to map (they will overwrite options set via config)
@@ -110,29 +99,3 @@ class ArgumentParser:
         for argumentDefinition in argumentDefinitions:
             valueMap.update(argumentDefinition)
         return valueMap
-
-    # builds the sender component of the learning setup
-    def buildSender(self):
-        values = self.parseArguments(args.senderArguments)
-        sender = Sender(**values)
-        return sender
-    
-    # builds the adapter component of the learning setup
-    def buildAdapter(self):
-        values = self.parseArguments(args.adapterArguments)
-        # values = self.getValueMapForArguments(self.adapterArguments, values)
-        adapter = Adapter(**values)
-        return adapter
-    
-    # builds the optional trace runner
-    def buildTraceRunner(self):
-        values = self.parseArguments(args.runnerArguments)
-        runner = TraceRunner(**values)
-        return runner
-    
-    def buildActionSender(self):
-        sender = self.buildSender()
-        values = self.parseArguments(args.actionSenderArguments)
-        values.update({"sender" : sender})
-        actionSender = ActionSender(**values)
-        return actionSender

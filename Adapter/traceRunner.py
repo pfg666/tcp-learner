@@ -123,7 +123,7 @@ class TraceRunner:
                 self.getSender().sendReset()
             elif line.lower() in ["accept", "listen", "closesocket", "closeserver", "closeconnection"]:
                 print "call to server adapter: " + line
-                self.getSender().sendCommand(line)
+                self.getSender().sendAction(line)
             else:
                 print "invalid line encountered: " + line
                 exit(-1)    

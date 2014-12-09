@@ -1,13 +1,13 @@
+from scapy.sendrecv import sr1, sniff
+from scapy.packet import Raw
+from response import Timeout, ConcreteResponse
+from scapy.config import conf
 __author__ = 'paul,ramon'
-import socket
+
 import time
-import sys
-import subprocess
-import threading
 import platform
 from interfaceType import InterfaceType
-from scapy.all import *
-from response import *
+from scapy.layers.inet import IP,TCP
 
 # variables used to retain last sequence/acknowledgment sent
 seqVar = 0
@@ -105,7 +105,7 @@ class Sender:
         if srcPort is None:
             srcPort = self.senderPort
         print "" +tcpFlagsSet + " " + str(seqNr) + " " + str(ackNr)
-        pIP = IP(dst=destIP, flags=ipFlagsSet)
+        pIP = IP(dst=destIP, flags=ipFlagsSet, version=4)
         pTCP = TCP(sport=srcPort,
         dport=destPort,
         seq=seqNr,
@@ -230,10 +230,9 @@ class Sender:
         # add the MAC-address of the server to scapy's ARP-table to use LAN
         # used every iteration, otherwise the entry somehow
         # w disappears after a while
-        conf.netcache.arp_cache[self.serverIP] = self.serverMAC
+        # conf.netcache.arp_cache[self.serverIP] = self.serverMAC
         conf.sniff_promisc=False
 
-        response = None
         timeBefore = time.time()
         
         if input1 != "nil":

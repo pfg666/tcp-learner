@@ -5,6 +5,7 @@ import java.util.Set;
 import sutInterface.SocketWrapper;
 import sutInterface.SutWrapper;
 import util.InputAction;
+import util.Log;
 import util.OutputAction;
 
 // SutWrapper used for learning TCP (uses abstraction) 
@@ -16,22 +17,29 @@ public class TCPSutWrapper implements SutWrapper{
 	private boolean exitIfInvalid = true;
 	private static final Set<String> ACTION_COMMANDS = Action.getActionStrings();
 	
-	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
+	private TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
 		this.socketWrapper = new SocketWrapper(tcpServerPort);
 		this.mapper = mapper;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				System.err.println("Closing stuff");
-				System.err.flush();
+				Log.fatal("Detected shutdown, commencing connection "+ 
+						socketWrapper + " termination");
 				if (socketWrapper != null) {
 					try {
+						Log.fatal("Sending an exit message to the adapter");
 						socketWrapper.writeInput("exit");
 					} finally {
+						Log.fatal("Closing the socket");
 						socketWrapper.close();
 					}
 				}
 			}
 		});
+	}
+	
+	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper, boolean exitIfInvalid) {
+		this(tcpServerPort, mapper);
+		this.exitIfInvalid = exitIfInvalid;
 	}
 
 	public void setMapper(TCPMapper mapper) {
@@ -42,7 +50,7 @@ public class TCPSutWrapper implements SutWrapper{
 		return mapper;
 	}
 	
-	public void setInvalidExit(boolean exitWhenInvalid) {
+	public void setExitOnInvalidParameter(boolean exitWhenInvalid) {
 		this.exitIfInvalid = exitWhenInvalid;
 	}
 	
@@ -83,7 +91,7 @@ public class TCPSutWrapper implements SutWrapper{
 	 * called by the learner to reset the automaton
 	 */
 	public void sendReset() {
-		System.out.println("******** RESET ********");
+		Log.info("******** RESET ********");
 		String rstMessage = mapper.processOutgoingReset();
 		socketWrapper.writeInput(rstMessage);
 		socketWrapper.writeInput("reset");

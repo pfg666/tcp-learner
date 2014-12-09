@@ -3,6 +3,7 @@ package sutInterface.tcp.init;
 import sutInterface.tcp.Flag;
 import sutInterface.tcp.Symbol;
 import sutInterface.tcp.TCPMapper;
+import util.Log;
 
 /**
  * An initial state oracle which works for Windows 8 and Linux for a limited alphabet. When this function is applied on the mapper,
@@ -28,7 +29,7 @@ public class FunctionInitOracle implements InitOracle{
 			isInitial = (mapper.lastFlagsReceived.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) &&
 					mapper.lastFlagsSent.has(Flag.SYN); 
 		}
-		System.out.println(isInitial);
+		Log.info("The oracle says that we are " + (isInitial?" in ":" not in ")+" the initial state");
 		return isInitial;
 	}
 
