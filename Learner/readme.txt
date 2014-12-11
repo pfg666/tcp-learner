@@ -11,7 +11,7 @@ To learn,
 -> start the network adapter
 -> start the learner setup 
 
-I the setup I have used I had:
+In the setup I have used I had:
 the server running on my host OS (Windows 8)
 the network adapter and learning setup running on a Ubuntu VM
 On my host OS I ran Wireshark, in order to monitor the TCP packets sent/received. 

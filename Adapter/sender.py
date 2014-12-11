@@ -1,13 +1,13 @@
+from scapy.sendrecv import sr1, sniff
+from scapy.packet import Raw
+from response import Timeout, ConcreteResponse
+from scapy.config import conf
 __author__ = 'paul,ramon'
-import socket
+
 import time
-import sys
-import subprocess
-import threading
 import platform
 from interfaceType import InterfaceType
-from scapy.all import *
-from response import *
+from scapy.layers.inet import IP,TCP
 
 # variables used to retain last sequence/acknowledgment sent
 seqVar = 0
@@ -16,18 +16,18 @@ ackVar = 0
 # the sender sends packets with configurable parameters to a server and retrieves responses
 class Sender:
     # information of the SUT
-    def __init__(self, serverMAC, serverIP, serverPort = 7991,
-                 networkInterface="eth1", networkInterfaceType=InterfaceType.Ethernet, networkPort=15000, networkPortMinimum=20000,
-                 networkPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
+    def __init__(self, serverMAC=None, serverIP="191.168.10.1", serverPort = 7991,
+                 networkInterface="lo", networkInterfaceType=InterfaceType.Ethernet, senderPort=15000, senderPortMinimum=20000,
+                 senderPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
                  isVerbose=0, waitTime=0.006, resetMechanism=0):
         # data on sender and server needed to send packets 
         self.serverIP = serverIP
         self.serverPort = serverPort
         self.serverMAC = serverMAC
         self.networkInterface = networkInterface
-        self.networkPort = networkPort
-        self.networkPortMinimum = networkPortMinimum
-        self.networkPortMaximum = networkPortMaximum
+        self.senderPort = senderPort
+        self.senderPortMinimum = senderPortMinimum
+        self.senderPortMaximum = senderPortMaximum
         self.portNumberFile = portNumberFile;
         
         # time to wait for a response from the server before concluding a timeout
@@ -53,23 +53,26 @@ class Sender:
                 self.tracker.start()
         else:
             self.tracker = None
+    
+    def __str__(self):
+        return "Sender with parameters: " + str(self.__dict__)
 
     # chooses a new port to send packets from
     def refreshNetworkPort(self):
-        print("previous local port: " + str(self.networkPort))
-        self.networkPort = self.getNextPort()
-        print("next local port: " + str(self.networkPort)+"\n")
-        return self.networkPort
+        print("previous local port: " + str(self.senderPort))
+        self.senderPort = self.getNextPort()
+        print("next local port: " + str(self.senderPort)+"\n")
+        return self.senderPort
 
     # gets a new port number, an increment of the old. Write new number over the old number in the portNumber file.
     def getNextPort(self):
         f = open(self.portNumberFile,"a+")
         f.seek(0)
         line = f.readline()
-        if line == '' or int(line) < self.networkPortMinimum:
-            networkPort = self.networkPortMinimum
+        if line == '' or int(line) < self.senderPortMinimum:
+            networkPort = self.senderPortMinimum
         else:
-            networkPort = (int(line)+1)%self.networkPortMaximum
+            networkPort = (int(line)+1)%self.senderPortMaximum
         f.closed
         f = open(self.portNumberFile, "w")
         f.write(str(networkPort))
@@ -89,6 +92,9 @@ class Sender:
         response = self.sendPacketAndRetrieveResponse(packet)
         return response
     
+    def setServerPort(self, newPort):
+        self.serverPort = newPort;
+    
     # function that creates packet from data strings/integers
     def createPacket(self, tcpFlagsSet, seqNr, ackNr, destIP = None, destPort = None, srcPort = None,
                      ipFlagsSet="DF", data="cc"):
@@ -97,9 +103,9 @@ class Sender:
         if destPort is None:
             destPort = self.serverPort
         if srcPort is None:
-            srcPort = self.networkPort
+            srcPort = self.senderPort
         print "" +tcpFlagsSet + " " + str(seqNr) + " " + str(ackNr)
-        pIP = IP(dst=destIP, flags=ipFlagsSet)
+        pIP = IP(dst=destIP, flags=ipFlagsSet, version=4)
         pTCP = TCP(sport=srcPort,
         dport=destPort,
         seq=seqNr,
@@ -112,14 +118,20 @@ class Sender:
         return p
     
     # sends packets and ensures both reception tools are used so as to retrieve the response when such response is given
+    # use packet = None for sniffing without sending a packet
     def sendPacketAndRetrieveResponse(self, packet):
         # we need first to clear the last response cached in the tracker 
         if self.useTracking == True :
             self.tracker.clearLastResponse()
-        #todo find a more elegant way of finding the client IP?
-        self.clientIP = packet[IP].src
-        # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
-        scapyResponse = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
+        
+        scapyResponse = None
+        if packet != None:
+            #todo find a more elegant way of finding the client IP?
+            self.clientIP = packet[IP].src
+            # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
+            scapyResponse = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
+        else:
+            time.sleep(self.waitTime)
         captureMethod = ""
         if scapyResponse is not None:
             response = self.scapyResponseParse(scapyResponse)
@@ -128,7 +140,7 @@ class Sender:
             response = None
             if self.useTracking == True:
                 # timeout case, return the response (if caught) by the tracker and missed by scapy
-                response = self.tracker.getLastResponse(self.networkPort)
+                response = self.tracker.getLastResponse(self.senderPort)
                 if type(response) is not Timeout:
                     captureMethod = "tracker"
             else:
@@ -204,29 +216,42 @@ class Sender:
     # uses scapy packet sniffer to sniff whatever TCP/IP packets there are on the network that are of interest
     def sniffPackets(self):
         sniffedPackets = sniff(lfilter=lambda x: IP in x and x[IP].src == self.serverIP and
-                                                 TCP in x and x[TCP].dport == self.networkPort,
+                                                 TCP in x and x[TCP].dport == self.senderPort,
                                timeout=self.waitTime)
         print 'sniffed'
         return sniffedPackets
+
+    # captures a response without sendin a packet first, in the same way as though a packet was sent
+    def captureResponse(self):
+        return self.sendInput("nil", None, None);
 
     # sends input over the network to the server
     def sendInput(self, input1, seqNr, ackNr):
         # add the MAC-address of the server to scapy's ARP-table to use LAN
         # used every iteration, otherwise the entry somehow
         # w disappears after a while
-        conf.netcache.arp_cache[self.serverIP] = self.serverMAC
+        # conf.netcache.arp_cache[self.serverIP] = self.serverMAC
         conf.sniff_promisc=False
 
-        response = None
         timeBefore = time.time()
+        
         if input1 != "nil":
-            response = self.sendPacket(input1, seqNr, ackNr)
+            #response = self.sendPacket(input1, seqNr, ackNr)
+            ###
+            packet = self.createPacket(input1, seqNr, ackNr)
+            ###
         else:
-            sniffed = self.sniffPackets()
-            if len(sniffed) > 0:
-                response = self.scapyResponseParse(sniffed[0])
-            else:
-                response = Timeout()
+            packet = None
+        response = self.sendPacketAndRetrieveResponse(packet)
+#         
+#         if input1 != "nil":
+#             response = self.sendPacket(input1, seqNr, ackNr)
+#         else:
+#             sniffed = self.sniffPackets()
+#             if len(sniffed) > 0:
+#                 response = self.scapyResponseParse(sniffed[0])
+#             else:
+#                 response = Timeout()
         timeAfter = time.time()
         timeSpent = timeAfter - timeBefore
         if timeSpent < self.waitTime:

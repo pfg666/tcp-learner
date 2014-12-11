@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import util.Log;
+
 /***
  * Provides trace state storing and fetching over a global static trace map.
  * Traces are serialized and deserialized via separators.
@@ -98,7 +100,7 @@ public class InitCacheManager {
 			}
 			reader.close();
 		} catch (FileNotFoundException e) {
-			System.err.println("Invalid cache file path " + fileName);
+			Log.err("Invalid cache file path " + fileName);
 			e.printStackTrace();
 			System.exit(0);
 		} catch (IOException e) {

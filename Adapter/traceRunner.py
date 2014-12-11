@@ -1,148 +1,136 @@
 __author__ = 'paul'
+from string import upper
 import jpype
 import os
+import time
 from sender import *
 from response import *
-from argparser import *
 
-# Tool used to run a single abstract trace from a file. It communicates directly with the Java mapper. Example of
-# an abstract trace ('#' excluded):
-# SYN(INV, INV)
-# ACK(V, V)
-# SYN(V, V)
-# ...
-# Change the following 4 settings to suit your own setup.
-tracePath = "traces.txt" # the path to the file containing the trace to be executed
-jvmPath = "/usr/lib/jvm/jdk1.7.0_45/jre/lib/amd64/server/libjvm.so" # path to libjm.so for ubuntu or jvm.dll for windows
-learnerProjectBinPath = "-Djava.class.path=../NetworkSetup/bin" # path to the java learner setup binaries
-mapClass = "sut.mapper.tested.U1310Mapper" # mapper class used
-# mapper interface:
-#     processOutgoingRequest(string, int, int)
-#     processIncomingResponseComp()
-#     processIncomingTimeout()
-portNumberFile = "sn.txt" # used for generating a new port number by incrementing the old
-global mapper
-mapper= None
-global sender
-sender = None
-global waitTime
 waitTime = 0.1
-def startJava():
-    jpype.startJVM(jvmPath, "-ea",learnerProjectBinPath)
-def stopJava():
-    jpype.shutdownJVM()
+learnerProjectBinPath = "-Djava.class.path=../bin" # path to the java learner setup binaries
+mapClass = "sutInterface.tcp.TCPMapper" # mapper class used
 
-# get mapper instance
-def getMapper():
-    global mapper
-    if mapper is None:
-        Mapper = jpype.JClass(mapClass)
-        mapper = Mapper()
-    return mapper
+class TraceRunner:
 
-# get sender singleton (quite uninspired)
-def getSender():
-    global sender
-    if sender is None:
-        argumentParser = ArgumentParser()
-        argumentParser.parseArguments()
-        sender = argumentParser.buildSender()
-        print sender.__dict__
-    return sender
+    def __init__(self, jvmPath, runNum, skipNum):
+        self.jvmPath = jvmPath # path to libjm.so for ubuntu or jvm.dll for windows
+        self.runNum = runNum # the number of times the trace is run. 
+        self.skipNum = skipNum # the number of lines skipped after each abstract input read
+        self.mapper = None
+        
+    def __str__(self):
+        return "Trace Runner with parameters: " + str(self.__dict__)
+        
+    # expected mapper interface:
+    #     processOutgoingRequest(string, int, int)
+    #     processIncomingResponseComp()
+    #     processIncomingTimeout()
+        
+    def startJava(self):
+        print "starting JVM with parameters: " + "-ea " + learnerProjectBinPath
+        jpype.startJVM(self.jvmPath, "-ea",learnerProjectBinPath)
+    
+    def stopJava(self):
+        print "shutting down JVM"
+        jpype.shutdownJVM()
+    
+    # get mapper instance
+    def getMapper(self):
+        if self.mapper is None:
+            Mapper = jpype.JClass(mapClass)
+            self.mapper = Mapper()
+        return self.mapper
+    
+    # get sender singleton (quite uninspired)
+    def getSender(self):
+        return self.sender
+    
+    def processRequest(self,flags, syn, ack):
+        return self.getMapper().processOutgoingRequest(flags, syn, ack)
+    
+    def processResponse(self, response):
+        if type(response) is ConcreteResponse:
+            responseString = self.getMapper().\
+            processIncomingResponseComp(response.flags, str(response.seq), str(response.ack))
+        else:
+            if type(response) is Timeout:
+                self.getMapper().processIncomingTimeout()
+            responseString = response.serialize().upper()
+        return responseString
+    
+    def sendConcreteRequest(self, concreteRequest):
+        if concreteRequest == "UNDEFINED":
+            return Undefined()
+        parts = concreteRequest.split()
+        flags = str(parts[0])
+        syn = long(parts[1])
+        ack = long(parts[2])
+        return self.getSender().sendInput(flags, syn, ack)
+    
+    def validReset(self):
+        validSeq = self.getMapper().getNextValidSeq()
+        self.getSender().sendValidReset(validSeq)
+    
+    # resets by changing ports on the sender.
+    def reset(self):
 
-def processRequest(flags, syn, ack):
-    return getMapper().processOutgoingRequest(flags, syn, ack)
-
-def processResponse(response):
-    if type(response) is ConcreteResponse:
-        #flags = jpype.JString(str(response.flags))
-        responseString = getMapper().processIncomingResponseComp(response.flags, str(response.seq), str(response.ack))
-    else:
-        if type(response) is Timeout:
-            getMapper().processIncomingTimeout()
-        responseString = response.serialize().upper()
-    return responseString
-
-def sendConcreteRequest(concreteRequest):
-    if concreteRequest == "UNDEFINED":
-        return Undefined()
-    parts = concreteRequest.split()
-    flags = str(parts[0])
-    syn = long(parts[1])
-    ack = long(parts[2])
-    return getSender().sendInput(flags, syn, ack)
-
-# gets a new port number, an increment of the old. Replaces it in the portNumber file.
-def getNextPort():
-    f = open(portNumberFile,"a+")
-    f.seek(0)
-    line = f.readline()
-    if line == '':
-        networkPort = getSender().networkPortMinimum
-    else:
-        networkPort = (int(line)+1)%getSender().networkPortMaximum
-    f.closed
-    f = open(portNumberFile, "w")
-    f.write(str(networkPort))
-    f.closed
-    return networkPort
-
-def validReset():
-    validSeq = getMapper().getNextValidSeq()
-    getSender().sendValidReset(validSeq)
-
-# resets by changing ports on the sender.
-def reset():
-    getMapper().setDefault()
-    getSender().networkPort = getNextPort()
-    print "Running on ", str(getSender().networkPort)
-
-# executes the trace at path. Starting '#' is used to comment the lines. Parsing ends once an endline is hit.
-# Step is 2, so that on a normal trace log, the response line is ignored.
-def executeTraceFile(filePath, step=2):
-    count = 0
-    ack = 0
-    reset()
-    print filePath
-    for line in open(filePath, "r"):
-        if line == "\n":
-            return
-        count = count + 1
-        if line[len(line)-1] == "\n":
-            line = line[:len(line)-1]
-        if line == "reset":
-            validReset()
-            count = 0
-            continue
-        if count % step != 1:
-            continue
-        if line[0] == "#":
-            continue
-     #   print getMapper().state()
-        print line#,"  ", getMapper().state()
-
+        print self.getMapper()
+        self.getMapper().setDefault()
+        
+        self.getSender().sendReset()
+    
+    # executes the trace at path. Starting '#' is used to comment the lines.
+    def executeTraceFile(self, sender, tracePath):
+        self.startJava()
+        self.sender = sender
+        step = self.skipNum
+        count = 0
+        ack = 0
+        
+        self.reset()
+        for line in open(tracePath, "r"):
+            # we ignore comments
+            if line[0] == "#":
+                continue
+            if count>0:
+                count -= 1
+                continue
+            self.processLine(line)
+            # after each processed line we skip the following skipNum lines
+            count = self.skipNum
+        self.stopJava()
+    
+    def processLine(self, line):
+        # in this case we have a normal message
         line = line.replace("(",",");
         line = line.replace(")",",");
-        if len(line) < 2:
-            break;
         parts = line.split(",")
+        # in this case we have a message
         if len(parts) == 4:
             flags = parts[0]
             syn = parts[1]
             ack = parts[2]
 
-            concreteRequest = processRequest(flags, syn, ack)
-            print concreteRequest
-            concreteResponse = sendConcreteRequest(concreteRequest)
-            abstractResponse = processResponse(concreteResponse)
-            print abstractResponse#,"  ", getMapper().state()
-            print getMapper().getState()
-        print "\n"
-        global waitTime
+            concreteRequest = self.processRequest(flags, syn, ack)
+            concreteResponse = self.sendConcreteRequest(concreteRequest)
+            abstractResponse = self.processResponse(concreteResponse)
+            print self.getMapper().getState()
+            
+        # in this case we either have reset or  a higher method call
+        elif len(parts) == 1: 
+            line = line.lower().replace("\n","") # removes excess baggage
+            if line == "reset":
+                self.getSender().sendReset()
+            elif line.lower() in ["accept", "listen", "closesocket", "closeserver", "closeconnection"]:
+                print "call to server adapter: " + line
+                self.getSender().sendAction(line)
+            else:
+                print "invalid line encountered: " + line
+                exit(-1)    
+        else: 
+            print "invalid line encountered: " + line
+            exit(-1)
         time.sleep(waitTime)
-
-if __name__ == "__main__":
-    startJava()
-    for i in range(0,1):
-        executeTraceFile(tracePath, 2)
-    stopJava()
+                
+                
+    

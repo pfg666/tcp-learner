@@ -1,31 +1,45 @@
 package sutInterface.tcp;
 
+import java.util.Set;
+
 import sutInterface.SocketWrapper;
 import sutInterface.SutWrapper;
 import util.InputAction;
+import util.Log;
 import util.OutputAction;
 
 // SutWrapper used for learning TCP (uses abstraction) 
 // Unlike SimpleSutWrapper, all communication is directed through a mapper component
 public class TCPSutWrapper implements SutWrapper{
 
-	private SocketWrapper socket;
+	private final SocketWrapper socketWrapper;
 	private TCPMapper mapper;
-	private boolean exitIfInvalid = false;
-
-	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
-		this.socket = new SocketWrapper(tcpServerPort);
+	private boolean exitIfInvalid = true;
+	private static final Set<String> ACTION_COMMANDS = Action.getActionStrings();
+	
+	private TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
+		this.socketWrapper = new SocketWrapper(tcpServerPort);
 		this.mapper = mapper;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				System.err.println("Closing stuff");
-				System.err.flush();
-				if (socket != null) {
-					socket.writeInput("exit");
-					socket.close();
+				Log.fatal("Detected shutdown, commencing connection "+ 
+						socketWrapper + " termination");
+				if (socketWrapper != null) {
+					try {
+						Log.fatal("Sending an exit message to the adapter");
+						socketWrapper.writeInput("exit");
+					} finally {
+						Log.fatal("Closing the socket");
+						socketWrapper.close();
+					}
 				}
 			}
 		});
+	}
+	
+	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper, boolean exitIfInvalid) {
+		this(tcpServerPort, mapper);
+		this.exitIfInvalid = exitIfInvalid;
 	}
 
 	public void setMapper(TCPMapper mapper) {
@@ -36,7 +50,7 @@ public class TCPSutWrapper implements SutWrapper{
 		return mapper;
 	}
 	
-	public void setInvalidExit(boolean exitWhenInvalid) {
+	public void setExitOnInvalidParameter(boolean exitWhenInvalid) {
 		this.exitIfInvalid = exitWhenInvalid;
 	}
 	
@@ -45,19 +59,30 @@ public class TCPSutWrapper implements SutWrapper{
 		
 		// Build concrete input
 		String abstractRequest = symbolicInput.getValuesAsString(); 
-		String concreteRequest = processOutgoingPacket(abstractRequest);
+		String concreteRequest;
+
+		// processing of action-commands
+		// note: mapper is not updated with action commands
+		
+		if(ACTION_COMMANDS.contains(abstractRequest)) {
+			concreteRequest = abstractRequest.toLowerCase();
+		}
+		// only processing of packet-requests
+		else {
+			concreteRequest = processOutgoingPacket(abstractRequest);
+		}
 		
 		// Handle non-concretizable abstract input case
 		if(concreteRequest.equalsIgnoreCase(Symbol.UNDEFINED.name())) {
 			symbolicOutput = new OutputAction(Symbol.UNDEFINED.name());
-		} 
-		
+		}
 		// Send concrete input, receive output from SUT and make abs
 		else {
 			String concreteResponse = sendPacket(concreteRequest);
 			String abstractResponse = processIncomingPacket(concreteResponse);
 			symbolicOutput = new OutputAction(abstractResponse);
 		}
+		
 		return symbolicOutput;
 	}
 
@@ -66,13 +91,14 @@ public class TCPSutWrapper implements SutWrapper{
 	 * called by the learner to reset the automaton
 	 */
 	public void sendReset() {
+		Log.info("******** RESET ********");
 		String rstMessage = mapper.processOutgoingReset();
-		socket.writeInput(rstMessage);
-		socket.writeInput("reset");
-		socket.readOutput();
+		socketWrapper.writeInput(rstMessage);
+		socketWrapper.writeInput("reset");
+		socketWrapper.readOutput();
 		mapper.setDefault();
 	}
-
+	
 	/**
 	 * Updates seqToSend and ackToSend correspondingly.
 	 * 
@@ -95,11 +121,15 @@ public class TCPSutWrapper implements SutWrapper{
 	}
 
 	private String sendPacket(String concreteRequest) {
-		socket.writeInput(concreteRequest);
-		String concreteResponse = socket.readOutput();
+		if (concreteRequest == null) {
+			socketWrapper.writeInput("nil");
+		} else {
+			socketWrapper.writeInput(concreteRequest);
+		}
+		String concreteResponse = socketWrapper.readOutput();
 		return concreteResponse;
 	}
-
+	
 	/**
 	 * 
 	 * @param concreteResponse
