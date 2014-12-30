@@ -62,11 +62,6 @@ void answer(char* output) {
 }
 
 void init_run() {
-	printf("now listening for learner...\n");
-	learner_conn_sd = accept(learner_listener_sd, (struct sockaddr*)NULL, NULL);
-	
-	printf("learner connected!");
-
 	accepting = 0;
 	server_sd = socket(AF_INET, SOCK_STREAM, 0);
 	
@@ -241,10 +236,6 @@ int process_input() {
 		process_close_connection();
 	} else if (strncmp(read_buffer, "reset", sizeof(read_buffer)) == 0) {
 		close_run();
-		server_port++;
-		if (server_port > max_server_port) {
-			server_port = min_server_port;
-		}
 		init_run();
 	} else if (strncmp(read_buffer, "exit", sizeof(read_buffer)) == 0) {
 		return -1;
@@ -253,6 +244,11 @@ int process_input() {
 }
 
 void run() {
+	printf("now listening for learner...\n");
+	learner_conn_sd = accept(learner_listener_sd, (struct sockaddr*)NULL, NULL);
+	
+	printf("learner connected!");
+
 	init_run();
 	
 	while(process_input() != -1); // stop if not succesfull, e.g. learner socket has closed.
