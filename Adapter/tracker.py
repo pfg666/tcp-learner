@@ -1,10 +1,9 @@
 from pcapy import open_live
 from impacket.ImpactDecoder import EthDecoder,Dot11WPA2Decoder
-from impacket.ImpactPacket import IP, TCP, UDP, ICMP
+from impacket.ImpactPacket import IP, TCP
 from interfaceType import InterfaceType
-from response import *
 import threading
-import sys
+from response import ConcreteResponse, Timeout
 
 # Tool that monitors communication of a server port and interface, built on the "pcapy" framework.
 # It always stores the last response received from the server. The sender tool, in  case scapy did not receive

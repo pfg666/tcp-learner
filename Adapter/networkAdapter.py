@@ -3,13 +3,7 @@ import socket
 from select import select
 import time
 import sys
-import inspect
-import argparse
 import signal
-from scapy.all import *
-from sender import Sender
-import interfaceType
-
 
 
 # The adapter exposes the sender functionality over sockets.
@@ -22,11 +16,14 @@ class Adapter:
     cmdSocket = None
     sender = None
     data = None
+    continous = None
 
-    def __init__(self, localCommunicationPort = 18200, cmdIp = "192.168.56.1", cmdPort=5000):
+    def __init__(self, localCommunicationPort = 18200, cmdIp = "192.168.56.1", cmdPort=5000, 
+                 continuous=True):
         self.localCommunicationPort = localCommunicationPort
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp
+        self.continuous = continuous
 
     # returns a new socket to the mapper/learner
     #def setUpSocket(self, commPort, cmdIp, cmdPort):
@@ -58,32 +55,41 @@ class Adapter:
                 if self.learnerSocket is not None:
                     print "Closing local server socket"
                     self.learnerSocket.close()
-            except IOError:
-                print "Error closing"
+            except IOError as e:
+                print "Error closing learner socket " + e
             try:
                 print(self.serverSocket)
                 if self.serverSocket is not None:
                     print "Closing gateway server socket"
                     self.serverSocket.close()
-            except IOError:
-                print "Error closing"
+            except IOError as e:
+                print "Error closing network adapter socket " + e
             try:
                 print(self.cmdSocket)
                 if self.cmdSocket is not None:
                     print "Closing gateway server command socket"
                     self.cmdSocket.send("exit\n")
                     self.cmdSocket.close()
-            except IOError:
-                print "Error closing"
+            except IOError as e:
+                print "Error closing command socket"
             if self.sender is not None and self.sender.isTracking() is True:
                 print "Stopping monitoring thread"
                 self.sender.stopTracking()
 
             print "Have a nice day"
+            time.sleep(1)
             sys.exit(1)
         except KeyboardInterrupt:
             sys.exit(1)
-            
+    
+    def closeLearnerSocket(self):
+        try:
+            if self.learnerSocket is not None:
+                print "Closing local server socket"
+                self.learnerSocket.close()
+        except IOError as e:
+                print "Error closing learner socket " + e
+                
     # reads string from socket until it reads a space/newline
     def receiveInput(self):
         inputstring = '';
@@ -130,12 +136,10 @@ class Adapter:
                     newPortFound = True
                     
     def sendReset(self):
-         print "reset"
-         print "********** reset **********"
-         self.sender.refreshNetworkPort()
-         self.cmdSocket.send("reset\n")
-         self.listenForServerPort()
-         self.sender.setServerPort(self.serverPort)
+        print "********** reset **********"
+        self.cmdSocket.send("reset\n")
+        self.listenForServerPort()
+        self.sender.setServerPort(self.serverPort)
 
     # accepts input from the learner, and process it. Sends network packets, looks at the
     # response, extracts the relevant parameters and sends them back to the learner
@@ -148,7 +152,13 @@ class Adapter:
             if input1 == "reset":
                 self.sendReset()
             elif input1 == "exit":
-                self.closeSockets()
+                msg = "Received exit signal " +  "(continuous" +  "=" + self.continuous + ") :"  
+                if self.continuous == False:
+                    msg = msg + " Closing all sockets"
+                    self.closeSockets()
+                else:
+                    msg = msg + " Closing only learner socket (so we are ready we a new session)"
+                    self.closeLearnerSocket()
                 return
             else:
                 print "*****"
@@ -186,7 +196,7 @@ class Adapter:
     # start adapter by list
     def startAdapter(self, sender):
         print "listening on "+str(self.localCommunicationPort)
-        origSigInt = signal.getsignal(signal.SIGINT)
+        signal.getsignal(signal.SIGINT)
         self.setUpSocket(self.localCommunicationPort, self.cmdIp, self.cmdPort)
         self.handleInput(sender)
 

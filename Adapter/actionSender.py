@@ -1,4 +1,4 @@
-from socketAdapter import SocketAdapter
+#from socketAdapter import SocketAdapter
 import socket
 
 # extends sender functionality with higher level commands
@@ -12,17 +12,21 @@ class ActionSender:
         self.sender = sender
         
     def __str__(self):
-        return "ActionSender with parameters: " + str(self.__dict__)
+        ret =  "ActionSender with parameters: " + str(self.__dict__)
+        if self.sender is not None:
+            ret  = ret + "\n" + str(self.sender)
+        return ret
         
     # returns a new socket to the mapper/learner
     def setUpSocket(self):
         if self.cmdSocket is None:
             cmdSocket = socket.create_connection((self.cmdIp, self.cmdPort))
             cmdSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+            cmdSocket.settimeout(2)
             print "python connected to server Adapter at " + self.cmdIp + " " + (str(self.cmdPort))
-           # self.cmdSocket = SocketAdapter(cmdSocket)
+            #self.cmdSocket = SocketAdapter(cmdSocket)
             self.cmdSocket = cmdSocket
-            self.listenForServerPort()
+        self.listenForServerPort()
         
     
     def closeSockets(self):
@@ -41,8 +45,8 @@ class ActionSender:
         newPortString = ""
         while True:
             newPortString = self.cmdSocket.recv(1024)
+            print "received " + newPortString
             for word in newPortString.split(): # TODO check if this really always works with a stream
-                print "recvd " + word
                 if newPortFound:
                     self.serverPort = int(word)
                     print "next server port: " + word
@@ -51,27 +55,23 @@ class ActionSender:
                     newPortFound = True
                     
     def sendReset(self):
-         if self.cmdSocket is None:
-             self.setUpSocket()
-         print "reset"
-         print "********** reset **********"
-         self.sender.refreshNetworkPort()
-         self.cmdSocket.send("reset\n")
-         self.listenForServerPort()
-         self.sender.setServerPort(self.serverPort)
-    
-    def isAction(self, input):
-        return input in self.actions
-    
-    def sendAction(self, input):
         if self.cmdSocket is None:
             self.setUpSocket()
-        response = None
-        if self.isAction(input):
-            self.cmdSocket.send(input + "\n") # TODO race-condition here, might go wrong: 
+        print "reset"
+        print "********** reset **********"
+        self.cmdSocket.send("reset\n")
+        self.listenForServerPort()
+        self.sender.setServerPort(self.serverPort)
+    
+    def isAction(self, inputString):
+        return inputString in self.actions
+    
+    def sendAction(self, inputString):
+        if self.isAction(inputString):
+            self.cmdSocket.send(inputString + "\n") # TODO race-condition here, might go wrong: 
             response = self.sender.captureResponse() # response might arrive before sender is ready
         else:
-            print input + " not a valid action ( it is not one of: " + str(self.actions) + ")"
+            print inputString + " not a valid action ( it is not one of: " + str(self.actions) + ")"
         return response
                 
     def sendInput(self, input1, seqNr, ackNr):

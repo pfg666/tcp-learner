@@ -1,17 +1,19 @@
 class Argument:
-    def __init__(self, definition, fullDefinition, type, defaultValue, description):
+    def __init__(self, definition, fullDefinition, argumentType, defaultValue, description):
         self.definition = definition
         self.fullDefinition = fullDefinition
         self.description = description
         self.default = defaultValue
-        self.type = type
+        self.argumentType = argumentType
 
 # list of arguments for each component in the setup
 # apart from config, each list has a corresponding section in the config file
 # senderArguments has the section [sender], runnerArguments has the section [runner]....
 
 adapterArguments = [
-    Argument("lcp","localCommunicationPort", int, 18200, "Listening adapter port which the learner connects to")
+    Argument("lcp","localCommunicationPort", int, 18200, "Listening adapter port which the learner connects to"),
+    Argument("con","continuous", bool, True, "Listening adapter handles clients continuously"\
+             " and doesn't close its server socket after first client is handled")
 ]
 
 configArguments = [

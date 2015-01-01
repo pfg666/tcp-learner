@@ -62,7 +62,7 @@ class ArgumentParser:
                     parser.add_argument("-"+argument.definition, "--"+argument.fullDefinition, type=argument.type, default = argument.default, help=argument.description)
                 else: 
                     parser.add_argument("-"+argument.definition, "--"+argument.fullDefinition, type=argument.type, help=argument.description)
-        ns, unknown = parser.parse_known_args(cmdOptions)
+        ns, _ = parser.parse_known_args(cmdOptions)
         reducedValues = dict((k, v) for k, v in vars(ns).iteritems() if v is not None) # build dict from namespace without None values
         return reducedValues
 

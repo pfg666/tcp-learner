@@ -1,13 +1,12 @@
-from scapy.sendrecv import sr1, sniff
-from scapy.packet import Raw
+#from scapy.sendrecv import sr1, sniff
+#from scapy.packet import Raw
+#from scapy.config import conf
+from scapy.layers.inet import IP,TCP
+from scapy.all import *  # @UnusedWildImport
 from response import Timeout, ConcreteResponse
-from scapy.config import conf
-__author__ = 'paul,ramon'
-
-import time
 import platform
 from interfaceType import InterfaceType
-from scapy.layers.inet import IP,TCP
+
 
 # variables used to retain last sequence/acknowledgment sent
 seqVar = 0
