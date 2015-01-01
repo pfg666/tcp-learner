@@ -4,7 +4,7 @@ class Argument:
         self.fullDefinition = fullDefinition
         self.description = description
         self.default = defaultValue
-        self.argumentType = argumentType
+        self.type = argumentType
 
 # list of arguments for each component in the setup
 # apart from config, each list has a corresponding section in the config file
