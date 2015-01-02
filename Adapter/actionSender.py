@@ -5,7 +5,7 @@ import socket
 class ActionSender:
     cmdSocket = None
     sender = None
-    actions = ["listen", "accept", "closeconnection", "closeserver"]
+    actions = ["listen", "accept", "closeconnection", "closeserver", "exit"]
     def __init__(self, cmdIp = "192.168.56.1", cmdPort=5000, sender = None):
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp
@@ -33,11 +33,13 @@ class ActionSender:
         try:
             print(self.cmdSocket)
             if self.cmdSocket is not None:
-                print "Closing gateway server command socket"
+                print "Telling server adapter to end session"
                 self.cmdSocket.send("exit\n")
+                print "Closing server adapter command socket"
                 self.cmdSocket.close()
-        except IOError:
-            print "Error closing ActionSender " + IOError.message
+        except IOError as e:
+            print "Error closing ActionSender " + e
+            raise e
     
     # fetches a server port
     def listenForServerPort(self):
@@ -63,6 +65,18 @@ class ActionSender:
         self.listenForServerPort()
         self.sender.setServerPort(self.serverPort)
     
+    def captureResponse(self):
+        response = None
+        if self.sender is not None:
+            response = self.captureResponse()
+        return response
+    
+    def isFlags(self, inputString):
+        isFlags = False
+        if self.sender is not None:
+            isFlags = self.sender.isFlags(inputString)
+        return isFlags
+    
     def isAction(self, inputString):
         return inputString in self.actions
     
@@ -77,6 +91,10 @@ class ActionSender:
     def sendInput(self, input1, seqNr, ackNr):
         return self.sender.sendInput(input1, seqNr, ackNr)
     
+    def shutdown(self):
+        self.closeSockets()
+        if self.sender is not None:
+            self.sender.shutdown()
 
 
     

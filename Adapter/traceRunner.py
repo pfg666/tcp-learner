@@ -92,6 +92,7 @@ class TraceRunner:
             self.processLine(line)
             # after each processed line we skip the following skipNum lines
             count = self.skipNum
+        self.getSender().shutdown()
         self.stopJava()
     
     def processLine(self, line):
@@ -115,16 +116,16 @@ class TraceRunner:
             line = line.lower().replace("\n","") # removes excess baggage
             if line == "reset":
                 self.getSender().sendReset()
-            elif line in ["accept", "listen", "closesocket", "closeserver", "closeconnection"]:
-                if "sendAction" in dir(self.getSender()):
+            elif "sendAction" in dir(self.getSender()) and "isAction" in dir(self.getSender()):
+                if self.getSender().isAction(line):
                     self.getSender().sendAction(line)
                 else:
-                    print "the sender of type " + str(type(self.getSender())) + ""\
-                    " does not implement the sendAction method"
+                    print "invalid command encountered: " + line
                     exit(-1)
             else:
-                print "invalid command encountered: " + line
-                exit(-1)    
+                print "the sender of type " + str(type(self.getSender())) + ""\
+                " does not implement both sendAction and isAction methods"
+                exit(-1)  
         else: 
             print "invalid command encountered: " + line
             exit(-1)
