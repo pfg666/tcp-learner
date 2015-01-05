@@ -17,7 +17,7 @@
 
 
 int learner_listener_sd, learner_conn_sd, server_sd, conn_sd;
-struct sockaddr_in learner_addr, server_addr;
+struct sockaddr_in learner_addr, server_addr, client_addr;
 #ifdef _WIN32
 HANDLE accepting_thread;
 #elif __gnu_linux__
@@ -98,6 +98,35 @@ void init_run() {
 	char output[100];
 	psprintf(output, 100, "port %i\n", server_port);
 	answer(output);
+}
+
+void perr(char * method, int sysReturn) {
+	if (sysReturn != 0) {
+		printf("We have a problem with %s", method);
+		exit(-1);
+	}
+}
+
+// Runs a "no handle" server that accepts connections in a loop, not optimized for linux yet
+void pure_server(int server_port) {
+#ifdef _WIN32
+	WSADATA wsaData;
+	WSAStartup(0x0202, &wsaData);
+#endif
+	server_sd = socket(AF_INET, SOCK_STREAM, 0);
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	server_addr.sin_port = htons(server_port);
+	perr("bind", bind(server_sd, (struct sockaddr*)&server_addr, sizeof(server_addr)));
+	printf("*** PURE SERVERRUN ***\nusing port %i\n", server_port);
+	char output[100];
+	psprintf(output, 100, "port %i\n", server_port);
+	perr("listen", listen(server_sd, 10));
+	while (1 == 1) {
+		SOCKET client_sd = accept(server_sd, (struct sockaddr*)&client_addr, NULL);
+		u_long client_port = ntohl(client_addr.sin_port);
+		printf("Accepted client with port: %lu" + client_port);
+	}
 }
 
 void close_run() {
@@ -302,7 +331,7 @@ void run() {
 #endif
 }
 
-char* help = "[-c | --continuous] [-l learnerport] [-m minport] [-n maxport]";
+char* help = "[-c | --continuous] [-l learnerport] [-m minport] [-n maxport] [-p]";
 
 int main(int argc, char *argv[]) {
 	learner_port = min_server_port = max_server_port = -1;
@@ -310,6 +339,10 @@ int main(int argc, char *argv[]) {
 	int arg_nr;
 	int continuous = 0;
 	for (arg_nr = 1; arg_nr < argc; arg_nr++) {
+		if (strcmp(argv[arg_nr], "-p") == 0) {
+			pure_server(20000);
+			return 2;
+		}
 		if (strcmp(argv[arg_nr], "--continuous") == 0 || strcmp(argv[arg_nr], "-c") == 0) {
 			continuous = 1;
 		}
