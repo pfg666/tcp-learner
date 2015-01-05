@@ -11,6 +11,7 @@ from response import ConcreteResponse, Timeout
 # some responses.
 class Tracker(threading.Thread):
     serverPort = 0
+    pcap = None
     interface = 'eth0'
     decoder = None
     max_bytes = 1024
@@ -43,12 +44,15 @@ class Tracker(threading.Thread):
 
     def isStopped(self):
         return self._stop.isSet()
+    
+    def setServerPort(self, serverPort):
+        self.serverPort = serverPort
         
     # This is method is called periodically by pcapy
     def callback(self,hdr,data):
         if self.isStopped() == True:
-            print("Tracker was stopped")
-#            sys.exit(1)
+            print("Tracker is stopped.")
+            #exit(0) # results in a strange warning
         else:
             packet=self.decoder.decode(data)
             l2=packet.child()
@@ -99,6 +103,6 @@ class Tracker(threading.Thread):
         self.trackPackets()
 
     def trackPackets(self):
-        pcap = open_live(self.interface, self.max_bytes, self.promiscuous, self.readTimeout)
-        pcap.setfilter("ip src "+str(self.serverIp)+" and tcp port " + str(self.serverPort))
-        pcap.loop(0,self.callback)
+        self.pcap = open_live(self.interface, self.max_bytes, self.promiscuous, self.readTimeout)
+        self.pcap.setfilter("tcp and ip src "+str(self.serverIp))#+" and tcp port " + str(self.serverPort))
+        a = self.pcap.loop(0,self.callback)

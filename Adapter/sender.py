@@ -94,6 +94,8 @@ class Sender:
     
     def setServerPort(self, newPort):
         self.serverPort = newPort;
+        if self.useTracking == True:
+            self.tracker.setServerPort(newPort)
     
     # function that creates packet from data strings/integers
     def createPacket(self, tcpFlagsSet, seqNr, ackNr, destIP = None, destPort = None, srcPort = None,
