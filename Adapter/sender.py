@@ -1,13 +1,13 @@
-from scapy.sendrecv import sr1, sniff
-from scapy.packet import Raw
+#from scapy.sendrecv import sr1, sniff
+#from scapy.packet import Raw
+#from scapy.config import conf
+from scapy.layers.inet import IP,TCP
+from scapy.all import *  # @UnusedWildImport
 from response import Timeout, ConcreteResponse
-from scapy.config import conf
-__author__ = 'paul,ramon'
-
-import time
 import platform
 from interfaceType import InterfaceType
-from scapy.layers.inet import IP,TCP
+import re
+
 
 # variables used to retain last sequence/acknowledgment sent
 seqVar = 0
@@ -204,6 +204,13 @@ class Sender:
         if self.checkForFlag(x, 4):
             result = result + "A"
         return result
+    
+    def isFlags(self, inputString):
+        isFlags = False
+        matchResult = re.match("[FSRPA]*", inputString)
+        if matchResult is not None:
+            isFlags = matchResult.group(0) == inputString
+        return isFlags
 
     # tells whether tracking is still active
     def isTracking(self):
@@ -279,6 +286,11 @@ class Sender:
         self.refreshNetworkPort()
         if self.useTracking == True:
             self.tracker.clearLastResponse()
+            
+            
+    def shutdown(self):
+        if self.useTracking == True:
+            self.tracker.stop();
 
 # example on how to run the sender
 if __name__ == "__main__":

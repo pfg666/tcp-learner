@@ -24,14 +24,13 @@ if __name__ == "__main__":
     print "==Preparation=="
     builder = Builder()
     
-#     print "\n==Sender Setup=="
-#     sender = builder.buildSender()
-#     print str(sender)
-#     
-#     print "\n==Trace Runner Setup=="
-#     runner = builder.buildTraceRunner()
-#     print str(runner)
-#     
-#     print "\n==Running Trace File=="
-#     runner.executeTraceFile(sender, "trace.txt")
+    print "\n==Sender Setup=="
+    sender = builder.buildSender()
+    print str(sender)
+     
+    print "\n==Trace Runner Setup=="
+    runner = builder.buildTraceRunner()
+    print str(runner)
     
+    print "\n==Running Trace File=="
+    runner.executeTraceFile(sender, "trace.txt")

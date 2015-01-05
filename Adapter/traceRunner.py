@@ -1,10 +1,6 @@
-__author__ = 'paul'
-from string import upper
-import jpype
-import os
+from response import ConcreteResponse, Timeout, Undefined
 import time
-from sender import *
-from response import *
+import jpype
 
 waitTime = 0.1
 learnerProjectBinPath = "-Djava.class.path=../bin" # path to the java learner setup binaries
@@ -83,9 +79,7 @@ class TraceRunner:
     def executeTraceFile(self, sender, tracePath):
         self.startJava()
         self.sender = sender
-        step = self.skipNum
         count = 0
-        ack = 0
         
         self.reset()
         for line in open(tracePath, "r"):
@@ -98,6 +92,7 @@ class TraceRunner:
             self.processLine(line)
             # after each processed line we skip the following skipNum lines
             count = self.skipNum
+        self.getSender().shutdown()
         self.stopJava()
     
     def processLine(self, line):
@@ -121,14 +116,18 @@ class TraceRunner:
             line = line.lower().replace("\n","") # removes excess baggage
             if line == "reset":
                 self.getSender().sendReset()
-            elif line.lower() in ["accept", "listen", "closesocket", "closeserver", "closeconnection"]:
-                print "call to server adapter: " + line
-                self.getSender().sendAction(line)
+            elif "sendAction" in dir(self.getSender()) and "isAction" in dir(self.getSender()):
+                if self.getSender().isAction(line):
+                    self.getSender().sendAction(line)
+                else:
+                    print "invalid command encountered: " + line
+                    exit(-1)
             else:
-                print "invalid line encountered: " + line
-                exit(-1)    
+                print "the sender of type " + str(type(self.getSender())) + ""\
+                " does not implement both sendAction and isAction methods"
+                exit(-1)  
         else: 
-            print "invalid line encountered: " + line
+            print "invalid command encountered: " + line
             exit(-1)
         time.sleep(waitTime)
                 
