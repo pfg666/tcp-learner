@@ -72,7 +72,6 @@ class TraceRunner:
 
         print self.getMapper()
         self.getMapper().setDefault()
-        
         self.getSender().sendReset()
     
     # executes the trace at path. Starting '#' is used to comment the lines.
@@ -92,10 +91,14 @@ class TraceRunner:
             self.processLine(line)
             # after each processed line we skip the following skipNum lines
             count = self.skipNum
+        self.reset()
         self.getSender().shutdown()
         self.stopJava()
     
     def processLine(self, line):
+        line = line.rstrip()
+        print line
+        print self.getMapper().getState()
         # in this case we have a normal message
         line = line.replace("(",",");
         line = line.replace(")",",");
@@ -110,6 +113,7 @@ class TraceRunner:
             concreteResponse = self.sendConcreteRequest(concreteRequest)
             abstractResponse = self.processResponse(concreteResponse)
             print self.getMapper().getState()
+            print abstractResponse
             
         # in this case we either have reset or  a higher method call
         elif len(parts) == 1: 
