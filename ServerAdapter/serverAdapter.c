@@ -130,7 +130,7 @@ void pure_server(int server_port) {
 		int client_sd = accept(server_sd, (struct sockaddr*)&client_addr, NULL);
 		if (client_sd != -1) {
 			u_long client_port = ntohl(client_addr.sin_port);
-			printf("Accepted client with port: %lu" + client_port);
+			printf("Accepted client with port: %lu", client_port);
 		}
 		else {
 			printf("Accepting failed");

@@ -89,10 +89,12 @@ class TraceRunner:
                 continue
             if line[0] == "!":
                 expectedResponse = line[1:]
-                if lastResponse != expectedResponse:
+                if self.compare(expectedResponse, lastResponse) == False:
                     print "Error: expected " + expectedResponse + " got " + lastResponse
                     self.shutdown()
                     return 
+                else:
+                    continue
             if count>0:
                 count -= 1
                 continue
@@ -101,12 +103,36 @@ class TraceRunner:
             count = self.skipNum
         self.shutdown()
         
+    def compare(self, expectedResponse, actualResponse):
+        matches = False
+        expectedResponse = expectedResponse.upper()
+        actualResponse = actualResponse.upper()
+        expParts = self.splitInputString(expectedResponse)
+        actParts = self.splitInputString(actualResponse)
+        print "Comparing " + expectedResponse + " with " + actualResponse
+        if len(expParts) != len(actParts):
+            matches = False
+        else:
+            if len(expParts) == 4:
+                matches = expParts[0] == actParts[0] and\
+                (expParts[1] == actParts[1] or expParts[1] == "_") and\
+                (expParts[2] ==actParts[2] or expParts[2] == "_")
+            else:
+                matches = expParts[0] == actParts[0] 
+        return matches
+        
     # called after all the trace has been process or an exception event occurs 
     # ( the "!" check fails)  
     def shutdown(self):
         self.reset()
         self.getSender().shutdown()
         self.stopJava()
+    
+    def splitInputString(self, line):
+        line = line.replace("(",",");
+        line = line.replace(")",",");
+        parts = line.split(",")
+        return parts
     
     # processes the line constructing the packet/action input, sending it via the sender
     # over the network to the running server and returning the result
@@ -128,8 +154,6 @@ class TraceRunner:
             concreteRequest = self.processRequest(flags, syn, ack)
             concreteResponse = self.sendConcreteRequest(concreteRequest)
             abstractResponse = self.processResponse(concreteResponse)
-            print self.getMapper().getState()
-            print abstractResponse
             
         # in this case we either have reset or  a higher method call
         elif len(parts) == 1: 
@@ -140,19 +164,24 @@ class TraceRunner:
                 if self.getSender().isAction(line):
                     concreteResponse = self.getSender().sendAction(line)
                     abstractResponse = self.processResponse(concreteResponse)
-                    print self.getMapper().getState()
-                    print abstractResponse
                 else:
                     print "invalid command encountered: " + line
+                    self.shutdown()
                     exit(-1)
             else:
                 print "the sender of type " + str(type(self.getSender())) + ""\
                 " does not implement both sendAction and isAction methods"
-                exit(-1)  
+                self.shutdown()
+                exit(-1) 
         else: 
             print "invalid command encountered: " + line
+            self.shutdown()
             exit(-1)
+            
+        print self.getMapper().getState()
+        print abstractResponse
         time.sleep(waitTime)
+        return abstractResponse
                 
                 
     
