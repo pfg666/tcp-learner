@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <stdlib.h>
 #elif _WIN32
 #include <winsock.h>
 #include <windows.h>
@@ -75,12 +76,15 @@ void psprintf(char *output_buffer, int buffer_size, const char *format, int inte
 
 void answer(char* output) {
 	pstrcpy(output_buffer, output_buffer_size, output);
-	if (send(learner_conn_sd, output_buffer, strlen(output), 0) == SOCKET_ERROR) {
-		printf("Failed to send %s", output_buffer);
 #ifdef _WIN32
+	if (send(learner_conn_sd, output_buffer, strlen(output), 0) == SOCKET_ERROR) {
 		printf("Error code %d", WSAGetLastError());
-#endif
 	}
+#elif __gnu_linux
+	if (send(learner_conn_sd, output_buffer, strlen(output), 0) == -1) {
+		printf("Failed to send %s", output_buffer);
+	}
+#endif
 }
 
 void init_run() {
@@ -107,7 +111,7 @@ void perr(char * method, int sysReturn) {
 	}
 }
 
-// Runs a "no handle" server that accepts connections in a loop, not optimized for linux yet
+// Runs a "no handle" server that accepts connections in a loop,
 void pure_server(int server_port) {
 #ifdef _WIN32
 	WSADATA wsaData;
@@ -123,9 +127,14 @@ void pure_server(int server_port) {
 	psprintf(output, 100, "port %i\n", server_port);
 	perr("listen", listen(server_sd, 10));
 	while (1 == 1) {
-		SOCKET client_sd = accept(server_sd, (struct sockaddr*)&client_addr, NULL);
-		u_long client_port = ntohl(client_addr.sin_port);
-		printf("Accepted client with port: %lu" + client_port);
+		int client_sd = accept(server_sd, (struct sockaddr*)&client_addr, NULL);
+		if (client_sd != -1) {
+			u_long client_port = ntohl(client_addr.sin_port);
+			printf("Accepted client with port: %lu" + client_port);
+		}
+		else {
+			printf("Accepting failed");
+		}
 	}
 }
 
@@ -302,7 +311,7 @@ int process_input() {
 	}
 	else if (strncmp(read_buffer, "exit", sizeof(read_buffer)) == 0) {
 		return -1;
-	} 
+	}
 	else {
 		printf("Unrecognized command %s. Exiting...", read_buffer);
 		return -1;
