@@ -38,9 +38,10 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 			}
 		}
 		
-		// either no init processing was done, 
+		// if no init processing was done, 
 		// 		then normally process word
-		//		else an extended result should have been obtained, remove the distinguishing output from it 							
+		//	else (an extended result should have been obtained)
+		//		remove the distinguishing output from it 							
 		if(extendedResult == null) {
 			return basicOracle.processQuery(word);	
 		} else {
@@ -50,22 +51,6 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		}
 	}
 	
-	private List<String> toMessages(Word word) {
-		List<String> inputs = new ArrayList<String>();
-		for (de.ls5.jlearn.interfaces.Symbol symbol : word.getSymbolArray()) {
-			inputs.add(symbol.toString());
-		}
-		return inputs;
-	}
-	
-	private Word buildWord(List<String> wordInputs) {
-		Word word = new WordImpl();
-		for(String wordInput : wordInputs) {
-			word.addSymbol(new SymbolImpl(wordInput));
-		}
-		return word;
-	}
-
 	private boolean getInitForTrace(List<String> traceInputs) throws LearningException{
 		boolean init;
 		if (isChangeCandidate(traceInputs) == true) {;
@@ -76,6 +61,7 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		return init;
 	}
 	
+	// Used to filter out inputs that, when applied, can not change the init state 
 	private boolean isChangeCandidate(List<String> traceInputs) {
 		String lastInput = traceInputs.get(traceInputs.size()-1);
 		return lastInput.contains(Flag.RST.name()) || lastInput.contains(Flag.SYN.name()) ;
@@ -115,4 +101,22 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		extendedResult = outputWord;
 		return outputWord.getSymbolByIndex(outputWord.size()-1).toString();
 	}
+	
+	// methods used to translate between strings and LearnLib words
+	private List<String> toMessages(Word word) {
+		List<String> inputs = new ArrayList<String>();
+		for (de.ls5.jlearn.interfaces.Symbol symbol : word.getSymbolArray()) {
+			inputs.add(symbol.toString());
+		}
+		return inputs;
+	}
+	
+	private Word buildWord(List<String> wordInputs) {
+		Word word = new WordImpl();
+		for(String wordInput : wordInputs) {
+			word.addSymbol(new SymbolImpl(wordInput));
+		}
+		return word;
+	}
+
 }

@@ -23,6 +23,7 @@ public class SocketWrapper {
 					sock.getInputStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(0);
 		}
 	}
 	

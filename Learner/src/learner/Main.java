@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -82,9 +84,11 @@ public class Main {
 
 		LearnLog.addAppender(new PrintStreamLoggingAppender(LogLevel.INFO,
 				stdout));
+		StringWriter statsStringWriter = new StringWriter(); 
+		// we first write things down on a string, and only once we're done do we build the file.
+		PrintWriter statsFileStream = new PrintWriter(statsStringWriter, true);
 		
-		PrintStream statisticsFileStream = new PrintStream(
-				new FileOutputStream("statistics.txt", false));
+				//new FileOutputStream("statistics.txt", false));
 		
 		Random random = new Random(seed);
 
@@ -161,11 +165,11 @@ public class Main {
 					stderr.flush();
 					stdout.println("done learning");
 
-					statisticsFileStream.println("Membership queries: "
+					statsFileStream.println("Membership queries: "
 							+ memQueries);
 					totalMemQueries += memQueries;
 					endtmp = System.currentTimeMillis();
-					statisticsFileStream
+					statsFileStream
 							.println("Running time of membership queries: "
 									+ (endtmp - starttmp) + "ms.");
 					totalTimeMemQueries += endtmp - starttmp;
@@ -186,12 +190,12 @@ public class Main {
 					stdout.flush();
 					stderr.flush();
 					stdout.println("done equivalence query");
-					statisticsFileStream
+					statsFileStream
 							.println("Membership queries in Equivalence query: "
 									+ stats.numMembQueries);
 					totalEquivQueries += stats.numEquivQueries;
 					endtmp = System.currentTimeMillis();
-					statisticsFileStream
+					statsFileStream
 							.println("Running time of equivalence query: "
 									+ (endtmp - starttmp) + "ms.");
 					totalTimeEquivQueries += endtmp - starttmp;
@@ -202,7 +206,7 @@ public class Main {
 						done = true;
 						continue;
 					}
-					statisticsFileStream.println("Sending CE to LearnLib.");
+					statsFileStream.println("Sending CE to LearnLib.");
 					stdout.println("Counter Example: "
 							+ o.getCounterExample().toString());
 					stdout.flush();
@@ -218,7 +222,7 @@ public class Main {
 				stderr.println("LearningException ex in Main!");
 				ex.printStackTrace();
 			} catch (Exception ex) {
-				statisticsFileStream.println("Exception!");
+				statsFileStream.println("Exception!");
 				stdout.println("Exception!");
 				stdout.println("Seed: " + seedStr);
 				stderr.println("Seed: " + seedStr);
@@ -228,20 +232,20 @@ public class Main {
 		}
 
 		long end = System.currentTimeMillis();
-		statisticsFileStream.println("");
-		statisticsFileStream.println("");
-		statisticsFileStream.println("STATISTICS SUMMARY:");
-		statisticsFileStream.println("Total running time: " + (end - start)
+		statsFileStream.println("");
+		statsFileStream.println("");
+		statsFileStream.println("STATISTICS SUMMARY:");
+		statsFileStream.println("Total running time: " + (end - start)
 				+ "ms.");
-		statisticsFileStream.println("Total time Membership queries: "
+		statsFileStream.println("Total time Membership queries: "
 				+ totalTimeMemQueries);
-		statisticsFileStream.println("Total time Equivalence queries: "
+		statsFileStream.println("Total time Equivalence queries: "
 				+ totalTimeEquivQueries);
-		statisticsFileStream.println("Total abstraction refinements: "
+		statsFileStream.println("Total abstraction refinements: "
 				+ refinementCounter);
-		statisticsFileStream.println("Total Membership queries: "
+		statsFileStream.println("Total Membership queries: "
 				+ totalMemQueries);
-		statisticsFileStream
+		statsFileStream
 				.println("Total Membership queries in Equivalence query: "
 						+ totalEquivQueries);
 
@@ -257,7 +261,7 @@ public class Main {
 		Automaton learnedModel = learner.getResult();
 		State startState = learnedModel.getStart();
 
-		statisticsFileStream
+		statsFileStream
 				.println("Total states in learned abstract Mealy machine: "
 						+ learnedModel.getAllStates().size());
 
@@ -275,29 +279,34 @@ public class Main {
 		// output learned state machine as dot and pdf file :
 		File outputFolder = new File("output"+File.separator + start);
 		outputFolder.mkdirs();
+		File statsFile = new File(outputFolder.getAbsoluteFile() + File.separator + "statistics.txt");
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
-
 		
 		try {
+			// build stats file
+			FileWriter statsFileWriter = new FileWriter(statsFile);
+			statsFileWriter.append(statsStringWriter.getBuffer());
+			statsFileWriter.close();
+
+			// build learned model dot file
 			out = new BufferedWriter(new FileWriter(dotFile));
 
 			DotUtil.writeDot(learnedModel, out, learnedModel.getAlphabet()
 					.size(), highlights, "");
 		} catch (IOException ex) {
-			// Logger.getLogger(DotUtil.class.getName()).log(Level.SEVERE, null,
-			// ex);
+			ex.printStackTrace(stderr);
 		} finally {
 			try {
 				out.close();
-				statisticsFileStream.close();
+				statsFileStream.close();
 			} catch (IOException ex) {
 				// Logger.getLogger(DotUtil.class.getName()).log(Level.SEVERE,
 				// null, ex);
 			}
 		}
 
-		// write pdf
+		// build pdf file from dot model
 		DotUtil.invokeDot(dotFile, "pdf", pdfFile);
 
 		stderr.println("Learner Finished!");

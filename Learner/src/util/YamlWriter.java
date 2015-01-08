@@ -17,8 +17,8 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class YamlWriter {
 
-	public static final String [] synInputAbs = {"V","INV"};
-	public static final String [] ackInputAbs = {"V","INV"};
+	public static final String [] synInputAbs = {"V"};
+	public static final String [] ackInputAbs = {"V"};
 	public static final String [] synOutputAbs = {"FRESH","SRECV","S+1RECV","ARECV","ZERO","INV"};
 	public static final String [] ackOutputAbs = {"S+1SENT","S+DSENT","S+D+1SENT","ASENT","ARECV","INV"};
 	public static final String [] flags = {"","SYN","ACK","RST", "FIN"};

@@ -12,7 +12,7 @@ class TraceRunner:
         self.jvmPath = jvmPath # path to libjm.so for ubuntu or jvm.dll for windows
         self.runNum = runNum # the number of times the trace is run. 
         self.skipNum = skipNum # the number of lines skipped after each abstract input read
-        self.mapper = None
+        self.mapper = None # stores the JPype instance of the mapper
         
     def __str__(self):
         return "Trace Runner with parameters: " + str(self.__dict__)
@@ -79,30 +79,46 @@ class TraceRunner:
         self.startJava()
         self.sender = sender
         count = 0
+        lastResponse = None # stores the last response abstract response
         
-        self.reset()
+        self.reset() # just to make sure everything is well initialized
         for line in open(tracePath, "r"):
+            line = line.rstrip()
             # we ignore comments
             if line[0] == "#":
                 continue
+            if line[0] == "!":
+                expectedResponse = line[1:]
+                if lastResponse != expectedResponse:
+                    print "Error: expected " + expectedResponse + " got " + lastResponse
+                    self.shutdown()
+                    return 
             if count>0:
                 count -= 1
                 continue
-            self.processLine(line)
+            lastResponse = self.processLine(line)
             # after each processed line we skip the following skipNum lines
             count = self.skipNum
+        self.shutdown()
+        
+    # called after all the trace has been process or an exception event occurs 
+    # ( the "!" check fails)  
+    def shutdown(self):
         self.reset()
         self.getSender().shutdown()
         self.stopJava()
     
+    # processes the line constructing the packet/action input, sending it via the sender
+    # over the network to the running server and returning the result
     def processLine(self, line):
-        line = line.rstrip()
         print line
         print self.getMapper().getState()
         # in this case we have a normal message
         line = line.replace("(",",");
         line = line.replace(")",",");
         parts = line.split(",")
+        
+        abstractResponse = None
         # in this case we have a message
         if len(parts) == 4:
             flags = parts[0]
@@ -122,7 +138,10 @@ class TraceRunner:
                 self.getSender().sendReset()
             elif "sendAction" in dir(self.getSender()) and "isAction" in dir(self.getSender()):
                 if self.getSender().isAction(line):
-                    self.getSender().sendAction(line)
+                    concreteResponse = self.getSender().sendAction(line)
+                    abstractResponse = self.processResponse(concreteResponse)
+                    print self.getMapper().getState()
+                    print abstractResponse
                 else:
                     print "invalid command encountered: " + line
                     exit(-1)

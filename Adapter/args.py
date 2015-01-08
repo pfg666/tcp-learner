@@ -42,7 +42,7 @@ senderArguments = [
                                                 "it can also send higher level actions to an command server adapter")]
 
 runnerArguments = [
-    Argument("r","runNum", int, 0,"The number of times the trace is run"),
+    Argument("r","runNum", int, 1,"The number of times the trace is run"),
     Argument("s","skipNum", int, 0,"The number of lines skipped after each abstract input is read"),
     Argument("j","jvmPath", str, "/usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/server/libjvm.so" ,"Path to libjvm.so")]
 

@@ -132,7 +132,7 @@ public class TCPSutWrapper implements SutWrapper{
 	
 	/**
 	 * 
-	 * @param concreteResponse
+	 * @param concreteResponse 
 	 *            of the form "flags seqNr ackNr", e.g. "FA 1000 2000"
 	 * @return output, e.g. "FA(V,INV)"
 	 */
@@ -150,6 +150,7 @@ public class TCPSutWrapper implements SutWrapper{
 			abstractResponse = mapper.processIncomingResponse(flags,
 					seqReceived, ackReceived);
 			if(abstractResponse.contains(Symbol.INV.name()) && this.exitIfInvalid) {
+				Log.err("Bumped into an invalid symbol. Abstract Response = " + abstractResponse + ". Exiting...");
 				System.exit(0);
 			}
 		}

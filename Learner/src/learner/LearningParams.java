@@ -19,5 +19,6 @@ public class LearningParams {
 		stdout.println("Minimum length of traces: " + this.minTraceLength);
 		stdout.println("Maximim length of traces: " + this.maxTraceLength);
 		stdout.println("Seed: " + seedStr);
+		stdout.flush();
 	}
 }

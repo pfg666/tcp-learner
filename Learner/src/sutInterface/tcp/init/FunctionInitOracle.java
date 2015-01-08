@@ -23,13 +23,13 @@ public class FunctionInitOracle implements InitOracle{
 	public boolean isResetting(TCPMapper mapper) {
 		boolean isInitial = false;
 		if(mapper.isLastResponseTimeout) {
-			isInitial = (mapper.lastFlagsSent.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) ||
-					mapper.isInit; 
-		} else {
-			isInitial = (mapper.lastFlagsReceived.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) &&
-					mapper.lastFlagsSent.has(Flag.SYN); 
-		}
-		Log.info("The oracle says that we are " + (isInitial?" in ":" not in ")+" the initial state");
+            isInitial = (mapper.lastFlagsSent.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) ||
+                            mapper.isInit; 
+	    } else {
+	            isInitial = (mapper.lastFlagsReceived.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) &&
+	                            mapper.lastFlagsSent.has(Flag.SYN);
+	    }
+		Log.info("Is initial state: " + isInitial);
 		return isInitial;
 	}
 

@@ -17,6 +17,10 @@ public class Calculator {
 		} while (newValue == value);
 		return newValue;
 	}
+	
+	public static long nth(long regValue, long n) {
+		return sum(regValue, n);
+	}
 
 	public static long next(long regValue) {
 		return sum(regValue,1);

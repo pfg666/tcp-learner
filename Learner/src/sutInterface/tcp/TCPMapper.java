@@ -21,6 +21,7 @@ public class TCPMapper {
 
 	/* data variables of the mapper, determined from request/responses */
 	public long lastSeqSent, lastAckSent, initialServerSeq, lastValidClientSeq;
+	public long dataAcked;
 	public FlagSet lastFlagsSent;
 	public FlagSet lastFlagsReceived;
 	public Symbol lastAbstractSeqSent;
@@ -173,7 +174,7 @@ public class TCPMapper {
 		Symbol abstractAck = getAbstract(concreteAck);
 		
 		/* do updates on output */
-		if (abstractAck == Symbol.SNCLIENTP1) {
+		if (abstractAck == Symbol.SNCLIENTP1 || abstractAck == Symbol.SNCLIENTPD) {
 			this.lastValidClientSeq = concreteAck;
 		}
 		if (abstractSeq == Symbol.FRESH) {
@@ -200,12 +201,16 @@ public class TCPMapper {
 		Symbol checkedSymbol;
 		if (nrReceived == Calculator.next(this.lastValidClientSeq)) {
 			checkedSymbol = Symbol.SNCLIENTP1;
+		} else if (nrReceived == Calculator.nth(this.lastValidClientSeq, 2)) {
+			checkedSymbol = Symbol.SNCLIENTP2;
 		} else if (nrReceived == this.lastValidClientSeq) {
 			checkedSymbol = Symbol.SNCLIENT;
 		} else if (nrReceived == this.initialServerSeq) {
 			checkedSymbol = Symbol.SNSERVER;
 		} else if (nrReceived == Calculator.next(this.initialServerSeq)) {
 			checkedSymbol = Symbol.SNSERVERP1;
+		} else if (nrReceived == Calculator.nth(this.initialServerSeq, 2)) {
+			checkedSymbol = Symbol.SNSERVERP2;
 		} else if (nrReceived == this.lastSeqSent) {
 			checkedSymbol = Symbol.SNSENT;
 		} else if (nrReceived == this.lastAckSent) {

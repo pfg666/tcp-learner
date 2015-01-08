@@ -3,8 +3,12 @@ package sutInterface.tcp;
 public enum Symbol {
 	SNCLIENT,
 	SNCLIENTP1,
+	SNCLIENTP2,
+	SNCLIENTPD,
 	SNSERVER,
 	SNSERVERP1,
+	SNSERVERP2,
+	SNSERVERPD,
 	ANSENT,
 	SNSENT,
 	SNPSENT,
@@ -15,7 +19,7 @@ public enum Symbol {
 	IWIN,
 	OWIN,
 	WIN,
-	UNDEFINED;
+	UNDEFINED ;
 	
 	public String toString(){
 		return this.name().replace('P', '+');
