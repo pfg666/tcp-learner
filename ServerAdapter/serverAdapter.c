@@ -77,7 +77,7 @@ void psprintf(char *output_buffer, int buffer_size, const char *format, int inte
 void answer(char* output) {
 	pstrcpy(output_buffer, output_buffer_size, output);
 #ifdef _WIN32
-	if (send(learner_conn_sd, output_buffer, strlen(output), 0) == SOCKET_ERROR) {
+    if (send(learner_conn_sd, output_buffer, strlen(output), 0) == SOCKET_ERROR) {
 		printf("Error code %d", WSAGetLastError());
 	}
 #elif __gnu_linux
@@ -410,4 +410,6 @@ int main(int argc, char *argv[]) {
 #elif __gnu_linux__	
 	close(learner_listener_sd);
 #endif
+
+    return 0;
 }
