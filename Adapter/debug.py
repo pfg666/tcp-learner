@@ -34,4 +34,4 @@ if __name__ == "__main__":
     print str(runner)
     
     print "\n==Running Trace File=="
-    runner.executeTraceFile(sender, "trace.txt")
+    runner.executeTraceFile(sender, "inputs/trace.txt")

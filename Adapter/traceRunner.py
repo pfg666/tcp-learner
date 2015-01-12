@@ -81,26 +81,30 @@ class TraceRunner:
         count = 0
         lastResponse = None # stores the last response abstract response
         
-        self.reset() # just to make sure everything is well initialized
-        for line in open(tracePath, "r"):
-            line = line.rstrip()
-            # we ignore comments
-            if line[0] == "#":
-                continue
-            if line[0] == "!":
-                expectedResponse = line[1:]
-                if self.compare(expectedResponse, lastResponse) == False:
-                    print "Error: expected " + expectedResponse + " got " + lastResponse
-                    self.shutdown()
-                    return 
-                else:
+        for i in range(1, self.runNum):
+            print 
+            print "=== Run Number " + str(i) + " ==="
+            print 
+            self.reset() # just to make sure everything is well initialized
+            for line in open(tracePath, "r"):
+                line = line.rstrip()
+                # we ignore comments
+                if line[0] == "#":
                     continue
-            if count>0:
-                count -= 1
-                continue
-            lastResponse = self.processLine(line)
-            # after each processed line we skip the following skipNum lines
-            count = self.skipNum
+                if line[0] == "!":
+                    expectedResponse = line[1:]
+                    if self.compare(expectedResponse, lastResponse) == False:
+                        print "Error: expected " + expectedResponse + " got " + lastResponse
+                        self.shutdown()
+                        return 
+                    else:
+                        continue
+                if count>0:
+                    count -= 1
+                    continue
+                lastResponse = self.processLine(line)
+                # after each processed line we skip the following skipNum lines
+                count = self.skipNum
         self.shutdown()
         
     def compare(self, expectedResponse, actualResponse):
