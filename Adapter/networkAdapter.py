@@ -121,6 +121,7 @@ class Adapter:
                 if self.continuous == False:
                     msg = msg + " Closing all sockets"
                     self.closeSockets()
+                    self.sender.sendReset()
                 else:
                     msg = msg + " Closing only learner socket (so we are ready for a new session)"
                     self.closeLearnerSocket()

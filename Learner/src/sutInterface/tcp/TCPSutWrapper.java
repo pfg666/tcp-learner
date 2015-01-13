@@ -65,6 +65,7 @@ public class TCPSutWrapper implements SutWrapper{
 		// note: mapper is not updated with action commands
 		
 		if(ACTION_COMMANDS.contains(abstractRequest)) {
+			getMapper().processOutgoingAction(Action.valueOf(abstractRequest));
 			concreteRequest = abstractRequest.toLowerCase();
 		}
 		// only processing of packet-requests

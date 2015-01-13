@@ -29,6 +29,11 @@ public class FunctionInitOracle implements InitOracle{
 	            isInitial = (mapper.lastFlagsReceived.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) &&
 	                            mapper.lastFlagsSent.has(Flag.SYN);
 	    }
+//		if(mapper.isLastResponseTimeout) {
+//			isInitial = mapper.isInit || mapper.lastFlagsReceived.has(Flag.SYN, Flag.ACK);
+//		} else {
+//			isInitial = mapper.isInit;
+//		} 
 		Log.info("Is initial state: " + isInitial);
 		return isInitial;
 	}
