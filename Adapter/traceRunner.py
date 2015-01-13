@@ -81,26 +81,41 @@ class TraceRunner:
         count = 0
         lastResponse = None # stores the last response abstract response
         
-        self.reset() # just to make sure everything is well initialized
-        for line in open(tracePath, "r"):
-            line = line.rstrip()
-            # we ignore comments
-            if line[0] == "#":
-                continue
-            if line[0] == "!":
-                expectedResponse = line[1:]
-                if self.compare(expectedResponse, lastResponse) == False:
-                    print "Error: expected " + expectedResponse + " got " + lastResponse
-                    self.shutdown()
-                    return 
-                else:
+        for i in range(0, self.runNum):
+            print 
+            print "=== Run Number " + str(i + 1) + " ==="
+            print 
+            self.reset() # just to make sure everything is well initialized
+            
+            for line in open(tracePath, "r"):
+                if count>0:
+                    count -= 1
                     continue
-            if count>0:
-                count -= 1
-                continue
-            lastResponse = self.processLine(line)
-            # after each processed line we skip the following skipNum lines
-            count = self.skipNum
+                
+                line = line.rstrip()
+                
+                # skip empty lines
+                if len(line) == 0:
+                    continue
+                
+                # skip comments
+                if line[0] == "#":
+                    continue
+                
+                # in case it is a check line, the previous response is matched against the pattern
+                # defined after !
+                if line[0] == "!":
+                    expectedResponse = line[1:]
+                    if self.compare(expectedResponse, lastResponse) == False:
+                        print "Error: expected " + expectedResponse + " got " + lastResponse
+                        self.shutdown()
+                        return 
+                    else:
+                        continue
+                # otherwise the line is an input
+                lastResponse = self.processLine(line)
+                # after each processed line we skip the following skipNum lines
+                count = self.skipNum
         self.shutdown()
         
     def compare(self, expectedResponse, actualResponse):

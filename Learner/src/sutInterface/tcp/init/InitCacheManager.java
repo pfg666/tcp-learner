@@ -38,6 +38,7 @@ public class InitCacheManager {
 	}
 
 	public void storeTrace(List<String> inputs, Boolean initValue) {
+		Log.info("storing init " + initValue + " for trace " + inputs);
 		storeTrace(inputs.toArray(new String[inputs.size()]), initValue);
 	}
 
@@ -61,7 +62,7 @@ public class InitCacheManager {
 
 	public boolean hasTrace(String[] inputs) {
 		String trace = buildTraceEntry(inputs);
-		return cachedTraces.get(trace) == null;
+		return cachedTraces.get(trace) != null;
 	}
 
 	public void dump(String fileName) {

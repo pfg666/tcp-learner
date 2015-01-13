@@ -17,7 +17,7 @@ public class TCPMapper {
 	public static final long WIN_SIZE = 8192;
 
 	/* data variables of the mapper, determined from request/responses */
-	public long lastSeqSent, lastAckSent, initialServerSeq, lastValidClientSeq;
+	public long lastSeqSent, lastAckSent, serverSeq, clientSeq;
 	public long dataAcked;
 	public FlagSet lastFlagsSent;
 	public FlagSet lastFlagsReceived;
@@ -25,6 +25,10 @@ public class TCPMapper {
 	public Symbol lastAbstractAckSent;
 	public Symbol lastAbstractSeqReceived;
 	public Symbol lastAbstractAckReceived;
+	
+	/* The only purpose of this is to inform the cache init oracle of the last action sent */
+	public Action lastActionSent;
+	public boolean isLastInputAnAction = false;
 
 	/*
 	 * boolean state variables, determined from data variables and the current
@@ -56,20 +60,21 @@ public class TCPMapper {
 	/* sets all the variables to their default values */
 	public void setDefault() {
 		this.lastSeqSent = this.lastAckSent = NOT_SET;
-		this.initialServerSeq = this.lastValidClientSeq = NOT_SET;
+		this.serverSeq = this.clientSeq = NOT_SET;
 		this.lastFlagsSent = FlagSet.EMPTY;
 		this.lastFlagsReceived = FlagSet.EMPTY;
 		this.lastAbstractSeqSent = this.lastAbstractAckSent = Symbol.INV;
 		this.lastAbstractSeqReceived = this.lastAbstractAckReceived = Symbol.INV;
 		this.isInit = true;
 		this.isLastResponseTimeout = false;
+		this.isLastInputAnAction = false;
 		if(this.oracle != null)
 			this.oracle.setDefault();
 	}
 
 	/* checks whether the abstractions are defined for the given inputs */
 	public boolean isConcretizable(Symbol abstractSeq, Symbol abstractAck) {
-		return !this.isInit || (Symbol.V.equals(abstractAck) && Symbol.V.equals(abstractSeq));
+		return !this.isInit || (!Symbol.INV.equals(abstractAck) && !Symbol.INV.equals(abstractSeq));
 	}
 	
 	public String processOutgoingRequest(FlagSet flags, Symbol abstractSeq,
@@ -86,13 +91,14 @@ public class TCPMapper {
 		
 		/* do updates on input */
 		if(this.isInit == true) {
-			this.lastValidClientSeq = concreteSeq;
+			this.clientSeq = concreteSeq;
 		}
 		this.lastSeqSent = concreteSeq;
 		this.lastAckSent = concreteAck;
 		this.lastFlagsSent = flags;
 		this.lastAbstractSeqSent = abstractSeq;
 		this.lastAbstractAckSent = abstractAck;
+		this.isLastInputAnAction = false;
 
 		/* build concrete input */
 		String concreteInput = Serializer.concreteMessageToString(flags,
@@ -101,7 +107,12 @@ public class TCPMapper {
 	}
 	
 	public String processOutgoingReset() {
-		return Serializer.concreteMessageToString(new FlagSet(Flag.RST), (lastValidClientSeq == NOT_SET)?0:lastValidClientSeq, 0);
+		return Serializer.concreteMessageToString(new FlagSet(Flag.RST), (clientSeq == NOT_SET)?0:clientSeq, 0);
+	}
+	
+	public void processOutgoingAction(Action action) {
+		this.lastActionSent = action;
+		this.isLastInputAnAction = true;
 	}
 	
 	private long newInvalidWithinWindow(long refNumber) {
@@ -116,6 +127,8 @@ public class TCPMapper {
 	private long getConcrete(Symbol absToSend, long nextValidNumber) {
 		long nextNumber;
 		switch (absToSend) {
+		case RAND:
+			nextNumber = Calculator.newValue();
 		case V:
 			nextNumber = nextValidNumber;
 			break;
@@ -123,10 +136,10 @@ public class TCPMapper {
 			nextNumber = Calculator.newOtherThan(nextValidNumber);
 			break;
 		case IWIN:
-			nextNumber = newInvalidWithinWindow(this.initialServerSeq);
+			nextNumber = newInvalidWithinWindow(this.serverSeq);
 			break;
 		case OWIN:
-			nextNumber = newInvalidOutsideWindow(this.initialServerSeq);
+			nextNumber = newInvalidOutsideWindow(this.serverSeq);
 			break;
 		case WIN:  //not yet tried
 			//nextNumber = Gen.randWithinRange(Gen.sum(1, nextValidNumber), Gen.sum(WIN_SIZE, nextValidNumber));
@@ -144,7 +157,7 @@ public class TCPMapper {
 		if (this.isInit == true) {
 			nextSeq = Calculator.newValue();
 		} else {
-			nextSeq = this.lastValidClientSeq;
+			nextSeq = this.clientSeq;
 		}
 		return nextSeq;
 	}
@@ -154,7 +167,7 @@ public class TCPMapper {
 		if (this.isInit == true) {
 			nextAck = Calculator.newValue();
 		} else {
-			nextAck = Calculator.next(this.initialServerSeq);
+			nextAck = Calculator.next(this.serverSeq);
 		}
 		return nextAck;
 	}
@@ -173,10 +186,10 @@ public class TCPMapper {
 		
 		/* do updates on output */
 		if (abstractAck == Symbol.SNCLIENTP1 || abstractAck == Symbol.SNCLIENTPD) {
-			this.lastValidClientSeq = concreteAck;
+			this.clientSeq = concreteAck;
 		}
-		if (abstractSeq == Symbol.FRESH) {
-			this.initialServerSeq = concreteSeq;
+		if (abstractSeq == Symbol.FRESH || abstractSeq == Symbol.SNSERVERP1) {
+			this.serverSeq = concreteSeq;
 		}
 		
 		/* state 0 detecting condition */
@@ -195,17 +208,17 @@ public class TCPMapper {
 
 	private Symbol getAbstract(long nrReceived) {
 		Symbol checkedSymbol;
-		if (nrReceived == Calculator.next(this.lastValidClientSeq)) {
+		if (nrReceived == Calculator.next(this.clientSeq)) {
 			checkedSymbol = Symbol.SNCLIENTP1;
-		} else if (nrReceived == Calculator.nth(this.lastValidClientSeq, 2)) {
+		} else if (nrReceived == Calculator.nth(this.clientSeq, 2)) {
 			checkedSymbol = Symbol.SNCLIENTP2;
-		} else if (nrReceived == this.lastValidClientSeq) {
+		} else if (nrReceived == this.clientSeq) {
 			checkedSymbol = Symbol.SNCLIENT;
-		} else if (nrReceived == this.initialServerSeq) {
+		} else if (nrReceived == this.serverSeq) {
 			checkedSymbol = Symbol.SNSERVER;
-		} else if (nrReceived == Calculator.next(this.initialServerSeq)) {
+		} else if (nrReceived == Calculator.next(this.serverSeq)) {
 			checkedSymbol = Symbol.SNSERVERP1;
-		} else if (nrReceived == Calculator.nth(this.initialServerSeq, 2)) {
+		} else if (nrReceived == Calculator.nth(this.serverSeq, 2)) {
 			checkedSymbol = Symbol.SNSERVERP2;
 		} else if (nrReceived == this.lastSeqSent) {
 			checkedSymbol = Symbol.SNSENT;
@@ -229,8 +242,8 @@ public class TCPMapper {
 		return "MAPPER[INIT=" + this.isInit + "; " +
 				"lastSeqSent=" + this.lastSeqSent + 
 				"; lastAckSent=" + this.lastAckSent + 
-				"; lastValidClientSeq=" + this.lastValidClientSeq + 
-				"; lastValidServerSeq=" + this.initialServerSeq + "]";
+				"; lastValidClientSeq=" + this.clientSeq + 
+				"; lastValidServerSeq=" + this.serverSeq + "]";
 	}
 
 	public String processOutgoingRequest(String flags, String abstractSeq,

@@ -6,6 +6,7 @@ import java.util.List;
 
 import sutInterface.Serializer;
 import sutInterface.tcp.TCPMapper;
+import util.exceptions.BugException;
 
 public class CachedInitOracle implements InitOracle {
 	private List<String> inputs = new ArrayList<String>();
@@ -25,14 +26,18 @@ public class CachedInitOracle implements InitOracle {
 	// pretty.
 	public boolean isResetting(TCPMapper mapper) {
 		boolean isResetting = false;
-		String input = Serializer.abstractMessageToString(mapper.lastFlagsSent,
-				mapper.lastAbstractSeqSent, mapper.lastAbstractAckSent);
+		String input;
+		if(!mapper.isLastInputAnAction)
+			input = Serializer.abstractMessageToString(mapper.lastFlagsSent,
+					mapper.lastAbstractSeqSent, mapper.lastAbstractAckSent);
+		else 
+			input = mapper.lastActionSent.toString();
 		append(input);
-		if (hasTrace()) {
-			isResetting = initCache.getTrace(getInputs());
+		if (getTrace() != null) {
+			isResetting = getTrace();
 		} else {
-			System.err.println("Could not find trace in cache");
-			System.exit(0);
+			initCache.display();
+			new BugException("Could not find trace in cache");
 		}
 		if (isResetting) {
 			setDefault();
@@ -52,10 +57,6 @@ public class CachedInitOracle implements InitOracle {
 		return inputs.toArray(new String[inputs.size()]);
 	}
 
-	protected Boolean getStoredState() {
-		return initCache.getTrace(getInputs());
-	}
-
 	protected boolean getPreviousResettingState() {
 		String[] inputs = getInputs();
 		Boolean lastStoredState = null;
@@ -68,8 +69,8 @@ public class CachedInitOracle implements InitOracle {
 		return inputs.length == 0 || Boolean.TRUE.equals(lastStoredState);
 	}
 
-	protected boolean hasTrace() {
-		return getStoredState() != null;
+	protected Boolean getTrace() {
+		return initCache.getTrace(getInputs());
 	}
 
 	protected void storeTrace(boolean value) {

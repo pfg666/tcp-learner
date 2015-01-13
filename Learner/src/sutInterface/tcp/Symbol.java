@@ -14,6 +14,7 @@ public enum Symbol {
 	SNPSENT,
 	FRESH,
 	ZERO,
+	RAND,
 	V,
 	INV, 
 	IWIN,

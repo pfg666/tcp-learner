@@ -1,6 +1,14 @@
+#SYN(V,V) 
+#LISTEN
+#commented
 LISTEN
-ACCEPT
 SYN(V,V)
+!SYN+ACK(_,_)
 ACK(V,V)
-FIN+ACK(V,V)
-RST(V,V)
+!timeout
+ACCEPT
+CLOSECONNECTION 
+!FIN+ACK(_,_)
+ACK(V,V)
+ACK+FIN(V,V)
+SYN(V,V)

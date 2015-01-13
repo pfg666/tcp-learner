@@ -33,5 +33,6 @@ if __name__ == "__main__":
     runner = builder.buildTraceRunner()
     print str(runner)
     
-    print "\n==Running Trace File=="
-    runner.executeTraceFile(sender, "trace.txt")
+    tracePath = "../input/trace.txt"
+    print "\n==Running Trace File " + tracePath + " =="
+    runner.executeTraceFile(sender, tracePath)
