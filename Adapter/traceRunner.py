@@ -94,7 +94,8 @@ class TraceRunner:
                 
                 line = line.rstrip()
                 
-                # skip empty lines
+                # exit loop at empty line, so empty line acts separator between the trace
+                # we are currently executing and the other traces we might have in our file 
                 if len(line) == 0:
                     break
                 
