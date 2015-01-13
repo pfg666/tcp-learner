@@ -290,13 +290,12 @@ public class TCPMapper {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		Class<TCPMapper> mapperClass = TCPMapper.class;
 		sb.append("Mapper state:\n");
 		
 		sb.append("lastSeqSent: " + lastSeqSent + "   ");
 		sb.append("lastAckSent: " + lastAckSent + "   ");
-		sb.append("initialServerSeq: " + initialServerSeq + "   ");
-		sb.append("lastValidClientSeq: " + lastValidClientSeq + "   ");
+		sb.append("initialServerSeq: " + serverSeq + "   ");
+		sb.append("lastValidClientSeq: " + clientSeq + "   ");
 		sb.append("dataAcked: " + dataAcked + "   ");
 		sb.append("lastFlagsSent: " + lastFlagsSent + "   ");
 		sb.append("lastFlagsReceived: " + lastFlagsReceived + "   ");

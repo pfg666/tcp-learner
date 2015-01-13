@@ -96,7 +96,7 @@ class TraceRunner:
                 
                 # skip empty lines
                 if len(line) == 0:
-                    continue
+                    break
                 
                 # skip comments
                 if line[0] == "#":
