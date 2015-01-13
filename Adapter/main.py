@@ -20,6 +20,8 @@ from builder import Builder
 
 global adapter
 adapter = None
+global origSigInt
+origSigInt = None
 
 # routine used to close the server socket, so you don't have to
 def signal_handler(sign, frame):

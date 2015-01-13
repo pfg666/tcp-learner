@@ -16,7 +16,6 @@
 #error OS not supported, have fun with adding ifdefs
 #endif
 
-
 int learner_listener_sd, learner_conn_sd, server_sd, conn_sd;
 struct sockaddr_in learner_addr, server_addr, client_addr;
 #ifdef _WIN32
@@ -39,6 +38,14 @@ char output_buffer[output_buffer_size];
 void start_accepting_thread();
 void stop_accepting_thread();
 
+void milliSleep(int millis) {
+	#ifdef _WIN32
+	Sleep(millis);
+	#else
+	usleep(millis*1000);
+	#endif
+}
+
 void init() {
 #ifdef _WIN32
 	WSADATA wsaData;
@@ -60,8 +67,8 @@ void init() {
 void pstrcpy(char *output_buffer, int buffer_size, char *source) {
 #ifdef _WIN32
 	strcpy_s(output_buffer, buffer_size, source);
-#elif __gnu_linux
-	strcpy(output_buffer, output);
+#elif __gnu_linux__
+	strcpy(output_buffer, output_buffer);
 #endif
 }
 
@@ -69,8 +76,8 @@ void pstrcpy(char *output_buffer, int buffer_size, char *source) {
 void psprintf(char *output_buffer, int buffer_size, const char *format, int integer) {
 #ifdef _WIN32
 	sprintf_s(output_buffer, buffer_size, format, integer);
-#elif __gnu_linux
-	sprintf(output_buffer, buffer_size, format, integer);
+#elif __gnu_linux__
+	sprintf(output_buffer, format, integer);
 #endif
 }
 
@@ -80,8 +87,8 @@ void answer(char* output) {
     if (send(learner_conn_sd, output_buffer, strlen(output), 0) == SOCKET_ERROR) {
 		printf("Error code %d", WSAGetLastError());
 	}
-#elif __gnu_linux
-	if (send(learner_conn_sd, output_buffer, strlen(output), 0) == -1) {
+#elif __gnu_linux__
+	if (send(learner_conn_sd, output, strlen(output), 0) == -1) {
 		printf("Failed to send %s", output_buffer);
 	}
 #endif
@@ -321,7 +328,13 @@ int process_input() {
 
 void run() {
 	printf("now listening for learner...\n");
+
 	learner_conn_sd = accept(learner_listener_sd, (struct sockaddr*)NULL, NULL);
+	while (learner_conn_sd == -1) {
+		printf("connection refused, retrying");
+		milliSleep(1000);
+		learner_conn_sd = accept(learner_listener_sd, (struct sockaddr*)NULL, NULL);
+	}
 
 	printf("learner connected!");
 
@@ -343,6 +356,7 @@ void run() {
 char* help = "[-c | --continuous] [-l learnerport] [-m minport] [-n maxport] [-p]";
 
 int main(int argc, char *argv[]) {
+
 	learner_port = min_server_port = max_server_port = -1;
 	learner_listener_sd = learner_conn_sd = server_sd = conn_sd = -1;
 	int arg_nr;

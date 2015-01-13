@@ -1,8 +1,5 @@
 package sutInterface.tcp;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import sutInterface.Serializer;
 import sutInterface.tcp.init.FunctionInitOracle;
 import sutInterface.tcp.init.InitOracle;
@@ -77,6 +74,7 @@ public class TCPMapper {
 	
 	public String processOutgoingRequest(FlagSet flags, Symbol abstractSeq,
 			Symbol abstractAck) {
+		
 		/* check if abstraction is defined */
 		if (!isConcretizable(abstractSeq, abstractAck)) {
 			return Symbol.UNDEFINED.toString();
@@ -181,8 +179,6 @@ public class TCPMapper {
 			this.initialServerSeq = concreteSeq;
 		}
 		
-		Arrays.asList(new ArrayList<String>(),new ArrayList<String>());
-		
 		/* state 0 detecting condition */
 		this.isLastResponseTimeout = false;
 		this.lastFlagsReceived = flags;
@@ -239,6 +235,7 @@ public class TCPMapper {
 
 	public String processOutgoingRequest(String flags, String abstractSeq,
 			String abstractAck) {
+		System.out.println(this);
 
 		/* generate enum classes */
 		Symbol seqSymbol = Symbol.toSymbol(abstractSeq);
@@ -269,11 +266,37 @@ public class TCPMapper {
 		String abstractOutput = processIncomingResponse(flags, seq, ack);
 		return abstractOutput;
 	}
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		TCPMapper mapper = new TCPMapper(null);
 		for (int i = 0; i < 1000; i++) {
 			System.out.println(mapper.newInvalidOutsideWindow(10000));
 			System.out.println(mapper.newInvalidWithinWindow(10000));	
 		}
+	}*/
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		Class<TCPMapper> mapperClass = TCPMapper.class;
+		sb.append("Mapper state:\n");
+		
+		sb.append("lastSeqSent: " + lastSeqSent + "   ");
+		sb.append("lastAckSent: " + lastAckSent + "   ");
+		sb.append("initialServerSeq: " + initialServerSeq + "   ");
+		sb.append("lastValidClientSeq: " + lastValidClientSeq + "   ");
+		sb.append("dataAcked: " + dataAcked + "   ");
+		sb.append("lastFlagsSent: " + lastFlagsSent + "   ");
+		sb.append("lastFlagsReceived: " + lastFlagsReceived + "   ");
+		sb.append("lastAbstractSeqSent: " + lastAbstractSeqSent + "   ");
+		sb.append("lastAbstractAckSent: " + lastAbstractAckSent + "   ");
+		sb.append("lastAbstractSeqReceived: " + lastAbstractSeqReceived + "   ");
+		sb.append("lastAbstractAckReceived: " + lastAbstractAckReceived + "   ");
+		sb.append("isInit: " + isInit + "   ");
+		sb.append("isLastResponseTimeout: " + isLastResponseTimeout + "   ");
+		/*
+		 * boolean state variables, determined from data variables and the current
+		 * values of the boolean variables
+		 */
+		return sb.toString();
 	}
 }

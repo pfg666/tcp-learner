@@ -49,9 +49,14 @@ public class SocketWrapper {
 	}
 
 	public void close() {
+		sockout.write("exit");
+		sockout.close();
 		try {
 			sockin.close();
-			sockout.close();
+		} catch (IOException ex) {
+
+		}
+		try {
 			sock.close();
 		} catch (IOException ex) {
 

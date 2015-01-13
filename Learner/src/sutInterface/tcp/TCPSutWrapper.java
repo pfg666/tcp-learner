@@ -156,4 +156,8 @@ public class TCPSutWrapper implements SutWrapper{
 		}
 		return abstractResponse;
 	}
+	
+	public void close() {
+		this.socketWrapper.close();
+	}
 }

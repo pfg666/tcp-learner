@@ -46,9 +46,11 @@ public class FlagSet {
 	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
+		result.append("{");
 		for (Flag flag : flagSet) {
 			result.append(flag.name()); 
 		}
+		result.append("}");
 		return result.toString();
 	}
 	
