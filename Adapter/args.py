@@ -11,7 +11,8 @@ class Argument:
 # senderArguments has the section [sender], runnerArguments has the section [runner]....
 
 adapterArguments = [
-    Argument("lcp","localCommunicationPort", int, 18200, "Listening adapter port which the learner connects to"),
+    Argument("p","socketPort", int, 18200, "Listening adapter port which the learner connects to"),
+    Argument("ip","socketIP", str, 'localhost', "Listening adapter IP which the learner connects to"),
     Argument("con","continuous", bool, True, "Listening adapter handles clients continuously"\
              " and doesn't close its server socket after first client is handled")
 ]

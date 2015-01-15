@@ -18,9 +18,13 @@ class Adapter:
     data = None
     continous = None
 
-    def __init__(self, localCommunicationPort = 18200, continuous=True):
-        self.localCommunicationPort = localCommunicationPort
+    def __init__(self, socketIP = 'localhost', socketPort = 18200, continuous=True):
+        self.socketIP = socketIP
+        self.socketPort = socketPort
         self.continuous = continuous
+
+    def __str__(self):
+        return "Adapter with parameters: " + str(self.__dict__)
 
     # returns a new socket to the mapper/learner
     #def setUpSocket(self, commPort, cmdIp, cmdPort):
@@ -29,13 +33,13 @@ class Adapter:
         self.serverSocket = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)
         # bind the socket to a public host and a well-known port
-        self.serverSocket.bind(('localhost', commPort))
+        self.serverSocket.bind((self.socketIP, commPort))
         # become a server socket
         self.serverSocket.listen(1)
 
         # accept connections from outside
         (clientSocket, address) = self.serverSocket.accept()
-        print "python server: address connected: " + str(address)
+        print "learner address connected: " + str(address)
         self.learnerSocket = clientSocket
         
     # closes all open sockets
@@ -83,7 +87,7 @@ class Adapter:
         while not finished:
             if not self.data:
                 try:
-                    ready = select([self.learnerSocket], [], [], 3)
+                    ready = select([self.learnerSocket], [], [], 10)
                     if ready[0]:
                         self.data = self.learnerSocket.recv(1024)
                     else:
@@ -115,6 +119,7 @@ class Adapter:
             seqNr = 0
             ackNr = 0
             if input1 == "reset":
+                print "Received reset signal."
                 self.sender.sendReset()
             elif input1 == "exit":
                 msg = "Received exit signal " +  "(continuous" +  "=" + str(self.continuous) + ") :"  
@@ -125,6 +130,7 @@ class Adapter:
                 else:
                     msg = msg + " Closing only learner socket (so we are ready for a new session)"
                     self.closeLearnerSocket()
+                print msg
                 return
             else:
                 print "*****"
@@ -144,7 +150,7 @@ class Adapter:
                     self.fault("invalid input " + input1)
                 
                 if response is not None:
-                    print 'received ' + response.serialize()
+                    print 'received ' + response.serialize() + "\n"
                     self.sendOutput(response.serialize())
                 else:
                     print "received timeout"
@@ -163,8 +169,8 @@ class Adapter:
     
     # start adapter by list
     def startAdapter(self, sender):
-        print "listening on "+str(self.localCommunicationPort)
+        print "listening on "+str(self.socketIP) + ":" +str(self.socketPort)
         signal.getsignal(signal.SIGINT)
-        self.setUpSocket(self.localCommunicationPort)
+        self.setUpSocket(self.socketPort)
         self.handleInput(sender)
 
