@@ -86,11 +86,12 @@ public class MainNew {
 		// it updates the init status in a cache
 		// a CachedInitOracle will then read from this cache and is used by the mapper instead of the FunctionInitOracle
 		else {
-			InitOracle initOracle = new CachedInitOracle(new InitCacheManager());
+			InitCacheManager cacheManager = new InitCacheManager();
+			InitOracle initOracle = new CachedInitOracle(cacheManager);
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
-			eqOracleRunner = new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper));
-			memOracleRunner = new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper));
+			eqOracleRunner = new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), cacheManager);
+			memOracleRunner = new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), cacheManager);
 		}
 		
 		Learner learner;

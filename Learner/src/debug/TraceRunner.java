@@ -20,7 +20,7 @@ import java.util.Set;
 
 import learner.Config;
 import learner.EquivalenceOracle;
-import learner.Main;
+import learner.MainNew;
 import learner.SutInterface;
 import learner.TCPParams;
 
@@ -48,7 +48,7 @@ public class TraceRunner {
 	//private final CacheInputValidator validator;
 	
 	public static void main(String[] args) throws IOException {
-		Main.handleArgs(args);
+		MainNew.handleArgs(args);
 		List<String> trace;
 		try {
 			trace = Files.readAllLines(Paths.get("testtrace.txt"), StandardCharsets.US_ASCII);
@@ -72,11 +72,11 @@ public class TraceRunner {
 		}
 		Log.fatal("Start running trace");
 
-		Config config = Main.createConfig();
+		Config config = MainNew.createConfig();
 
-		SutInterface sutInterface = Main.createSutInterface(config);
+		SutInterface sutInterface = MainNew.createSutInterface(config);
 	
-		TCPParams tcp = Main.readConfig(config, sutInterface);
+		TCPParams tcp = MainNew.readConfig(config, sutInterface);
 		tcp.exitIfInvalid = false;
 		
 		InitOracle initOracle;

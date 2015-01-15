@@ -106,6 +106,7 @@ class Adapter:
         else:
             return int(inputString)
 
+
     # accepts input from the learner, and process it. Sends network packets, looks at the
     # response, extracts the relevant parameters and sends them back to the learner
     def handleInput(self, sender):

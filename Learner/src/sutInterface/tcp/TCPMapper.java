@@ -295,8 +295,8 @@ public class TCPMapper {
 		
 		sb.append("lastSeqSent: " + lastSeqSent + "   ");
 		sb.append("lastAckSent: " + lastAckSent + "   ");
-		sb.append("initialServerSeq: " + initialServerSeq + "   ");
-		sb.append("lastValidClientSeq: " + lastValidClientSeq + "   ");
+		//sb.append("initialServerSeq: " + initialServerSeq + "   ");
+		//sb.append("lastValidClientSeq: " + lastValidClientSeq + "   ");
 		sb.append("dataAcked: " + dataAcked + "   ");
 		sb.append("lastFlagsSent: " + lastFlagsSent + "   ");
 		sb.append("lastFlagsReceived: " + lastFlagsReceived + "   ");
