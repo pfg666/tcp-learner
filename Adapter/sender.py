@@ -29,7 +29,7 @@ class Sender:
         self.senderPortMinimum = senderPortMinimum
         self.senderPortMaximum = senderPortMaximum
         self.portNumberFile = portNumberFile;
-        self.SAsToReceive = []
+        self.SYNACKsReceived = []
         
         # time to wait for a response from the server before concluding a timeout
         self.waitTime = waitTime
@@ -86,10 +86,6 @@ class Sender:
     # should scapy return None, then a tracker is used to retrieve whatever packets scapy has missed (in case it did)
     # TODO Why does scapy miss some packets?
     def sendPacket(self,flagsSet, seqNr, ackNr):
-        # if a new SYN is sent, you may expect one SA: store this information to dodge SA-retransmits
-        if self.isSYN(flagsSet) and not ((seqNr, ackNr) in self.SAsToReceive):
-            self.SAsToReceive.append((seqNr, ackNr))
-        
         if self.useTracking == True :
             self.tracker.clearLastResponse()
         #if self.isVerbose == 1 :
@@ -144,7 +140,7 @@ class Sender:
         # check scapy's response
         # if SA, and retransmitted, it's not a real response: better make it None
         response = self.processSynAck(response)
-            
+        
         if response is None:
             if self.useTracking == True:
                 # timeout case, return the response (if caught) by the tracker and missed by scapy
@@ -170,15 +166,13 @@ class Sender:
     # check whether the packet is a SYN+ACK: if so, remember this, and if it was retransmitted,
     # return Null, otherwise return response itself
     def processSynAck(self, response):
-        #return response
         # if SA, and retransmitted, it's not a real response: better make it None
         if self.isSYNACK(response):
-            respSynAck = (response.seq, response.ack)
-            if self.isRetransmittedSYNACK(response):
-                print "discarding retransmitted SYN+ACK(" + str(response.seq) + ", " + str(response.ack) + ")"
+            if (response.seq, response.ack) in self.SYNACKsReceived:
+                print "discarding SYN+ACK(" + str(response.seq) + "," + str(response.ack) + ")"
                 response = None
             else:
-                self.SAsToReceive.remove(respSynAck)
+                self.SYNACKsReceived.append((response.seq, response.ack))
         return response
     
     def isSYNACK(self, response):
@@ -187,16 +181,6 @@ class Sender:
         if not response.hasFlags():
             return False
         return ('s' in response.flags or 'S' in response.flags) and ('a' in response.flags or 'A' in response.flags)
-    
-    def isSYN(self, flagsSet):
-        return (flagsSet is not None) and ('s'  in flagsSet or 'S' in flagsSet)
-       
-    def isRetransmittedSYNACK(self, response):
-        if response is None:
-            return False
-        if not response.hasFlags():
-            return False
-        return self.isSYNACK(response) and not ((response.seq, response.ack) in self.SAsToReceive)
     
     # transforms a scapy TCP response packet into an abstract response
     def scapyResponseParse(self, scapyResponse):
@@ -329,6 +313,7 @@ class Sender:
     # can be altered, but I'd say in case learning involves many queries, use the other method.
     def sendReset(self):
         self.refreshNetworkPort()
+        self.SYNACKsReceived = []
         if self.useTracking == True:
             self.tracker.clearLastResponse()
             

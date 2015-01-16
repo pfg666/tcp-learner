@@ -54,7 +54,6 @@ public class Main {
 	public static PrintStream statsOut;
 
 	public static void main(String[] args) throws FileNotFoundException, LearningException {
-		
 		handleArgs(args);
 		
 		setupOutput(outputDir);
