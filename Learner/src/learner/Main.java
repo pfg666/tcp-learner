@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Random;
 
 import org.yaml.snakeyaml.Yaml;
@@ -26,6 +25,7 @@ import sutInterface.tcp.init.CachedInitOracle;
 import sutInterface.tcp.init.FunctionInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
+import sutInterface.tcp.init.LogOracleWrapper;
 import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
@@ -46,12 +46,14 @@ import de.ls5.jlearn.util.DotUtil;
 public class Main {
 	private static File sutConfigFile = null;
 	private static LearningParams learningParams;
-	private static long seed = System.currentTimeMillis();
+	private static long seed = 178208038;
 	private static String seedStr = Long.toString(seed);
-	private static String outputDir = "output" + File.separator + System.currentTimeMillis();
+	private static final long timeSnap = System.currentTimeMillis();
+	private static final String outputDir = "output" + File.separator + timeSnap;
 	private static File outputFolder;
 	public static PrintStream learnOut;
 	public static PrintStream tcpOut;
+	public static PrintStream stdOut = System.out;
 	public static PrintStream errOut;
 	public static PrintStream statsOut;
 
@@ -160,7 +162,7 @@ public class Main {
 	}
 	
 	
-	public static void setupOutput(String outputDir) throws FileNotFoundException {
+	public static void setupOutput(final String outputDir) throws FileNotFoundException {
 		outputFolder = new File(outputDir);
 		outputFolder.mkdirs();
 		tcpOut = new PrintStream(
@@ -176,7 +178,7 @@ public class Main {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				InitCacheManager mgr = new InitCacheManager();
-				mgr.dump("output\\cache.txt"); 
+				mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				closeOutputStreams();
 			}
 		});
@@ -281,8 +283,8 @@ public class Main {
 			InitOracle initOracle = new FunctionInitOracle();
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
-			eqOracleRunner = new EquivalenceOracle(sutWrapper);
-			memOracleRunner = new MembershipOracle(sutWrapper);
+			eqOracleRunner = new EquivalenceOracle(sutWrapper); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			memOracleRunner = new LogOracleWrapper(new MembershipOracle(sutWrapper));
 		} 
 		
 		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class
@@ -294,8 +296,8 @@ public class Main {
 			InitOracle initOracle = new CachedInitOracle(cacheManager);
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
-			eqOracleRunner = new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), cacheManager);
-			memOracleRunner = new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), cacheManager);
+			eqOracleRunner = new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), cacheManager));
+			memOracleRunner = new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), cacheManager));
 		}
 		
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);

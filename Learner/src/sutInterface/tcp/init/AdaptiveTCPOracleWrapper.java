@@ -3,8 +3,6 @@ package sutInterface.tcp.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import learner.Main;
-
 import sutInterface.tcp.Flag;
 import util.Log;
 import util.exceptions.BugException;
@@ -31,10 +29,15 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		this.basicOracle = oracle;
 		this.cacheManager = cacheManager;
 	}
+	
+	
+	private Word processTrace(Word input) throws LearningException {
+		Word output = basicOracle.processQuery(input);
+		return output;
+	}
 
 	public Word processQuery(Word word) throws LearningException {
 		Word output = null;
-//		Main.tcpOut.println("LearnLib Query: " + word);
 		lastOutputWordBeforeExtension = null;
 		List<String> inputs = new ArrayList<String>();
 		
@@ -49,7 +52,7 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 			}
 		}
 		if (lastOutputWordBeforeExtension == null) {
-			output =  basicOracle.processQuery(word);
+			output =  processTrace(word);
 		} else {
 			if(!invCheck(lastOutputWordBeforeExtension)) {
 				
@@ -57,12 +60,6 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 			}
 			output =  lastOutputWordBeforeExtension;
 		}
-
-		for(int i = 0; i < word.getSymbolArray().length; i ++) {
-			Main.tcpOut.println(word.getSymbolArray()[i].toString());
-			Main.tcpOut.println("!" + output.getSymbolArray()[i].toString());
-		}
-		Main.tcpOut.println("reset");
 
 		return output;
 	}
@@ -72,6 +69,7 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		for(String message : toMessages(word)) {
 			if(message.contains("INV")) {
 				noInv = false;
+				break;
 			}
 		}
 		return noInv;
@@ -129,7 +127,7 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		for(String traceInput : extendedTraceInputs) {
 			word.addSymbol(new SymbolImpl(traceInput));
 		}
-		Word outputWord = basicOracle.processQuery(word);
+		Word outputWord = processTrace(word);
 		if (outputWord.getSymbolArray().length < 2) { 
 			throw new BugException("Invalid trace given"); 
 		}
