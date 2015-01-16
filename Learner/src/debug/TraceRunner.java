@@ -1,13 +1,10 @@
 package debug;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -16,16 +13,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import learner.Config;
 import learner.EquivalenceOracle;
-import learner.MainNew;
+import learner.Main;
 import learner.SutInterface;
 import learner.TCPParams;
-
 import sutInterface.SutWrapper;
-import sutInterface.tcp.Action;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
 import sutInterface.tcp.init.CachedInitOracle;
@@ -35,7 +29,6 @@ import sutInterface.tcp.init.InitOracle;
 import util.InputAction;
 import util.Log;
 import util.OutputAction;
-import util.SoundUtils;
 
 public class TraceRunner {
 	public static final String START = 		"\n****** INPUTS  ******\n";
@@ -48,7 +41,7 @@ public class TraceRunner {
 	//private final CacheInputValidator validator;
 	
 	public static void main(String[] args) throws IOException {
-		MainNew.handleArgs(args);
+		Main.handleArgs(args);
 		List<String> trace;
 		try {
 			trace = Files.readAllLines(Paths.get("testtrace.txt"), StandardCharsets.US_ASCII);
@@ -72,11 +65,12 @@ public class TraceRunner {
 		}
 		Log.fatal("Start running trace");
 
-		Config config = MainNew.createConfig();
+		Main.setupOutput("trace runner output.txt");
+		Config config = Main.createConfig();
 
-		SutInterface sutInterface = MainNew.createSutInterface(config);
+		SutInterface sutInterface = Main.createSutInterface(config);
 	
-		TCPParams tcp = MainNew.readConfig(config, sutInterface);
+		TCPParams tcp = Main.readConfig(config, sutInterface);
 		tcp.exitIfInvalid = false;
 		
 		InitOracle initOracle;

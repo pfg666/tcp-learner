@@ -6,7 +6,7 @@ import sutInterface.tcp.init.InitOracle;
 import util.Calculator;
 
 /**
- * Mapper component from abs to conc and conc to abs. Does NOT handle TIMEOUTS.
+ * Mapper component from abs to conc and conc to abs.
  * 
  * @author paul
  */
@@ -28,13 +28,14 @@ public class TCPMapper {
 	
 	/* The only purpose of this is to inform the cache init oracle of the last action sent */
 	public Action lastActionSent;
-	public boolean isLastInputAnAction = false;
+	public boolean isLastInputAnAction;
 
 	/*
 	 * boolean state variables, determined from data variables and the current
 	 * values of the boolean variables
 	 */
 	public boolean isInit;
+	public boolean startState;
 	public boolean isLastResponseTimeout;
 	
 	
@@ -46,7 +47,13 @@ public class TCPMapper {
 	
 	public TCPMapper(InitOracle oracle) {
 		this.oracle = oracle;
+		//by default, we assume that the start state is the listening state
+		this.startState = true;  
 		setDefault();
+	}
+	
+	public void setStartState(boolean isListening) {
+		this.startState = isListening;
 	}
 	
 	public InitOracle getInitOracle() {
@@ -65,7 +72,7 @@ public class TCPMapper {
 		this.lastFlagsReceived = FlagSet.EMPTY;
 		this.lastAbstractSeqSent = this.lastAbstractAckSent = Symbol.INV;
 		this.lastAbstractSeqReceived = this.lastAbstractAckReceived = Symbol.INV;
-		this.isInit = true;
+		this.isInit = this.startState;
 		this.isLastResponseTimeout = false;
 		this.isLastInputAnAction = false;
 		if(this.oracle != null)
@@ -290,13 +297,12 @@ public class TCPMapper {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		Class<TCPMapper> mapperClass = TCPMapper.class;
 		sb.append("Mapper state:\n");
 		
 		sb.append("lastSeqSent: " + lastSeqSent + "   ");
 		sb.append("lastAckSent: " + lastAckSent + "   ");
-		//sb.append("initialServerSeq: " + initialServerSeq + "   ");
-		//sb.append("lastValidClientSeq: " + lastValidClientSeq + "   ");
+		sb.append("initialServerSeq: " + serverSeq + "   ");
+		sb.append("lastValidClientSeq: " + clientSeq + "   ");
 		sb.append("dataAcked: " + dataAcked + "   ");
 		sb.append("lastFlagsSent: " + lastFlagsSent + "   ");
 		sb.append("lastFlagsReceived: " + lastFlagsReceived + "   ");

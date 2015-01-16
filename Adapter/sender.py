@@ -170,13 +170,15 @@ class Sender:
     # check whether the packet is a SYN+ACK: if so, remember this, and if it was retransmitted,
     # return Null, otherwise return response itself
     def processSynAck(self, response):
-        return response
+        #return response
         # if SA, and retransmitted, it's not a real response: better make it None
         if self.isSYNACK(response):
             respSynAck = (response.seq, response.ack)
             if self.isRetransmittedSYNACK(response):
+                print "discarding retransmitted SYN+ACK(" + str(response.seq) + ", " + str(response.ack) + ")"
                 response = None
-            self.SAsToReceive.remove(respSynAck)
+            else:
+                self.SAsToReceive.remove(respSynAck)
         return response
     
     def isSYNACK(self, response):

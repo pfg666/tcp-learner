@@ -28,7 +28,7 @@ public class EquivalenceOracle implements Oracle {
 		InputAction input;
 		OutputAction output;
 
-		System.out.println("Equivalence query number: " + ++Statistics.getStats().numEquivQueries);
+		System.out.println("Equivalence query number: " + ++Statistics.getStats().totalEquivQueries);
 
 		for (Symbol currentSymbol : query.getSymbolList()) {
 			input = new InputAction(currentSymbol.toString());

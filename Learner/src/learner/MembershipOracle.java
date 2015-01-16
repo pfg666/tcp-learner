@@ -27,7 +27,7 @@ public class MembershipOracle implements Oracle {
 		InputAction input;
 		OutputAction output;
 		
-		System.out.println("Member query number: " + ++Statistics.getStats().numMembQueries);
+		System.out.println("Membership query number: " + ++Statistics.getStats().totalMemQueries);
 
 		for (Symbol currentSymbol : query.getSymbolList()) {
 			input = new InputAction(currentSymbol.toString());
