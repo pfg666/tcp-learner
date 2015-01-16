@@ -41,6 +41,9 @@ public class SocketWrapper {
 		String output = null;
 		try {
 			output = sockin.readLine();
+			if (output == null) {
+				throw new RuntimeException("socket closed!");
+			}
 			Log.info("OUT: "+ output);
 		} catch (IOException e) {
 			e.printStackTrace();

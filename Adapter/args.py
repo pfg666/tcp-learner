@@ -33,7 +33,7 @@ senderArguments = [
     Argument("pnf","portNumberFile", str, "sn.txt", "File with the port number"),
     Argument("ut","useTracking", bool, True, "If set, then the tracker is used along with the Scapy tool"),
     Argument("wt","waitTime",float, 0.06, "Sets the time the adapter waits for a response before concluding a timeout"),
-    Argument("sip","serverIP", str, "192.168.56.1", "The TCP server"),
+    Argument("sip","serverIP", str, "10.0.2.2", "The TCP server"),
     Argument("sport","serverPort", int, 20000, "The server port"),
     Argument("smac","serverMAC", str, None, "The server MAC address"),
     Argument("rst","resetMechanism", int, 0, "0 selects reset by sending a valid RST and not changing the port,"
@@ -48,5 +48,5 @@ runnerArguments = [
     Argument("j","jvmPath", str, "/usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/server/libjvm.so" ,"Path to libjvm.so")]
 
 actionSenderArguments = [
-    Argument("cip","cmdIp", str, "192.168.56.1","The ip of the server adapter"),
+    Argument("cip","cmdIp", str, "10.0.2.2","The ip of the server adapter"),
     Argument("cport","cmdPort", int, 5000,"The port of the server adapter")]

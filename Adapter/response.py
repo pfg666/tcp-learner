@@ -5,6 +5,8 @@ class Response(object):
         self.resType = resType
     def serialize(self):
         return "NOT_IMPLEMENTED"
+    def hasFlags(self):
+        return False
 
 # concrete responses are used if packets are returned
 class ConcreteResponse(Response):
@@ -28,6 +30,10 @@ class ConcreteResponse(Response):
             equ = (self.flags == response.flags) and (self.ack == response.ack) 
             equ = equ and (self.seq == response.seq)
         return equ
+
+    def hasFlags(self):
+        return True
+
 
 # timeouts are used if no packets are returned
 class Timeout(Response):

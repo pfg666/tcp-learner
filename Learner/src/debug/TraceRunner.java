@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import learner.Config;
+import learner.EquivalenceOracle;
 import learner.Main;
 import learner.SutInterface;
 import learner.TCPParams;
@@ -64,6 +65,7 @@ public class TraceRunner {
 		}
 		Log.fatal("Start running trace");
 
+		Main.setupOutput("trace runner output.txt");
 		Config config = Main.createConfig();
 
 		SutInterface sutInterface = Main.createSutInterface(config);

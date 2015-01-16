@@ -55,8 +55,8 @@ public class Main {
 	public static PrintStream errOut;
 	public static PrintStream statsOut;
 
-	public static void main(String[] args) 	throws LearningException, IOException {
-		
+	public static void main(String[] args) throws LearningException, IOException {
+
 		handleArgs(args);
 		
 		setupOutput(outputDir);
@@ -190,7 +190,6 @@ public class Main {
 		stats.startTime = System.currentTimeMillis();
 		long starttmp = stats.startTime;
 		int hypCounter = 0;
-		int memQueries = 0;
 		long endtmp;
 		boolean done = false;
 		tcpOut.println("starting learning\n");

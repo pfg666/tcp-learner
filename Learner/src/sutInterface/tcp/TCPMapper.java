@@ -77,7 +77,6 @@ public class TCPMapper {
 		this.isLastInputAnAction = false;
 		if(this.oracle != null)
 			this.oracle.setDefault();
-		System.out.println(" INIT IS "+ this.isInit);
 	}
 
 	/* checks whether the abstractions are defined for the given inputs */

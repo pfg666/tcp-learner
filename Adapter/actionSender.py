@@ -6,7 +6,7 @@ class ActionSender:
     cmdSocket = None
     sender = None
     actions = ["listen", "accept", "closeconnection", "closeserver", "exit"]
-    def __init__(self, cmdIp = "192.168.56.1", cmdPort=5000, sender = None):
+    def __init__(self, cmdIp = "10.0.2.2", cmdPort=5000, sender = None):
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp
         self.sender = sender
