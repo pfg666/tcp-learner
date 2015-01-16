@@ -6,7 +6,6 @@ from scapy.all import *  # @UnusedWildImport
 from response import Timeout, ConcreteResponse
 import platform
 from interfaceType import InterfaceType
-import re
 
 
 # variables used to retain last sequence/acknowledgment sent

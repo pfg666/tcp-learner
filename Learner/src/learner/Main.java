@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 
 import org.yaml.snakeyaml.Yaml;
@@ -50,10 +51,11 @@ public class Main {
 	private static String outputDir = "output" + File.separator + System.currentTimeMillis();
 	private static File outputFolder;
 	public static PrintStream learnOut;
+	public static PrintStream tcpOut;
 	public static PrintStream errOut;
 	public static PrintStream statsOut;
 
-	public static void main(String[] args) throws FileNotFoundException, LearningException {
+	public static void main(String[] args) 	throws LearningException, IOException {
 		
 		handleArgs(args);
 		
@@ -92,9 +94,9 @@ public class Main {
 
 
 		// final output to out.txt
-		learnOut.println("Seed: " + seedStr);
+		tcpOut.println("Seed: " + seedStr);
 		errOut.println("Seed: " + seedStr);
-		learnOut.println("Done.");
+		tcpOut.println("Done.");
 		errOut.println("Successful run.");
 
 		// output needed for equivalence checking
@@ -157,11 +159,15 @@ public class Main {
 		}
 	}
 	
+	
 	public static void setupOutput(String outputDir) throws FileNotFoundException {
 		outputFolder = new File(outputDir);
 		outputFolder.mkdirs();
+		tcpOut = new PrintStream(
+				new FileOutputStream(outputDir + File.separator + "tcpLog.txt", false));
+		
 		learnOut = new PrintStream(
-				new FileOutputStream(outputDir + File.separator + "log.txt", false));
+				new FileOutputStream(outputDir + File.separator + "learnLog.txt", false));
 		
 		errOut = System.err;
 		
@@ -169,6 +175,8 @@ public class Main {
 				new FileOutputStream(outputDir + File.separator + "statistics.txt", false));
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
+				InitCacheManager mgr = new InitCacheManager();
+				mgr.dump("output\\cache.txt"); 
 				closeOutputStreams();
 			}
 		});
@@ -176,7 +184,7 @@ public class Main {
 
 	public static LearnResult learn(Learner learner,
 			de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle)
-			throws LearningException, ObservationConflictException {
+			throws LearningException, ObservationConflictException, IOException {
 		LearnResult learnResult = new LearnResult();
 		Statistics stats = Statistics.getStats();
 		stats.startTime = System.currentTimeMillis();
@@ -185,42 +193,50 @@ public class Main {
 		int memQueries = 0;
 		long endtmp;
 		boolean done = false;
-		learnOut.println("starting learning\n");
+		tcpOut.println("starting learning\n");
 		//try {
 			while (!done) {
-				learnOut.println("		RUN NUMBER: " + ++stats.runs);
-				learnOut.println("");
-				learnOut.flush();
+				tcpOut.println("		RUN NUMBER: " + ++stats.runs);
+				tcpOut.println("");
+				tcpOut.flush();
 				errOut.flush();
 
 				// execute membership queries
 				learner.learn();
-				learnOut.flush();
+				tcpOut.flush();
 				errOut.flush();
-				learnOut.println("done learning");
+				tcpOut.println("done learning");
 				endtmp = System.currentTimeMillis();
 				statsOut
 						.println("Running time of membership queries: "
 								+ (endtmp - starttmp) + "ms.");
 				stats.totalTimeMemQueries += endtmp - starttmp;
 				starttmp = System.currentTimeMillis();
-				learnOut.flush();
+				tcpOut.flush();
 
 				// stable hypothesis after membership queries
 				Automaton hyp = learner.getResult();
-				DotUtil.writeDot(hyp, new File(outputDir + File.separator + "tmp-learnresult"
-						+ hypCounter++ + ".dot"));
+				String hypString = outputDir + File.separator + "tmp-learnresult"
+						+ hypCounter++ + ".dot";
+				String hypStringPdf = outputDir + File.separator + "tmp-learnresult"
+						+ hypCounter++ + ".pdf";
+				
+				File hypDot = new File(hypString);
+				File hypPDF = new File(hypStringPdf);
+				BufferedWriter out = new BufferedWriter(new FileWriter(new File(hypString)));
+				DotUtil.writeDot(hyp, out);
+				DotUtil.invokeDot(hypDot, "pdf", hypPDF);
 
-				learnOut.println("starting equivalence query");
-				learnOut.flush();
+				tcpOut.println("starting equivalence query");
+				tcpOut.flush();
 				errOut.flush();
 				// search for counterexample
 				EquivalenceOracleOutput o = eqOracle
 						.findCounterExample(hyp);
 	
-				learnOut.flush();
+				tcpOut.flush();
 				errOut.flush();
-				learnOut.println("done equivalence query");
+				tcpOut.println("done equivalence query");
 				endtmp = System.currentTimeMillis();
 				stats.totalTimeEquivQueries += endtmp - starttmp;
 				starttmp = System.currentTimeMillis();
@@ -229,18 +245,19 @@ public class Main {
 				if (o == null) {
 					done = true;
 					continue;
-				}
-				learnOut.println("Sending CE to LearnLib.");
-				learnOut.println("Counter Example: "
+				} 
+				tcpOut.println("Sending CE to LearnLib.");
+				tcpOut.println("Counter Example: "
 						+ o.getCounterExample().toString());
-				learnOut.flush();
+				tcpOut.flush();
 				errOut.flush();
 				// return counter example to the learner, so that it can use
 				// it to generate new membership queries
 				learner.addCounterExample(o.getCounterExample(),
 						o.getOracleOutput());
-				learnOut.flush();
+				tcpOut.flush();
 				errOut.flush();
+				break;
 			}
 		stats.endTime = System.currentTimeMillis();
 		learnResult.learnedModel = learner.getResult();
@@ -249,6 +266,7 @@ public class Main {
 	
 	private static void closeOutputStreams() {
 		statsOut.close();
+		tcpOut.close();
 		learnOut.close();
 		errOut.close();
 	}
@@ -287,7 +305,7 @@ public class Main {
 	public static TCPParams readConfig(Config config, SutInterface sutInterface) {
 		// read/disp config params for learner
 		learningParams = config.learningParams;
-		learningParams.printParams(learnOut);
+		learningParams.printParams(tcpOut);
 
 		// read sut interface information
 		SutInfo.setMinValue(learningParams.minValue);
@@ -296,12 +314,12 @@ public class Main {
 		SutInfo.setInputSignatures(sutInterface.inputInterfaces);
 		SutInfo.setOutputSignatures(sutInterface.outputInterfaces);
 
-		LearnLog.addAppender(new PrintStreamLoggingAppender(LogLevel.INFO,
+		LearnLog.addAppender(new PrintStreamLoggingAppender(LogLevel.DEBUG,
 				learnOut));
 
 		// read/disp TCP config
 		TCPParams tcp = config.tcpParams;
-		tcp.printParams(learnOut);
+		tcp.printParams(tcpOut);
 		return tcp;
 	}
 

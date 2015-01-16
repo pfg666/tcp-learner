@@ -18,6 +18,7 @@ class Tracker(threading.Thread):
     promiscuous = False
     readTimeout = 1 # in milliseconds
     isStopped = False
+    lastResponse = None
     lastResponses = dict()
     
     def __init__ (self,interface,  serverPort, serverIp, interfaceType=InterfaceType.Ethernet, readTimeout = 1):
@@ -67,8 +68,14 @@ class Tracker(threading.Thread):
                 tcp_ack = l3.get_th_ack()
     #            print str(src_ip)
                 if l3.get_th_sport() == self.serverPort:
-                    print 'pcapy:' + self.impacketResponseParse(l3).serialize()
-                    self.lastResponses[l3.get_th_dport()] = self.impacketResponseParse(l3)
+                    lastResponse = self.impacketResponseParse(l3)
+                    if lastResponse is not None: 
+                        if lastResponse.equals(self.lastResponse) and lastResponse.flags == "SA":
+                            print 'ignoring SA retransmission ' + lastResponse.serialize()
+                        else:
+                            print 'pcapy:' + lastResponse.serialize()
+                            self.lastResponse = lastResponse
+                            self.lastResponses[l3.get_th_dport()] = lastResponse
     #                print "tracker:" + self.impacketResponseParse(l3).serialize()
 
 

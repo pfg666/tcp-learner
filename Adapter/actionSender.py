@@ -1,6 +1,5 @@
 #from socketAdapter import SocketAdapter
 import socket
-from time import sleep
 
 # extends sender functionality with higher level commands
 class ActionSender:
@@ -23,7 +22,7 @@ class ActionSender:
         if self.cmdSocket is None:
             cmdSocket = socket.create_connection((self.cmdIp, self.cmdPort))
             cmdSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-            cmdSocket.settimeout(2)
+            cmdSocket.settimeout(60)
             print "python connected to server Adapter at " + self.cmdIp + " " + (str(self.cmdPort))
             #self.cmdSocket = SocketAdapter(cmdSocket)
             self.cmdSocket = cmdSocket
@@ -85,8 +84,8 @@ class ActionSender:
         if self.isAction(inputString):
             self.cmdSocket.send(inputString + "\n") # TODO race-condition here, might go wrong: 
             response = self.sender.captureResponse() # response might arrive before sender is ready
-            cmdResponse = self.cmdSocket.recv(1024)
-            print "server adapter response: " + cmdResponse
+            #cmdResponse = self.cmdSocket.recv(1024)
+            #print "server adapter response: " + cmdResponse
         else:
             print inputString + " not a valid action ( it is not one of: " + str(self.actions) + ")"
         return response

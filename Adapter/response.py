@@ -21,6 +21,13 @@ class ConcreteResponse(Response):
     def serialize(self):
         outputString = self.flags + " " + str(self.seq) + " " + str(self.ack)
         return outputString
+    
+    def equals(self, response):
+        equ = False
+        if response is not None and type(response) is ConcreteResponse:  
+            equ = (self.flags == response.flags) and (self.ack == response.ack) 
+            equ = equ and (self.seq == response.seq)
+        return equ
 
 # timeouts are used if no packets are returned
 class Timeout(Response):

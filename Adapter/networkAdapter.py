@@ -1,3 +1,4 @@
+from time import sleep
 __author__ = 'paul,ramon'
 import socket
 from select import select
@@ -114,10 +115,15 @@ class Adapter:
     # response, extracts the relevant parameters and sends them back to the learner
     def handleInput(self, sender):
         self.sender = sender
+        count = 0
         while (True):
             input1 = self.receiveInput()
             seqNr = 0
             ackNr = 0
+            count = (count + 1) % 1000
+            if count == 999:
+                sleep(5)
+            
             if input1 == "reset":
                 print "Received reset signal."
                 self.sender.sendReset()

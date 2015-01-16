@@ -12,7 +12,7 @@ import util.Calculator;
  */
 
 public class TCPMapper {
-	public static final long NOT_SET = Integer.MAX_VALUE;
+	public static final long NOT_SET = -1;
 	public static final long DATA_LENGTH = 4;
 	public static final long WIN_SIZE = 8192;
 
@@ -46,9 +46,9 @@ public class TCPMapper {
 	}
 	
 	public TCPMapper(InitOracle oracle) {
-		this.oracle = oracle;
+		setInitOracle(oracle);
 		//by default, we assume that the start state is the listening state
-		this.startState = true;  
+		setStartState(true);  
 		setDefault();
 	}
 	
@@ -77,6 +77,7 @@ public class TCPMapper {
 		this.isLastInputAnAction = false;
 		if(this.oracle != null)
 			this.oracle.setDefault();
+		System.out.println(" INIT IS "+ this.isInit);
 	}
 
 	/* checks whether the abstractions are defined for the given inputs */
@@ -299,17 +300,17 @@ public class TCPMapper {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Mapper state:\n");
 		
-		sb.append("lastSeqSent: " + lastSeqSent + "   ");
-		sb.append("lastAckSent: " + lastAckSent + "   ");
 		sb.append("initialServerSeq: " + serverSeq + "   ");
 		sb.append("lastValidClientSeq: " + clientSeq + "   ");
-		sb.append("dataAcked: " + dataAcked + "   ");
-		sb.append("lastFlagsSent: " + lastFlagsSent + "   ");
-		sb.append("lastFlagsReceived: " + lastFlagsReceived + "   ");
-		sb.append("lastAbstractSeqSent: " + lastAbstractSeqSent + "   ");
-		sb.append("lastAbstractAckSent: " + lastAbstractAckSent + "   ");
-		sb.append("lastAbstractSeqReceived: " + lastAbstractSeqReceived + "   ");
-		sb.append("lastAbstractAckReceived: " + lastAbstractAckReceived + "   ");
+//		sb.append("lastSeqSent: " + lastSeqSent + "   ");
+//		sb.append("lastAckSent: " + lastAckSent + "   ");
+//		sb.append("dataAcked: " + dataAcked + "   ");
+//		sb.append("lastFlagsSent: " + lastFlagsSent + "   ");
+//		sb.append("lastFlagsReceived: " + lastFlagsReceived + "   ");
+//		sb.append("lastAbstractSeqSent: " + lastAbstractSeqSent + "   ");
+//		sb.append("lastAbstractAckSent: " + lastAbstractAckSent + "   ");
+//		sb.append("lastAbstractSeqReceived: " + lastAbstractSeqReceived + "   ");
+//		sb.append("lastAbstractAckReceived: " + lastAbstractAckReceived + "   ");
 		sb.append("isInit: " + isInit + "   ");
 		sb.append("isLastResponseTimeout: " + isLastResponseTimeout + "   ");
 		/*

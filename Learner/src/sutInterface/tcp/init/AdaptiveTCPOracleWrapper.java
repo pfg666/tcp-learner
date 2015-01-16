@@ -3,6 +3,8 @@ package sutInterface.tcp.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import learner.Main;
+
 import sutInterface.tcp.Flag;
 import util.Log;
 import util.exceptions.BugException;
@@ -23,7 +25,7 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 	private InitCacheManager cacheManager;
 	// used for storing the last output before the distinguishing input is applied, so 
 	// we don't have run the trace all over again
-	private String lastOutputBeforeExtension = null;
+	private Word lastOutputWordBeforeExtension = null;
 
 	public AdaptiveTCPOracleWrapper(Oracle oracle, InitCacheManager cacheManager) {
 		this.basicOracle = oracle;
@@ -31,7 +33,9 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 	}
 
 	public Word processQuery(Word word) throws LearningException {
-		
+		Word output = null;
+//		Main.tcpOut.println("LearnLib Query: " + word);
+		lastOutputWordBeforeExtension = null;
 		List<String> inputs = new ArrayList<String>();
 		
 		/* We verify that at each point when executing the query we know the "is listening" value. 
@@ -44,8 +48,33 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 				cacheManager.storeTrace(inputs, init);
 			}
 		}
+		if (lastOutputWordBeforeExtension == null) {
+			output =  basicOracle.processQuery(word);
+		} else {
+			if(!invCheck(lastOutputWordBeforeExtension)) {
+				
+				System.exit(0);
+			}
+			output =  lastOutputWordBeforeExtension;
+		}
 
-		return basicOracle.processQuery(word);
+		for(int i = 0; i < word.getSymbolArray().length; i ++) {
+			Main.tcpOut.println(word.getSymbolArray()[i].toString());
+			Main.tcpOut.println("!" + output.getSymbolArray()[i].toString());
+		}
+		Main.tcpOut.println("reset");
+
+		return output;
+	}
+	
+	private boolean invCheck(Word word) {
+		boolean noInv = true;
+		for(String message : toMessages(word)) {
+			if(message.contains("INV")) {
+				noInv = false;
+			}
+		}
+		return noInv;
 	}
 	
 	// return whether the server is in the listening state after executing the given trace
@@ -104,7 +133,9 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		if (outputWord.getSymbolArray().length < 2) { 
 			throw new BugException("Invalid trace given"); 
 		}
-		lastOutputBeforeExtension = outputWord.getSymbolByIndex(outputWord.size()-2).toString();
+		List<Symbol> outputSymbols = new ArrayList<Symbol>(outputWord.getSymbolList());
+		outputSymbols.remove(outputSymbols.size()-1);
+		lastOutputWordBeforeExtension = buildWordS(outputSymbols);
 		return outputWord.getSymbolByIndex(outputWord.size()-1).toString();
 	}
 	
@@ -120,6 +151,14 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 	private Word buildWord(List<String> wordInputs) {
 		Word word = new WordImpl();
 		for(String wordInput : wordInputs) {
+			word.addSymbol(new SymbolImpl(wordInput));
+		}
+		return word;
+	}
+	
+	private Word buildWordS(List<Symbol> wordInputs) {
+		Word word = new WordImpl();
+		for(Symbol wordInput : wordInputs) {
 			word.addSymbol(new SymbolImpl(wordInput));
 		}
 		return word;
