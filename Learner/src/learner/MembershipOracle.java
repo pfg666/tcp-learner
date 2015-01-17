@@ -21,7 +21,6 @@ public class MembershipOracle implements Oracle {
 	//@Override
 	public Word processQuery(Word query) throws LearningException {
 		Word result = new WordImpl();
-		System.out.println("LearnLib Query: " + query);
 
 		sutWrapper.sendReset();
 		InputAction input;

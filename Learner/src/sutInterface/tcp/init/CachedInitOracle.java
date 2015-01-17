@@ -36,8 +36,8 @@ public class CachedInitOracle implements InitOracle {
 		if (getTrace() != null) {
 			isResetting = getTrace();
 		} else {
-			initCache.display();
-			new BugException("Could not find trace in cache");
+			//throw new BugException("Could not find trace " + Arrays.asList(getInputs()) + " in cache");
+			return true;
 		}
 		if (isResetting) {
 			setDefault();
@@ -75,12 +75,6 @@ public class CachedInitOracle implements InitOracle {
 
 	protected void storeTrace(boolean value) {
 		initCache.storeTrace(getInputs(), value);
-	}
-
-	public static void main(String[] args) {
-		System.out.println("ACK+SYN(FRESH,V)"
-				.matches("((ACK\\+SYN)|(SYN\\+ACK))\\((?!FRESH).*"));
-		;
 	}
 
 }

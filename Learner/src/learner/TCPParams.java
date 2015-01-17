@@ -48,6 +48,8 @@ public class TCPParams{
 	 * Escape in case one of the numbers received from server cannot be matched, signaling that learning is out-of-synch
 	 */
 	public boolean exitIfInvalid = true;
+	
+	public String logLevel = "INFO";
 
 	public void printParams(PrintStream stdout) {
 		stdout.printf("TCP endpoint: (%s,%s)\n", this.sutIP, String.valueOf(this.sutPort));

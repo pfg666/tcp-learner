@@ -51,7 +51,7 @@ class TraceRunner:
         else:
             if type(response) is Timeout:
                 self.getMapper().processIncomingTimeout()
-            responseString = response.serialize().upper()
+            responseString = response.__str__().upper()
         return responseString
     
     def sendConcreteRequest(self, concreteRequest):

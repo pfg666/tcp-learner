@@ -158,8 +158,8 @@ class Adapter:
                     self.fault("invalid input " + input1)
                 
                 if response is not None:
-                    print 'received ' + response.serialize() + "\n"
-                    self.sendOutput(response.serialize())
+                    print 'received ' + response.__str__() + "\n"
+                    self.sendOutput(response.__str__())
                 else:
                     print "received timeout"
                     self.sendOutput("timeout")

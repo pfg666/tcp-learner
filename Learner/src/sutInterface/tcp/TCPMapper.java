@@ -1,7 +1,9 @@
 package sutInterface.tcp;
 
 import sutInterface.Serializer;
+import sutInterface.tcp.init.CachedInitOracle;
 import sutInterface.tcp.init.FunctionInitOracle;
+import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
 import util.Calculator;
 
@@ -43,6 +45,7 @@ public class TCPMapper {
 
 	public TCPMapper() {
 		this( new FunctionInitOracle());
+		//this( new CachedInitOracle(new InitCacheManager("/home/student/GitHub/tcp-learner/output/1421437324088/cache.txt")));
 	}
 	
 	public TCPMapper(InitOracle oracle) {
@@ -114,7 +117,7 @@ public class TCPMapper {
 	}
 	
 	public String processOutgoingReset() {
-		return Serializer.concreteMessageToString(new FlagSet(Flag.RST), (clientSeq == NOT_SET)?0:clientSeq, 0);
+		return (clientSeq == NOT_SET)? null : Serializer.concreteMessageToString(new FlagSet(Flag.RST), clientSeq, 0);
 	}
 	
 	public void processOutgoingAction(Action action) {

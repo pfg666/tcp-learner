@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 public class Log {
 	enum Level {
+		DEBUG,
 		INFO,
 		WARN,
 		FATAL,
@@ -11,9 +12,14 @@ public class Log {
 	}
 	
 	private static PrintStream activePrintStream = null;
+	private static Level logLevel = Level.INFO;
 	
 	public static void setActivePrintStream(PrintStream printStream) {
 		activePrintStream = printStream;
+	}
+	
+	public static void setLogLevel(String logLevel) {
+		Log.logLevel = Level.valueOf(logLevel);
 	}
 	
 	public static void warn(String message) {
@@ -41,6 +47,15 @@ public class Log {
 	/** Logs message prepending location of log invocation. To retrieve the location from which the log was called, 
 	 * it navigates through the stack until it gets outside of the Log/Exception classes. */ 
 	private static void log(Level level, String message, PrintStream writer) {
+		if(level == null || level.compareTo(logLevel) < 0) {
+			return;
+		}
+		StackTraceElement relevantStackTraceElement = getLocation();
+		writer.println(level.name()+" (" + relevantStackTraceElement.getClassName() + ";" + relevantStackTraceElement.getMethodName() + ";" + relevantStackTraceElement.getLineNumber() + "): "+ message);
+		writer.flush();
+	}
+	
+	private static StackTraceElement getLocation() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		StackTraceElement relevantStackTraceElement = null;
 		for(StackTraceElement element : stackTrace) {
@@ -50,7 +65,6 @@ public class Log {
 				break;
 			}
 		}
-		writer.println(level.name()+" (" + relevantStackTraceElement.getClassName() + ";" + relevantStackTraceElement.getMethodName() + ";" + relevantStackTraceElement.getLineNumber() + "): "+ message);
-		writer.flush();
+		return relevantStackTraceElement;
 	}
 }

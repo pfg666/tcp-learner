@@ -94,9 +94,12 @@ public class TCPSutWrapper implements SutWrapper{
 	public void sendReset() {
 		Log.info("******** RESET ********");
 		String rstMessage = mapper.processOutgoingReset();
-		socketWrapper.writeInput(rstMessage);
+		// mapper made a pertinent reset message
+		if(rstMessage != null) {
+			socketWrapper.writeInput(rstMessage);
+			socketWrapper.readOutput();
+		}
 		socketWrapper.writeInput("reset");
-		socketWrapper.readOutput();
 		mapper.setDefault();
 	}
 	

@@ -19,7 +19,7 @@ class Tracker(threading.Thread):
     readTimeout = 1 # in milliseconds
     isStopped = False
     lastResponse = None
-    lastResponses = dict()
+    lastResponses = list()
     
     def __init__ (self,interface,  serverPort, serverIp, interfaceType=InterfaceType.Ethernet, readTimeout = 1):
         super(Tracker, self).__init__()
@@ -30,6 +30,8 @@ class Tracker(threading.Thread):
         self.daemon = True
         self.readTimeout = readTimeout
         self.serverIp = serverIp
+        self.lastResponse = None
+        self.lastResponses = list()
         
     def getDecoder(self, interfaceType):
         if interfaceType == InterfaceType.Ethernet:
@@ -69,14 +71,17 @@ class Tracker(threading.Thread):
     #            print str(src_ip)
                 if l3.get_th_sport() == self.serverPort:
                     lastResponse = self.impacketResponseParse(l3)
-                    if lastResponse is not None: 
-                        if lastResponse.equals(self.lastResponse) and lastResponse.flags == "SA":
-                            print 'ignoring SA retransmission ' + lastResponse.serialize()
-                        else:
-                            print 'pcapy:' + lastResponse.serialize()
-                            self.lastResponse = lastResponse
-                            self.lastResponses[l3.get_th_dport()] = lastResponse
-    #                print "tracker:" + self.impacketResponseParse(l3).serialize()
+                    self.processResponse(lastResponse)
+    #                print "tracker:" + self.impacketResponseParse(l3).__str__()
+
+    def processResponse(self, response):
+        if response is not None:
+            if response.flags == "SA" and response in self.lastResponses:
+                print 'ignoring SA retransmission ' + response.__str__()
+            else:
+                print 'non SA-ret packet:' + response.__str__()
+                self.lastResponses.append(response)
+                self.lastResponse = response
 
 
     # MAKE SURE the order of checking/appending characters is the same here as it is in the sender
@@ -97,13 +102,28 @@ class Tracker(threading.Thread):
     # clears all last responses for all ports (keep that in mind if you have responses on several ports)
     # this is done because when learning, we only care about one port
     def clearLastResponse(self):
-        self.lastResponses.clear()
+        self.lastResponse = None
+    
+    def reset(self):
+        self.clearLastResponse()
+        self.lastResponses = list()
     
     # fetches the last response from an active port. If no response was sent, then it returns Timeout
-    def getLastResponse(self, localPort):
-        lastResponse = self.lastResponses.get(localPort)
-        if lastResponse is None:
-            lastResponse = Timeout()
+    def getLastResponse(self, requestSN):
+        print 'tracker response query'
+        lastResponse = None
+        # no new responses intercepted
+        if self.lastResponse is None:
+            lastResponse = None
+        else:
+            if  requestSN <= self.lastResponse.ack:
+                lastResponse = self.lastResponse
+            else:
+                if len(self.lastResponses) > 0:
+                    for response in reversed(self.lastResponses):
+                        if response.seq <= requestSN:
+                            lastResponse = response
+                            break
         return lastResponse
         
     def run(self):

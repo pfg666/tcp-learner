@@ -30,6 +30,7 @@ import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
 import de.ls5.jlearn.abstractclasses.LearningException;
+import de.ls5.jlearn.algorithms.angluin.Angluin;
 import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
 import de.ls5.jlearn.exceptions.ObservationConflictException;
@@ -63,17 +64,17 @@ public class Main {
 		
 		setupOutput(outputDir);
 
-		Log.fatal("Start Learning");
-
 		Config config = createConfig();
 
 		SutInterface sutInterface = createSutInterface(config);
 	
 		TCPParams tcp = readConfig(config, sutInterface);
 		
+		Log.setLogLevel(tcp.logLevel);
 		
 		// first is the membership, second is the equivalence oracle
-		Tuple2<Oracle,Oracle> tcpOracles = createOraclesFromConfig(tcp);
+		Tuple2<Oracle,Oracle> tcpOracles = buildOraclesFromConfig(tcp);
+		
 		
 		Learner learner;
 
@@ -85,7 +86,7 @@ public class Main {
 		eqOracle.setOracle(tcpOracles.tuple1);
 		eqOracle.setRandom(random);
 
-		learner = new ObservationPack();
+		learner = new Angluin();
 		learner.setOracle(tcpOracles.tuple0);
 
 		learner.setAlphabet(SutInfo.generateInputAlphabet());
@@ -194,6 +195,8 @@ public class Main {
 		int hypCounter = 0;
 		long endtmp;
 		boolean done = false;
+
+		Log.fatal("Start Learning");
 		tcpOut.println("starting learning\n");
 		//try {
 			while (!done) {
@@ -272,7 +275,7 @@ public class Main {
 		errOut.close();
 	}
 	
-	private static Tuple2<Oracle, Oracle> createOraclesFromConfig(TCPParams tcp) {
+	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
 		// setup tcp oracles/wrappers
 		SutWrapper sutWrapper = null;
 		Oracle eqOracleRunner = null;
@@ -283,7 +286,7 @@ public class Main {
 			InitOracle initOracle = new FunctionInitOracle();
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
-			eqOracleRunner = new EquivalenceOracle(sutWrapper); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			eqOracleRunner = new LogOracleWrapper(new EquivalenceOracle(sutWrapper)); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
 			memOracleRunner = new LogOracleWrapper(new MembershipOracle(sutWrapper));
 		} 
 		

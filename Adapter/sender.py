@@ -28,7 +28,6 @@ class Sender:
         self.senderPortMinimum = senderPortMinimum
         self.senderPortMaximum = senderPortMaximum
         self.portNumberFile = portNumberFile;
-        self.SYNACKsReceived = []
         
         # time to wait for a response from the server before concluding a timeout
         self.waitTime = waitTime
@@ -126,65 +125,41 @@ class Sender:
         if self.useTracking == True :
             self.tracker.clearLastResponse()
         
-        response = None
+        scapyResponse = None
         if packet != None:
             #todo find a more elegant way of finding the client IP?
             self.clientIP = packet[IP].src
             # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
-            response = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
-            response = self.scapyResponseParse(response)
+            scapyResponse = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
         else:
             time.sleep(self.waitTime)
         captureMethod = ""
-        # check scapy's response
-        # if SA, and retransmitted, it's not a real response: better make it None
-        response = self.processSynAck(response)
-        
-        if response is None:
+        if scapyResponse is not None:
+            response = self.scapyResponseParse(scapyResponse)
+            captureMethod = "scapy"
+        else:
+            response = None
             if self.useTracking == True:
                 # timeout case, return the response (if caught) by the tracker and missed by scapy
-                response = self.tracker.getLastResponse(self.senderPort)
-                if type(response) is not Timeout:
+                response = self.tracker.getLastResponse(packet.seq)
+                if response is not None:
                     captureMethod = "tracker"
-                response = self.processSynAck(response)
-        else:
-            captureMethod = "scapy"
-        
-        if response is None:
-            response = Timeout()
-        
+                else:
+                    response = Timeout()
+            else:
+                response = Timeout()
+
         if captureMethod != "":
             captureMethod = "("+captureMethod+")"
-        print response.serialize() + "  "+captureMethod
+        print response.__str__() + "  "+captureMethod
         if self.useTracking == True:
             self.tracker.clearLastResponse()
         # if scapyResponse is not None:
         #    self.bijectionCheck(scapyResponse, response)
         return response
     
-    # check whether the packet is a SYN+ACK: if so, remember this, and if it was retransmitted,
-    # return Null, otherwise return response itself
-    def processSynAck(self, response):
-        # if SA, and retransmitted, it's not a real response: better make it None
-        if self.isSYNACK(response):
-            if (response.seq, response.ack) in self.SYNACKsReceived:
-                print "discarding SYN+ACK(" + str(response.seq) + "," + str(response.ack) + ")"
-                response = None
-            else:
-                self.SYNACKsReceived.append((response.seq, response.ack))
-        return response
-    
-    def isSYNACK(self, response):
-        if response is None:
-            return False
-        if not response.hasFlags():
-            return False
-        return ('s' in response.flags or 'S' in response.flags) and ('a' in response.flags or 'A' in response.flags)
-    
     # transforms a scapy TCP response packet into an abstract response
     def scapyResponseParse(self, scapyResponse):
-        if scapyResponse is None:
-            return None
         flags = scapyResponse[TCP].flags
         seq = scapyResponse[TCP].seq
         ack = scapyResponse[TCP].ack
@@ -312,9 +287,8 @@ class Sender:
     # can be altered, but I'd say in case learning involves many queries, use the other method.
     def sendReset(self):
         self.refreshNetworkPort()
-        self.SYNACKsReceived = []
         if self.useTracking == True:
-            self.tracker.clearLastResponse()
+            self.tracker.reset()
             
             
     def shutdown(self):
