@@ -40,20 +40,38 @@ public class SoundUtils {
 		sdl.close();
 	}
 
-	public static void announce() {
+	public static void success() {
 		try {
 			SoundUtils.tone(1000, 200, 100.0);
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			SoundUtils.tone(100, 1000);
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			SoundUtils.tone(5000, 100);
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			SoundUtils.tone(400, 500);
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			SoundUtils.tone(400, 500, 0.2);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void failure(){
+		try {
+			SoundUtils.tone(450, 100);
+			Thread.sleep(100);
+			SoundUtils.tone(450, 100);
+			Thread.sleep(100);
+			SoundUtils.tone(450, 100);
+			Thread.sleep(100);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String args []) {
+		SoundUtils.success();
 	}
 }

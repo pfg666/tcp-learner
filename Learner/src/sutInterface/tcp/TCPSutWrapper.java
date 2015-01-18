@@ -50,10 +50,6 @@ public class TCPSutWrapper implements SutWrapper{
 		return mapper;
 	}
 	
-	public void setExitOnInvalidParameter(boolean exitWhenInvalid) {
-		this.exitIfInvalid = exitWhenInvalid;
-	}
-	
 	public OutputAction sendInput(InputAction symbolicInput) {
 		OutputAction symbolicOutput;
 		
@@ -73,6 +69,8 @@ public class TCPSutWrapper implements SutWrapper{
 			concreteRequest = processOutgoingPacket(abstractRequest);
 		}
 		
+		System.out.println(mapper.getState());
+		
 		// Handle non-concretizable abstract input case
 		if(concreteRequest.equalsIgnoreCase(Symbol.UNDEFINED.name())) {
 			symbolicOutput = new OutputAction(Symbol.UNDEFINED.name());
@@ -83,6 +81,8 @@ public class TCPSutWrapper implements SutWrapper{
 			String abstractResponse = processIncomingPacket(concreteResponse);
 			symbolicOutput = new OutputAction(abstractResponse);
 		}
+		
+		System.out.println(mapper.getState());
 		
 		return symbolicOutput;
 	}

@@ -109,14 +109,15 @@ class Tracker(threading.Thread):
         self.lastResponses = list()
     
     # fetches the last response from an active port. If no response was sent, then it returns Timeout
-    def getLastResponse(self, requestSN):
+    def getLastResponse(self, requestSN = None):
         print 'tracker response query'
         lastResponse = None
+    
         # no new responses intercepted
         if self.lastResponse is None:
             lastResponse = None
         else:
-            if  requestSN <= self.lastResponse.ack:
+            if  requestSN is None or requestSN <= self.lastResponse.ack:
                 lastResponse = self.lastResponse
             else:
                 if len(self.lastResponses) > 0:
@@ -125,7 +126,7 @@ class Tracker(threading.Thread):
                             lastResponse = response
                             break
         return lastResponse
-        
+    
     def run(self):
         self.trackPackets()
 

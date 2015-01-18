@@ -6,7 +6,6 @@ import java.util.List;
 
 import sutInterface.Serializer;
 import sutInterface.tcp.TCPMapper;
-import util.exceptions.BugException;
 
 public class CachedInitOracle implements InitOracle {
 	private List<String> inputs = new ArrayList<String>();

@@ -89,6 +89,7 @@ public class TCPMapper {
 	
 	public String processOutgoingRequest(FlagSet flags, Symbol abstractSeq,
 			Symbol abstractAck) {
+		this.lastActionSent = null; // no action sent
 		
 		/* check if abstraction is defined */
 		if (!isConcretizable(abstractSeq, abstractAck)) {
@@ -108,7 +109,6 @@ public class TCPMapper {
 		this.lastFlagsSent = flags;
 		this.lastAbstractSeqSent = abstractSeq;
 		this.lastAbstractAckSent = abstractAck;
-		this.isLastInputAnAction = false;
 
 		/* build concrete input */
 		String concreteInput = Serializer.concreteMessageToString(flags,
@@ -122,7 +122,6 @@ public class TCPMapper {
 	
 	public void processOutgoingAction(Action action) {
 		this.lastActionSent = action;
-		this.isLastInputAnAction = true;
 	}
 	
 	private long newInvalidWithinWindow(long refNumber) {
@@ -258,7 +257,6 @@ public class TCPMapper {
 
 	public String processOutgoingRequest(String flags, String abstractSeq,
 			String abstractAck) {
-		System.out.println(this);
 
 		/* generate enum classes */
 		Symbol seqSymbol = Symbol.toSymbol(abstractSeq);

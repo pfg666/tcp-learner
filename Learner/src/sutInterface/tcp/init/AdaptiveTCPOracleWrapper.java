@@ -77,11 +77,11 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 	// return whether the server is in the listening state after executing the given trace
 	private boolean getInitForTrace(List<String> subTrace) throws LearningException{
 		boolean init;
-		if (isChangeCandidate(subTrace)) {;
+		//if (isChangeCandidate(subTrace)) {;
 			init = getInitForChangeCandidate(subTrace);
-		} else {
-			init = getInitForNonChanger(subTrace);
-		}
+//		} else {
+//			init = getInitForNonChanger(subTrace);
+//		}
 		this.lastInitValue = init;
 		return init;
 	}
@@ -92,7 +92,7 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		int flagsDelim = lastInput.indexOf('(');
 		String flagStrings = lastInput.substring(0, flagsDelim);
 		FlagSet flags = new FlagSet(flagStrings);
-		return flags.is(Flag.SYN) || flags.has(Flag.RST) ;
+		return flags.has(Flag.SYN) || flags.has(Flag.RST) ;
 	}
 
 	// getting the "is listening" state for a non changer does not require a asking a query, thus

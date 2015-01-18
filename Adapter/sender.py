@@ -140,8 +140,11 @@ class Sender:
         else:
             response = None
             if self.useTracking == True:
-                # timeout case, return the response (if caught) by the tracker and missed by scapy
-                response = self.tracker.getLastResponse(packet.seq)
+                if packet is None:
+                    response = self.tracker.getLastResponse()
+                else:
+                    # timeout case, return the response (if caught) by the tracker and missed by scapy
+                    response = self.tracker.getLastResponse(packet.seq)
                 if response is not None:
                     captureMethod = "tracker"
                 else:

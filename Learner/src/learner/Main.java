@@ -25,6 +25,7 @@ import sutInterface.tcp.init.CachedInitOracle;
 import sutInterface.tcp.init.FunctionInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
+import sutInterface.tcp.init.InvCheckOracleWrapper;
 import sutInterface.tcp.init.LogOracleWrapper;
 import util.Log;
 import util.SoundUtils;
@@ -57,6 +58,7 @@ public class Main {
 	public static PrintStream stdOut = System.out;
 	public static PrintStream errOut;
 	public static PrintStream statsOut;
+	private static boolean done;
 
 	public static void main(String[] args) throws LearningException, IOException {
 
@@ -156,7 +158,7 @@ public class Main {
 
 		// bips to notify that learning is done :)
 		try {
-			SoundUtils.announce();
+			SoundUtils.success();
 		} catch (Exception e) {
 			
 		}
@@ -178,9 +180,12 @@ public class Main {
 				new FileOutputStream(outputDir + File.separator + "statistics.txt", false));
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				InitCacheManager mgr = new InitCacheManager();
-				mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				closeOutputStreams();
+				if (done == false) {
+					InitCacheManager mgr = new InitCacheManager();
+					mgr.dump(outputDir + File.separator +  "cache.txt"); 
+					SoundUtils.failure();
+				}
 			}
 		});
 	}
@@ -194,7 +199,7 @@ public class Main {
 		long starttmp = stats.startTime;
 		int hypCounter = 0;
 		long endtmp;
-		boolean done = false;
+		done = false;
 
 		Log.fatal("Start Learning");
 		tcpOut.println("starting learning\n");
@@ -261,7 +266,6 @@ public class Main {
 						o.getOracleOutput());
 				tcpOut.flush();
 				errOut.flush();
-				break;
 			}
 		stats.endTime = System.currentTimeMillis();
 		learnResult.learnedModel = learner.getResult();
@@ -286,8 +290,8 @@ public class Main {
 			InitOracle initOracle = new FunctionInitOracle();
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
-			eqOracleRunner = new LogOracleWrapper(new EquivalenceOracle(sutWrapper)); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-			memOracleRunner = new LogOracleWrapper(new MembershipOracle(sutWrapper));
+			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)));
 		} 
 		
 		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class
@@ -299,8 +303,8 @@ public class Main {
 			InitOracle initOracle = new CachedInitOracle(cacheManager);
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
-			eqOracleRunner = new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), cacheManager));
-			memOracleRunner = new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), cacheManager));
+			eqOracleRunner = new InvCheckOracleWrapper(new AdaptiveTCPOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)), cacheManager));
+			memOracleRunner = new InvCheckOracleWrapper(new AdaptiveTCPOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)), cacheManager));
 		}
 		
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
