@@ -4,7 +4,6 @@ import sutInterface.SutWrapper;
 import util.InputAction;
 import util.OutputAction;
 import de.ls5.jlearn.abstractclasses.LearningException;
-import de.ls5.jlearn.interfaces.Oracle;
 import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.interfaces.Word;
 import de.ls5.jlearn.shared.SymbolImpl;

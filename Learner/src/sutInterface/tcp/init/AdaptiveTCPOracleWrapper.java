@@ -19,6 +19,8 @@ import de.ls5.jlearn.shared.WordImpl;
 
 /**
  * Implementation of an oracle which resolves the init state of the query before executing.
+ * Unfortunately, because it has no interaction with the TCP mapper, it is difficult to enable it
+ * to clean used connections.
  */
 public class AdaptiveTCPOracleWrapper implements Oracle {
 

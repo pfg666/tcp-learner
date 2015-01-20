@@ -3,7 +3,6 @@ package sutInterface.tcp.init;
 import sutInterface.tcp.Flag;
 import sutInterface.tcp.Symbol;
 import sutInterface.tcp.TCPMapper;
-import util.Log;
 
 /**
  * Similar to the functional init oracle, but unlike it, the partial oracle doesn't always know the 

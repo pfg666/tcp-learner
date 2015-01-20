@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import learner.Statistics;
-
-import sutInterface.tcp.Flag;
 import sutInterface.tcp.Packet;
-import sutInterface.tcp.Symbol;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
 import util.InputAction;
@@ -15,6 +12,16 @@ import util.Log;
 import util.OutputAction;
 import util.exceptions.BugException;
 
+/**
+ * The adaptive oracle works by sending a distinguishing input whenever it is unsure if
+ * the system state is the listening state. A syn packet is used for distinguishing. Whenever
+ * this probe syn packet is acknowledged, it means that the system is in the listening state.
+ * 
+ * Sending the SYN request changes the system state. To restore it, the whole trace is rerun up 
+ * to the current input or the system is reset.
+ * 
+ * Sometimes, we can get the is listening information cheaply by calling a partial oracle. 
+ */
 public class AdaptiveInitOracle implements InitOracle {
 	private final TCPSutWrapper tcpWrapper;
 	// used to buffer all the packets we send to the SUT.
@@ -84,7 +91,6 @@ public class AdaptiveInitOracle implements InitOracle {
 		Log.info("Sending SYN with random seq.");
 		OutputAction output = tcpWrapper.sendInput(new InputAction("SYN(RAND,RAND)"));
 		String outputString = output.getValuesAsString();
-		Packet outputPacket = new Packet(outputString);
 		// it was in the listening state (init is ok, so the seq and ack values should have been updated)
 		if(outputString.contains("SYN+ACK") && clone.lastAckReceived == clone.lastSeqSent + 1) {//outputPacket.flags.is(Flag.SYN, Flag.ACK)) {
 			Log.info("SYN acknowledged, we were in the list state.");

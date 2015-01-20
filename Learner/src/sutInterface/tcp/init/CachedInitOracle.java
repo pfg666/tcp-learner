@@ -7,6 +7,10 @@ import java.util.List;
 import sutInterface.tcp.TCPMapper;
 import util.Log;
 
+/**
+ * An init oracle based on cache. If the init state after executing a trace is found in 
+ * the cache, it is returned, otherwise the oracle returns null.
+ */
 public class CachedInitOracle implements InitOracle {
 	private List<String> inputs = new ArrayList<String>();
 	private InitCacheManager initCache;
