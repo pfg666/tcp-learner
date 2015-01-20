@@ -7,7 +7,8 @@ public enum Flag {
 	ACK,
 	RST,
 	FIN,
-	PSH;
+	PSH,
+	_;
 	
 	public char initial() {
 		return name().charAt(0);
@@ -19,7 +20,11 @@ public enum Flag {
 			String uppedFlags = flags.toUpperCase();
 			String[] flagStrings = uppedFlags.split("\\+");
 			for (String flagString : flagStrings) {
-				flagSet.add(Flag.valueOf(flagString));
+				if(flagString.equals("_")) {
+					flagSet.add(Flag._);
+				} else {
+					flagSet.add(Flag.valueOf(flagString));
+				}
 			}
 		}
 		return flagSet;
@@ -34,5 +39,13 @@ public enum Flag {
 			}
 		}
 		return searchedFlag;
+	}
+	
+	public boolean matches(Flag flag) {
+		return this.equals(flag) || flag == Flag._;
+	}
+	
+	public boolean matches(String flag) {
+		return this.equals(flag) || Flag._.equals(flag);
 	}
 }

@@ -15,6 +15,8 @@ public class Statistics {
 	public int totalMemQueries = 0;
 	public int totalTimeMemQueries = 0;
 	public int totalTimeEquivQueries = 0;
+	public int totalQueriesSavedByPartialOracle = 0;
+	public int totalAdditionalQueriesByAdaptiveOracle = 0;
 	public int runs = 0;
 	
 	public void printStats(PrintStream statsOut) {
@@ -34,5 +36,17 @@ public class Statistics {
 		statsOut
 				.println("Total Membership queries in Equivalence query: "
 						+ totalEquivQueries);
+		
+		if (totalQueriesSavedByPartialOracle != 0) {
+			statsOut
+			.println("Total queries that were not executed because of the Partial Oracle: "
+					+ totalQueriesSavedByPartialOracle);
+		}
+		
+		if (totalAdditionalQueriesByAdaptiveOracle != 0) {
+			statsOut
+			.println("Total queries that were executed because of the Adaptive Oracle: "
+					+ totalAdditionalQueriesByAdaptiveOracle);
+		}
 	}
 }

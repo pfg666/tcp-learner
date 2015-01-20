@@ -3,6 +3,8 @@ package sutInterface.tcp.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.exceptions.BugException;
+
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.interfaces.Oracle;
 import de.ls5.jlearn.interfaces.Word;
@@ -18,9 +20,8 @@ public class InvCheckOracleWrapper implements Oracle{
 	@Override
 	public Word processQuery(Word input) throws LearningException {
 		Word output =  this.oracle.processQuery(input);
-		
 		if(!invCheck(output)) {
-			System.exit(0);
+			throw new BugException("Detected invalid in output trace " + output);
 		}
 		return output;
 	}

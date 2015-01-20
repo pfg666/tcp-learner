@@ -6,7 +6,7 @@ import sutInterface.tcp.TCPMapper;
 import util.Log;
 
 /**
- * An initial state oracle which works for Windows 8 and Linux for a limited alphabet. When this function is applied on the mapper,
+ * An initial state oracle designed to work for Windows 8 and Linux for a very limited alphabet. When this function is applied on the mapper,
  * it should tell if the sut is in the initial state (hence, all numbers in the follow up input are valid) or it's isn't (and only
  * a limited selection is valid)
  * 
@@ -15,25 +15,21 @@ import util.Log;
  * 
  * If you use this, remove RST+ACK(V,INV) as an input and it should work. 
  */
-public class FunctionInitOracle implements InitOracle{
+public class FunctionalInitOracle implements InitOracle{
 	
 	/***
 	 *  resetting function for Windows 8
 	 */
-	public boolean isResetting(TCPMapper mapper) {
+	public Boolean isResetting(TCPMapper mapper) {
 		boolean isInitial = false;
+		
 		if(mapper.isLastResponseTimeout) {
-            isInitial = (mapper.lastFlagsSent.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) ||
+            isInitial = (mapper.lastPacketSent.flags.has(Flag.RST) && mapper.lastPacketSent.seq.is(Symbol.V)) ||
                             mapper.isInit; 
 	    } else {
-	            isInitial = (mapper.lastFlagsReceived.has(Flag.RST) && mapper.lastAbstractSeqSent.is(Symbol.V)) &&
-	                            mapper.lastFlagsSent.has(Flag.SYN);
+	            isInitial = (mapper.lastPacketReceived.flags.has(Flag.RST) && mapper.lastPacketSent.seq.is(Symbol.V)) &&
+	                            mapper.lastPacketSent.flags.has(Flag.SYN);
 	    }
-//		if(mapper.isLastResponseTimeout) {
-//			isInitial = mapper.isInit || mapper.lastFlagsReceived.has(Flag.SYN, Flag.ACK);
-//		} else {
-//			isInitial = mapper.isInit;
-//		} 
 		Log.info("Is initial state: " + isInitial);
 		return isInitial;
 	}

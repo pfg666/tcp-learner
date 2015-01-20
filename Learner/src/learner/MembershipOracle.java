@@ -10,7 +10,7 @@ import de.ls5.jlearn.interfaces.Word;
 import de.ls5.jlearn.shared.SymbolImpl;
 import de.ls5.jlearn.shared.WordImpl;
 
-public class MembershipOracle implements Oracle {
+public class MembershipOracle implements ExtendedOracle {
 	private static final long serialVersionUID = -1374892499287788040L;
 	private SutWrapper sutWrapper;
 
@@ -23,24 +23,31 @@ public class MembershipOracle implements Oracle {
 		Word result = new WordImpl();
 
 		sutWrapper.sendReset();
-		InputAction input;
-		OutputAction output;
 		
 		System.out.println("Membership query number: " + ++Statistics.getStats().totalMemQueries);
+		System.out.println("Query: " + query);
 
 		for (Symbol currentSymbol : query.getSymbolList()) {
-			input = new InputAction(currentSymbol.toString());
-			
-			System.out.println("Sending: " + input);
-
-			output = sutWrapper.sendInput(input);
-			System.out.println("Received: " + output.toString());
-
-			result.addSymbol(new SymbolImpl(output.getValuesAsString()));
+			String outputString = sendInput(currentSymbol.toString());
+			result.addSymbol(new SymbolImpl(outputString));
 		}
 
 		System.out.println("Returning to LearnLib: " + result);
 
 		return result;
+	}
+	
+	public String sendInput(String inputString) {
+		InputAction input = new InputAction(inputString);
+		System.out.println("Sending: " + inputString);
+
+		OutputAction output = sutWrapper.sendInput(input);
+		if (output != null) {
+			String outputString = output.getValuesAsString();
+			System.out.println("Received: " + outputString);
+			return outputString;
+		} else {
+			return null;
+		}
 	}
 }

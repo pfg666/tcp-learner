@@ -3,7 +3,7 @@ package sutInterface.tcp;
 import java.util.HashSet;
 
 
-public enum Action {
+public enum Action implements TCPMessage{
 	LISTEN, 
 	ACCEPT, 
 	CLOSESERVER, 
@@ -18,5 +18,14 @@ public enum Action {
 		  }
 
 		  return values;
+	}
+	
+	public static boolean isAction(String message)  {
+		for(Action action : Action.values()) {
+			if(action.name().equalsIgnoreCase(message)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

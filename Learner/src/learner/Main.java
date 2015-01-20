@@ -20,19 +20,21 @@ import sutInterface.SutWrapper;
 import sutInterface.tcp.LearnResult;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
+import sutInterface.tcp.init.AdaptiveCachedInitOracle;
+import sutInterface.tcp.init.AdaptiveInitOracle;
 import sutInterface.tcp.init.AdaptiveTCPOracleWrapper;
 import sutInterface.tcp.init.CachedInitOracle;
-import sutInterface.tcp.init.FunctionInitOracle;
+import sutInterface.tcp.init.FunctionalInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
 import sutInterface.tcp.init.InvCheckOracleWrapper;
 import sutInterface.tcp.init.LogOracleWrapper;
+import sutInterface.tcp.init.PartialInitOracle;
 import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.angluin.Angluin;
-import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
 import de.ls5.jlearn.exceptions.ObservationConflictException;
 import de.ls5.jlearn.interfaces.Automaton;
@@ -59,6 +61,7 @@ public class Main {
 	public static PrintStream errOut;
 	public static PrintStream statsOut;
 	private static boolean done;
+	public static Config config;
 
 	public static void main(String[] args) throws LearningException, IOException {
 
@@ -67,6 +70,7 @@ public class Main {
 		setupOutput(outputDir);
 
 		Config config = createConfig();
+		Main.config = config;
 
 		SutInterface sutInterface = createSutInterface(config);
 	
@@ -181,9 +185,9 @@ public class Main {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				closeOutputStreams();
+				InitCacheManager mgr = new InitCacheManager();
+				mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				if (done == false) {
-					InitCacheManager mgr = new InitCacheManager();
-					mgr.dump(outputDir + File.separator +  "cache.txt"); 
 					SoundUtils.failure();
 				}
 			}
@@ -287,7 +291,7 @@ public class Main {
 		
 		// in a normal init-oracle ("functional") TCP setup, we use the conventional eq/mem oracles
 		if(! "adaptive".equalsIgnoreCase(tcp.oracle)) {
-			InitOracle initOracle = new FunctionInitOracle();
+			InitOracle initOracle = new FunctionalInitOracle();
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
 			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
@@ -299,12 +303,17 @@ public class Main {
 		// it updates the init status in a cache
 		// a CachedInitOracle will then read from this cache and is used by the mapper instead of the FunctionInitOracle
 		else {
-			InitCacheManager cacheManager = new InitCacheManager();
-			InitOracle initOracle = new CachedInitOracle(cacheManager);
-			TCPMapper tcpMapper = new TCPMapper(initOracle);
+			TCPMapper tcpMapper = new TCPMapper();
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
-			eqOracleRunner = new InvCheckOracleWrapper(new AdaptiveTCPOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)), cacheManager));
-			memOracleRunner = new InvCheckOracleWrapper(new AdaptiveTCPOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)), cacheManager));
+			InitOracle initOracle = new AdaptiveInitOracle(tcp.sutPort, new PartialInitOracle());
+			tcpMapper.setInitOracle(initOracle);
+			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)));
+			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)));
+			
+//			TCPMapper tcpMapper = new TCPMapper( new CachedInitOracle(new InitCacheManager()));
+//			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
+//			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), new InitCacheManager())));
+//			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), new InitCacheManager())));
 		}
 		
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);

@@ -3,8 +3,11 @@ package sutInterface.tcp.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import learner.ExtendedOracle;
+
 import sutInterface.tcp.Flag;
 import sutInterface.tcp.FlagSet;
+import sutInterface.tcp.Internal;
 import util.Log;
 import util.exceptions.BugException;
 import de.ls5.jlearn.abstractclasses.LearningException;
@@ -15,12 +18,12 @@ import de.ls5.jlearn.shared.SymbolImpl;
 import de.ls5.jlearn.shared.WordImpl;
 
 /**
- * If the initOracle is adaptive, we can only run the trace once we have init info for all its subtraces. 
+ * Implementation of an oracle which resolves the init state of the query before executing.
  */
 public class AdaptiveTCPOracleWrapper implements Oracle {
 
 	private static final long serialVersionUID = 1L;
-	private Oracle basicOracle;
+	private ExtendedOracle basicOracle;
 	private InitCacheManager cacheManager;
 	// stores the last output before the distinguishing input is applied, so 
 	// we don't have run the trace all over again
@@ -28,7 +31,7 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 	// stores the last init value, used when processing the "non changer inputs"
 	private boolean lastInitValue;
 
-	public AdaptiveTCPOracleWrapper(Oracle oracle, InitCacheManager cacheManager) {
+	public AdaptiveTCPOracleWrapper(ExtendedOracle oracle, InitCacheManager cacheManager) {
 		this.basicOracle = oracle;
 		this.cacheManager = cacheManager;
 	}
@@ -78,7 +81,7 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 	private boolean getInitForTrace(List<String> subTrace) throws LearningException{
 		boolean init;
 		//if (isChangeCandidate(subTrace)) {;
-			init = getInitForChangeCandidate(subTrace);
+		init = getInitForChangeCandidate(subTrace);
 //		} else {
 //			init = getInitForNonChanger(subTrace);
 //		}
@@ -110,6 +113,9 @@ public class AdaptiveTCPOracleWrapper implements Oracle {
 		Log.info("extended trace output: " + lastOutput);
 		String distOutputExpr = "((ACK\\+SYN)|(SYN\\+ACK)).*"; //\\(FRESH,(?!FRESH).*"; // hard
 		boolean isResetting = lastOutput.matches(distOutputExpr);
+		if (isResetting == false) {
+			basicOracle.sendInput(Internal.REVERT.toString());
+		}
 		return isResetting;
 	}
 	
