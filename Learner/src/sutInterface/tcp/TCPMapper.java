@@ -13,7 +13,7 @@ import util.exceptions.BugException;
  */
 
 public class TCPMapper {
-	public static final long NOT_SET = -1;
+	public static final long NOT_SET = Integer.MIN_VALUE;
 	public static final long DATA_LENGTH = 4;
 	public static final long WIN_SIZE = 8192;
 
@@ -24,6 +24,10 @@ public class TCPMapper {
 	public long lastSeqReceived;
 	public Packet lastPacketSent;
 	public Packet lastPacketReceived;
+	
+	/* strings updated for all requests (actions, packets) and responses (timeout, packets) */
+	public String lastMessageSent;
+	public String lastMessageReceived;
 	
 	/* The only purpose of this is to inform the cache init oracle of the last action sent */
 	public Action lastActionSent;
@@ -120,6 +124,7 @@ public class TCPMapper {
 		this.lastSeqSent = concreteSeq;
 		this.lastAckSent = concreteAck;
 		this.lastPacketSent = new Packet(flags, abstractSeq, abstractAck);
+		this.lastMessageSent = this.lastPacketSent.serialize();
 
 		/* build concrete input */
 		String concreteInput = Serializer.concreteMessageToString(flags,
@@ -133,6 +138,7 @@ public class TCPMapper {
 	
 	public void processOutgoingAction(Action action) {
 		this.lastActionSent = action;
+		this.lastMessageSent = action.name();
 	}
 	
 	private long newInvalidWithinWindow(long refNumber) {
@@ -187,7 +193,11 @@ public class TCPMapper {
 		if (this.isInit == true) {
 			nextAck = Calculator.newValue();
 		} else {
-			nextAck = Calculator.next(this.serverSeq);
+			if (this.lastPacketReceived != null) {
+				nextAck = Calculator.nth(this.serverSeq, this.lastPacketReceived.payload());
+			} else {
+				nextAck = this.serverSeq;
+			}
 		}
 		return nextAck;
 	}
@@ -195,6 +205,8 @@ public class TCPMapper {
 	public void processIncomingTimeout() {
 		/* state 0 detecting condition */
 		this.isLastResponseTimeout = true;
+		this.lastMessageReceived = "TIMEOUT";
+		this.lastPacketReceived = null;
 		this.isInit = checkInit();
 	}
 	
@@ -208,7 +220,7 @@ public class TCPMapper {
 		if (abstractAck == Symbol.SNCLIENTP1 || abstractAck == Symbol.SNCLIENTPD) {
 			this.clientSeq = concreteAck;
 		}
-		if (abstractSeq == Symbol.FRESH) { //|| abstractSeq == Symbol.SNSERVERP1) {
+		if (abstractSeq == Symbol.FRESH || abstractSeq == Symbol.SNSERVERP1) {
 			this.serverSeq = concreteSeq;
 		}
 		
@@ -217,6 +229,7 @@ public class TCPMapper {
 		this.lastSeqReceived = concreteSeq; 
 		this.lastAckReceived = concreteAck;
 		this.lastPacketReceived = new Packet(flags, abstractSeq, abstractAck);
+		this.lastMessageReceived = this.lastPacketReceived.serialize();
 		this.isInit = checkInit();
 
 		/* build concrete output */

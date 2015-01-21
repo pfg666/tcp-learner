@@ -21,6 +21,10 @@ public class Packet implements TCPMessage {
 		this.ack = Symbol.valueOf(parts[2]);
 	}
 	
+	public int payload() {
+		return (flags.has(Flag.FIN)? 0 : 1) + (flags.has(Flag.SYN)? 0 : 1);
+	}
+	
 	public String toString() {
 		return flags + "(" + seq + "," + ack + ")";
 	}

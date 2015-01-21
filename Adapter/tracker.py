@@ -11,6 +11,7 @@ from response import ConcreteResponse, Timeout
 # some responses.
 class Tracker(threading.Thread):
     serverPort = 0
+    senderPort = 0
     pcap = None
     interface = 'eth0'
     decoder = None
@@ -19,19 +20,18 @@ class Tracker(threading.Thread):
     readTimeout = 1 # in milliseconds
     isStopped = False
     lastResponse = None
-    lastResponses = list()
+    lastResponses = dict()
     
-    def __init__ (self,interface,  serverPort, serverIp, interfaceType=InterfaceType.Ethernet, readTimeout = 1):
+    def __init__ (self,interface, serverIp, interfaceType=InterfaceType.Ethernet, readTimeout = 1):
         super(Tracker, self).__init__()
         self.interface = interface
-        self.serverPort = serverPort
         self.decoder = self.getDecoder(interfaceType) # Wireless not yet supported
         self._stop = threading.Event()
         self.daemon = True
         self.readTimeout = readTimeout
         self.serverIp = serverIp
         self.lastResponse = None
-        self.lastResponses = list()
+        self.lastResponses = dict()
         
     def getDecoder(self, interfaceType):
         if interfaceType == InterfaceType.Ethernet:
@@ -48,9 +48,6 @@ class Tracker(threading.Thread):
     def isStopped(self):
         return self._stop.isSet()
     
-    def setServerPort(self, serverPort):
-        self.serverPort = serverPort
-        
     # This is method is called periodically by pcapy
     def callback(self,hdr,data):
         if self.isStopped() == True:
@@ -64,24 +61,24 @@ class Tracker(threading.Thread):
     #       Due to the filter used, all packets should use TCP
                 src_ip = l2.get_ip_src()
                 dst_ip = l2.get_ip_dst()
-                tcp_dst_port = l3.get_th_sport()
-                tcp_src_port = l3.get_th_dport()
+                tcp_src_port = l3.get_th_sport()
+                tcp_dst_port = l3.get_th_dport()
                 tcp_syn = l3.get_th_seq()
                 tcp_ack = l3.get_th_ack()
-    #            print str(src_ip)
-                if l3.get_th_sport() == self.serverPort:
-                    lastResponse = self.impacketResponseParse(l3)
-                    self.processResponse(lastResponse)
+                response = self.impacketResponseParse(l3)
+                self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
+                self.lastResponse = response
     #                print "tracker:" + self.impacketResponseParse(l3).__str__()
 
     def processResponse(self, response):
         if response is not None:
+            self.lastResponse = response
             if response.flags == "SA" and response in self.lastResponses:
                 print 'ignoring SA retransmission ' + response.__str__()
             else:
                 print 'non SA-ret packet:' + response.__str__()
-                self.lastResponses.append(response)
-                self.lastResponse = response
+#                self.lastResponses.append(response)
+#                self.lastResponse = response
 
 
     # MAKE SURE the order of checking/appending characters is the same here as it is in the sender
@@ -103,28 +100,26 @@ class Tracker(threading.Thread):
     # this is done because when learning, we only care about one port
     def clearLastResponse(self):
         self.lastResponse = None
+        self.lastResponses.clear()
     
     def reset(self):
         self.clearLastResponse()
-        self.lastResponses = list()
     
     # fetches the last response from an active port. If no response was sent, then it returns Timeout
-    def getLastResponse(self, requestSN = None):
-        print 'tracker response query'
-        lastResponse = None
-    
-        # no new responses intercepted
-        if self.lastResponse is None:
-            lastResponse = None
-        else:
-            if  requestSN is None or requestSN <= self.lastResponse.ack:
-                lastResponse = self.lastResponse
-            else:
-                if len(self.lastResponses) > 0:
-                    for response in reversed(self.lastResponses):
-                        if response.seq <= requestSN:
-                            lastResponse = response
-                            break
+    def getLastResponse(self, serverPort, senderPort, requestSN = None):
+        lastResponse = self.lastResponses.get((serverPort,senderPort))
+        if lastResponse is None:
+            lastResponse = Timeout()
+        return lastResponse
+#        else:
+#            if  requestSN is None or requestSN <= self.lastResponse.ack:
+#                lastResponse = self.lastResponse
+#            else:
+#                if len(self.lastResponses) > 0:
+#                    for response in reversed(self.lastResponses):
+#                        if response.seq <= requestSN:
+#                            lastResponse = response
+#                            break
         return lastResponse
     
     def run(self):

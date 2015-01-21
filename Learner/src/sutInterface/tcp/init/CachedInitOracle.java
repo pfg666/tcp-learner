@@ -2,7 +2,9 @@ package sutInterface.tcp.init;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import sutInterface.tcp.TCPMapper;
 import util.Log;
@@ -81,6 +83,14 @@ public class CachedInitOracle implements InitOracle {
 	protected void storeTrace(boolean value) {
 		initCache.storeTrace(getInputs(), value);
 		Log.info("STORING " + getTrace() + " for trace " + inputs);
+	}
+	
+	protected void checkTrace(List<String> input, List<String> output) {
+		initCache.checkTrace(input.toArray(new String[output.size()]), output.toArray(new String[output.size()]));
+	}
+	
+	protected void checkTrace(List<String> output) {
+		initCache.checkTrace(getInputs(), output.toArray(new String[output.size()]));
 	}
 
 }

@@ -9,6 +9,10 @@ public enum Action implements TCPMessage{
 	CLOSESERVER, 
 	CLOSECONNECTION;
 	
+	public String serialize() {
+		return this.name();
+	}
+	
 	public static HashSet<String> getActionStrings() {
 
 		  HashSet<String> values = new HashSet<String>();

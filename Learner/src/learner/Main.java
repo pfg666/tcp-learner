@@ -32,6 +32,7 @@ import util.SoundUtils;
 import util.Tuple2;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.angluin.Angluin;
+import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
 import de.ls5.jlearn.exceptions.ObservationConflictException;
 import de.ls5.jlearn.interfaces.Automaton;
@@ -89,7 +90,8 @@ public class Main {
 		eqOracle.setOracle(tcpOracles.tuple1);
 		eqOracle.setRandom(random);
 
-		learner = new Angluin();
+		learner = new ObservationPack();
+		//learner = new Angluin();
 		learner.setOracle(tcpOracles.tuple0);
 
 		learner.setAlphabet(SutInfo.generateInputAlphabet());

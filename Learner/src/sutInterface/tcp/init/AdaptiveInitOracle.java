@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import learner.Statistics;
-import sutInterface.tcp.Packet;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
 import util.InputAction;
@@ -21,18 +20,23 @@ import util.exceptions.BugException;
  * to the current input or the system is reset.
  * 
  * Sometimes, we can get the is listening information cheaply by calling a partial oracle. 
+ * 
  */
 public class AdaptiveInitOracle implements InitOracle {
 	private final TCPSutWrapper tcpWrapper;
 	// used to buffer all the packets we send to the SUT.
-	private List<Packet> inputBuffer;
+	private List<String> inputBuffer;
+	private List<String> outputCheckBuffer;
+	private List<String> inputCheckBuffer;
 	private CachedInitOracle cachedOracle;
 	private InitOracle partialOracle;
 	
 	public AdaptiveInitOracle(int sutPort ) {
 		this.tcpWrapper = new TCPSutWrapper(sutPort);
 		this.cachedOracle = new CachedInitOracle(new InitCacheManager());
-		this.inputBuffer = new ArrayList<Packet>(); 
+		this.inputBuffer = new ArrayList<String>();
+		this.outputCheckBuffer = new ArrayList<String>(); 
+		this.inputCheckBuffer = new ArrayList<String>();
 		this.partialOracle = null;
 	}
 	
@@ -44,7 +48,10 @@ public class AdaptiveInitOracle implements InitOracle {
 	
 
 	public Boolean isResetting(TCPMapper mapper) {
-		inputBuffer.add(mapper.lastPacketSent);
+		inputBuffer.add(mapper.lastMessageSent);
+		inputCheckBuffer.add(mapper.lastMessageSent);
+		outputCheckBuffer.add(mapper.lastMessageReceived);
+		cachedOracle.checkTrace(inputCheckBuffer, outputCheckBuffer);
 		Boolean isResetting = getInitFromCache(mapper);
 		if (isResetting == null) {
 			isResetting = getInitFromPartialOracle(mapper);
@@ -58,7 +65,6 @@ public class AdaptiveInitOracle implements InitOracle {
 				//storeInitToCache(isResetting);
 			}
 		}
-		
 		return isResetting;
 	}
 	
@@ -124,6 +130,8 @@ public class AdaptiveInitOracle implements InitOracle {
 
 	public void setDefault() {
 		inputBuffer.clear();
+		inputCheckBuffer.clear();
+		outputCheckBuffer.clear();
 		cachedOracle.setDefault();
 	}
 	
@@ -141,10 +149,10 @@ public class AdaptiveInitOracle implements InitOracle {
 		Log.info("Restoring SUT to state before SYN by running:" + inputBuffer);
 		tcpWrapper.setMapper(mapper);
 		// we need to store this in a buffer, on default the input buffer is cleared.
-		List<Packet> copyInputBuffer = new ArrayList<Packet>(inputBuffer);
+		List<String> copyInputBuffer = new ArrayList<String>(inputBuffer);
 		mapper.setDefault();
-		for(Packet input : copyInputBuffer) {
-			tcpWrapper.sendInput(new InputAction(input.serialize())); 
+		for(String input : copyInputBuffer) {
+			tcpWrapper.sendInput(new InputAction(input)); 
 		}
 	}
 	

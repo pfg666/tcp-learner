@@ -48,7 +48,7 @@ class Sender:
                 self.useTracking = False
             else:
                 from tracker import Tracker
-                self.tracker = Tracker(self.networkInterface, self.serverPort, self.serverIP)
+                self.tracker = Tracker(self.networkInterface, self.serverIP)
                 self.tracker.start()
         else:
             self.tracker = None
@@ -59,7 +59,7 @@ class Sender:
     # chooses a new port to send packets from
     def refreshNetworkPort(self):
         print("previous local port: " + str(self.senderPort))
-        self.senderPort = self.getNextPort()
+        self.setSenderPort(self.getNextPort())
         print("next local port: " + str(self.senderPort)+"\n")
         return self.senderPort
 
@@ -71,7 +71,8 @@ class Sender:
         if line == '' or int(line) < self.senderPortMinimum:
             networkPort = self.senderPortMinimum
         else:
-            networkPort = (int(line)+1)%self.senderPortMaximum
+            senderPortRange = self.senderPortMaximum - self.senderPortMinimum
+            networkPort = self.senderPortMinimum + (int(line) + 1) % senderPortRange 
         f.closed
         f = open(self.portNumberFile, "w")
         f.write(str(networkPort))
@@ -93,8 +94,9 @@ class Sender:
     
     def setServerPort(self, newPort):
         self.serverPort = newPort;
-        if self.useTracking == True:
-            self.tracker.setServerPort(newPort)
+            
+    def setSenderPort(self, newPort):
+        self.senderPort = newPort
     
     # function that creates packet from data strings/integers
     def createPacket(self, tcpFlagsSet, seqNr, ackNr, destIP = None, destPort = None, srcPort = None,
@@ -141,10 +143,10 @@ class Sender:
             response = None
             if self.useTracking == True:
                 if packet is None:
-                    response = self.tracker.getLastResponse()
+                    response = self.tracker.getLastResponse(self.serverPort, self.senderPort)
                 else:
                     # timeout case, return the response (if caught) by the tracker and missed by scapy
-                    response = self.tracker.getLastResponse(packet.seq)
+                    response = self.tracker.getLastResponse(self.serverPort, self.senderPort, packet.seq)
                 if response is not None:
                     captureMethod = "tracker"
                 else:

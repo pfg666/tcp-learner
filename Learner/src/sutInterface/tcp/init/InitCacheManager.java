@@ -21,6 +21,7 @@ public class InitCacheManager {
 	private static final String SEP = "_";
 	private static final String SEP2 = " ";
 	private static final Map<String, Boolean> cachedTraces = new LinkedHashMap<String, Boolean>();
+	private static final Map<String, String> cachedResults = new LinkedHashMap<String, String>();
 
 	public InitCacheManager() {
 
@@ -44,6 +45,21 @@ public class InitCacheManager {
 			throw new BugException(" Inconsistency detected in Cache Manager for trace " + inputs);
 		} else {
 			storeTrace(inputs.toArray(new String[inputs.size()]), initValue);
+		}
+	}
+	
+	public void checkTrace(String[] inputs, String[] outputs) {
+		String inputTrace = buildTraceEntry(inputs);
+		String outputTrace = buildTraceEntry(outputs); 
+		if(cachedResults.containsKey(inputTrace)) {
+			if(!cachedResults.get(inputTrace).equalsIgnoreCase(outputTrace)) {
+				Log.err("Non determinism for input trace: " + inputTrace);
+				Log.err("First got: " + cachedResults.get(inputTrace));
+				Log.err("Now got: " + outputTrace);
+				System.exit(0);
+			}
+		} else {
+			cachedResults.put(inputTrace, outputTrace);
 		}
 	}
 
