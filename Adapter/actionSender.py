@@ -85,8 +85,8 @@ class ActionSender:
         if self.isAction(inputString):
             self.cmdSocket.send(inputString + "\n") # TODO race-condition here, might go wrong: 
             response = self.sender.captureResponse() # response might arrive before sender is ready
-            cmdResponse = self.cmdSocket.recv(1024)
-            print "server adapter response: " + cmdResponse
+            #cmdResponse = self.cmdSocket.recv(1024)
+            #print "server adapter response: " + cmdResponse
         else:
             print inputString + " not a valid action ( it is not one of: " + str(self.actions) + ")"
         return response

@@ -50,10 +50,16 @@ public class TraceRunner {
 			return;
 		}
 		ListIterator<String> it = trace.listIterator();
+		System.out.println("TRACE FILE: ");
+		int i = 1;
 		while(it.hasNext()) {
 			String line = it.next();
+			System.out.print((i++) + ": " + line);
 			if (line.startsWith("#") || line.isEmpty()) {
 				it.remove();
+				System.out.println(" (skipped)");
+			} else {
+				System.out.println();
 			}
 		}
 		int iterations;
@@ -63,7 +69,7 @@ public class TraceRunner {
 		} catch (NumberFormatException e) {
 			iterations = 1;
 		}
-		Log.fatal("Start running trace");
+		Log.fatal("Start running trace " + iterations + " times");
 
 		Main.setupOutput("trace runner output.txt");
 		Config config = Main.createConfig();
@@ -84,8 +90,8 @@ public class TraceRunner {
 		TCPSutWrapper sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
 		sutWrapper.setExitOnInvalidParameter(false);
 		TraceRunner traceRunner = new TraceRunner(trace, sutWrapper);
-		for (int i = 0; i < iterations; i++) {
-			traceRunner.runTrace();
+		for (i = 0; i < iterations; i++) {
+			traceRunner.runTrace((i+1));
 		}
 		sutWrapper.close();
 		System.out.println(traceRunner.results());
@@ -123,13 +129,18 @@ public class TraceRunner {
 		this.sutWrapper = sutWrapper;
 	}
 	
-	protected void runTrace() {
+	protected void runTrace(int number) {
 		List<String> outcome = new LinkedList<String>();
 		sutWrapper.sendReset();
 		for (InputAction input : inputTrace) {
 			OutputAction output;
-			output = this.sutWrapper.sendInput(input);
-			System.out.println(" >>> " + input + " >>> " + output);
+			if (input.getMethodName().equals("reset")) {
+				this.sutWrapper.sendReset();
+				output = new OutputAction("RESET");
+			} else {
+				output = this.sutWrapper.sendInput(input);
+			}
+			System.out.println("# " + number + " >>> " + input + " >>> " + output);
 			outcome.add(output.toString());
 		}
 		Integer currentCounter = outcomes.get(outcome);

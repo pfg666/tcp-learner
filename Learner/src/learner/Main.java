@@ -52,8 +52,8 @@ public class Main {
 	public static PrintStream learnOut;
 	public static PrintStream errOut;
 	public static PrintStream statsOut;
-
-	public static void main(String[] args) throws FileNotFoundException, LearningException {
+	
+	public static void main(String[] args) throws FileNotFoundException, LearningException {		
 		handleArgs(args);
 		
 		setupOutput(outputDir);
@@ -87,8 +87,7 @@ public class Main {
 		SutInfo.generateOutputAlphabet();
 		
 		learnResult = learn(learner, eqOracle);
-
-
+		
 
 		// final output to out.txt
 		learnOut.println("Seed: " + seedStr);
@@ -117,13 +116,25 @@ public class Main {
 		highlights.add(startState);
 		BufferedWriter out = null;
 		
-		
+		writeDotFiles(learnResult, highlights, out);
+
+		errOut.println("Learner Finished!");
+
+		// bips to notify that learning is done :)
+		try {
+			SoundUtils.announce();
+		} catch (Exception e) {
+			
+		}
+	}
+
+	private static void writeDotFiles(LearnResult learnResult,
+			LinkedList<State> highlights, BufferedWriter out) {
 		// output learned state machine as dot and pdf file :
 		//File outputFolder = new File(outputDir + File.separator + learnResult.startTime);
 		//outputFolder.mkdirs();
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
-
 		
 		try {
 			out = new BufferedWriter(new FileWriter(dotFile));
@@ -145,15 +156,6 @@ public class Main {
 
 		// write pdf
 		DotUtil.invokeDot(dotFile, "pdf", pdfFile);
-
-		errOut.println("Learner Finished!");
-
-		// bips to notify that learning is done :)
-		try {
-			SoundUtils.announce();
-		} catch (Exception e) {
-			
-		}
 	}
 	
 	public static void setupOutput(String outputDir) throws FileNotFoundException {
