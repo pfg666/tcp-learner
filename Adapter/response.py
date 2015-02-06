@@ -3,7 +3,7 @@ class Response(object):
     resType = ""
     def __init__(self, resType):
         self.resType = resType
-    def serialize(self):
+    def __str__(self):
         return "NOT_IMPLEMENTED"
     def hasFlags(self):
         return False
@@ -20,18 +20,26 @@ class ConcreteResponse(Response):
         self.ack = ack
         self.flags = flags
 
-    def serialize(self):
+    def __str__(self):
         outputString = self.flags + " " + str(self.seq) + " " + str(self.ack)
         return outputString
     
+    def __eq__(self, other):
+        equ = False
+        if other is not None and type(other) is ConcreteResponse:  
+            equ = (self.flags == other.flags) and (self.ack == other.ack) 
+            equ = equ and (self.seq == other.seq)
+        return equ
+
     def hasFlags(self):
         return True
+
 
 # timeouts are used if no packets are returned
 class Timeout(Response):
     def __init__(self):
         super(Timeout, self).__init__("TIMEOUT")
-    def serialize(self):
+    def __str__(self):
         outputString = "timeout"
         return  outputString
 
@@ -39,12 +47,14 @@ class Timeout(Response):
 class Undefined(Response):
     def __init__(self):
         super(Undefined, self).__init__("UNDEFINED")
-    def serialize(self):
+    def __str__(self):
         outputString = "undefined"
         return  outputString
 
 if __name__ == "__main__":
     response = ConcreteResponse("ss",10,20)
-    print response.serialize()
     timeout = Timeout()
-    print timeout.serialize()
+    l = [response, timeout]
+    l.append(timeout)
+    l.append(timeout)
+    print len(l)

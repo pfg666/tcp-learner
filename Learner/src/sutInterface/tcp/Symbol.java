@@ -20,7 +20,8 @@ public enum Symbol {
 	IWIN,
 	OWIN,
 	WIN,
-	UNDEFINED ;
+	UNDEFINED,
+	_;
 	
 	public String toString(){
 		return this.name().replace('P', '+');
@@ -32,6 +33,14 @@ public enum Symbol {
 	
 	public boolean equals(String str) {
 		return this.toString().compareToIgnoreCase(str) == 0;
+	}
+	
+	public boolean matches(Symbol symbol) {
+		return this.equals(symbol) || symbol == Symbol._;
+	}
+	
+	public boolean matches(String symbol) {
+		return this.equals(symbol) || Symbol._.equals(symbol);
 	}
 	
 	public static Symbol toSymbol(String str) {

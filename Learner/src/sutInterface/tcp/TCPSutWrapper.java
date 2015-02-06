@@ -1,6 +1,7 @@
 package sutInterface.tcp;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import sutInterface.SocketWrapper;
 import sutInterface.SutWrapper;
@@ -12,35 +13,53 @@ import util.OutputAction;
 // Unlike SimpleSutWrapper, all communication is directed through a mapper component
 public class TCPSutWrapper implements SutWrapper{
 
-	private final SocketWrapper socketWrapper;
+	private final static Map<Integer,SocketWrapper> socketWrapperMap = new HashMap<Integer, SocketWrapper>();
 	private TCPMapper mapper;
-	private boolean exitIfInvalid = true;
-	private static final Set<String> ACTION_COMMANDS = Action.getActionStrings();
+	private TCPMapper previousMapper;
+	private final SocketWrapper socketWrapper;
 	
-	private TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
-		this.socketWrapper = new SocketWrapper(tcpServerPort);
+	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
+		this(tcpServerPort);
 		this.mapper = mapper;
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				Log.fatal("Detected shutdown, commencing connection "+ 
-						socketWrapper + " termination");
-				if (socketWrapper != null) {
-					try {
-						Log.fatal("Sending an exit message to the adapter");
-						socketWrapper.writeInput("exit");
-					} finally {
-						Log.fatal("Closing the socket");
-						socketWrapper.close();
+	}
+	
+	public TCPSutWrapper(int tcpServerPort) {
+		if(socketWrapperMap.containsKey(tcpServerPort)) {
+			this.socketWrapper = socketWrapperMap.get(tcpServerPort); 
+		} else {
+			this.socketWrapper = new SocketWrapper(tcpServerPort);
+			socketWrapperMap.put(tcpServerPort,this.socketWrapper);
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				public void run() {
+					Log.fatal("Detected shutdown, commencing connection "+ 
+							socketWrapper + " termination");
+					if (socketWrapper != null) {
+						try {
+							Log.fatal("Sending an exit message to the adapter");
+							socketWrapper.writeInput("exit");
+						} finally {
+							Log.fatal("Closing the socket");
+							socketWrapper.close();
+						}
 					}
 				}
-			}
-		});
+			});
+		}
+		
 	}
 	
 	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper, boolean exitIfInvalid) {
 		this(tcpServerPort, mapper);
-		this.exitIfInvalid = exitIfInvalid;
 	}
+	
+	private static TCPSutWrapper tcpWrapper = null;
+	public static void setTCPSutWrapper(TCPSutWrapper tcpWrapper) {
+		TCPSutWrapper.tcpWrapper  = tcpWrapper;
+	}
+	public static TCPSutWrapper getTCPSutWrapper() {
+		return TCPSutWrapper.tcpWrapper;
+	}
+	
 
 	public void setMapper(TCPMapper mapper) {
 		this.mapper = mapper;
@@ -50,21 +69,29 @@ public class TCPSutWrapper implements SutWrapper{
 		return mapper;
 	}
 	
-	public void setExitOnInvalidParameter(boolean exitWhenInvalid) {
-		this.exitIfInvalid = exitWhenInvalid;
-	}
-	
 	public OutputAction sendInput(InputAction symbolicInput) {
 		OutputAction symbolicOutput;
+		previousMapper = mapper.clone();
 		
 		// Build concrete input
 		String abstractRequest = symbolicInput.getValuesAsString(); 
 		String concreteRequest;
+		
+		// Internal inputs are handled first. They have no effect on the system
+		if(Internal.isInternalCommand(abstractRequest)) {
+			if(Internal.valueOf(abstractRequest) == Internal.REVERT) {
+				mapper = previousMapper;
+				sendReset();
+				return null;
+			} 
+		}
 
+		
+		Log.info("MAPPER BEFORE:" + mapper.getState());
 		// processing of action-commands
 		// note: mapper is not updated with action commands
 		
-		if(ACTION_COMMANDS.contains(abstractRequest)) {
+		if(Action.isAction(abstractRequest)) {
 			getMapper().processOutgoingAction(Action.valueOf(abstractRequest));
 			concreteRequest = abstractRequest.toLowerCase();
 		}
@@ -72,6 +99,8 @@ public class TCPSutWrapper implements SutWrapper{
 		else {
 			concreteRequest = processOutgoingPacket(abstractRequest);
 		}
+		
+		
 		
 		// Handle non-concretizable abstract input case
 		if(concreteRequest.equalsIgnoreCase(Symbol.UNDEFINED.name())) {
@@ -83,6 +112,7 @@ public class TCPSutWrapper implements SutWrapper{
 			String abstractResponse = processIncomingPacket(concreteResponse);
 			symbolicOutput = new OutputAction(abstractResponse);
 		}
+		Log.info("MAPPER AFTER:" + mapper.getState());
 		
 		return symbolicOutput;
 	}
@@ -94,9 +124,12 @@ public class TCPSutWrapper implements SutWrapper{
 	public void sendReset() {
 		Log.info("******** RESET ********");
 		String rstMessage = mapper.processOutgoingReset();
-		socketWrapper.writeInput(rstMessage);
+		// mapper made a pertinent reset message
+		if(rstMessage != null) {
+			socketWrapper.writeInput(rstMessage);
+			socketWrapper.readOutput();
+		}
 		socketWrapper.writeInput("reset");
-		socketWrapper.readOutput();
 		mapper.setDefault();
 	}
 	
@@ -150,10 +183,6 @@ public class TCPSutWrapper implements SutWrapper{
 			long ackReceived = Long.parseLong(inputValues[2]);
 			abstractResponse = mapper.processIncomingResponse(flags,
 					seqReceived, ackReceived);
-			if(abstractResponse.contains(Symbol.INV.name()) && this.exitIfInvalid) {
-				Log.err("Bumped into an invalid symbol. Abstract Response = " + abstractResponse + ". Exiting...");
-				System.exit(0);
-			}
 		}
 		return abstractResponse;
 	}

@@ -20,15 +20,18 @@ import sutInterface.SutWrapper;
 import sutInterface.tcp.LearnResult;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
-import sutInterface.tcp.init.AdaptiveTCPOracleWrapper;
-import sutInterface.tcp.init.CachedInitOracle;
-import sutInterface.tcp.init.FunctionInitOracle;
+import sutInterface.tcp.init.AdaptiveInitOracle;
+import sutInterface.tcp.init.FunctionalInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
+import sutInterface.tcp.init.InvCheckOracleWrapper;
+import sutInterface.tcp.init.LogOracleWrapper;
+import sutInterface.tcp.init.PartialInitOracle;
 import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
 import de.ls5.jlearn.abstractclasses.LearningException;
+import de.ls5.jlearn.algorithms.angluin.Angluin;
 import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
 import de.ls5.jlearn.exceptions.ObservationConflictException;
@@ -45,30 +48,36 @@ import de.ls5.jlearn.util.DotUtil;
 public class Main {
 	private static File sutConfigFile = null;
 	private static LearningParams learningParams;
-	private static long seed = System.currentTimeMillis();
+	private static long seed = 178208038;
 	private static String seedStr = Long.toString(seed);
-	private static String outputDir = "output" + File.separator + System.currentTimeMillis();
+	private static final long timeSnap = System.currentTimeMillis();
+	private static final String outputDir = "output" + File.separator + timeSnap;
 	private static File outputFolder;
 	public static PrintStream learnOut;
+	public static PrintStream tcpOut;
+	public static PrintStream stdOut = System.out;
 	public static PrintStream errOut;
 	public static PrintStream statsOut;
-	
-	public static void main(String[] args) throws FileNotFoundException, LearningException {		
+	private static boolean done;
+	public static Config config;
+
+	public static void main(String[] args) throws LearningException, IOException {
 		handleArgs(args);
 		
 		setupOutput(outputDir);
 
-		Log.fatal("Start Learning");
-
 		Config config = createConfig();
+		Main.config = config;
 
 		SutInterface sutInterface = createSutInterface(config);
 	
 		TCPParams tcp = readConfig(config, sutInterface);
 		
+		Log.setLogLevel(tcp.logLevel);
 		
 		// first is the membership, second is the equivalence oracle
-		Tuple2<Oracle,Oracle> tcpOracles = createOraclesFromConfig(tcp);
+		Tuple2<Oracle,Oracle> tcpOracles = buildOraclesFromConfig(tcp);
+		
 		
 		Learner learner;
 
@@ -81,6 +90,7 @@ public class Main {
 		eqOracle.setRandom(random);
 
 		learner = new ObservationPack();
+		//learner = new Angluin();
 		learner.setOracle(tcpOracles.tuple0);
 
 		learner.setAlphabet(SutInfo.generateInputAlphabet());
@@ -90,9 +100,9 @@ public class Main {
 		
 
 		// final output to out.txt
-		learnOut.println("Seed: " + seedStr);
+		tcpOut.println("Seed: " + seedStr);
 		errOut.println("Seed: " + seedStr);
-		learnOut.println("Done.");
+		tcpOut.println("Done.");
 		errOut.println("Successful run.");
 
 		// output needed for equivalence checking
@@ -122,7 +132,7 @@ public class Main {
 
 		// bips to notify that learning is done :)
 		try {
-			SoundUtils.announce();
+			SoundUtils.success();
 		} catch (Exception e) {
 			
 		}
@@ -158,11 +168,15 @@ public class Main {
 		DotUtil.invokeDot(dotFile, "pdf", pdfFile);
 	}
 	
-	public static void setupOutput(String outputDir) throws FileNotFoundException {
+	
+	public static void setupOutput(final String outputDir) throws FileNotFoundException {
 		outputFolder = new File(outputDir);
 		outputFolder.mkdirs();
+		tcpOut = new PrintStream(
+				new FileOutputStream(outputDir + File.separator + "tcpLog.txt", false));
+		
 		learnOut = new PrintStream(
-				new FileOutputStream(outputDir + File.separator + "log.txt", false));
+				new FileOutputStream(outputDir + File.separator + "learnLog.txt", false));
 		
 		errOut = System.err;
 		
@@ -171,57 +185,71 @@ public class Main {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				closeOutputStreams();
+				InitCacheManager mgr = new InitCacheManager();
+				mgr.dump(outputDir + File.separator +  "cache.txt"); 
+				if (done == false) {
+					SoundUtils.failure();
+				}
 			}
 		});
 	}
 
 	public static LearnResult learn(Learner learner,
 			de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle)
-			throws LearningException, ObservationConflictException {
+			throws LearningException, ObservationConflictException, IOException {
 		LearnResult learnResult = new LearnResult();
 		Statistics stats = Statistics.getStats();
 		stats.startTime = System.currentTimeMillis();
 		long starttmp = stats.startTime;
 		int hypCounter = 0;
-		int memQueries = 0;
 		long endtmp;
-		boolean done = false;
-		learnOut.println("starting learning\n");
+		done = false;
+
+		Log.fatal("Start Learning");
+		tcpOut.println("starting learning\n");
 		//try {
 			while (!done) {
-				learnOut.println("		RUN NUMBER: " + ++stats.runs);
-				learnOut.println("");
-				learnOut.flush();
+				tcpOut.println("		RUN NUMBER: " + ++stats.runs);
+				tcpOut.println("");
+				tcpOut.flush();
 				errOut.flush();
 
 				// execute membership queries
 				learner.learn();
-				learnOut.flush();
+				tcpOut.flush();
 				errOut.flush();
-				learnOut.println("done learning");
+				tcpOut.println("done learning");
 				endtmp = System.currentTimeMillis();
 				statsOut
 						.println("Running time of membership queries: "
 								+ (endtmp - starttmp) + "ms.");
 				stats.totalTimeMemQueries += endtmp - starttmp;
 				starttmp = System.currentTimeMillis();
-				learnOut.flush();
+				tcpOut.flush();
 
 				// stable hypothesis after membership queries
 				Automaton hyp = learner.getResult();
-				DotUtil.writeDot(hyp, new File(outputDir + File.separator + "tmp-learnresult"
-						+ hypCounter++ + ".dot"));
+				String hypString = outputDir + File.separator + "tmp-learnresult"
+						+ hypCounter++ + ".dot";
+				String hypStringPdf = outputDir + File.separator + "tmp-learnresult"
+						+ hypCounter++ + ".pdf";
+				
+				File hypDot = new File(hypString);
+				File hypPDF = new File(hypStringPdf);
+				BufferedWriter out = new BufferedWriter(new FileWriter(new File(hypString)));
+				DotUtil.writeDot(hyp, out);
+				DotUtil.invokeDot(hypDot, "pdf", hypPDF);
 
-				learnOut.println("starting equivalence query");
-				learnOut.flush();
+				tcpOut.println("starting equivalence query");
+				tcpOut.flush();
 				errOut.flush();
 				// search for counterexample
 				EquivalenceOracleOutput o = eqOracle
 						.findCounterExample(hyp);
 	
-				learnOut.flush();
+				tcpOut.flush();
 				errOut.flush();
-				learnOut.println("done equivalence query");
+				tcpOut.println("done equivalence query");
 				endtmp = System.currentTimeMillis();
 				stats.totalTimeEquivQueries += endtmp - starttmp;
 				starttmp = System.currentTimeMillis();
@@ -230,17 +258,17 @@ public class Main {
 				if (o == null) {
 					done = true;
 					continue;
-				}
-				learnOut.println("Sending CE to LearnLib.");
-				learnOut.println("Counter Example: "
+				} 
+				tcpOut.println("Sending CE to LearnLib.");
+				tcpOut.println("Counter Example: "
 						+ o.getCounterExample().toString());
-				learnOut.flush();
+				tcpOut.flush();
 				errOut.flush();
 				// return counter example to the learner, so that it can use
 				// it to generate new membership queries
 				learner.addCounterExample(o.getCounterExample(),
 						o.getOracleOutput());
-				learnOut.flush();
+				tcpOut.flush();
 				errOut.flush();
 			}
 		stats.endTime = System.currentTimeMillis();
@@ -250,11 +278,12 @@ public class Main {
 	
 	private static void closeOutputStreams() {
 		statsOut.close();
+		tcpOut.close();
 		learnOut.close();
 		errOut.close();
 	}
 	
-	private static Tuple2<Oracle, Oracle> createOraclesFromConfig(TCPParams tcp) {
+	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
 		// setup tcp oracles/wrappers
 		SutWrapper sutWrapper = null;
 		Oracle eqOracleRunner = null;
@@ -262,11 +291,11 @@ public class Main {
 		
 		// in a normal init-oracle ("functional") TCP setup, we use the conventional eq/mem oracles
 		if(! "adaptive".equalsIgnoreCase(tcp.oracle)) {
-			InitOracle initOracle = new FunctionInitOracle();
+			InitOracle initOracle = new FunctionalInitOracle();
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
-			eqOracleRunner = new EquivalenceOracle(sutWrapper);
-			memOracleRunner = new MembershipOracle(sutWrapper);
+			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)));
 		} 
 		
 		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class
@@ -274,12 +303,17 @@ public class Main {
 		// it updates the init status in a cache
 		// a CachedInitOracle will then read from this cache and is used by the mapper instead of the FunctionInitOracle
 		else {
-			InitCacheManager cacheManager = new InitCacheManager();
-			InitOracle initOracle = new CachedInitOracle(cacheManager);
-			TCPMapper tcpMapper = new TCPMapper(initOracle);
+			TCPMapper tcpMapper = new TCPMapper();
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
-			eqOracleRunner = new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), cacheManager);
-			memOracleRunner = new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), cacheManager);
+			InitOracle initOracle = new AdaptiveInitOracle(tcp.sutPort, new PartialInitOracle());
+			tcpMapper.setInitOracle(initOracle);
+			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)));
+			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)));
+			
+//			TCPMapper tcpMapper = new TCPMapper( new CachedInitOracle(new InitCacheManager()));
+//			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
+//			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), new InitCacheManager())));
+//			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), new InitCacheManager())));
 		}
 		
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
@@ -288,7 +322,7 @@ public class Main {
 	public static TCPParams readConfig(Config config, SutInterface sutInterface) {
 		// read/disp config params for learner
 		learningParams = config.learningParams;
-		learningParams.printParams(learnOut);
+		learningParams.printParams(tcpOut);
 
 		// read sut interface information
 		SutInfo.setMinValue(learningParams.minValue);
@@ -297,12 +331,12 @@ public class Main {
 		SutInfo.setInputSignatures(sutInterface.inputInterfaces);
 		SutInfo.setOutputSignatures(sutInterface.outputInterfaces);
 
-		LearnLog.addAppender(new PrintStreamLoggingAppender(LogLevel.INFO,
+		LearnLog.addAppender(new PrintStreamLoggingAppender(LogLevel.DEBUG,
 				learnOut));
 
 		// read/disp TCP config
 		TCPParams tcp = config.tcpParams;
-		tcp.printParams(learnOut);
+		tcp.printParams(tcpOut);
 		return tcp;
 	}
 
@@ -344,4 +378,5 @@ public class Main {
 				.println(" config_file     - .yaml config file describing the sut/learning.");
 	}
 }
+
 

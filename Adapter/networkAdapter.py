@@ -1,3 +1,4 @@
+from time import sleep
 __author__ = 'paul,ramon'
 import socket
 from select import select
@@ -115,11 +116,16 @@ class Adapter:
     # response, extracts the relevant parameters and sends them back to the learner
     def handleInput(self, sender):
         self.sender = sender
+        count = 0
         while (True):
             input1 = self.receiveInput()
             print "received input " + input1
             seqNr = 0
             ackNr = 0
+            count = (count + 1) % 1000
+            if count == 999:
+                sleep(5)
+            
             if input1 == "reset":
                 print "Received reset signal."
                 self.sender.sendReset()
@@ -152,8 +158,8 @@ class Adapter:
                     self.fault("invalid input " + input1)
                 
                 if response is not None:
-                    print 'received ' + response.serialize() + "\n"
-                    self.sendOutput(response.serialize())
+                    print 'received ' + response.__str__() + "\n"
+                    self.sendOutput(response.__str__())
                 else:
                     print "received timeout"
                     self.sendOutput("timeout")

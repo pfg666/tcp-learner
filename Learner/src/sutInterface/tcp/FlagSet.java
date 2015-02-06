@@ -1,14 +1,15 @@
 package sutInterface.tcp;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class FlagSet {
 	public static final FlagSet EMPTY = new FlagSet();
 	private Set<Flag> flagSet;
 	public FlagSet() {
-		this.flagSet = new LinkedHashSet<Flag>();
+		this.flagSet = new TreeSet<Flag>();
 	}
 	public FlagSet(Flag... flags) {
 		this();
@@ -46,11 +47,13 @@ public class FlagSet {
 	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		result.append("{");
+		
 		for (Flag flag : flagSet) {
-			result.append(flag.name()); 
+			result.append(flag.name());
+			result.append("+");
 		}
-		result.append("}");
+		result.setLength(result.length()-1);
+		result.trimToSize();
 		return result.toString();
 	}
 	
@@ -63,4 +66,24 @@ public class FlagSet {
 		boolean hasAllFlags = has(flags) && flags.length == this.flagSet.size();
 		return hasAllFlags;
 	}
+	
+	public int size() {
+		return this.flagSet.size();
+	}
+	
+	public boolean matches(FlagSet flags) {
+		boolean match = true;
+		if(flags != null && this.size() == flags.size()) {
+			Iterator<Flag> otherFlags = flags.flagSet.iterator();
+            for (Flag thisFlags : this.flagSet) {
+                match = thisFlags.matches(otherFlags.next());
+                if (match  == false) 
+                	break;
+            }
+		} else {
+			match = false;
+		} 
+		return match;
+	}
+
 }

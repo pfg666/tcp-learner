@@ -5,6 +5,7 @@ import java.io.PrintStream;
 public class LearningParams {
 	// params for learning
 	public String sutInterface;
+	public String algorithm = "Angluin";
 	public int maxValue;
 	public int minValue;
 	public long seed;

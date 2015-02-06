@@ -6,10 +6,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import util.Log;
+import util.exceptions.BugException;
 
 /***
  * Provides trace state storing and fetching over a global static trace map.
@@ -18,7 +20,8 @@ import util.Log;
 public class InitCacheManager {
 	private static final String SEP = "_";
 	private static final String SEP2 = " ";
-	private static final Map<String, Boolean> cachedTraces = new HashMap<String, Boolean>();
+	private static final Map<String, Boolean> cachedTraces = new LinkedHashMap<String, Boolean>();
+	private static final Map<String, String> cachedResults = new LinkedHashMap<String, String>();
 
 	public InitCacheManager() {
 
@@ -37,12 +40,30 @@ public class InitCacheManager {
 		return builder.toString();
 	}
 
-	public void storeTrace(List<String> inputs, Boolean initValue) {
-		Log.info("storing init " + initValue + " for trace " + inputs);
-		storeTrace(inputs.toArray(new String[inputs.size()]), initValue);
+	public void storeTrace(List<String> inputs, boolean initValue) {
+		if(hasTrace(inputs) && !getTrace(inputs).equals(initValue)) {
+			throw new BugException(" Inconsistency detected in Cache Manager for trace " + inputs);
+		} else {
+			storeTrace(inputs.toArray(new String[inputs.size()]), initValue);
+		}
+	}
+	
+	public void checkTrace(String[] inputs, String[] outputs) {
+		String inputTrace = buildTraceEntry(inputs);
+		String outputTrace = buildTraceEntry(outputs); 
+		if(cachedResults.containsKey(inputTrace)) {
+			if(!cachedResults.get(inputTrace).equalsIgnoreCase(outputTrace)) {
+				Log.err("Non determinism for input trace: " + inputTrace);
+				Log.err("First got: " + cachedResults.get(inputTrace));
+				Log.err("Now got: " + outputTrace);
+				System.exit(0);
+			}
+		} else {
+			cachedResults.put(inputTrace, outputTrace);
+		}
 	}
 
-	public void storeTrace(String[] inputs, Boolean initValue) {
+	public void storeTrace(String[] inputs, boolean initValue) {
 		String trace = buildTraceEntry(inputs);
 		cachedTraces.put(trace, initValue);
 	}

@@ -2,12 +2,17 @@ package sutInterface.tcp.init;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import sutInterface.Serializer;
 import sutInterface.tcp.TCPMapper;
-import util.exceptions.BugException;
+import util.Log;
 
+/**
+ * An init oracle based on cache. If the init state after executing a trace is found in 
+ * the cache, it is returned, otherwise the oracle returns null.
+ */
 public class CachedInitOracle implements InitOracle {
 	private List<String> inputs = new ArrayList<String>();
 	private InitCacheManager initCache;
@@ -24,28 +29,30 @@ public class CachedInitOracle implements InitOracle {
 	 */
 	// TODO This taking the mapper and building the last input sent is not
 	// pretty.
-	public boolean isResetting(TCPMapper mapper) {
-		boolean isResetting = false;
+	public Boolean isResetting(TCPMapper mapper) {
+		Boolean isResetting = false;
 		String input;
-		if(!mapper.isLastInputAnAction)
-			input = Serializer.abstractMessageToString(mapper.lastFlagsSent,
-					mapper.lastAbstractSeqSent, mapper.lastAbstractAckSent);
+		if (!mapper.isLastInputAnAction)
+			input = mapper.lastPacketSent.serialize();
 		else 
 			input = mapper.lastActionSent.toString();
 		append(input);
-		if (getTrace() != null) {
-			isResetting = getTrace();
+		Log.info("FETCHING init for trace " + inputs);
+		isResetting = getTrace();
+		if (isResetting != null) { 
+			Log.info("TRACE FOUND " + isResetting);
+			if (isResetting) {
+				Log.info("defaulting");
+				setDefault();
+			}
 		} else {
-			initCache.display();
-			new BugException("Could not find trace in cache");
-		}
-		if (isResetting) {
-			setDefault();
+			Log.info("TRACE NOT FOUND");
 		}
 		return isResetting;
 	}
 	
 	public void setDefault() {
+		Log.info("DEFAULTED");
 		inputs.clear();
 	}
 
@@ -75,12 +82,15 @@ public class CachedInitOracle implements InitOracle {
 
 	protected void storeTrace(boolean value) {
 		initCache.storeTrace(getInputs(), value);
+		Log.info("STORING " + getTrace() + " for trace " + inputs);
 	}
-
-	public static void main(String[] args) {
-		System.out.println("ACK+SYN(FRESH,V)"
-				.matches("((ACK\\+SYN)|(SYN\\+ACK))\\((?!FRESH).*"));
-		;
+	
+	protected void checkTrace(List<String> input, List<String> output) {
+		initCache.checkTrace(input.toArray(new String[output.size()]), output.toArray(new String[output.size()]));
+	}
+	
+	protected void checkTrace(List<String> output) {
+		initCache.checkTrace(getInputs(), output.toArray(new String[output.size()]));
 	}
 
 }

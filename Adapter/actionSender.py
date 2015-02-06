@@ -1,6 +1,5 @@
 #from socketAdapter import SocketAdapter
 import socket
-from time import sleep
 
 # extends sender functionality with higher level commands
 class ActionSender:
@@ -23,7 +22,7 @@ class ActionSender:
         if self.cmdSocket is None:
             cmdSocket = socket.create_connection((self.cmdIp, self.cmdPort))
             cmdSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-            cmdSocket.settimeout(2)
+            cmdSocket.settimeout(60)
             print "python connected to server Adapter at " + self.cmdIp + " " + (str(self.cmdPort))
             #self.cmdSocket = SocketAdapter(cmdSocket)
             self.cmdSocket = cmdSocket

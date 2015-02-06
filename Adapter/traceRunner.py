@@ -51,7 +51,7 @@ class TraceRunner:
         else:
             if type(response) is Timeout:
                 self.getMapper().processIncomingTimeout()
-            responseString = response.serialize().upper()
+            responseString = response.__str__().upper()
         return responseString
     
     def sendConcreteRequest(self, concreteRequest):
@@ -66,11 +66,10 @@ class TraceRunner:
     def validReset(self):
         validSeq = self.getMapper().getNextValidSeq()
         self.getSender().sendValidReset(validSeq)
+        self.getMapper().setDefault()
     
     # resets by changing ports on the sender.
     def reset(self):
-
-        print self.getMapper()
         self.getMapper().setDefault()
         self.getSender().sendReset()
     
@@ -79,6 +78,7 @@ class TraceRunner:
         self.startJava()
         self.sender = sender
         count = 0
+        lineNum = 0
         lastResponse = None # stores the last response abstract response
         
         for i in range(0, self.runNum):
@@ -88,6 +88,7 @@ class TraceRunner:
             self.reset() # just to make sure everything is well initialized
             
             for line in open(tracePath, "r"):
+                lineNum = lineNum + 1
                 if count>0:
                     count -= 1
                     continue
@@ -108,7 +109,7 @@ class TraceRunner:
                 if line[0] == "!":
                     expectedResponse = line[1:]
                     if self.compare(expectedResponse, lastResponse) == False:
-                        print "Error: expected " + expectedResponse + " got " + lastResponse
+                        print "Error line " + str(lineNum) + ": expected " + expectedResponse + " got " + lastResponse 
                         self.shutdown()
                         return 
                     else:
@@ -175,7 +176,7 @@ class TraceRunner:
         elif len(parts) == 1: 
             line = line.lower().replace("\n","") # removes excess baggage
             if line == "reset":
-                self.getSender().sendReset()
+                self.reset()
             elif "sendAction" in dir(self.getSender()) and "isAction" in dir(self.getSender()):
                 if self.getSender().isAction(line):
                     concreteResponse = self.getSender().sendAction(line)
