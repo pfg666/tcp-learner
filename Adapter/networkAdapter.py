@@ -107,7 +107,10 @@ class Adapter:
     def receiveNumber(self):
         inputString = self.receiveInput()
         if inputString.isdigit() == False:
-            self.fault("Received "+inputString + " but expected a number")
+            #if len(inputString) and inputString[1:].isdigit():
+            #    return int(inputString[1:])+2**32
+            #else:
+                self.fault("Received "+inputString + " but expected a number")
         else:
             return int(inputString)
 

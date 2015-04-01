@@ -25,7 +25,7 @@ public class FunctionalInitOracle implements InitOracle{
 		
 		if(mapper.isLastResponseTimeout) {
             isInitial = (mapper.lastPacketSent.flags.has(Flag.RST) && mapper.lastPacketSent.seq.is(Symbol.V)) ||
-                            mapper.isInit; 
+                            mapper.freshSeqEnabled; 
 	    } else {
 	            isInitial = (mapper.lastPacketReceived.flags.has(Flag.RST) && mapper.lastPacketSent.seq.is(Symbol.V)) &&
 	                            mapper.lastPacketSent.flags.has(Flag.SYN);

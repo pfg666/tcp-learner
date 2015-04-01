@@ -21,6 +21,7 @@ import sutInterface.tcp.LearnResult;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
 import sutInterface.tcp.init.AdaptiveInitOracle;
+import sutInterface.tcp.init.ClientInitOracle;
 import sutInterface.tcp.init.FunctionalInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
@@ -291,7 +292,12 @@ public class Main {
 		
 		// in a normal init-oracle ("functional") TCP setup, we use the conventional eq/mem oracles
 		if(! "adaptive".equalsIgnoreCase(tcp.oracle)) {
-			InitOracle initOracle = new FunctionalInitOracle();
+			InitOracle initOracle = null;
+			if("client".equalsIgnoreCase(tcp.oracle)) {
+				initOracle = new ClientInitOracle();
+			} else {
+				initOracle = new FunctionalInitOracle();
+			}
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
 			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));

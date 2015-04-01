@@ -1,6 +1,7 @@
 package sutInterface.tcp;
 
 import sutInterface.Serializer;
+import sutInterface.tcp.init.ClientInitOracle;
 import sutInterface.tcp.init.FunctionalInitOracle;
 import sutInterface.tcp.init.InitOracle;
 import util.Calculator;
@@ -13,7 +14,7 @@ import util.exceptions.BugException;
  */
 
 public class TCPMapper {
-	public static final long NOT_SET = Integer.MIN_VALUE;
+	public static final long NOT_SET = -3; //Integer.MIN_VALUE;
 	public static final long DATA_LENGTH = 4;
 	public static final long WIN_SIZE = 8192;
 
@@ -37,15 +38,18 @@ public class TCPMapper {
 	 * boolean state variables, determined from data variables and the current
 	 * values of the boolean variables
 	 */
-	public boolean isInit;
+	public boolean freshSeqEnabled;
+	public boolean freshAckEnabled;
 	public boolean startState;
 	public boolean isLastResponseTimeout;
+	public boolean isMessageOutgoing;
 	
 	
 	private InitOracle oracle;
 
 	public TCPMapper() {
-		this( new FunctionalInitOracle());
+		this( new ClientInitOracle());
+		//this( new FunctionalInitOracle());
 		//this( new CachedInitOracle(new InitCacheManager("/home/student/GitHub/tcp-learner/output/1421437324088/cache.txt")));
 	}
 	
@@ -66,9 +70,11 @@ public class TCPMapper {
 		mapper.lastPacketSent = this.lastPacketSent;
 		mapper.lastPacketReceived = this.lastPacketReceived;
 		mapper.lastActionSent = this.lastActionSent;
-		mapper.isInit = this.isInit;
+		mapper.freshSeqEnabled = this.freshSeqEnabled;
+		mapper.freshAckEnabled = this.freshAckEnabled;
 		mapper.isLastInputAnAction = this.isLastInputAnAction;
 		mapper.startState = this.startState;
+		mapper.isMessageOutgoing = this.isMessageOutgoing;
 		return mapper;
 	}
 	
@@ -90,18 +96,19 @@ public class TCPMapper {
 		this.lastSeqReceived = this.lastAckReceived = NOT_SET;
 		this.serverSeq = this.clientSeq = NOT_SET;
 		this.lastPacketSent = new Packet(FlagSet.EMPTY, Symbol.INV, Symbol.INV);
-		this.lastPacketReceived = new Packet(FlagSet.EMPTY, Symbol.INV, Symbol.INV);
-				
-		this.isInit = this.startState;
+		this.lastPacketReceived = new Packet(FlagSet.EMPTY, Symbol.INV, Symbol.INV);			
+		this.freshSeqEnabled = this.startState;
+		this.freshAckEnabled = this.startState;
 		this.isLastResponseTimeout = false;
 		this.isLastInputAnAction = false;
+		this.isMessageOutgoing = true;
 		if(this.oracle != null)
 			this.oracle.setDefault();
 	}
 
 	/* checks whether the abstractions are defined for the given inputs */
 	public boolean isConcretizable(Symbol abstractSeq, Symbol abstractAck) {
-		return !this.isInit || (!Symbol.INV.equals(abstractAck) && !Symbol.INV.equals(abstractSeq));
+		return !this.freshSeqEnabled || (!Symbol.INV.equals(abstractAck) && !Symbol.INV.equals(abstractSeq));
 	}
 	
 	public String processOutgoingRequest(FlagSet flags, Symbol abstractSeq,
@@ -118,14 +125,15 @@ public class TCPMapper {
 		long concreteAck = getConcrete(abstractAck, getNextValidAck());
 		
 		/* do updates on input */
-		if(this.isInit == true) {
+		if(this.freshSeqEnabled == true) {
 			this.clientSeq = concreteSeq;
 		}
 		this.lastSeqSent = concreteSeq;
 		this.lastAckSent = concreteAck;
 		this.lastPacketSent = new Packet(flags, abstractSeq, abstractAck);
 		this.lastMessageSent = this.lastPacketSent.serialize();
-
+		this.isMessageOutgoing = true;
+		this.freshSeqEnabled = checkInit();
 		/* build concrete input */
 		String concreteInput = Serializer.concreteMessageToString(flags,
 				concreteSeq, concreteAck);
@@ -139,6 +147,8 @@ public class TCPMapper {
 	public void processOutgoingAction(Action action) {
 		this.lastActionSent = action;
 		this.lastMessageSent = action.name();
+		this.isMessageOutgoing = true;
+		this.freshSeqEnabled = checkInit();
 	}
 	
 	private long newInvalidWithinWindow(long refNumber) {
@@ -180,7 +190,7 @@ public class TCPMapper {
 
 	public long getNextValidSeq() {
 		long nextSeq;
-		if (this.isInit == true) {
+		if (this.freshSeqEnabled == true) {
 			nextSeq = Calculator.newValue();
 		} else {
 			nextSeq = this.clientSeq;
@@ -190,7 +200,7 @@ public class TCPMapper {
 
 	public long getNextValidAck() {
 		long nextAck;
-		if (this.isInit == true) {
+		if (this.freshAckEnabled == true) {
 			nextAck = Calculator.newValue();
 		} else {
 			if (this.lastPacketReceived != null) {
@@ -207,14 +217,15 @@ public class TCPMapper {
 		this.isLastResponseTimeout = true;
 		this.lastMessageReceived = "TIMEOUT";
 		this.lastPacketReceived = null;
-		this.isInit = checkInit();
+		this.isMessageOutgoing = false;
+		this.freshAckEnabled = checkInit();
 	}
 	
 	public String processIncomingResponse(FlagSet flags, long concreteSeq,
 			long concreteAck) {
 		/* generate output symbols */
-		Symbol abstractSeq = getAbstract(concreteSeq);
-		Symbol abstractAck = getAbstract(concreteAck);
+		Symbol abstractSeq = getAbstract(concreteSeq, true);
+		Symbol abstractAck = getAbstract(concreteAck, false);
 		
 		/* do updates on output */
 		if (abstractAck == Symbol.SNCLIENTP1 || abstractAck == Symbol.SNCLIENTPD) {
@@ -230,7 +241,8 @@ public class TCPMapper {
 		this.lastAckReceived = concreteAck;
 		this.lastPacketReceived = new Packet(flags, abstractSeq, abstractAck);
 		this.lastMessageReceived = this.lastPacketReceived.serialize();
-		this.isInit = checkInit();
+		this.isMessageOutgoing = false;
+		this.freshAckEnabled = checkInit();
 
 		/* build concrete output */
 		String abstractOutput = Serializer.abstractMessageToString(
@@ -239,7 +251,7 @@ public class TCPMapper {
 		return abstractOutput;
 	}
 
-	private Symbol getAbstract(long nrReceived) {
+	private Symbol getAbstract(long nrReceived, boolean isIncomingSeq) {
 		Symbol checkedSymbol;
 		if (nrReceived == Calculator.next(this.clientSeq)) {
 			checkedSymbol = Symbol.SNCLIENTP1;
@@ -259,7 +271,9 @@ public class TCPMapper {
 			checkedSymbol = Symbol.ANSENT;
 		} else if (nrReceived == 0) {
 			checkedSymbol = Symbol.ZERO;
-		} else if (this.isInit) {
+		} else if (isIncomingSeq == false && this.freshSeqEnabled) {
+			checkedSymbol = Symbol.FRESH;
+		} else if (isIncomingSeq == true && this.freshAckEnabled) {
 			checkedSymbol = Symbol.FRESH;
 		} else {
 			checkedSymbol = Symbol.INV;
@@ -277,7 +291,8 @@ public class TCPMapper {
 	}
 
 	public String getState() {
-		return "MAPPER [INIT=" + this.isInit + "; " +
+		return "MAPPER [FRESH_SEQ=" + this.freshSeqEnabled + "; " +
+				"FRESH_ACK=" + this.freshAckEnabled + "; " +
 				"lastSeqSent=" + this.lastSeqSent + 
 				"; lastAckSent=" + this.lastAckSent + 
 				"; clientSeq=" + this.clientSeq + 
@@ -342,7 +357,7 @@ public class TCPMapper {
 //		sb.append("lastAbstractAckSent: " + lastAbstractAckSent + "   ");
 //		sb.append("lastAbstractSeqReceived: " + lastAbstractSeqReceived + "   ");
 //		sb.append("lastAbstractAckReceived: " + lastAbstractAckReceived + "   ");
-		sb.append("isInit: " + isInit + "   ");
+		sb.append("isInit: " + freshSeqEnabled + "   ");
 		sb.append("isLastResponseTimeout: " + isLastResponseTimeout + "   ");
 		/*
 		 * boolean state variables, determined from data variables and the current

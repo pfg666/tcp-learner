@@ -20,7 +20,7 @@ public class PartialInitOracle implements InitOracle{
 	    } else {
 	    	// if we send a packet without SYN or a RST flags, the init status shouldn't change
 	    	if( (!mapper.lastPacketSent.flags.has(Flag.SYN)) && (!mapper.lastPacketSent.flags.has(Flag.RST)) ) {
-	    		isInitial = mapper.isInit;
+	    		isInitial = mapper.freshSeqEnabled;
 	    	} else {
 	    		isInitial = null;
 	    	}

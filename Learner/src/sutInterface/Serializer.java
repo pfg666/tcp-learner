@@ -37,13 +37,16 @@ public class Serializer {
 	public static String abstractMessageToString(char[] flags,
 			String seqValidity, String ackValidity) {
 		StringBuilder result = new StringBuilder();
-
-		result.append(charToFlag(flags[0]));
-		for (int i = 1; i < flags.length; i++) {
-			result.append("+");
-			result.append(charToFlag(flags[i]));
+		if (flags.length != 0) {
+			result.append(charToFlag(flags[0]));
+			for (int i = 1; i < flags.length; i++) {
+				result.append("+");
+				result.append(charToFlag(flags[i]));
+			}
+		} else {
+			result.append("-");
 		}
-
+		
 		result.append("(");
 		result.append(seqValidity);
 		result.append(",");
