@@ -42,13 +42,13 @@ public class TCPMapper {
 	public boolean freshAckEnabled;
 	public boolean startState;
 	public boolean isLastResponseTimeout;
-	public boolean isMessageOutgoing;
 	
 	
 	private InitOracle oracle;
 
 	public TCPMapper() {
 		this( new ClientInitOracle());
+		setDefault();
 		//this( new FunctionalInitOracle());
 		//this( new CachedInitOracle(new InitCacheManager("/home/student/GitHub/tcp-learner/output/1421437324088/cache.txt")));
 	}
@@ -74,7 +74,6 @@ public class TCPMapper {
 		mapper.freshAckEnabled = this.freshAckEnabled;
 		mapper.isLastInputAnAction = this.isLastInputAnAction;
 		mapper.startState = this.startState;
-		mapper.isMessageOutgoing = this.isMessageOutgoing;
 		return mapper;
 	}
 	
@@ -101,7 +100,6 @@ public class TCPMapper {
 		this.freshAckEnabled = this.startState;
 		this.isLastResponseTimeout = false;
 		this.isLastInputAnAction = false;
-		this.isMessageOutgoing = true;
 		if(this.oracle != null)
 			this.oracle.setDefault();
 	}
@@ -132,8 +130,9 @@ public class TCPMapper {
 		this.lastAckSent = concreteAck;
 		this.lastPacketSent = new Packet(flags, abstractSeq, abstractAck);
 		this.lastMessageSent = this.lastPacketSent.serialize();
-		this.isMessageOutgoing = true;
-		this.freshSeqEnabled = checkInit();
+		
+		checkInit(true);
+		
 		/* build concrete input */
 		String concreteInput = Serializer.concreteMessageToString(flags,
 				concreteSeq, concreteAck);
@@ -147,8 +146,8 @@ public class TCPMapper {
 	public void processOutgoingAction(Action action) {
 		this.lastActionSent = action;
 		this.lastMessageSent = action.name();
-		this.isMessageOutgoing = true;
-		this.freshSeqEnabled = checkInit();
+		
+		checkInit(true);
 	}
 	
 	private long newInvalidWithinWindow(long refNumber) {
@@ -217,8 +216,7 @@ public class TCPMapper {
 		this.isLastResponseTimeout = true;
 		this.lastMessageReceived = "TIMEOUT";
 		this.lastPacketReceived = null;
-		this.isMessageOutgoing = false;
-		this.freshAckEnabled = checkInit();
+		checkInit(false);
 	}
 	
 	public String processIncomingResponse(FlagSet flags, long concreteSeq,
@@ -228,7 +226,7 @@ public class TCPMapper {
 		Symbol abstractAck = getAbstract(concreteAck, false);
 		
 		/* do updates on output */
-		if (abstractAck == Symbol.SNCLIENTP1 || abstractAck == Symbol.SNCLIENTPD) {
+		if (abstractAck == Symbol.SNCLIENTP1 || abstractAck == Symbol.SNCLIENTPD || freshAckEnabled) {
 			this.clientSeq = concreteAck;
 		}
 		if (abstractSeq == Symbol.FRESH || abstractSeq == Symbol.SNSERVERP1) {
@@ -237,17 +235,18 @@ public class TCPMapper {
 		
 		/* state 0 detecting condition */
 		this.isLastResponseTimeout = false;
-		this.lastSeqReceived = concreteSeq; 
+		this.lastSeqReceived = concreteSeq;
 		this.lastAckReceived = concreteAck;
 		this.lastPacketReceived = new Packet(flags, abstractSeq, abstractAck);
 		this.lastMessageReceived = this.lastPacketReceived.serialize();
-		this.isMessageOutgoing = false;
-		this.freshAckEnabled = checkInit();
 
 		/* build concrete output */
 		String abstractOutput = Serializer.abstractMessageToString(
 				flags, abstractSeq,
 				abstractAck);
+		
+		checkInit(false);
+		
 		return abstractOutput;
 	}
 
@@ -281,12 +280,25 @@ public class TCPMapper {
 		return checkedSymbol;
 	}
 	
-	protected boolean checkInit() {
-		Boolean isResetting = oracle.isResetting(this); 
+	protected void checkInit(boolean outgoing) {
+		/*Boolean isResetting = oracle.isResetting(this); 
 		if (isResetting == null) {
 			throw new BugException("Oracle doesn't know the init value");
 		} else {
 			return isResetting.booleanValue();
+		}*/
+		boolean sentRST = lastPacketSent.flags.has(Flag.RST);
+		boolean receivedRST = !isLastResponseTimeout && lastPacketReceived.flags.has(Flag.RST);
+		
+		if (freshSeqEnabled && lastAckReceived == lastSeqSent+1) {
+			freshSeqEnabled = false;
+		} else if (!freshSeqEnabled && (receivedRST || sentRST)) {
+			freshSeqEnabled = true;
+		}
+		if (receivedRST || sentRST) {
+			freshAckEnabled = true;
+		} else if (!outgoing && lastSeqReceived == lastAckSent) {
+			freshAckEnabled = false;
 		}
 	}
 
