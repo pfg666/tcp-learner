@@ -14,15 +14,15 @@ public class ClientInitOracle  implements InitOracle{
 	public Boolean isResetting(TCPMapper mapper) {
 		Boolean result = null;
 		
-		if (mapper.isMessageOutgoing) {
+		//if (mapper.isMessageOutgoing) {
 			boolean isFreshSeqEnabled = false;
 			// when can you send a fresh seq?
 			isFreshSeqEnabled = mapper.freshSeqEnabled && mapper.lastAckReceived != 0;
 			result = isFreshSeqEnabled;
-		} 
+		//} 
 		
 		
-		else {
+		//else {
 			boolean isFreshAckEnabled = false;
 			// when can you send a fresh ack?
 			if(mapper.isLastResponseTimeout) {
@@ -31,7 +31,7 @@ public class ClientInitOracle  implements InitOracle{
 				//isFreshAckEnabled = mapper.freshAckEnabled && mapper.;
 			}		
 			result = isFreshAckEnabled;
-		}
+		//}
 		Log.info("Is initial state: " + result);
 		return result;
 	}

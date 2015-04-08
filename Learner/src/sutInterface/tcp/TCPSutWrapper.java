@@ -99,8 +99,8 @@ public class TCPSutWrapper implements SutWrapper{
 		else {
 			concreteRequest = processOutgoingPacket(abstractRequest);
 		}
-		
-		
+
+		Log.info("MAPPER INTER:" + mapper.getState());
 		
 		// Handle non-concretizable abstract input case
 		if(concreteRequest.equalsIgnoreCase(Symbol.UNDEFINED.name())) {

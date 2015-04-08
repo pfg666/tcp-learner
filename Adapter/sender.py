@@ -18,7 +18,7 @@ class Sender:
     def __init__(self, serverMAC=None, serverIP="191.168.10.1", serverPort = 7991,
                  networkInterface="lo", networkInterfaceType=InterfaceType.Ethernet, senderPort=15000, senderPortMinimum=20000,
                  senderPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
-                 isVerbose=0, waitTime=0.006, resetMechanism=0):
+                 isVerbose=0, waitTime=0.02, resetMechanism=0):
         # data on sender and server needed to send packets 
         self.serverIP = serverIP
         self.serverPort = serverPort
