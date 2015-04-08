@@ -33,7 +33,6 @@ class ActionSender:
     
     def closeSockets(self):
         try:
-            print(self.cmdSocket)
             if self.cmdSocket is not None:
                 print "Telling server adapter to end session"
                 self.cmdSocket.send("exit\n")

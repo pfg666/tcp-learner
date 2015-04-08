@@ -90,8 +90,8 @@ public class Main {
 		eqOracle.setOracle(tcpOracles.tuple1);
 		eqOracle.setRandom(random);
 
-		learner = new ObservationPack();
-		//learner = new Angluin();
+		//learner = new ObservationPack();
+		learner = new Angluin();
 		learner.setOracle(tcpOracles.tuple0);
 
 		learner.setAlphabet(SutInfo.generateInputAlphabet());

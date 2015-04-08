@@ -169,6 +169,7 @@ class TraceRunner:
             ack = parts[2]
 
             concreteRequest = self.processRequest(flags, syn, ack)
+            print self.getMapper().getState()
             concreteResponse = self.sendConcreteRequest(concreteRequest)
             abstractResponse = self.processResponse(concreteResponse)
             

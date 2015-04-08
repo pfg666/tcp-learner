@@ -22,7 +22,7 @@ public class Packet implements TCPMessage {
 	}
 	
 	public int payload() {
-		return (flags.has(Flag.FIN)? 0 : 1) + (flags.has(Flag.SYN)? 0 : 1);
+		return (flags.has(Flag.FIN)? 1 : 0) + (flags.has(Flag.SYN)? 1 : 0);
 	}
 	
 	public String toString() {
