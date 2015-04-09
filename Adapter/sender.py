@@ -72,7 +72,10 @@ class Sender:
             networkPort = self.senderPortMinimum
         else:
             senderPortRange = self.senderPortMaximum - self.senderPortMinimum
-            networkPort = self.senderPortMinimum + (int(line) + 1) % senderPortRange 
+            if senderPortRange == 0:
+                networkPort = self.senderPortMinimum
+            else:
+                networkPort = self.senderPortMinimum + (int(line) + 1) % senderPortRange 
         f.closed
         f = open(self.portNumberFile, "w")
         f.write(str(networkPort))

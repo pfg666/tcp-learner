@@ -22,6 +22,7 @@ import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
 import sutInterface.tcp.init.AdaptiveInitOracle;
 import sutInterface.tcp.init.ClientInitOracle;
+import sutInterface.tcp.init.DeterminismCheckerOracleWrapper;
 import sutInterface.tcp.init.FunctionalInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
@@ -57,7 +58,7 @@ public class Main {
 	public static PrintStream learnOut;
 	public static PrintStream tcpOut;
 	public static PrintStream stdOut = System.out;
-	public static PrintStream errOut;
+	public static PrintStream errOut = System.err;
 	public static PrintStream statsOut;
 	private static boolean done;
 	public static Config config;
@@ -300,8 +301,8 @@ public class Main {
 			}
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
-			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)));
+			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
 		} 
 		
 		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class
@@ -313,8 +314,8 @@ public class Main {
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
 			InitOracle initOracle = new AdaptiveInitOracle(tcp.sutPort, new PartialInitOracle());
 			tcpMapper.setInitOracle(initOracle);
-			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)));
-			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)));
+			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))));
+			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
 			
 //			TCPMapper tcpMapper = new TCPMapper( new CachedInitOracle(new InitCacheManager()));
 //			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
