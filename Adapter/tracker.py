@@ -32,6 +32,7 @@ class Tracker(threading.Thread):
         self.serverIp = serverIp
         self.lastResponse = None
         self.lastResponses = dict()
+        self.responseHistory = set()
         
     def getDecoder(self, interfaceType):
         if interfaceType == InterfaceType.Ethernet:
@@ -66,8 +67,11 @@ class Tracker(threading.Thread):
                 tcp_syn = l3.get_th_seq()
                 tcp_ack = l3.get_th_ack()
                 response = self.impacketResponseParse(l3)
-                self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
-                self.lastResponse = response
+                if (response.seq, response.ack, response.flags) not in self.responseHistory:
+                    if "S" in response.flags:
+                        self.responseHistory.add((response.seq, response.ack, response.flags))
+                    self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
+                    self.lastResponse = response
     #                print "tracker:" + self.impacketResponseParse(l3).__str__()
 
     def processResponse(self, response):
@@ -104,6 +108,7 @@ class Tracker(threading.Thread):
     
     def reset(self):
         self.clearLastResponse()
+        self.responseHistory.clear()
     
     # fetches the last response from an active port. If no response was sent, then it returns Timeout
     def getLastResponse(self, serverPort, senderPort, requestSN = None):
