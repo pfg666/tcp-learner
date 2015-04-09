@@ -53,7 +53,7 @@ class Tracker(threading.Thread):
     def callback(self,hdr,data):
         if self.isStopped() == True:
             print("Tracker is stopped.")
-            #exit(0) # results in a strange warning
+            exit(-1) # results in a strange warning
         else:
             packet=self.decoder.decode(data)
             l2=packet.child()

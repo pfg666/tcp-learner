@@ -128,6 +128,7 @@ public class TCPMapper {
 		}
 		this.lastSeqSent = concreteSeq;
 		this.lastAckSent = concreteAck;
+		this.isLastInputAnAction = false;
 		this.lastPacketSent = new Packet(flags, abstractSeq, abstractAck);
 		this.lastMessageSent = this.lastPacketSent.serialize();
 		
@@ -146,6 +147,7 @@ public class TCPMapper {
 	public void processOutgoingAction(Action action) {
 		this.lastActionSent = action;
 		this.lastMessageSent = action.name();
+		this.isLastInputAnAction = true;
 		
 		checkInit(true);
 	}
@@ -215,7 +217,7 @@ public class TCPMapper {
 		/* state 0 detecting condition */
 		this.isLastResponseTimeout = true;
 		this.lastMessageReceived = "TIMEOUT";
-		this.lastPacketReceived = null;
+		//this.lastPacketReceived = null;
 		checkInit(false);
 	}
 	
@@ -226,7 +228,7 @@ public class TCPMapper {
 		Symbol abstractAck = getAbstract(concreteAck, false);
 		
 		/* do updates on output */
-		if (abstractAck == Symbol.SNCLIENTP1 || abstractAck == Symbol.SNCLIENTPD || freshAckEnabled) {
+		if (abstractAck == Symbol.SNCLIENTP1 || abstractAck == Symbol.SNCLIENTPD) {
 			this.clientSeq = concreteAck;
 		}
 		if (abstractSeq == Symbol.FRESH || abstractSeq == Symbol.SNSERVERP1) {
@@ -270,8 +272,6 @@ public class TCPMapper {
 			checkedSymbol = Symbol.ANSENT;
 		} else if (nrReceived == 0) {
 			checkedSymbol = Symbol.ZERO;
-		} else if (isIncomingSeq == false && this.freshSeqEnabled) {
-			checkedSymbol = Symbol.FRESH;
 		} else if (isIncomingSeq == true && this.freshAckEnabled) {
 			checkedSymbol = Symbol.FRESH;
 		} else {
@@ -287,18 +287,47 @@ public class TCPMapper {
 		} else {
 			return isResetting.booleanValue();
 		}*/
-		boolean sentRST = lastPacketSent.flags.has(Flag.RST);
-		boolean receivedRST = !isLastResponseTimeout && lastPacketReceived.flags.has(Flag.RST);
 		
-		if (freshSeqEnabled && lastAckReceived == lastSeqSent+1) {
-			freshSeqEnabled = false;
-		} else if (!freshSeqEnabled && (receivedRST || sentRST)) {
-			freshSeqEnabled = true;
-		}
-		if (receivedRST || sentRST) {
-			freshAckEnabled = true;
-		} else if (!outgoing && lastSeqReceived == lastAckSent) {
-			freshAckEnabled = false;
+		
+//		if(outgoing == false) {
+//			if(isLastResponseTimeout) {
+//	            freshSeqEnabled = (lastPacketSent.flags.has(Flag.RST) && lastPacketSent.seq.is(Symbol.V)) ||
+//	                            freshSeqEnabled; 
+//	            freshAckEnabled = (lastPacketSent.flags.has(Flag.RST) && lastPacketSent.seq.is(Symbol.V)) ||
+//	            				freshAckEnabled;
+//		    } else {
+//			    freshSeqEnabled = (lastPacketReceived.flags.has(Flag.RST) && lastPacketSent.seq.is(Symbol.V)) &&
+//			                            lastPacketSent.flags.has(Flag.SYN);
+//			    freshAckEnabled = 
+//		    } 
+//		} else {
+//			
+//			
+//		}
+		if (outgoing ) {
+//			if (freshSeqEnabled && lastAckReceived == lastSeqReceived+1) {
+//				freshSeqEnabled = false;
+//			} 
+			//freshSeqEnabled = false;
+			
+		} else {
+			boolean sentRST = lastPacketSent.flags.has(Flag.RST) && this.lastPacketSent.seq.is(Symbol.V);
+			boolean receivedRST = !isLastResponseTimeout && lastPacketReceived.flags.has(Flag.RST);
+			
+			
+			if (!freshSeqEnabled && (receivedRST || sentRST) || this.lastSeqReceived == 0) {
+				freshSeqEnabled = true;
+			} else {
+				freshSeqEnabled = !(lastPacketSent.flags.has(Flag.SYN)  
+						&& this.lastAckReceived == this.lastSeqSent + 1)
+						&& freshSeqEnabled;
+			}
+	
+			if (receivedRST || sentRST) {
+				freshAckEnabled = true;
+			} else if (!outgoing && lastSeqReceived == lastAckSent || (!isLastResponseTimeout && lastPacketReceived.flags.is(Flag.SYN))) {
+				freshAckEnabled = false;
+			}
 		}
 	}
 
