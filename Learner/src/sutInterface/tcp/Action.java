@@ -5,11 +5,11 @@ import java.util.HashSet;
 
 public enum Action implements TCPMessage{
 	LISTEN, 
-	ACCEPT, 
-	CLOSESERVER, 
-	CLOSECONNECTION,
+	ACCEPT,
+	CONNECT,
 	CLOSE,
-	CONNECT;
+	CLOSESERVER, 
+	CLOSECONNECTION;
 	
 	public String serialize() {
 		return this.name();
