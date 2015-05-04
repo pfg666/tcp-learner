@@ -32,10 +32,10 @@ public class CachedInitOracle implements InitOracle {
 	public Boolean isResetting(TCPMapper mapper) {
 		Boolean isResetting = false;
 		String input;
-		if (!mapper.isLastInputAnAction)
-			input = mapper.lastPacketSent.serialize();
+		if (!mapper.isRequestAction)
+			input = mapper.packetSent.serialize();
 		else 
-			input = mapper.lastActionSent.toString();
+			input = mapper.actionSent.toString();
 		append(input);
 		Log.info("FETCHING init for trace " + inputs);
 		isResetting = getTrace();

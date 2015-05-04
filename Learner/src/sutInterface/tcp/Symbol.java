@@ -21,6 +21,10 @@ public enum Symbol {
 	OWIN,
 	WIN,
 	UNDEFINED,
+	P1,
+	M1,
+	P2,
+	M2,
 	_;
 	
 	public String toString(){

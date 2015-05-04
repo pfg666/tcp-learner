@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -62,6 +63,7 @@ public class Main {
 	public static PrintStream statsOut;
 	private static boolean done;
 	public static Config config;
+	private static File sutInterfaceFile;
 
 	public static void main(String[] args) throws LearningException, IOException {
 		handleArgs(args);
@@ -128,7 +130,7 @@ public class Main {
 		highlights.add(startState);
 		BufferedWriter out = null;
 		
-		writeDotFiles(learnResult, highlights, out);
+		writeOutputFiles(learnResult, highlights, out);
 
 		errOut.println("Learner Finished!");
 
@@ -140,7 +142,7 @@ public class Main {
 		}
 	}
 
-	private static void writeDotFiles(LearnResult learnResult,
+	private static void writeOutputFiles(LearnResult learnResult,
 			LinkedList<State> highlights, BufferedWriter out) {
 		// output learned state machine as dot and pdf file :
 		//File outputFolder = new File(outputDir + File.separator + learnResult.startTime);
@@ -148,12 +150,15 @@ public class Main {
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
 		
+		
 		try {
+			Files.copy(sutConfigFile.getParentFile().toPath(), outputFolder.toPath().resolve("input"));
 			out = new BufferedWriter(new FileWriter(dotFile));
 
 			DotUtil.writeDot(learnResult.learnedModel, out, learnResult.learnedModel.getAlphabet()
 					.size(), highlights, "");
 		} catch (IOException ex) {
+			System.out.println(ex);
 			// Logger.getLogger(DotUtil.class.getName()).log(Level.SEVERE, null,
 			// ex);
 		} finally {
@@ -316,11 +321,6 @@ public class Main {
 			tcpMapper.setInitOracle(initOracle);
 			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))));
 			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
-			
-//			TCPMapper tcpMapper = new TCPMapper( new CachedInitOracle(new InitCacheManager()));
-//			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
-//			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), new InitCacheManager())));
-//			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), new InitCacheManager())));
 		}
 		
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
@@ -349,7 +349,7 @@ public class Main {
 
 	public static SutInterface createSutInterface(Config config)
 			throws FileNotFoundException {
-		File sutInterfaceFile = new File(sutConfigFile
+		sutInterfaceFile = new File(sutConfigFile
 				.getParentFile().getAbsolutePath()
 				+ File.separator 
 				+ config.learningParams.sutInterface);

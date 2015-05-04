@@ -98,7 +98,7 @@ public class AdaptiveInitOracle implements InitOracle {
 		OutputAction output = tcpWrapper.sendInput(new InputAction("SYN(RAND,RAND)"));
 		String outputString = output.getValuesAsString();
 		// it was in the listening state (init is ok, so the seq and ack values should have been updated)
-		if(outputString.contains("SYN+ACK") && clone.lastAckReceived == clone.lastSeqSent + 1) {//outputPacket.flags.is(Flag.SYN, Flag.ACK)) {
+		if(outputString.contains("SYN+ACK") && clone.ackReceived == clone.seqSent + 1) {//outputPacket.flags.is(Flag.SYN, Flag.ACK)) {
 			Log.info("SYN acknowledged, we were in the list state.");
 			tcpWrapper.sendReset(); 
 			isResetting = true;

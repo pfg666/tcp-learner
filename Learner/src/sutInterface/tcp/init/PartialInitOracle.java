@@ -14,12 +14,12 @@ public class PartialInitOracle implements InitOracle{
 		Boolean isInitial = null;
 		
 		// if we send a reset with a valid seq, then we should be in the init state
-		if( mapper.isLastResponseTimeout == true && mapper.lastPacketSent.flags.is(Flag.RST) && 
-				mapper.lastPacketSent.seq.is(Symbol.V)) {
+		if( mapper.isResponseTimeout && mapper.packetSent.flags.is(Flag.RST) && 
+				mapper.packetSent.seq.is(Symbol.V)) {
             isInitial =  true;
 	    } else {
 	    	// if we send a packet without SYN or a RST flags, the init status shouldn't change
-	    	if( (!mapper.lastPacketSent.flags.has(Flag.SYN)) && (!mapper.lastPacketSent.flags.has(Flag.RST)) ) {
+	    	if( (!mapper.packetSent.flags.has(Flag.SYN)) && (!mapper.packetSent.flags.has(Flag.RST)) ) {
 	    		isInitial = mapper.freshSeqEnabled;
 	    	} else {
 	    		isInitial = null;

@@ -23,12 +23,12 @@ public class FunctionalInitOracle implements InitOracle{
 	public Boolean isResetting(TCPMapper mapper) {
 		boolean isInitial = false;
 		
-		if(mapper.isLastResponseTimeout) {
-            isInitial = (mapper.lastPacketSent.flags.has(Flag.RST) && mapper.lastPacketSent.seq.is(Symbol.V)) ||
+		if(mapper.isResponseTimeout) {
+            isInitial = (mapper.packetSent.flags.has(Flag.RST) && mapper.packetSent.seq.is(Symbol.V)) ||
                             mapper.freshSeqEnabled; 
 	    } else {
-	            isInitial = (mapper.lastPacketReceived.flags.has(Flag.RST) && mapper.lastPacketSent.seq.is(Symbol.V)) &&
-	                            mapper.lastPacketSent.flags.has(Flag.SYN);
+	            isInitial = (mapper.packetReceived.flags.has(Flag.RST) && mapper.packetSent.seq.is(Symbol.V)) &&
+	                            mapper.packetSent.flags.has(Flag.SYN);
 	    }
 		Log.info("Is initial state: " + isInitial);
 		return isInitial;

@@ -17,7 +17,7 @@ public class ClientInitOracle  implements InitOracle{
 		//if (mapper.isMessageOutgoing) {
 			boolean isFreshSeqEnabled = false;
 			// when can you send a fresh seq?
-			isFreshSeqEnabled = mapper.freshSeqEnabled && mapper.lastAckReceived != 0;
+			isFreshSeqEnabled = mapper.freshSeqEnabled && mapper.ackReceived != 0;
 			result = isFreshSeqEnabled;
 		//} 
 		
@@ -25,7 +25,7 @@ public class ClientInitOracle  implements InitOracle{
 		//else {
 			boolean isFreshAckEnabled = false;
 			// when can you send a fresh ack?
-			if(mapper.isLastResponseTimeout) {
+			if(mapper.isResponseTimeout) {
 	        	//isInitial = mapper.isIncomingInit && mapper.lastPacketSent.flags.has(Flag.SYN);
 			} else {
 				//isFreshAckEnabled = mapper.freshAckEnabled && mapper.;
