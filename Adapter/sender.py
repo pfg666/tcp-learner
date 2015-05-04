@@ -139,6 +139,7 @@ class Sender:
             if self.useTracking:
                 # the tracker discards retransmits, but scapy doesn't, so don't use scapy
                 scapyResponse = None
+                time.sleep(self.waitTime)
         else:
             time.sleep(self.waitTime)
         captureMethod = ""
