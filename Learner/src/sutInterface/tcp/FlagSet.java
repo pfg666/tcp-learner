@@ -85,5 +85,8 @@ public class FlagSet {
 		} 
 		return match;
 	}
+	public int payload() {
+		return (this.has(Flag.FIN)? 1 : 0) + (this.has(Flag.SYN)? 1 : 0);
+	}
 
 }

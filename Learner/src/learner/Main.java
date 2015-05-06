@@ -9,7 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -30,12 +31,12 @@ import sutInterface.tcp.init.InitOracle;
 import sutInterface.tcp.init.InvCheckOracleWrapper;
 import sutInterface.tcp.init.LogOracleWrapper;
 import sutInterface.tcp.init.PartialInitOracle;
+import util.FileManager;
 import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.angluin.Angluin;
-import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
 import de.ls5.jlearn.exceptions.ObservationConflictException;
 import de.ls5.jlearn.interfaces.Automaton;
@@ -65,7 +66,7 @@ public class Main {
 	public static Config config;
 	private static File sutInterfaceFile;
 
-	public static void main(String[] args) throws LearningException, IOException {
+	public static void main(String[] args) throws LearningException, IOException, Exception {
 		handleArgs(args);
 		
 		setupOutput(outputDir);
@@ -149,10 +150,15 @@ public class Main {
 		//outputFolder.mkdirs();
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
-		
+		File inputFolder = sutConfigFile.getParentFile();
+		Path srcInputPath = inputFolder.toPath();
+		Path dstInputPath = outputFolder.toPath().resolve(inputFolder.getName()); // or resolve("input")
+		Path srcTcpPath = Paths.get(System.getProperty("user.dir")).resolve("Learner").resolve("src").resolve("sutInterface").resolve("tcp");
+		Path dstTcpPath = outputFolder.toPath().resolve("tcp");
 		
 		try {
-			Files.copy(sutConfigFile.getParentFile().toPath(), outputFolder.toPath().resolve("input"));
+			FileManager.copyFromTo(srcInputPath, dstInputPath);
+			FileManager.copyFromTo(srcTcpPath, dstTcpPath);
 			out = new BufferedWriter(new FileWriter(dotFile));
 
 			DotUtil.writeDot(learnResult.learnedModel, out, learnResult.learnedModel.getAlphabet()
@@ -161,6 +167,9 @@ public class Main {
 			System.out.println(ex);
 			// Logger.getLogger(DotUtil.class.getName()).log(Level.SEVERE, null,
 			// ex);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			try {
 				out.close();
