@@ -288,9 +288,34 @@ public class TCPMapper {
 		return checkedSymbol;
 	}
 	
+
+	protected void checkInit() {
+		checkInitServer_NO_ACTIONS_ALL_V();
+	}
 	
-	protected void checkInitClient() {
+	// not tested, probably won't work
+	protected void checkInitClient_CONNECT_MOST_V_INV() {
 		boolean sentRST = packetSent.flags.has(Flag.RST) && packetSent.seq.is(Symbol.V);
+		boolean receivedRST = !isResponseTimeout && packetReceived.flags.has(Flag.RST);
+		
+		if (!freshSeqEnabled && (receivedRST || sentRST) || seqReceived == 0) {
+			freshSeqEnabled = true;
+		} else {
+			freshSeqEnabled = !(packetSent.flags.has(Flag.SYN) && ackReceived == seqSent + 1)
+					&& freshSeqEnabled;
+		}
+		
+		if (receivedRST || sentRST) {
+			freshAckEnabled = true; // && freshSeqEnabled; //this might be needed at some point
+		} else if (seqReceived == ackSent || 
+				(!isResponseTimeout && packetReceived.flags.has(Flag.SYN))) {
+			freshAckEnabled = false;
+		}
+	}
+	
+	// does not include RST and RST+ACK packets
+	protected void checkInitClient_CONNECT_MOST_V() {
+		boolean sentRST = packetSent.flags.has(Flag.RST);
 		boolean receivedRST = !isResponseTimeout && packetReceived.flags.has(Flag.RST);
 		
 		if (!freshSeqEnabled && (receivedRST || sentRST) || seqReceived == 0) {
@@ -319,7 +344,7 @@ public class TCPMapper {
 		freshAckEnabled = isInit;
 	}
 	
-	protected void checkInitServer_NO_ACTIONS_MOST_VINV() {
+	protected void checkInitServer_NO_ACTIONS_MOST_V_INV() {
 		boolean isInit = freshSeqEnabled || freshAckEnabled;
 		isInit = 
 		(packetSent.flags.has(Flag.ACK) && packetReceived.flags.is(Flag.RST) && packetSent.seq.is(Symbol.V) && packetSent.ack.is(Symbol.V))  || //t1
@@ -329,10 +354,6 @@ public class TCPMapper {
 		
 		freshSeqEnabled = isInit;
 		freshAckEnabled = isInit;
-	}
-	
-	protected void checkInit() {
-		checkInitServer_NO_ACTIONS_ALL_V();
 	}
 
 	public String getState() {
