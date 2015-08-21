@@ -1,5 +1,6 @@
 #from socketAdapter import SocketAdapter
 import socket
+syn_ok = False
 
 # extends sender functionality with higher level commands
 class ActionSender:
@@ -26,12 +27,12 @@ class ActionSender:
             print "python connected to server Adapter at " + self.cmdIp + " " + (str(self.cmdPort))
             #self.cmdSocket = SocketAdapter(cmdSocket)
             self.cmdSocket = cmdSocket
+            self.sockFile = self.cmdSocket.makefile('r')
         self.listenForServerPort()
         
     
     def closeSockets(self):
         try:
-            print(self.cmdSocket)
             if self.cmdSocket is not None:
                 print "Telling server adapter to end session"
                 self.cmdSocket.send("exit\n")
@@ -43,18 +44,24 @@ class ActionSender:
     
     # fetches a server port
     def listenForServerPort(self):
-        newPortFound = False
-        newPortString = ""
-        while True:
-            newPortString = self.cmdSocket.recv(1024)
-            print "received " + newPortString
-            for word in newPortString.split(): # TODO check if this really always works with a stream
-                if newPortFound:
-                    self.serverPort = int(word)
-                    print "next server port: " + word
-                    return
-                if word == "port":
-                    newPortFound = True
+#        while True:
+            line = self.sockFile.readline()
+            print "received " + line
+            line = line.split()
+            if line[0] != "port":
+                raise Exception("expected 'port', received '" + line[0] + "'")
+            self.serverPort = int(line[1])
+            print "next server port: " + str(self.serverPort)
+#            word = self.sockFile.readline()
+#            newPortString = self.cmdSocket.recv(1024)
+#             print "received " + newPortString
+#             for word in newPortString.split(): # TODO check if this really always works with a stream
+#                 if newPortFound:
+#                     self.serverPort = int(word)
+#                     print "next server port: " + word
+#                     return
+#                 if word == "port":
+#                     newPortFound = True
                     
     def sendReset(self):
         if self.cmdSocket is None:
@@ -62,6 +69,10 @@ class ActionSender:
         print "reset"
         print "********** reset **********"
         self.cmdSocket.send("reset\n")
+        if syn_ok:
+            line = self.sockFile.readline()
+            if line != "ok\n":
+                raise Exception("expected 'ok' upon reset, received '" + line + "'")
         self.listenForServerPort()
         self.sender.setServerPort(self.serverPort)
     
@@ -82,8 +93,19 @@ class ActionSender:
     
     def sendAction(self, inputString):
         if self.isAction(inputString):
-            self.cmdSocket.send(inputString + "\n") # TODO race-condition here, might go wrong: 
-            response = self.sender.captureResponse() # response might arrive before sender is ready
+            self.cmdSocket.send(inputString + "\n")
+            if syn_ok:
+                ok = self.sockFile.readline()
+                if ok != "ok\n":
+                    raise Exception("expected 'ok', received '" + ok + "'")
+                self.cmdSocket.send("ok\n")
+            response = self.sender.captureResponse()
+#             for word in ok.split(): # TODO check if this really always works with a stream
+#                 if word == "ok":
+#                     self.cmdSocket.send("ok\n")
+#                 else:
+#                     raise Exception("expected 'ok', received" + word)
+#             response = self.sender.captureResponse()
             #cmdResponse = self.cmdSocket.recv(1024)
             #print "server adapter response: " + cmdResponse
         else:

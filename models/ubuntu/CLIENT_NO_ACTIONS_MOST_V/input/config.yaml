@@ -9,6 +9,6 @@ learningParams:
 tcpParams:
     sutPort: 18200
     sutIP: 127.0.0.1
-    oracle: client
+    oracle: functional
 
 

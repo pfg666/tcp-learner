@@ -1,29 +1,32 @@
-package sutInterface.tcp;
+package functionalMappers;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import sutInterface.SocketWrapper;
 import sutInterface.SutWrapper;
+import sutInterface.tcp.Action;
+import sutInterface.tcp.Internal;
+import sutInterface.tcp.Symbol;
 import util.InputAction;
 import util.Log;
 import util.OutputAction;
 
 // SutWrapper used for learning TCP (uses abstraction) 
 // Unlike SimpleSutWrapper, all communication is directed through a mapper component
-public class TCPSutWrapper implements SutWrapper{
+public class TCPSutWrapperSpecification implements SutWrapper{
 
 	private final static Map<Integer,SocketWrapper> socketWrapperMap = new HashMap<Integer, SocketWrapper>();
-	private TCPMapper mapper;
-	private TCPMapper previousMapper;
+	private TCPMapperSpecification mapper;
+	private TCPMapperSpecification previousMapper;
 	private final SocketWrapper socketWrapper;
 	
-	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper) {
+	public TCPSutWrapperSpecification(int tcpServerPort, TCPMapperSpecification mapper) {
 		this(tcpServerPort);
 		this.mapper = mapper;
 	}
 	
-	public TCPSutWrapper(int tcpServerPort) {
+	public TCPSutWrapperSpecification(int tcpServerPort) {
 		if(socketWrapperMap.containsKey(tcpServerPort)) {
 			this.socketWrapper = socketWrapperMap.get(tcpServerPort); 
 		} else {
@@ -48,25 +51,16 @@ public class TCPSutWrapper implements SutWrapper{
 		
 	}
 	
-	public TCPSutWrapper(int tcpServerPort, TCPMapper mapper, boolean exitIfInvalid) {
+	public TCPSutWrapperSpecification(int tcpServerPort, TCPMapperSpecification mapper, boolean exitIfInvalid) {
 		this(tcpServerPort, mapper);
 	}
 	
-	private static TCPSutWrapper tcpWrapper = null;
-	public static void setTCPSutWrapper(TCPSutWrapper tcpWrapper) {
-		TCPSutWrapper.tcpWrapper  = tcpWrapper;
+	private static TCPSutWrapperSpecification tcpWrapper = null;
+	public static void setTCPSutWrapper(TCPSutWrapperSpecification tcpWrapper) {
+		TCPSutWrapperSpecification.tcpWrapper  = tcpWrapper;
 	}
-	public static TCPSutWrapper getTCPSutWrapper() {
-		return TCPSutWrapper.tcpWrapper;
-	}
-	
-
-	public void setMapper(TCPMapper mapper) {
-		this.mapper = mapper;
-	}
-
-	public TCPMapper getMapper() {
-		return mapper;
+	public static TCPSutWrapperSpecification getTCPSutWrapper() {
+		return TCPSutWrapperSpecification.tcpWrapper;
 	}
 	
 	public OutputAction sendInput(InputAction symbolicInput) {
@@ -92,7 +86,7 @@ public class TCPSutWrapper implements SutWrapper{
 		// note: mapper is not updated with action commands
 		
 		if(Action.isAction(abstractRequest)) {
-			getMapper().processOutgoingAction(Action.valueOf(abstractRequest));
+			this.mapper.processOutgoingAction(Action.valueOf(abstractRequest));
 			concreteRequest = abstractRequest.toLowerCase();
 		}
 		// only processing of packet-requests

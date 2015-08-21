@@ -259,11 +259,6 @@ public class TCPMapper {
 		
 		return abstractOutput;
 	}
-	
-	//select which check init function you want to call.
-	protected void checkInit() {
-		checkInitClient_CONNECT_MOST_V();
-	}
 
 	private Symbol getAbstract(long nrReceived, boolean isIncomingSeq) {
 		Symbol checkedSymbol;
@@ -287,16 +282,15 @@ public class TCPMapper {
 			checkedSymbol = Symbol.ZERO;
 		} else if ( isIncomingSeq == true && this.freshAckEnabled ) {
 			checkedSymbol = Symbol.FRESH;
-		}  
-//			if ( isIncomingSeq == true && this.freshAckEnabled ) {
-//			checkedSymbol = Symbol.FRESH;
-//		} else if ( isIncomingSeq == false && this.freshAckEnabled ) {
-//			checkedSymbol = Symbol.FRESH;
-//		} 
-		else {
+		} else {
 			checkedSymbol = Symbol.INV;
 		}
 		return checkedSymbol;
+	}
+	
+
+	protected void checkInit() {
+		checkInitServer_NO_ACTIONS_ALL_V();
 	}
 	
 	// not tested, probably won't work

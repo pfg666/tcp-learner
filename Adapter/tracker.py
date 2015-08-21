@@ -32,6 +32,7 @@ class Tracker(threading.Thread):
         self.serverIp = serverIp
         self.lastResponse = None
         self.lastResponses = dict()
+        self.responseHistory = set()
         
     def getDecoder(self, interfaceType):
         if interfaceType == InterfaceType.Ethernet:
@@ -52,7 +53,7 @@ class Tracker(threading.Thread):
     def callback(self,hdr,data):
         if self.isStopped() == True:
             print("Tracker is stopped.")
-            #exit(0) # results in a strange warning
+            exit(-1) # results in a strange warning
         else:
             packet=self.decoder.decode(data)
             l2=packet.child()
@@ -66,14 +67,18 @@ class Tracker(threading.Thread):
                 tcp_syn = l3.get_th_seq()
                 tcp_ack = l3.get_th_ack()
                 response = self.impacketResponseParse(l3)
-                self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
-                self.lastResponse = response
+                # ignore a packet if it was a retransmit
+                if (response.seq, response.ack, response.flags) not in self.responseHistory:
+                    if "S" in response.flags:
+                        self.responseHistory.add((response.seq, response.ack, response.flags))
+                    self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
+                    self.lastResponse = response
     #                print "tracker:" + self.impacketResponseParse(l3).__str__()
 
     def processResponse(self, response):
         if response is not None:
             self.lastResponse = response
-            if response.flags == "SA" and response in self.lastResponses:
+            if (response.flags == "SA" or response.flags == "AS") and response in self.lastResponses:
                 print 'ignoring SA retransmission ' + response.__str__()
             else:
                 print 'non SA-ret packet:' + response.__str__()
@@ -104,6 +109,7 @@ class Tracker(threading.Thread):
     
     def reset(self):
         self.clearLastResponse()
+        self.responseHistory.clear()
     
     # fetches the last response from an active port. If no response was sent, then it returns Timeout
     def getLastResponse(self, serverPort, senderPort, requestSN = None):

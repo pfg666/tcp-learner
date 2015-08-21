@@ -18,7 +18,7 @@ class Sender:
     def __init__(self, serverMAC=None, serverIP="191.168.10.1", serverPort = 7991,
                  networkInterface="lo", networkInterfaceType=InterfaceType.Ethernet, senderPort=15000, senderPortMinimum=20000,
                  senderPortMaximum=40000, portNumberFile = "sn.txt", useTracking=False,
-                 isVerbose=0, waitTime=0.006, resetMechanism=0):
+                 isVerbose=0, waitTime=0.02, resetMechanism=0):
         # data on sender and server needed to send packets 
         self.serverIP = serverIP
         self.serverPort = serverPort
@@ -72,7 +72,10 @@ class Sender:
             networkPort = self.senderPortMinimum
         else:
             senderPortRange = self.senderPortMaximum - self.senderPortMinimum
-            networkPort = self.senderPortMinimum + (int(line) + 1) % senderPortRange 
+            if senderPortRange == 0:
+                networkPort = self.senderPortMinimum
+            else:
+                networkPort = self.senderPortMinimum + (int(line) + 1) % senderPortRange 
         f.closed
         f = open(self.portNumberFile, "w")
         f.write(str(networkPort))
@@ -133,6 +136,10 @@ class Sender:
             self.clientIP = packet[IP].src
             # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
             scapyResponse = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
+            if self.useTracking:
+                # the tracker discards retransmits, but scapy doesn't, so don't use scapy
+                scapyResponse = None
+                time.sleep(self.waitTime)
         else:
             time.sleep(self.waitTime)
         captureMethod = ""

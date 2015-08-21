@@ -9,12 +9,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.Random;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import sutInterface.DeterminismCheckerOracleWrapper;
+import sutInterface.ProbablisticOracle;
 import sutInterface.SutInfo;
 import sutInterface.SutWrapper;
 import sutInterface.tcp.LearnResult;
@@ -28,12 +32,12 @@ import sutInterface.tcp.init.InitOracle;
 import sutInterface.tcp.init.InvCheckOracleWrapper;
 import sutInterface.tcp.init.LogOracleWrapper;
 import sutInterface.tcp.init.PartialInitOracle;
+import util.FileManager;
 import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.angluin.Angluin;
-import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
 import de.ls5.jlearn.exceptions.ObservationConflictException;
 import de.ls5.jlearn.interfaces.Automaton;
@@ -57,12 +61,13 @@ public class Main {
 	public static PrintStream learnOut;
 	public static PrintStream tcpOut;
 	public static PrintStream stdOut = System.out;
-	public static PrintStream errOut;
+	public static PrintStream errOut = System.err;
 	public static PrintStream statsOut;
 	private static boolean done;
 	public static Config config;
+	private static File sutInterfaceFile;
 
-	public static void main(String[] args) throws LearningException, IOException {
+	public static void main(String[] args) throws LearningException, IOException, Exception {
 		handleArgs(args);
 		
 		setupOutput(outputDir);
@@ -90,8 +95,8 @@ public class Main {
 		eqOracle.setOracle(tcpOracles.tuple1);
 		eqOracle.setRandom(random);
 
-		learner = new ObservationPack();
-		//learner = new Angluin();
+		//learner = new ObservationPack();
+		learner = new Angluin();
 		learner.setOracle(tcpOracles.tuple0);
 
 		learner.setAlphabet(SutInfo.generateInputAlphabet());
@@ -127,7 +132,7 @@ public class Main {
 		highlights.add(startState);
 		BufferedWriter out = null;
 		
-		writeDotFiles(learnResult, highlights, out);
+		writeOutputFiles(learnResult, highlights, out);
 
 		errOut.println("Learner Finished!");
 
@@ -139,22 +144,33 @@ public class Main {
 		}
 	}
 
-	private static void writeDotFiles(LearnResult learnResult,
+	private static void writeOutputFiles(LearnResult learnResult,
 			LinkedList<State> highlights, BufferedWriter out) {
 		// output learned state machine as dot and pdf file :
 		//File outputFolder = new File(outputDir + File.separator + learnResult.startTime);
 		//outputFolder.mkdirs();
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
+		File inputFolder = sutConfigFile.getParentFile();
+		Path srcInputPath = inputFolder.toPath();
+		Path dstInputPath = outputFolder.toPath().resolve(inputFolder.getName()); // or resolve("input")
+		Path srcTcpPath = Paths.get(System.getProperty("user.dir")).resolve("Learner").resolve("src").resolve("sutInterface").resolve("tcp");
+		Path dstTcpPath = outputFolder.toPath().resolve("tcp");
 		
 		try {
+			FileManager.copyFromTo(srcInputPath, dstInputPath);
+			FileManager.copyFromTo(srcTcpPath, dstTcpPath);
 			out = new BufferedWriter(new FileWriter(dotFile));
 
 			DotUtil.writeDot(learnResult.learnedModel, out, learnResult.learnedModel.getAlphabet()
 					.size(), highlights, "");
 		} catch (IOException ex) {
+			System.out.println(ex);
 			// Logger.getLogger(DotUtil.class.getName()).log(Level.SEVERE, null,
 			// ex);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			try {
 				out.close();
@@ -300,9 +316,11 @@ public class Main {
 			}
 			TCPMapper tcpMapper = new TCPMapper(initOracle);
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
-			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)));
-		} 
+			//eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)), 1, 0.8, 1))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			//memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new MembershipOracle(sutWrapper)), 1, 0.8, 1)));
+			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
+		}
 		
 		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class
 		// this class, along with passing regular queries, also applies the SYN extension to determine the init-status
@@ -313,13 +331,8 @@ public class Main {
 			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
 			InitOracle initOracle = new AdaptiveInitOracle(tcp.sutPort, new PartialInitOracle());
 			tcpMapper.setInitOracle(initOracle);
-			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)));
-			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper)));
-			
-//			TCPMapper tcpMapper = new TCPMapper( new CachedInitOracle(new InitCacheManager()));
-//			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
-//			eqOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new EquivalenceOracle(sutWrapper), new InitCacheManager())));
-//			memOracleRunner = new InvCheckOracleWrapper(new LogOracleWrapper(new AdaptiveTCPOracleWrapper(new MembershipOracle(sutWrapper), new InitCacheManager())));
+			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))));
+			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
 		}
 		
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
@@ -348,7 +361,7 @@ public class Main {
 
 	public static SutInterface createSutInterface(Config config)
 			throws FileNotFoundException {
-		File sutInterfaceFile = new File(sutConfigFile
+		sutInterfaceFile = new File(sutConfigFile
 				.getParentFile().getAbsolutePath()
 				+ File.separator 
 				+ config.learningParams.sutInterface);
