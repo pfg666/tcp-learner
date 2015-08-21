@@ -26,6 +26,11 @@ pthread_t connecting_thread;
 #endif
 int connecting;
 
+/* 
+server_port and server_address form the address which the client adapter will connect to when learning.
+learner_port is the port through which the client adapter communicates with the learner setup.
+*/
+
 int server_port, learner_port;
 char server_addr[100];
 
@@ -239,6 +244,7 @@ int process_input() {
 		printf("learner port set to %i\n", server_port);
 	}
 	else if (strncmp(read_buffer, "exit", sizeof(read_buffer)) == 0) {
+		//init();
 		return -1;
 	}
 	else {
@@ -311,6 +317,7 @@ int main(int argc, char *argv[]) {
 	init();
 	// if continuous, keep running, otherwise run once
 	do {
+	    printf("Should be running continuously");
 		run();
 	} while (continuous);
 	
