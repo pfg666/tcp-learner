@@ -14,6 +14,8 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.sound.midi.SysexMessage;
+
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -21,6 +23,7 @@ import sutInterface.DeterminismCheckerOracleWrapper;
 import sutInterface.ProbablisticOracle;
 import sutInterface.SutInfo;
 import sutInterface.SutWrapper;
+import sutInterface.tcp.InvlangSutWrapper;
 import sutInterface.tcp.LearnResult;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
@@ -49,17 +52,19 @@ import de.ls5.jlearn.logging.LearnLog;
 import de.ls5.jlearn.logging.LogLevel;
 import de.ls5.jlearn.logging.PrintStreamLoggingAppender;
 import de.ls5.jlearn.util.DotUtil;
+import sutInterface.tcp.functionalMappers.TCPMapperSpecification;
+import sutInterface.tcp.functionalMappers.TCPSutWrapperSpecification;
 
 public class Main {
 	private static File sutConfigFile = null;
-	private static LearningParams learningParams;
+	public static LearningParams learningParams;
 	private static long seed = 178208038;
 	private static String seedStr = Long.toString(seed);
 	private static final long timeSnap = System.currentTimeMillis();
 	private static final String outputDir = "output" + File.separator + timeSnap;
 	private static File outputFolder;
 	public static PrintStream learnOut;
-	public static PrintStream tcpOut;
+	public static PrintStream absTraceOut, absAndConcTraceOut;
 	public static PrintStream stdOut = System.out;
 	public static PrintStream errOut = System.err;
 	public static PrintStream statsOut;
@@ -106,9 +111,9 @@ public class Main {
 		
 
 		// final output to out.txt
-		tcpOut.println("Seed: " + seedStr);
+		absTraceOut.println("Seed: " + seedStr);
 		errOut.println("Seed: " + seedStr);
-		tcpOut.println("Done.");
+		absTraceOut.println("Done.");
 		errOut.println("Successful run.");
 
 		// output needed for equivalence checking
@@ -189,9 +194,11 @@ public class Main {
 	public static void setupOutput(final String outputDir) throws FileNotFoundException {
 		outputFolder = new File(outputDir);
 		outputFolder.mkdirs();
-		tcpOut = new PrintStream(
+		absTraceOut = new PrintStream(
 				new FileOutputStream(outputDir + File.separator + "tcpLog.txt", false));
-		
+		absAndConcTraceOut = new PrintStream(
+						new FileOutputStream(outputDir + File.separator + "tcpTrace.txt", false));
+		absAndConcTraceOut.println("copy this to obtain the regex describing any text between two inputs of a trace:\n[^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n]\n\n");
 		learnOut = new PrintStream(
 				new FileOutputStream(outputDir + File.separator + "learnLog.txt", false));
 		
@@ -223,26 +230,26 @@ public class Main {
 		done = false;
 
 		Log.fatal("Start Learning");
-		tcpOut.println("starting learning\n");
+		absTraceOut.println("starting learning\n");
 		//try {
 			while (!done) {
-				tcpOut.println("		RUN NUMBER: " + ++stats.runs);
-				tcpOut.println("");
-				tcpOut.flush();
+				absTraceOut.println("		RUN NUMBER: " + ++stats.runs);
+				absTraceOut.println("");
+				absTraceOut.flush();
 				errOut.flush();
 
 				// execute membership queries
 				learner.learn();
-				tcpOut.flush();
+				absTraceOut.flush();
 				errOut.flush();
-				tcpOut.println("done learning");
+				absTraceOut.println("done learning");
 				endtmp = System.currentTimeMillis();
 				statsOut
 						.println("Running time of membership queries: "
 								+ (endtmp - starttmp) + "ms.");
 				stats.totalTimeMemQueries += endtmp - starttmp;
 				starttmp = System.currentTimeMillis();
-				tcpOut.flush();
+				absTraceOut.flush();
 
 				// stable hypothesis after membership queries
 				Automaton hyp = learner.getResult();
@@ -257,16 +264,16 @@ public class Main {
 				DotUtil.writeDot(hyp, out);
 				DotUtil.invokeDot(hypDot, "pdf", hypPDF);
 
-				tcpOut.println("starting equivalence query");
-				tcpOut.flush();
+				absTraceOut.println("starting equivalence query");
+				absTraceOut.flush();
 				errOut.flush();
 				// search for counterexample
 				EquivalenceOracleOutput o = eqOracle
 						.findCounterExample(hyp);
 	
-				tcpOut.flush();
+				absTraceOut.flush();
 				errOut.flush();
-				tcpOut.println("done equivalence query");
+				absTraceOut.println("done equivalence query");
 				endtmp = System.currentTimeMillis();
 				stats.totalTimeEquivQueries += endtmp - starttmp;
 				starttmp = System.currentTimeMillis();
@@ -276,16 +283,16 @@ public class Main {
 					done = true;
 					continue;
 				} 
-				tcpOut.println("Sending CE to LearnLib.");
-				tcpOut.println("Counter Example: "
+				absTraceOut.println("Sending CE to LearnLib.");
+				absTraceOut.println("Counter Example: "
 						+ o.getCounterExample().toString());
-				tcpOut.flush();
+				absTraceOut.flush();
 				errOut.flush();
 				// return counter example to the learner, so that it can use
 				// it to generate new membership queries
 				learner.addCounterExample(o.getCounterExample(),
 						o.getOracleOutput());
-				tcpOut.flush();
+				absTraceOut.flush();
 				errOut.flush();
 			}
 		stats.endTime = System.currentTimeMillis();
@@ -295,7 +302,8 @@ public class Main {
 	
 	private static void closeOutputStreams() {
 		statsOut.close();
-		tcpOut.close();
+		absTraceOut.close();
+		absAndConcTraceOut.close();
 		learnOut.close();
 		errOut.close();
 	}
@@ -314,8 +322,9 @@ public class Main {
 			} else {
 				initOracle = new FunctionalInitOracle();
 			}
-			TCPMapper tcpMapper = new TCPMapper(initOracle);
-			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
+			//TCPMapperSpecification tcpMapper = new TCPMapperSpecification(initOracle);
+			//sutWrapper = new TCPSutWrapperSpecification(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
+			sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 			//eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)), 1, 0.8, 1))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
 			//memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new MembershipOracle(sutWrapper)), 1, 0.8, 1)));
 			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
@@ -327,26 +336,26 @@ public class Main {
 		// it updates the init status in a cache
 		// a CachedInitOracle will then read from this cache and is used by the mapper instead of the FunctionInitOracle
 		else {
-			TCPMapper tcpMapper = new TCPMapper();
-			sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, false);
-			InitOracle initOracle = new AdaptiveInitOracle(tcp.sutPort, new PartialInitOracle());
-			tcpMapper.setInitOracle(initOracle);
+			//TCPMapperSpecification tcpMapper = new TCPMapperSpecification();
+			sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
+			//sutWrapper = new TCPSutWrapperSpecification(tcp.sutPort, tcpMapper, false);
+			//InitOracle initOracle = new AdaptiveInitOracle(tcp.sutPort, new PartialInitOracle());
+			//tcpMapper.setInitOracle(initOracle);
 			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))));
 			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
 		}
-		
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
 	}
 
 	public static TCPParams readConfig(Config config, SutInterface sutInterface) {
 		// read/disp config params for learner
 		learningParams = config.learningParams;
-		learningParams.printParams(tcpOut);
-
+		learningParams.printParams(absTraceOut);
+		
 		// read sut interface information
 		SutInfo.setMinValue(learningParams.minValue);
 		SutInfo.setMaxValue(learningParams.maxValue);
-
+		
 		SutInfo.setInputSignatures(sutInterface.inputInterfaces);
 		SutInfo.setOutputSignatures(sutInterface.outputInterfaces);
 
@@ -355,7 +364,7 @@ public class Main {
 
 		// read/disp TCP config
 		TCPParams tcp = config.tcpParams;
-		tcp.printParams(tcpOut);
+		tcp.printParams(absTraceOut);
 		return tcp;
 	}
 

@@ -6,7 +6,14 @@ syn_ok = False
 class ActionSender:
     cmdSocket = None
     sender = None
-    actions = ["listen", "accept", "closeconnection", "closeserver", "exit", "close", "connect"]
+    actions = ["listen",
+               "accept",
+               "close",
+               "closeconnection",
+               "closeserver",
+               "exit",
+               "closeclient",
+               "connect"]
     def __init__(self, cmdIp = "192.168.56.1", cmdPort=5000, sender = None):
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp

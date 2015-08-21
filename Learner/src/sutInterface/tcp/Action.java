@@ -7,8 +7,9 @@ public enum Action implements TCPMessage{
 	LISTEN, 
 	ACCEPT,
 	CONNECT,
+	//CLOSECLIENT,
+	//CLOSESERVER, 
 	CLOSE,
-	CLOSESERVER, 
 	CLOSECONNECTION;
 	
 	public String serialize() {

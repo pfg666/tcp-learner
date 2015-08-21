@@ -12,6 +12,7 @@ public class LearningParams {
 	public int maxNumTraces;
 	public int minTraceLength;
 	public int maxTraceLength;
+	public String mapper;
 	
 	public void printParams(PrintStream stdout) {
 		String seedStr = Long.toString(seed) + " - Set statically";
@@ -19,6 +20,7 @@ public class LearningParams {
 		stdout.println("Maximum number of traces: " + this.maxNumTraces);
 		stdout.println("Minimum length of traces: " + this.minTraceLength);
 		stdout.println("Maximim length of traces: " + this.maxTraceLength);
+		stdout.println("Mapper: " + this.mapper);
 		stdout.println("Seed: " + seedStr);
 		stdout.flush();
 	}

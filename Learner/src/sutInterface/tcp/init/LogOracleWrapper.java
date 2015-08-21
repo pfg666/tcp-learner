@@ -17,10 +17,10 @@ public class LogOracleWrapper  implements Oracle{
 	public Word processQuery(Word input) throws LearningException {
 		Word output = this.oracle.processQuery(input);
 		for(int i = 0; i < input.getSymbolArray().length; i ++) {
-			Main.tcpOut.println(input.getSymbolArray()[i].toString());
-			Main.tcpOut.println("!" + output.getSymbolArray()[i].toString());
+			Main.absTraceOut.println(input.getSymbolArray()[i].toString());
+			Main.absTraceOut.println("!" + output.getSymbolArray()[i].toString());
 		}
-		Main.tcpOut.println("reset");
+		Main.absTraceOut.println("reset");
 		return output;
 	}
 }
