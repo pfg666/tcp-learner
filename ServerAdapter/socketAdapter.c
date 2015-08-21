@@ -122,7 +122,7 @@ void *do_connect(void *arg)
 }
 
 void start_connecting_thread() {
-	if (!main_socket_blocked) {
+	if (main_socket_blocked == 0 && secondary_sd == -1) {
 #ifdef _WIN32
 		socket_thread = CreateThread(NULL, 0, &do_connect, NULL, 0, NULL);
 #elif __gnu_linux__
@@ -167,11 +167,12 @@ void *do_accept(void *arg) {
 		//answer("OK\n");
 	}
 	//} while (secondary_sd != -1);
+	main_socket_blocked = 0;
 	return 0;
 }
 
 void start_accepting_thread() {
-	if (!main_socket_blocked) {
+	if (main_socket_blocked == 0 && secondary_sd == -1) {
 #ifdef _WIN32
 		socket_thread = CreateThread(NULL, 0, &do_accept, NULL, 0, NULL);
 #elif __gnu_linux__
@@ -279,6 +280,7 @@ void close_run() {
 		} else {
 			printf("errno = %i\n", errno);
 		}
+		error("could not close main socket");
 	}
 	if (secondary_sd != -1 && close(secondary_sd) != 0) {
 		if (errno == EBADF) {
@@ -290,6 +292,7 @@ void close_run() {
 		} else {
 			printf("errno = %i\n", errno);
 		}
+		error("could not close secondary socket");
 	}
 #endif
 	main_sd = secondary_sd = -1;
@@ -309,6 +312,7 @@ void process_close() {
 #elif __gnu_linux__	
 	close(main_sd);
 #endif
+	main_sd = -1;
 }
 
 void process_close_secondary() {
@@ -320,6 +324,7 @@ void process_close_secondary() {
 #elif __gnu_linux__	
 	close(secondary_sd);
 #endif
+	secondary_sd = -1;
 }
 
 void process_accept() {
