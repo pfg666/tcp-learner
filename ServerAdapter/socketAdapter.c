@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <errno.h>
 #ifdef __gnu_linux__
 	#include <sys/types.h>
 	#include <sys/socket.h>
@@ -18,7 +18,7 @@
 	#error OS not supported, have fun with adding ifdefs
 #endif
 
-int learner_listener_sd, learner_conn_sd, main_sd, secondary_sd, main_sd_old, secondary_sd_old;
+int learner_listener_sd, learner_conn_sd, main_sd, secondary_sd;
 #ifdef _WIN32
 HANDLE socket_thread;
 #elif __gnu_linux__
@@ -264,24 +264,34 @@ void close_run() {
 #ifdef _WIN32
 	closesocket(main_sd);
 	closesocket(secondary_sd);
-	if (main_sd_old != -1) {
-		closesocket(main_sd_old);
-	}
-	if (secondary_sd_old != -1) {
-		closesocket(secondary_sd_old);
-	}
 #elif __gnu_linux__	
-	close(main_sd);
-	close(secondary_sd);
-	if (main_sd_old != -1) {
-		close(main_sd_old);
+	char msg[200];
+	snprintf(msg, sizeof(msg), "socket descriptors:\n1: %i\n2: %i\n", 
+		main_sd, secondary_sd);
+		printf("%s", msg);
+	if (main_sd != -1 && close(main_sd) != 0) {
+		if (errno == EBADF) {
+			printf("errno = EBADF\n");
+		} else if (errno == EINTR) {
+			printf("errno = EINTR\n");
+		} else if (errno == EIO) {
+			printf("errno = EIO\n");
+		} else {
+			printf("errno = %i\n", errno);
+		}
 	}
-	if (secondary_sd_old != -1) {
-		close(secondary_sd_old);
+	if (secondary_sd != -1 && close(secondary_sd) != 0) {
+		if (errno == EBADF) {
+			printf("errno = EBADF\n");
+		} else if (errno == EINTR) {
+			printf("errno = EINTR\n");
+		} else if (errno == EIO) {
+			printf("errno = EIO\n");
+		} else {
+			printf("errno = %i\n", errno);
+		}
 	}
 #endif
-	main_sd_old = main_sd;
-	secondary_sd_old = secondary_sd;
 	main_sd = secondary_sd = -1;
 }
 
@@ -408,7 +418,7 @@ void run() {
 char* help = "[-c | --continuous] [-l learnerport] [--dport|-p portnumber] [--daddr|-a ip address]";
 int main(int argc, char *argv[]) {
 	learner_port = -1;
-	learner_listener_sd = learner_conn_sd = main_sd = secondary_sd = main_sd_old = secondary_sd_old = -1;
+	learner_listener_sd = learner_conn_sd = main_sd = secondary_sd = -1;
 	int arg_nr;
 	int continuous = 0;
 	strcpy_end(server_addr, default_server_addr, sizeof(server_addr));
