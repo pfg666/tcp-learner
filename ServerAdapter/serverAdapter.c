@@ -83,6 +83,7 @@ void psprintf(char *output_buffer, int buffer_size, const char *format, int inte
 
 void answer(char* output) {
 	pstrcpy(output_buffer, output_buffer_size, output);
+
 #ifdef _WIN32
     if (send(learner_conn_sd, output_buffer, strlen(output), 0) == SOCKET_ERROR) {
 		printf("Error code %d", WSAGetLastError());
@@ -91,7 +92,7 @@ void answer(char* output) {
 	if (send(learner_conn_sd, output, strlen(output), 0) == -1) {
 		printf("Failed to send %s", output_buffer);
 	}
-#endif
+#endif 
 }
 
 void init_run() {
@@ -179,11 +180,11 @@ void *do_accept(void *arg) {
 	}
 	if (conn_sd == -1) {
 		printf("accepting failed\n");
-		answer("NOK\n");
+		//answer("NOK\n");
 	}
 	else {
 		printf("accepting succeeded\n");
-		answer("OK\n");
+		//answer("OK\n");
 	}
 	//} while (conn_sd != -1);
 	return 0;
@@ -192,11 +193,11 @@ void *do_accept(void *arg) {
 void process_listen() {
 	printf("LISTEN\n");
 	if (listen(server_sd, 10) == 0) {
-		answer("OK\n");
+		//answer("OK\n");
 		printf("listening succesfully\n");
 	}
 	else {
-		answer("NOK\n");
+		//answer("NOK\n");
 		printf("listening failed\n");
 #ifdef __gnu_linux__
 		int sendbuf;
@@ -247,11 +248,11 @@ void process_close_server() {
 #elif __gnu_linux__
 	if (close(server_sd) == 0) {
 #endif
-		answer("OK\n");
+		//answer("OK\n");
 		printf("close successful\n");
 	}
 	else {
-		answer("NOK\n");
+		//answer("NOK\n");
 		printf("close failed\n");
 #ifdef __gnu_linux__
 		int sendbuf;
@@ -273,16 +274,16 @@ void process_close_connection() {
 		if (close(conn_sd) == 0) {
 #endif
 			conn_sd = -1;
-			answer("OK\n");
+			//answer("OK\n");
 			printf("close succesful\n");
 		}
 		else {
-			answer("NOK\n");
+			//answer("NOK\n");
 			printf("close failed\n");
 		}
 		}
 	else {
-		answer("NOK\n");
+		//answer("NOK\n");
 		printf("no connection to close!\n");
 	}
 	}
