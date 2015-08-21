@@ -31,6 +31,8 @@ import util.Log;
 import util.OutputAction;
 
 public class TraceRunner {
+	private static final String PATH = "testtrace.txt";
+	
 	public static final String START = 		"\n****** INPUTS  ******\n";
 	public static final String SEPARATOR = 	"\n****** OUTPUTS ******\n";
 	public static final String END = 		"\n*********************\n";
@@ -44,9 +46,9 @@ public class TraceRunner {
 		Main.handleArgs(args);
 		List<String> trace;
 		try {
-			trace = Files.readAllLines(Paths.get("testtrace.txt"), StandardCharsets.US_ASCII);
+			trace = Files.readAllLines(Paths.get(PATH), StandardCharsets.US_ASCII);
 		} catch (IOException e) {
-			System.out.println("usage of java tracerunner: create a file 'testtrace.txt with the input on each line'");
+			System.out.println("usage of java tracerunner: create a file '" + PATH + "' with the input on each line', optionally preceded by the number of times the input should be repeated");
 			return;
 		}
 		ListIterator<String> it = trace.listIterator();

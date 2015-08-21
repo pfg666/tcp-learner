@@ -1,4 +1,4 @@
-package sutInterface.tcp.init;
+package sutInterface;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +11,12 @@ import de.ls5.jlearn.interfaces.Word;
 import de.ls5.jlearn.shared.SymbolImpl;
 import de.ls5.jlearn.shared.WordImpl;
 
+import util.LearnlibUtils;
+
+/**
+ * Oracle wrapper to check for non-determinism, and aborts the learner upon detection.
+ * @author Ramon
+ */
 public class DeterminismCheckerOracleWrapper implements Oracle {
 	private static final long serialVersionUID = 1L;
 	private final Oracle oracle;
@@ -46,8 +52,8 @@ public class DeterminismCheckerOracleWrapper implements Oracle {
 	}
 	
 	public static void main(String[] args) {
-		Word word = symbolsToWords("aap", "noot", "mies");
-		Word subWord = symbolsToWords("aap", "noot", "wim");
+		Word word = LearnlibUtils.symbolsToWords("aap", "noot", "mies");
+		Word subWord = LearnlibUtils.symbolsToWords("aap", "noot", "wim");
 		Oracle dummy = new Oracle() {
 			private static final long serialVersionUID = 1L;
 			int i = 0;
@@ -55,11 +61,11 @@ public class DeterminismCheckerOracleWrapper implements Oracle {
 			public Word processQuery(Word arg0) throws LearningException {
 				Word result;
 				if (i == 0) {
-					result = symbolsToWords("1", "2", "3");
+					result = LearnlibUtils.symbolsToWords("1", "2", "3");
 				} else if (i == 1) {
-					result = symbolsToWords("1", "2", "3");
+					result = LearnlibUtils.symbolsToWords("1", "2", "3");
 				} else {
-					result = symbolsToWords("1", "4", "3");
+					result = LearnlibUtils.symbolsToWords("1", "4", "3");
 				}
 				i++;
 				return result;
@@ -80,13 +86,5 @@ public class DeterminismCheckerOracleWrapper implements Oracle {
 			System.out.println("failed too early on non-determinism-check:");
 			e.printStackTrace();
 		}
-	}
-	
-	private static Word symbolsToWords(String... symbolStrings) {
-		SymbolImpl[] symbols = new SymbolImpl[symbolStrings.length];
-		for (int i = 0; i < symbolStrings.length; i++) {
-			symbols[i] = new SymbolImpl(symbolStrings[i]);
-		}
-		return new WordImpl(symbols);
 	}
 }

@@ -67,6 +67,7 @@ class Tracker(threading.Thread):
                 tcp_syn = l3.get_th_seq()
                 tcp_ack = l3.get_th_ack()
                 response = self.impacketResponseParse(l3)
+                # ignore a packet if it was a retransmit
                 if (response.seq, response.ack, response.flags) not in self.responseHistory:
                     if "S" in response.flags:
                         self.responseHistory.add((response.seq, response.ack, response.flags))
@@ -77,7 +78,7 @@ class Tracker(threading.Thread):
     def processResponse(self, response):
         if response is not None:
             self.lastResponse = response
-            if response.flags == "SA" and response in self.lastResponses:
+            if (response.flags == "SA" or response.flags == "AS") and response in self.lastResponses:
                 print 'ignoring SA retransmission ' + response.__str__()
             else:
                 print 'non SA-ret packet:' + response.__str__()
