@@ -20,6 +20,8 @@ import learner.Main;
 import learner.SutInterface;
 import learner.TCPParams;
 import sutInterface.SutWrapper;
+import sutInterface.tcp.InvlangMapper;
+import sutInterface.tcp.InvlangSutWrapper;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
 import sutInterface.tcp.init.CachedInitOracle;
@@ -38,7 +40,7 @@ public class TraceRunner {
 	public static final String END = 		"\n*********************\n";
 	
 	private Map<List<String>, Integer> outcomes = new HashMap<>();
-	private final SutWrapper sutWrapper;
+	private final InvlangSutWrapper sutWrapper;
 	private final List<InputAction> inputTrace;
 	//private final CacheInputValidator validator;
 	
@@ -81,15 +83,16 @@ public class TraceRunner {
 		TCPParams tcp = Main.readConfig(config, sutInterface);
 		tcp.exitIfInvalid = false;
 		
-		InitOracle initOracle;
+		/*InitOracle initOracle;
 		// in a normal init-oracle ("functional") TCP setup, we use the conventional eq/mem oracles
 		if(! "adaptive".equalsIgnoreCase(tcp.oracle)) {
 			initOracle = new FunctionalInitOracle();
 		} else {
 			initOracle = new CachedInitOracle(new InitCacheManager());
 		}
-		TCPMapper tcpMapper = new TCPMapper(initOracle);
-		TCPSutWrapper sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
+		TCPMapper tcpMapper = new TCPMapper(initOracle);*/
+		//TCPSutWrapper sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
+		InvlangSutWrapper sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 		TraceRunner traceRunner = new TraceRunner(trace, sutWrapper);
 		for (i = 0; i < iterations; i++) {
 			traceRunner.runTrace((i+1));
@@ -121,7 +124,7 @@ public class TraceRunner {
 		return sb.toString();
 	}
 
-	public TraceRunner(List<String> inputTrace, TCPSutWrapper sutWrapper) {
+	public TraceRunner(List<String> inputTrace, InvlangSutWrapper sutWrapper) {
 		List<InputAction> inputActions = new ArrayList<>(inputTrace.size());
 		for (String s : inputTrace) {
 			inputActions.add(new InputAction(s));
@@ -133,6 +136,8 @@ public class TraceRunner {
 	protected void runTrace(int number) {
 		List<String> outcome = new LinkedList<String>();
 		sutWrapper.sendReset();
+		System.out.println("# " + number);
+		//System.out.println("# " + number + " @@@ " + this.sutWrapper.toString());
 		for (InputAction input : inputTrace) {
 			OutputAction output;
 			if (input.getMethodName().equals("reset")) {
@@ -141,7 +146,8 @@ public class TraceRunner {
 			} else {
 				output = this.sutWrapper.sendInput(input);
 			}
-			System.out.println("# " + number + " >>> " + input + " >>> " + output);
+			//System.out.println("# " + number + " >>> " + input + " >>> " + output);
+			//System.out.println("# " + number + " @@@ " + this.sutWrapper.toString());
 			outcome.add(output.toString());
 		}
 		Integer currentCounter = outcomes.get(outcome);

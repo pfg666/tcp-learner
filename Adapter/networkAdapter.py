@@ -88,7 +88,7 @@ class Adapter:
         while not finished:
             if not self.data:
                 try:
-                    ready = select([self.learnerSocket], [], [], 10)
+                    ready = select([self.learnerSocket], [], [], 300)
                     if ready[0]:
                         self.data = self.learnerSocket.recv(1024)
                     else:

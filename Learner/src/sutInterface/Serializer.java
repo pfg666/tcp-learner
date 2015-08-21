@@ -21,6 +21,14 @@ public class Serializer {
 		return result.toString();
 	}
 	
+	public static String concreteMessageToString(invlang.types.FlagSet flags, long seqNr,
+			long ackNr) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(flags.toInitials()).append(" ").append(seqNr).append(" ").append(ackNr);
+		return sb.toString();
+	}
+	
+	
 	public static String concreteMessageToString(FlagSet flags, long seqNr,
 			long ackNr) {
 		StringBuilder result = new StringBuilder();
@@ -34,6 +42,21 @@ public class Serializer {
 		return result.toString();
 	}
 
+	public static String abstractMessageToString(invlang.types.FlagSet flags,
+			String seqValidity, String ackValidity) {
+		StringBuilder sb = new StringBuilder();
+		boolean first = true;
+		for (invlang.types.Flag flag : flags.getSortedFlags()) {
+			if (!first) {
+				sb.append("+");
+			}
+			first = false;
+			sb.append(flag);
+		}
+		sb.append("(").append(seqValidity).append(",").append(ackValidity).append(")");
+		return sb.toString();
+	}
+	
 	public static String abstractMessageToString(char[] flags,
 			String seqValidity, String ackValidity) {
 		StringBuilder result = new StringBuilder();

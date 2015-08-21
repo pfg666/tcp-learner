@@ -52,6 +52,7 @@ public class TCPMapper {
 	public TCPMapper() {
 		this( new ClientInitOracle());
 		setDefault();
+		
 		//this( new FunctionalInitOracle());
 		//this( new CachedInitOracle(new InitCacheManager("/home/student/GitHub/tcp-learner/output/1421437324088/cache.txt")));
 	}

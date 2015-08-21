@@ -1,0 +1,386 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0xb6b4d9b6, pid=788, tid=3075766016
+#
+# JRE version: Java(TM) SE Runtime Environment (7.0_71-b14) (build 1.7.0_71-b14)
+# Java VM: Java HotSpot(TM) Server VM (24.71-b01 mixed mode linux-x86 )
+# Problematic frame:
+# C  [_jpype.so+0x419b6]  JPJavaEnv::FindClass(char const*)+0x36
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread is native thread
+
+siginfo:si_signo=SIGSEGV: si_errno=0, si_code=1 (SEGV_MAPERR), si_addr=0x00000000
+
+Registers:
+EAX=0x0998d050, EBX=0xb6b9f000, ECX=0x09c85328, EDX=0x09c8532c
+ESP=0xbfbff3c0, EBP=0x0998d050, ESI=0xb6ba0c08, EDI=0x00000000
+EIP=0xb6b4d9b6, EFLAGS=0x00210286, CR2=0x00000000
+
+Top of Stack: (sp=0xbfbff3c0)
+0xbfbff3c0:   09b1ac18 b6b04000 bfbff504 b6a7cf2f
+0xbfbff3d0:   bfbff504 00000000 bfbff464 b6b9f000
+0xbfbff3e0:   0000000f b6b02920 bfbff538 b6b5a22d
+0xbfbff3f0:   09c73748 09c8532c bfbff448 b7627e00
+0xbfbff400:   00000000 b775f450 00000218 00000238
+0xbfbff410:   bfbff44c 09c8e72c bfbff464 b6ba0c48
+0xbfbff420:   bfbff48c bfbff46c bfbff498 00000040
+0xbfbff430:   00000001 0000005c 00000023 00000005 
+
+Instructions: (pc=0xb6b4d9b6)
+0xb6b4d996:   89 04 24 e8 f2 1c fe ff 8b b3 94 fe ff ff 89 c7
+0xb6b4d9a6:   8b 06 8b 10 89 04 24 ff 52 18 8b 54 24 34 89 c5
+0xb6b4d9b6:   8b 07 89 54 24 04 89 3c 24 ff 50 18 8b 16 89 c7
+0xb6b4d9c6:   8b 02 89 14 24 89 6c 24 04 ff 50 1c 8b 83 c0 ff 
+
+Register to memory mapping:
+
+EAX=
+[error occurred during error reporting (printing register info), id 0xb]
+
+Stack: [0xbfbb1000,0xbfc01000],  sp=0xbfbff3c0,  free space=312k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [_jpype.so+0x419b6]  JPJavaEnv::FindClass(char const*)+0x36
+
+
+---------------  P R O C E S S  ---------------
+
+VM state:at safepoint (shutting down)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x09bf3ca0] Threads_lock - owner thread: 0x09c4a000
+
+Heap
+ def new generation   total 4800K, used 542K [0x9e400000, 0x9e930000, 0xa3800000)
+  eden space 4288K,  12% used [0x9e400000, 0x9e4879b8, 0x9e830000)
+  from space 512K,   0% used [0x9e830000, 0x9e830000, 0x9e8b0000)
+  to   space 512K,   0% used [0x9e8b0000, 0x9e8b0000, 0x9e930000)
+ tenured generation   total 10752K, used 0K [0xa3800000, 0xa4280000, 0xae000000)
+   the space 10752K,   0% used [0xa3800000, 0xa3800000, 0xa3800200, 0xa4280000)
+ compacting perm gen  total 16384K, used 1762K [0xae000000, 0xaf000000, 0xb2000000)
+   the space 16384K,  10% used [0xae000000, 0xae1b8968, 0xae1b8a00, 0xaf000000)
+No shared spaces configured.
+
+Card table byte_map: [0xb207e000,0xb211d000] byte_map_base: 0xb1b8c000
+
+Polling page: 0xb777f000
+
+Code Cache  [0xb21dd000, 0xb241d000, 0xb51dd000)
+ total_blobs=96 nmethods=0 adapters=66 free_code_cache=48864Kb largest_free_block=50036736
+
+Compilation events (0 events):
+No events
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 0,048 Thread 0x099aa000 Threw 0x9e44a740 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,052 Thread 0x099aa000 Threw 0x9e4540b8 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,052 Thread 0x099aa000 Threw 0x9e455ea8 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,053 Thread 0x099aa000 Threw 0x9e458270 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,055 Thread 0x099aa000 Threw 0x9e460da0 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,159 Thread 0x099aa000 Threw 0x9e4640d8 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,160 Thread 0x099aa000 Threw 0x9e4666a0 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,160 Thread 0x099aa000 Threw 0x9e4688b0 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,263 Thread 0x099aa000 Threw 0x9e46d898 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+Event: 0,264 Thread 0x099aa000 Threw 0x9e46fc30 at /HUDSON/workspace/7u-2-build-linux-i586/jdk7u71/1605/hotspot/src/share/vm/prims/jvm.cpp:1281
+
+Events (10 events):
+Event: 0,263 loading class 0x09c8d488 done
+Event: 0,264 loading class 0x09c8d288
+Event: 0,264 loading class 0x09c8d288 done
+Event: 0,801 Thread 0x09c84000 Thread exited: 0x09c84000
+Event: 0,801 loading class 0x9e3a5438
+Event: 0,801 loading class 0x9e3a5438 done
+Event: 0,802 loading class 0x9e3fac50
+Event: 0,802 loading class 0x9e3fac50 done
+Event: 0,804 Thread 0x099aa000 Thread exited: 0x099aa000
+Event: 0,804 Thread 0x09c62000 Thread exited: 0x09c62000
+
+
+Dynamic libraries:
+08048000-082f1000 r-xp 00000000 08:01 132603     /usr/bin/python2.7
+082f1000-082f2000 r--p 002a8000 08:01 132603     /usr/bin/python2.7
+082f2000-08351000 rw-p 002a9000 08:01 132603     /usr/bin/python2.7
+08351000-0835d000 rw-p 00000000 00:00 0 
+0998d000-09ca0000 rw-p 00000000 00:00 0          [heap]
+9dae8000-9daeb000 ---p 00000000 00:00 0 
+9daeb000-9db39000 rw-p 00000000 00:00 0 
+9db39000-9dd39000 rw-s 00000000 00:07 229288     socket:[229288]
+9dd39000-9dd3a000 ---p 00000000 00:00 0 
+9dd3a000-9ddba000 rw-p 00000000 00:00 0 
+9ddba000-9ddbd000 ---p 00000000 00:00 0 
+9ddbd000-9de0b000 rw-p 00000000 00:00 0          [stack:800]
+9de0b000-9de0e000 ---p 00000000 00:00 0 
+9de0e000-9de8c000 rw-p 00000000 00:00 0          [stack:799]
+9de8c000-9de8f000 ---p 00000000 00:00 0 
+9de8f000-9df0d000 rw-p 00000000 00:00 0          [stack:798]
+9df0d000-9df10000 ---p 00000000 00:00 0 
+9df10000-9df5e000 rw-p 00000000 00:00 0 
+9df5e000-9df61000 ---p 00000000 00:00 0 
+9df61000-9dfaf000 rw-p 00000000 00:00 0          [stack:796]
+9dfaf000-9dfb2000 ---p 00000000 00:00 0 
+9dfb2000-9e000000 rw-p 00000000 00:00 0          [stack:795]
+9e000000-9e021000 rw-p 00000000 00:00 0 
+9e021000-9e100000 ---p 00000000 00:00 0 
+9e11a000-9e11b000 ---p 00000000 00:00 0 
+9e11b000-9e1e6000 rw-p 00000000 00:00 0 
+9e1e6000-9e3a5000 r--s 039e9000 08:01 269846     /usr/lib/jvm/jdk1.7.0_71/jre/lib/rt.jar
+9e3a5000-9e930000 rw-p 00000000 00:00 0 
+9e930000-a3800000 rw-p 00000000 00:00 0 
+a3800000-a4280000 rw-p 00000000 00:00 0 
+a4280000-ae000000 rw-p 00000000 00:00 0 
+ae000000-af000000 rw-p 00000000 00:00 0 
+af000000-b2000000 rw-p 00000000 00:00 0 
+b2008000-b2011000 rw-p 00000000 00:00 0 
+b2011000-b2029000 rw-p 00000000 00:00 0 
+b2029000-b202f000 rw-p 00000000 00:00 0 
+b202f000-b207e000 rw-p 00000000 00:00 0 
+b207e000-b2081000 rw-p 00000000 00:00 0 
+b2081000-b20a8000 rw-p 00000000 00:00 0 
+b20a8000-b20ae000 rw-p 00000000 00:00 0 
+b20ae000-b20fc000 rw-p 00000000 00:00 0 
+b20fc000-b2104000 rw-p 00000000 00:00 0 
+b2104000-b211c000 rw-p 00000000 00:00 0 
+b211c000-b2126000 rw-p 00000000 00:00 0 
+b2126000-b21dd000 rw-p 00000000 00:00 0 
+b21dd000-b241d000 rwxp 00000000 00:00 0 
+b241d000-b51dd000 rw-p 00000000 00:00 0 
+b51dd000-b51f4000 r-xp 00000000 08:01 269959     /usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/libzip.so
+b51f4000-b51f5000 rw-p 00017000 08:01 269959     /usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/libzip.so
+b51f5000-b5a79000 r-xp 00000000 08:01 269911     /usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/server/libjvm.so
+b5a79000-b5add000 rw-p 00884000 08:01 269911     /usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/server/libjvm.so
+b5add000-b5f00000 rw-p 00000000 00:00 0 
+b5f00000-b5f21000 rw-p 00000000 00:00 0 
+b5f21000-b6000000 ---p 00000000 00:00 0 
+b6007000-b6012000 r-xp 00000000 08:01 64671      /lib/i386-linux-gnu/libnss_files-2.19.so
+b6012000-b6013000 r--p 0000a000 08:01 64671      /lib/i386-linux-gnu/libnss_files-2.19.so
+b6013000-b6014000 rw-p 0000b000 08:01 64671      /lib/i386-linux-gnu/libnss_files-2.19.so
+b6014000-b601e000 r-xp 00000000 08:01 64680      /lib/i386-linux-gnu/libnss_nis-2.19.so
+b601e000-b601f000 r--p 00009000 08:01 64680      /lib/i386-linux-gnu/libnss_nis-2.19.so
+b601f000-b6020000 rw-p 0000a000 08:01 64680      /lib/i386-linux-gnu/libnss_nis-2.19.so
+b6020000-b6035000 r-xp 00000000 08:01 64677      /lib/i386-linux-gnu/libnsl-2.19.so
+b6035000-b6036000 r--p 00015000 08:01 64677      /lib/i386-linux-gnu/libnsl-2.19.so
+b6036000-b6037000 rw-p 00016000 08:01 64677      /lib/i386-linux-gnu/libnsl-2.19.so
+b6037000-b6039000 rw-p 00000000 00:00 0 
+b6039000-b6040000 r-xp 00000000 08:01 64672      /lib/i386-linux-gnu/libnss_compat-2.19.so
+b6040000-b6041000 r--p 00006000 08:01 64672      /lib/i386-linux-gnu/libnss_compat-2.19.so
+b6041000-b6042000 rw-p 00007000 08:01 64672      /lib/i386-linux-gnu/libnss_compat-2.19.so
+b604b000-b6053000 rw-s 00000000 08:01 270901     /tmp/hsperfdata_root/788 (deleted)
+b6053000-b6076000 r-xp 00000000 08:01 269930     /usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/libjava.so
+b6076000-b6077000 rw-p 00023000 08:01 269930     /usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/libjava.so
+b6077000-b6078000 ---p 00000000 00:00 0 
+b6078000-b6938000 rw-p 00000000 00:00 0          [stack:793]
+b6938000-b6973000 r-xp 00000000 08:01 135143     /usr/lib/i386-linux-gnu/libpcap.so.1.5.3
+b6973000-b6974000 r--p 0003a000 08:01 135143     /usr/lib/i386-linux-gnu/libpcap.so.1.5.3
+b6974000-b6975000 rw-p 0003b000 08:01 135143     /usr/lib/i386-linux-gnu/libpcap.so.1.5.3
+b6979000-b697a000 rw-p 00000000 00:00 0 
+b697a000-b6985000 r-xp 00000000 08:01 269955     /usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/libverify.so
+b6985000-b6986000 rw-p 0000b000 08:01 269955     /usr/lib/jvm/jdk1.7.0_71/jre/lib/i386/libverify.so
+b6986000-b6a06000 rw-p 00000000 00:00 0 
+b6a06000-b6a22000 r-xp 00000000 08:01 3374       /lib/i386-linux-gnu/libgcc_s.so.1
+b6a22000-b6a23000 rw-p 0001b000 08:01 3374       /lib/i386-linux-gnu/libgcc_s.so.1
+b6a23000-b6aff000 r-xp 00000000 08:01 135262     /usr/lib/i386-linux-gnu/libstdc++.so.6.0.19
+b6aff000-b6b00000 ---p 000dc000 08:01 135262     /usr/lib/i386-linux-gnu/libstdc++.so.6.0.19
+b6b00000-b6b04000 r--p 000dc000 08:01 135262     /usr/lib/i386-linux-gnu/libstdc++.so.6.0.19
+b6b04000-b6b05000 rw-p 000e0000 08:01 135262     /usr/lib/i386-linux-gnu/libstdc++.so.6.0.19
+b6b05000-b6b0c000 rw-p 00000000 00:00 0 
+b6b0c000-b6b9d000 r-xp 00000000 08:01 140682     /usr/local/lib/python2.7/dist-packages/_jpype.so
+b6b9d000-b6b9f000 r--p 00090000 08:01 140682     /usr/local/lib/python2.7/dist-packages/_jpype.so
+b6b9f000-b6ba1000 rw-p 00092000 08:01 140682     /usr/local/lib/python2.7/dist-packages/_jpype.so
+b6ba1000-b6f02000 rw-p 00000000 00:00 0 
+b6f02000-b7095000 r-xp 00000000 08:01 29148      /lib/i386-linux-gnu/libcrypto.so.1.0.0
+b7095000-b70a4000 r--p 00193000 08:01 29148      /lib/i386-linux-gnu/libcrypto.so.1.0.0
+b70a4000-b70ab000 rw-p 001a2000 08:01 29148      /lib/i386-linux-gnu/libcrypto.so.1.0.0
+b70ab000-b70ae000 rw-p 00000000 00:00 0 
+b70ae000-b70ff000 r-xp 00000000 08:01 29147      /lib/i386-linux-gnu/libssl.so.1.0.0
+b70ff000-b7101000 r--p 00051000 08:01 29147      /lib/i386-linux-gnu/libssl.so.1.0.0
+b7101000-b7105000 rw-p 00053000 08:01 29147      /lib/i386-linux-gnu/libssl.so.1.0.0
+b7105000-b7106000 r--p 007ea000 08:01 136798     /usr/lib/locale/locale-archive
+b7106000-b7107000 rw-p 00000000 00:00 0 
+b7107000-b710e000 r-xp 00000000 08:01 64676      /lib/i386-linux-gnu/librt-2.19.so
+b710e000-b710f000 r--p 00006000 08:01 64676      /lib/i386-linux-gnu/librt-2.19.so
+b710f000-b7110000 rw-p 00007000 08:01 64676      /lib/i386-linux-gnu/librt-2.19.so
+b7110000-b7114000 r-xp 00000000 08:01 220242     /usr/local/lib/python2.7/dist-packages/pcapy.so
+b7114000-b7115000 r--p 00003000 08:01 220242     /usr/local/lib/python2.7/dist-packages/pcapy.so
+b7115000-b7116000 rw-p 00004000 08:01 220242     /usr/local/lib/python2.7/dist-packages/pcapy.so
+b7116000-b7156000 rw-p 00000000 00:00 0 
+b7156000-b7287000 r--p 002be000 08:01 136798     /usr/lib/locale/locale-archive
+b7287000-b7487000 r--p 00000000 08:01 136798     /usr/lib/locale/locale-archive
+b7487000-b7549000 rw-p 00000000 00:00 0 
+b7549000-b758d000 r-xp 00000000 08:01 64678      /lib/i386-linux-gnu/libm-2.19.so
+b758d000-b758e000 r--p 00043000 08:01 64678      /lib/i386-linux-gnu/libm-2.19.so
+b758e000-b758f000 rw-p 00044000 08:01 64678      /lib/i386-linux-gnu/libm-2.19.so
+b758f000-b75a7000 r-xp 00000000 08:01 3476       /lib/i386-linux-gnu/libz.so.1.2.8
+b75a7000-b75a8000 r--p 00017000 08:01 3476       /lib/i386-linux-gnu/libz.so.1.2.8
+b75a8000-b75a9000 rw-p 00018000 08:01 3476       /lib/i386-linux-gnu/libz.so.1.2.8
+b75a9000-b75ab000 r-xp 00000000 08:01 64686      /lib/i386-linux-gnu/libutil-2.19.so
+b75ab000-b75ac000 r--p 00001000 08:01 64686      /lib/i386-linux-gnu/libutil-2.19.so
+b75ac000-b75ad000 rw-p 00002000 08:01 64686      /lib/i386-linux-gnu/libutil-2.19.so
+b75ad000-b75b0000 r-xp 00000000 08:01 64693      /lib/i386-linux-gnu/libdl-2.19.so
+b75b0000-b75b1000 r--p 00002000 08:01 64693      /lib/i386-linux-gnu/libdl-2.19.so
+b75b1000-b75b2000 rw-p 00003000 08:01 64693      /lib/i386-linux-gnu/libdl-2.19.so
+b75b2000-b75b3000 rw-p 00000000 00:00 0 
+b75b3000-b775c000 r-xp 00000000 08:01 64683      /lib/i386-linux-gnu/libc-2.19.so
+b775c000-b775d000 ---p 001a9000 08:01 64683      /lib/i386-linux-gnu/libc-2.19.so
+b775d000-b775f000 r--p 001a9000 08:01 64683      /lib/i386-linux-gnu/libc-2.19.so
+b775f000-b7760000 rw-p 001ab000 08:01 64683      /lib/i386-linux-gnu/libc-2.19.so
+b7760000-b7763000 rw-p 00000000 00:00 0 
+b7763000-b777b000 r-xp 00000000 08:01 64691      /lib/i386-linux-gnu/libpthread-2.19.so
+b777b000-b777c000 r--p 00017000 08:01 64691      /lib/i386-linux-gnu/libpthread-2.19.so
+b777c000-b777d000 rw-p 00018000 08:01 64691      /lib/i386-linux-gnu/libpthread-2.19.so
+b777d000-b777f000 rw-p 00000000 00:00 0 
+b777f000-b7780000 ---p 00000000 00:00 0 
+b7780000-b7781000 rw-p 00000000 00:00 0 
+b7781000-b7784000 r-xp 00000000 08:01 138822     /usr/lib/python2.7/lib-dynload/_hashlib.i386-linux-gnu.so
+b7784000-b7785000 r--p 00002000 08:01 138822     /usr/lib/python2.7/lib-dynload/_hashlib.i386-linux-gnu.so
+b7785000-b7786000 rw-p 00003000 08:01 138822     /usr/lib/python2.7/lib-dynload/_hashlib.i386-linux-gnu.so
+b7786000-b778d000 r-xp 00000000 08:01 138829     /usr/lib/python2.7/lib-dynload/_ssl.i386-linux-gnu.so
+b778d000-b778e000 r--p 00006000 08:01 138829     /usr/lib/python2.7/lib-dynload/_ssl.i386-linux-gnu.so
+b778e000-b778f000 rw-p 00007000 08:01 138829     /usr/lib/python2.7/lib-dynload/_ssl.i386-linux-gnu.so
+b778f000-b7790000 r--p 007e6000 08:01 136798     /usr/lib/locale/locale-archive
+b7790000-b7792000 rw-p 00000000 00:00 0 
+b7792000-b7793000 r-xp 00000000 00:00 0          [vdso]
+b7793000-b77b3000 r-xp 00000000 08:01 64692      /lib/i386-linux-gnu/ld-2.19.so
+b77b3000-b77b4000 r--p 0001f000 08:01 64692      /lib/i386-linux-gnu/ld-2.19.so
+b77b4000-b77b5000 rw-p 00020000 08:01 64692      /lib/i386-linux-gnu/ld-2.19.so
+bfbad000-bfbae000 rwxp 00000000 00:00 0 
+bfbb5000-bfc01000 rw-p 00000000 00:00 0          [stack]
+
+VM Arguments:
+jvm_args: -ea 
+java_command: <unknown>
+Launcher Type: generic
+
+Environment Variables:
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+USERNAME=root
+SHELL=/bin/bash
+DISPLAY=:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x7e8e90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x7e8e90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x681f90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: [libjvm.so+0x681f90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGXFSZ: [libjvm.so+0x681f90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x681f90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x683790], sa_mask[0]=0x00000000, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x684a90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: [libjvm.so+0x684a90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGTERM: [libjvm.so+0x684a90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGQUIT: [libjvm.so+0x684a90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+
+
+---------------  S Y S T E M  ---------------
+
+OS:jessie/sid
+
+uname:Linux 3.13.0-36-generic #63-Ubuntu SMP Wed Sep 3 21:30:45 UTC 2014 i686
+libc:glibc 2.19 NPTL 2.19 
+rlimit: STACK 8192k, CORE 0k, NPROC 7865, NOFILE 4096, AS infinity
+load average:0,14 0,11 0,28
+
+/proc/meminfo:
+MemTotal:        1025968 kB
+MemFree:          103760 kB
+Buffers:           28576 kB
+Cached:           278744 kB
+SwapCached:            0 kB
+Active:           712440 kB
+Inactive:         157700 kB
+Active(anon):     563588 kB
+Inactive(anon):    13408 kB
+Active(file):     148852 kB
+Inactive(file):   144292 kB
+Unevictable:          32 kB
+Mlocked:              32 kB
+HighTotal:        135112 kB
+HighFree:          14584 kB
+LowTotal:         890856 kB
+LowFree:           89176 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:               256 kB
+Writeback:             0 kB
+AnonPages:        562880 kB
+Mapped:           108944 kB
+Shmem:             14148 kB
+Slab:              24856 kB
+SReclaimable:      14400 kB
+SUnreclaim:        10456 kB
+KernelStack:        2968 kB
+PageTables:         6304 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:      512984 kB
+Committed_AS:    1867640 kB
+VmallocTotal:     122880 kB
+VmallocUsed:       21216 kB
+VmallocChunk:      98540 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:    362496 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:       34808 kB
+DirectMap2M:      878592 kB
+
+
+CPU:total 1 (1 cores per cpu, 1 threads per core) family 6 model 58 stepping 9, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, tsc
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 58
+model name	: Intel(R) Core(TM) i7-3630QM CPU @ 2.40GHz
+stepping	: 9
+microcode	: 0x19
+cpu MHz		: 2408.793
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 1
+core id		: 0
+cpu cores	: 1
+apicid		: 0
+initial apicid	: 0
+fdiv_bug	: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 5
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 nx rdtscp constant_tsc pni monitor ssse3
+bogomips	: 4817.58
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 1025968k(103760k free), swap 0k(0k free)
+
+vm_info: Java HotSpot(TM) Server VM (24.71-b01) for linux-x86 JRE (1.7.0_71-b14), built on Sep 26 2014 16:44:29 by "java_re" with gcc 4.3.0 20080428 (Red Hat 4.3.0-8)
+
+time: Thu Jan  8 15:56:32 2015
+elapsed time: 0 seconds
+

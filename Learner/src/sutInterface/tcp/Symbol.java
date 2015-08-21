@@ -25,6 +25,7 @@ public enum Symbol {
 	M1,
 	P2,
 	M2,
+	SIMULTANEOUS,
 	_;
 	
 	public String toString(){
@@ -48,7 +49,7 @@ public enum Symbol {
 	}
 	
 	public static Symbol toSymbol(String str) {
-		String newStr = str.toUpperCase();
+		String newStr = str.toUpperCase().trim();
 		newStr = newStr.replace('+', 'P');
 		return Symbol.valueOf(newStr);
 	}

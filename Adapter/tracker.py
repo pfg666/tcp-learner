@@ -69,8 +69,8 @@ class Tracker(threading.Thread):
                 response = self.impacketResponseParse(l3)
                 # ignore a packet if it was a retransmit
                 if (response.seq, response.ack, response.flags) not in self.responseHistory:
-                    if "S" in response.flags:
-                        self.responseHistory.add((response.seq, response.ack, response.flags))
+                    #if "S" in response.flags:
+                    self.responseHistory.add((response.seq, response.ack, response.flags))
                     self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
                     self.lastResponse = response
     #                print "tracker:" + self.impacketResponseParse(l3).__str__()
