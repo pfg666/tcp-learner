@@ -40,6 +40,7 @@ import util.FileManager;
 import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
+import util.learnlib.Dot;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.angluin.Angluin;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
@@ -254,16 +255,14 @@ public class Main {
 
 				// stable hypothesis after membership queries
 				Automaton hyp = learner.getResult();
-				String hypString = outputDir + File.separator + "tmp-learnresult"
+				String hypFileName = outputDir + File.separator + "tmp-learnresult"
 						+ hypCounter++ + ".dot";
-				String hypStringPdf = outputDir + File.separator + "tmp-learnresult"
+				String hypPdfFileName = outputDir + File.separator + "tmp-learnresult"
 						+ hypCounter++ + ".pdf";
 				
-				File hypDot = new File(hypString);
-				File hypPDF = new File(hypStringPdf);
-				BufferedWriter out = new BufferedWriter(new FileWriter(new File(hypString)));
-				DotUtil.writeDot(hyp, out);
-				DotUtil.invokeDot(hypDot, "pdf", hypPDF);
+				File hypPDF = new File(hypPdfFileName);
+				Dot.writeDotFile(hyp, hypFileName );
+				DotUtil.invokeDot(hypFileName, "pdf", hypPDF);
 
 				absTraceOut.println("starting equivalence query");
 				absTraceOut.flush();
