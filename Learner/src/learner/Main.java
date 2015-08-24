@@ -19,6 +19,7 @@ import javax.sound.midi.SysexMessage;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import sutInterface.CacheOracle;
 import sutInterface.DeterminismCheckerOracleWrapper;
 import sutInterface.ProbablisticOracle;
 import sutInterface.SutInfo;
@@ -327,8 +328,8 @@ public class Main {
 			sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 			//eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)), 1, 0.8, 1))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
 			//memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new MembershipOracle(sutWrapper)), 1, 0.8, 1)));
-			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
+			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new CacheOracle(new EquivalenceOracle(sutWrapper))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new CacheOracle(new MembershipOracle(sutWrapper)))));
 		}
 		
 		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class

@@ -1,26 +1,17 @@
 package sutInterface.tcp;
 
 import invlang.mapperReader.InvLangHandler;
-import invlang.semantics.EnumDefinitions;
-import invlang.semantics.State;
-import invlang.semantics.programTree.expressionTree.BinaryOperator;
 import invlang.semantics.programTree.expressionTree.Expression;
-import invlang.semantics.programTree.expressionTree.LiteralLeaf;
 import invlang.types.EnumValue;
 import invlang.types.FlagSet;
-import invlang.types.TypeEnvironment;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import mapperlanguageParser.MapperLanguageParser;
 
 import sutInterface.Serializer;
 

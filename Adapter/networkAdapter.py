@@ -33,6 +33,7 @@ class Adapter:
         # create an INET, STREAMing socket
         self.serverSocket = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)
+        self.serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         # bind the socket to a public host and a well-known port
         self.serverSocket.bind((self.socketIP, commPort))
         # become a server socket
