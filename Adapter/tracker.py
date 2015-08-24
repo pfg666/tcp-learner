@@ -67,13 +67,16 @@ class Tracker(threading.Thread):
                 tcp_syn = l3.get_th_seq()
                 tcp_ack = l3.get_th_ack()
                 response = self.impacketResponseParse(l3)
+                self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
+                self.lastResponse = response
                 # ignore a packet if it was a retransmit
-                if (response.seq, response.ack, response.flags) not in self.responseHistory:
-                    #if "S" in response.flags:
-                    self.responseHistory.add((response.seq, response.ack, response.flags))
-                    self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
-                    self.lastResponse = response
-    #                print "tracker:" + self.impacketResponseParse(l3).__str__()
+#                if (response.seq, response.ack, response.flags) not in self.responseHistory:
+#                    #if "S" in response.flags:
+#                    self.responseHistory.add((response.seq, response.ack, response.flags))
+#                    self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
+#                    self.lastResponse = response
+#                else:
+#                    print "ignoring retransmission: " + response
 
     def processResponse(self, response):
         if response is not None:

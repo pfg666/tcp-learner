@@ -150,6 +150,20 @@ public class Main {
 			
 		}
 	}
+	
+	private static void copyInputsToOutputFolder() {
+		File inputFolder = sutConfigFile.getParentFile();
+		Path srcInputPath = inputFolder.toPath();
+		Path dstInputPath = outputFolder.toPath().resolve(inputFolder.getName()); // or resolve("input")
+		Path srcTcpPath = Paths.get(System.getProperty("user.dir")).resolve("Learner").resolve("src").resolve("sutInterface").resolve("tcp");
+		Path dstTcpPath = outputFolder.toPath().resolve("tcp");
+		try {
+			FileManager.copyFromTo(srcInputPath, dstInputPath);
+			FileManager.copyFromTo(srcTcpPath, dstTcpPath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static void writeOutputFiles(LearnResult learnResult,
 			LinkedList<State> highlights, BufferedWriter out) {
@@ -159,14 +173,8 @@ public class Main {
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
 		File inputFolder = sutConfigFile.getParentFile();
-		Path srcInputPath = inputFolder.toPath();
-		Path dstInputPath = outputFolder.toPath().resolve(inputFolder.getName()); // or resolve("input")
-		Path srcTcpPath = Paths.get(System.getProperty("user.dir")).resolve("Learner").resolve("src").resolve("sutInterface").resolve("tcp");
-		Path dstTcpPath = outputFolder.toPath().resolve("tcp");
 		
 		try {
-			FileManager.copyFromTo(srcInputPath, dstInputPath);
-			FileManager.copyFromTo(srcTcpPath, dstTcpPath);
 			out = new BufferedWriter(new FileWriter(dotFile));
 
 			DotUtil.writeDot(learnResult.learnedModel, out, learnResult.learnedModel.getAlphabet()
@@ -211,6 +219,7 @@ public class Main {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				closeOutputStreams();
+				copyInputsToOutputFolder();
 				InitCacheManager mgr = new InitCacheManager();
 				mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				if (done == false) {
