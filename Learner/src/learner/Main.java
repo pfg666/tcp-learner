@@ -101,6 +101,11 @@ public class Main {
 				learningParams.minTraceLength, learningParams.maxTraceLength);
 		eqOracle.setOracle(tcpOracles.tuple1);
 		eqOracle.setRandom(random);
+		WordCheckingEquivalenceOracle eqOracle2 = new WordCheckingEquivalenceOracle(tcpOracles.tuple1, new String[] {
+				"LISTEN", "SYN(V,V)", "ACK(V,V)", "ACCEPT", "FIN+ACK(V,V)", "CLOSECONNECTION", "ACCEPT", "ACK(V,V)", "CLOSECONNECTION", "ACK(V,V)"
+		});
+		
+		CompositeEquivalenceOracle compOracle = new CompositeEquivalenceOracle(eqOracle, eqOracle2);
 
 		//learner = new ObservationPack();
 		learner = new Angluin();
@@ -109,7 +114,7 @@ public class Main {
 		learner.setAlphabet(SutInfo.generateInputAlphabet());
 		SutInfo.generateOutputAlphabet();
 		
-		learnResult = learn(learner, eqOracle);
+		learnResult = learn(learner, compOracle);
 		
 
 		// final output to out.txt
@@ -172,7 +177,6 @@ public class Main {
 		//outputFolder.mkdirs();
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
-		File inputFolder = sutConfigFile.getParentFile();
 		
 		try {
 			out = new BufferedWriter(new FileWriter(dotFile));
