@@ -13,19 +13,24 @@ public class CacheOracle implements Oracle {
 	private static final long serialVersionUID = 1L;
 	private final Oracle oracle;
 	private static final QueryCacheManager cacheManager = new QueryCacheManager();
-	private static Map<List<Symbol>, List<Symbol>> inputToOutput = cacheManager.load("cache.txt"); 
+	private static Map<List<Symbol>, List<Symbol>> inputToOutput = cacheManager.load("cache.txt");
+	private volatile static boolean cacheAtShutdownSet = false;
 	
-	{
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				cacheManager.dump("cache.txt", inputToOutput); 
-			}
-		});
+	private static synchronized void addShutdownHook() {
+		if (! cacheAtShutdownSet) {
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				public void run() {
+					cacheManager.dump("cache.txt", inputToOutput); 
+				}
+			});
+			
+			cacheAtShutdownSet = true;
+		}
 	}
 
 	public CacheOracle(Oracle oracle) {
 		this.oracle = oracle;
-		
+		addShutdownHook();
 	}
 
 	@Override
