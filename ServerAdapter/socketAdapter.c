@@ -189,6 +189,9 @@ void init() {
 		WSAStartup(0x0202, &wsaData);
 	#endif
 	learner_listener_sd = socket(AF_INET, SOCK_STREAM, 0);
+	int reuse = 1;
+    if (setsockopt(	learner_listener_sd, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) < 0)
+        perror("setsockopt(SO_REUSEADDR) failed");
 	struct sockaddr_in learner_addr;
 	memset(&learner_addr, 0, sizeof(struct sockaddr_in));
 	learner_addr.sin_family = AF_INET; 
