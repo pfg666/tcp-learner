@@ -18,9 +18,18 @@ public class WordCheckingEquivalenceOracle implements EquivalenceOracle{
 	private List<Word> wordsToCheck = new ArrayList<Word>();
 	private Oracle oracle;
 
-	public WordCheckingEquivalenceOracle(Oracle oracle, String [] traceToCheck) {
-		this.wordsToCheck.add(LearnlibUtils.symbolsToWords(traceToCheck));
+	public WordCheckingEquivalenceOracle(Oracle oracle, List<List<String>> inputTracesToCheck) {
+		this.wordsToCheck = parseTestWords(inputTracesToCheck);
 		this.oracle = oracle;
+	}
+	
+	private List<Word> parseTestWords(List<List<String>> inputTracesToCheck) {
+		List<Word> testWords = new ArrayList<Word>();
+		for(List<String> traceToCheck : inputTracesToCheck) {
+			Word testWord = LearnlibUtils.symbolsToWords(traceToCheck);
+			testWords.add(testWord);
+		}
+		return testWords;
 	}
 
 	public EquivalenceOracleOutput findCounterExample(Automaton hyp) {

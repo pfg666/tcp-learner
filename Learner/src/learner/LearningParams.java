@@ -1,11 +1,14 @@
 package learner;
 
 import java.io.PrintStream;
+import java.util.List;
 
 public class LearningParams {
 	// params for learning
 	public String sutInterface;
 	public String algorithm = "Angluin";
+	public List<List<String>> testTraces = null;
+	public String yanCommand = null;
 	public int maxValue;
 	public int minValue;
 	public long seed;

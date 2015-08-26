@@ -60,8 +60,6 @@ import sutInterface.tcp.functionalMappers.TCPSutWrapperSpecification;
 public class Main {
 	private static File sutConfigFile = null;
 	public static LearningParams learningParams;
-	private static long seed = 178208038;
-	private static String seedStr = Long.toString(seed);
 	private static final long timeSnap = System.currentTimeMillis();
 	private static final String outputDir = "output" + File.separator + timeSnap;
 	private static File outputFolder;
@@ -96,16 +94,7 @@ public class Main {
 
 		LearnResult learnResult;
 		
-		Random random = new Random(seed);
-		RandomWalkEquivalenceOracle eqOracle = new RandomWalkEquivalenceOracle(learningParams.maxNumTraces,
-				learningParams.minTraceLength, learningParams.maxTraceLength);
-		eqOracle.setOracle(tcpOracles.tuple1);
-		eqOracle.setRandom(random);
-		WordCheckingEquivalenceOracle eqOracle2 = new WordCheckingEquivalenceOracle(tcpOracles.tuple1, new String[] {
-				"LISTEN", "SYN(V,V)", "ACK(V,V)", "ACCEPT", "FIN+ACK(V,V)", "CLOSECONNECTION", "ACCEPT", "ACK(V,V)", "CLOSECONNECTION", "ACK(V,V)"
-		});
-		
-		CompositeEquivalenceOracle compOracle = new CompositeEquivalenceOracle(eqOracle, eqOracle2);
+		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = buildEquivalenceOracle(learningParams, tcpOracles.tuple1);
 
 		//learner = new ObservationPack();
 		learner = new Angluin();
@@ -114,12 +103,12 @@ public class Main {
 		learner.setAlphabet(SutInfo.generateInputAlphabet());
 		SutInfo.generateOutputAlphabet();
 		
-		learnResult = learn(learner, compOracle);
+		learnResult = learn(learner, eqOracle);
 		
 
 		// final output to out.txt
-		absTraceOut.println("Seed: " + seedStr);
-		errOut.println("Seed: " + seedStr);
+		absTraceOut.println("Seed: " + learningParams.seed);
+		errOut.println("Seed: " + learningParams.seed);
 		absTraceOut.println("Done.");
 		errOut.println("Successful run.");
 
@@ -319,6 +308,26 @@ public class Main {
 		absAndConcTraceOut.close();
 		learnOut.close();
 		errOut.close();
+	}
+	
+	private static de.ls5.jlearn.interfaces.EquivalenceOracle buildEquivalenceOracle(LearningParams learningParams, Oracle queryOracle) {
+		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = null;
+		if (learningParams.yanCommand == null) {
+			Random random = new Random(learningParams.seed);
+			RandomWalkEquivalenceOracle eqOracle1 = new RandomWalkEquivalenceOracle(learningParams.maxNumTraces,
+					learningParams.minTraceLength, learningParams.maxTraceLength);
+			eqOracle1.setOracle(queryOracle);
+			eqOracle1.setRandom(random);
+			eqOracle = eqOracle1;
+		} else {
+			eqOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces);
+		}
+		if (learningParams.testTraces != null && !learningParams.testTraces.isEmpty()) {
+			WordCheckingEquivalenceOracle eqOracle2 = new WordCheckingEquivalenceOracle(queryOracle, learningParams.testTraces);
+			CompositeEquivalenceOracle compOracle = new CompositeEquivalenceOracle(eqOracle, eqOracle2);
+			eqOracle = compOracle;
+		}
+		return eqOracle;
 	}
 	
 	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
