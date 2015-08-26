@@ -1,17 +1,13 @@
 package sutInterface;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import util.Counter;
 import util.Log;
-
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.interfaces.Oracle;
 import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.interfaces.Word;
-import de.ls5.jlearn.shared.SymbolImpl;
 import de.ls5.jlearn.shared.WordImpl;
 
 public class ProbablisticOracle implements Oracle {

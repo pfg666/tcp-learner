@@ -19,6 +19,7 @@ import javax.sound.midi.SysexMessage;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import sutInterface.CacheOracle;
 import sutInterface.DeterminismCheckerOracleWrapper;
 import sutInterface.ProbablisticOracle;
 import sutInterface.SutInfo;
@@ -39,6 +40,7 @@ import util.FileManager;
 import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
+import util.learnlib.Dot;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.angluin.Angluin;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
@@ -58,8 +60,6 @@ import sutInterface.tcp.functionalMappers.TCPSutWrapperSpecification;
 public class Main {
 	private static File sutConfigFile = null;
 	public static LearningParams learningParams;
-	private static long seed = 178208038;
-	private static String seedStr = Long.toString(seed);
 	private static final long timeSnap = System.currentTimeMillis();
 	private static final String outputDir = "output" + File.separator + timeSnap;
 	private static File outputFolder;
@@ -94,11 +94,7 @@ public class Main {
 
 		LearnResult learnResult;
 		
-		Random random = new Random(seed);
-		RandomWalkEquivalenceOracle eqOracle = new RandomWalkEquivalenceOracle(learningParams.maxNumTraces,
-				learningParams.minTraceLength, learningParams.maxTraceLength);
-		eqOracle.setOracle(tcpOracles.tuple1);
-		eqOracle.setRandom(random);
+		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = buildEquivalenceOracle(learningParams, tcpOracles.tuple1);
 
 		//learner = new ObservationPack();
 		learner = new Angluin();
@@ -111,8 +107,8 @@ public class Main {
 		
 
 		// final output to out.txt
-		absTraceOut.println("Seed: " + seedStr);
-		errOut.println("Seed: " + seedStr);
+		absTraceOut.println("Seed: " + learningParams.seed);
+		errOut.println("Seed: " + learningParams.seed);
 		absTraceOut.println("Done.");
 		errOut.println("Successful run.");
 
@@ -148,6 +144,20 @@ public class Main {
 			
 		}
 	}
+	
+	private static void copyInputsToOutputFolder() {
+		File inputFolder = sutConfigFile.getParentFile();
+		Path srcInputPath = inputFolder.toPath();
+		Path dstInputPath = outputFolder.toPath().resolve(inputFolder.getName()); // or resolve("input")
+		Path srcTcpPath = Paths.get(System.getProperty("user.dir")).resolve("Learner").resolve("src").resolve("sutInterface").resolve("tcp");
+		Path dstTcpPath = outputFolder.toPath().resolve("tcp");
+		try {
+			FileManager.copyFromTo(srcInputPath, dstInputPath);
+			FileManager.copyFromTo(srcTcpPath, dstTcpPath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static void writeOutputFiles(LearnResult learnResult,
 			LinkedList<State> highlights, BufferedWriter out) {
@@ -156,15 +166,8 @@ public class Main {
 		//outputFolder.mkdirs();
 		File dotFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.dot");
 		File pdfFile = new File(outputFolder.getAbsolutePath() + File.separator + "learnresult.pdf");
-		File inputFolder = sutConfigFile.getParentFile();
-		Path srcInputPath = inputFolder.toPath();
-		Path dstInputPath = outputFolder.toPath().resolve(inputFolder.getName()); // or resolve("input")
-		Path srcTcpPath = Paths.get(System.getProperty("user.dir")).resolve("Learner").resolve("src").resolve("sutInterface").resolve("tcp");
-		Path dstTcpPath = outputFolder.toPath().resolve("tcp");
 		
 		try {
-			FileManager.copyFromTo(srcInputPath, dstInputPath);
-			FileManager.copyFromTo(srcTcpPath, dstTcpPath);
 			out = new BufferedWriter(new FileWriter(dotFile));
 
 			DotUtil.writeDot(learnResult.learnedModel, out, learnResult.learnedModel.getAlphabet()
@@ -209,6 +212,7 @@ public class Main {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				closeOutputStreams();
+				copyInputsToOutputFolder();
 				InitCacheManager mgr = new InitCacheManager();
 				mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				if (done == false) {
@@ -253,16 +257,14 @@ public class Main {
 
 				// stable hypothesis after membership queries
 				Automaton hyp = learner.getResult();
-				String hypString = outputDir + File.separator + "tmp-learnresult"
+				String hypFileName = outputDir + File.separator + "tmp-learnresult"
 						+ hypCounter++ + ".dot";
-				String hypStringPdf = outputDir + File.separator + "tmp-learnresult"
+				String hypPdfFileName = outputDir + File.separator + "tmp-learnresult"
 						+ hypCounter++ + ".pdf";
 				
-				File hypDot = new File(hypString);
-				File hypPDF = new File(hypStringPdf);
-				BufferedWriter out = new BufferedWriter(new FileWriter(new File(hypString)));
-				DotUtil.writeDot(hyp, out);
-				DotUtil.invokeDot(hypDot, "pdf", hypPDF);
+				File hypPDF = new File(hypPdfFileName);
+				Dot.writeDotFile(hyp, hypFileName );
+				DotUtil.invokeDot(hypFileName, "pdf", hypPDF);
 
 				absTraceOut.println("starting equivalence query");
 				absTraceOut.flush();
@@ -308,6 +310,26 @@ public class Main {
 		errOut.close();
 	}
 	
+	private static de.ls5.jlearn.interfaces.EquivalenceOracle buildEquivalenceOracle(LearningParams learningParams, Oracle queryOracle) {
+		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = null;
+		if (learningParams.yanCommand == null) {
+			Random random = new Random(learningParams.seed);
+			RandomWalkEquivalenceOracle eqOracle1 = new RandomWalkEquivalenceOracle(learningParams.maxNumTraces,
+					learningParams.minTraceLength, learningParams.maxTraceLength);
+			eqOracle1.setOracle(queryOracle);
+			eqOracle1.setRandom(random);
+			eqOracle = eqOracle1;
+		} else {
+			eqOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces);
+		}
+		if (learningParams.testTraces != null && !learningParams.testTraces.isEmpty()) {
+			WordCheckingEquivalenceOracle eqOracle2 = new WordCheckingEquivalenceOracle(queryOracle, learningParams.testTraces);
+			CompositeEquivalenceOracle compOracle = new CompositeEquivalenceOracle(eqOracle, eqOracle2);
+			eqOracle = compOracle;
+		}
+		return eqOracle;
+	}
+	
 	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
 		// setup tcp oracles/wrappers
 		SutWrapper sutWrapper = null;
@@ -327,8 +349,8 @@ public class Main {
 			sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 			//eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)), 1, 0.8, 1))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
 			//memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new MembershipOracle(sutWrapper)), 1, 0.8, 1)));
-			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
+			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new CacheOracle(new EquivalenceOracle(sutWrapper))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new CacheOracle(new MembershipOracle(sutWrapper)))));
 		}
 		
 		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class

@@ -31,7 +31,7 @@ public class DeterminismCheckerOracleWrapper implements Oracle {
 		Word output = this.oracle.processQuery(input);
 		List<Symbol> inputList = input.getSymbolList();
 		List<Symbol> outputList = output.getSymbolList();
-		for (int length = 1; length < inputList.size(); length++) {
+		for (int length = 1; length <= inputList.size(); length++) {
 			checkDeterminism(inputList.subList(0, length), outputList.subList(0, length));
 		}
 		return output;
@@ -39,6 +39,7 @@ public class DeterminismCheckerOracleWrapper implements Oracle {
 	
 	private void checkDeterminism(List<Symbol> input, List<Symbol> output) throws LearningException {
 		List<Symbol> previousOutput = inputToOutput.get(input);
+		
 		if (previousOutput == null) {
 			inputToOutput.put(input, output);
 		} else {
