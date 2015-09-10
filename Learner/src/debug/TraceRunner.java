@@ -14,11 +14,15 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import de.ls5.jlearn.interfaces.Oracle;
+
 import learner.Config;
 import learner.EquivalenceOracle;
 import learner.Main;
+import learner.MembershipOracle;
 import learner.SutInterface;
 import learner.TCPParams;
+import sutInterface.ObservationTreeWrapper;
 import sutInterface.SutWrapper;
 import sutInterface.tcp.InvlangMapper;
 import sutInterface.tcp.InvlangSutWrapper;
@@ -28,9 +32,13 @@ import sutInterface.tcp.init.CachedInitOracle;
 import sutInterface.tcp.init.FunctionalInitOracle;
 import sutInterface.tcp.init.InitCacheManager;
 import sutInterface.tcp.init.InitOracle;
+import sutInterface.tcp.init.InvCheckOracleWrapper;
+import sutInterface.tcp.init.LogOracleWrapper;
 import util.InputAction;
 import util.Log;
+import util.ObservationTree;
 import util.OutputAction;
+import util.Tuple2;
 
 public class TraceRunner {
 	private static final String PATH = "testtrace.txt";
@@ -92,6 +100,7 @@ public class TraceRunner {
 		}
 		TCPMapper tcpMapper = new TCPMapper(initOracle);*/
 		//TCPSutWrapper sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
+		
 		InvlangSutWrapper sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 		TraceRunner traceRunner = new TraceRunner(trace, sutWrapper);
 		for (i = 0; i < iterations; i++) {
