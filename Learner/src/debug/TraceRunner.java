@@ -39,7 +39,7 @@ public class TraceRunner {
 	public static final String SEPARATOR = 	"\n****** OUTPUTS ******\n";
 	public static final String END = 		"\n*********************\n";
 	
-	private Map<List<String>, Integer> outcomes = new HashMap<>();
+	private Map<List<String>, Integer> outcomes = new HashMap<List<String>, Integer>();
 	private final InvlangSutWrapper sutWrapper;
 	private final List<InputAction> inputTrace;
 	//private final CacheInputValidator validator;

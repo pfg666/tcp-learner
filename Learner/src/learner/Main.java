@@ -1,5 +1,6 @@
 package learner;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,11 +9,15 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 import javax.sound.midi.SysexMessage;
 
@@ -37,6 +42,7 @@ import sutInterface.tcp.init.InvCheckOracleWrapper;
 import sutInterface.tcp.init.LogOracleWrapper;
 import sutInterface.tcp.init.PartialInitOracle;
 import util.FileManager;
+import util.LearnlibUtils;
 import util.Log;
 import util.SoundUtils;
 import util.Tuple2;
@@ -50,9 +56,12 @@ import de.ls5.jlearn.interfaces.EquivalenceOracleOutput;
 import de.ls5.jlearn.interfaces.Learner;
 import de.ls5.jlearn.interfaces.Oracle;
 import de.ls5.jlearn.interfaces.State;
+import de.ls5.jlearn.interfaces.Symbol;
+import de.ls5.jlearn.interfaces.Word;
 import de.ls5.jlearn.logging.LearnLog;
 import de.ls5.jlearn.logging.LogLevel;
 import de.ls5.jlearn.logging.PrintStreamLoggingAppender;
+import de.ls5.jlearn.shared.WordImpl;
 import de.ls5.jlearn.util.DotUtil;
 import sutInterface.tcp.functionalMappers.TCPMapperSpecification;
 import sutInterface.tcp.functionalMappers.TCPSutWrapperSpecification;
@@ -272,7 +281,9 @@ public class Main {
 				// search for counterexample
 				EquivalenceOracleOutput o = eqOracle
 						.findCounterExample(hyp);
-	
+				
+				analyzeCounterExample(hyp, o);
+				
 				absTraceOut.flush();
 				errOut.flush();
 				absTraceOut.println("done equivalence query");
@@ -302,6 +313,30 @@ public class Main {
 		return learnResult;
 	}
 	
+	private static void analyzeCounterExample(Automaton hyp, EquivalenceOracleOutput o) throws IOException {
+		PrintStream out = new PrintStream( new FileOutputStream("cexanalysis.txt", true));
+		Word ceInputWord = o.getCounterExample();
+		Word oracleOutputWord = o.getOracleOutput();
+		List<Symbol> ceInputSymbols = ceInputWord.getSymbolList();
+		List<Symbol> sutOutput = oracleOutputWord.getSymbolList();
+		List<Symbol> inputSymbols = new ArrayList<Symbol>();
+		List<Symbol> hypOutput = hyp.getTraceOutput(ceInputWord).getSymbolList();
+		out.print("\n\n\n\n");
+		
+		for (int i = 0; i < ceInputSymbols.size(); i++) {
+			inputSymbols.add(ceInputSymbols.get(i));
+			Word inputWord = new WordImpl((Symbol[]) inputSymbols.toArray(new Symbol[inputSymbols.size()]));
+			out.println(ceInputSymbols.get(i));
+			out.println("!" +hypOutput.get(i) + " s" + hyp.getTraceState(inputWord, i+1).getId());
+			
+			if (! hypOutput.get(i).equals( sutOutput.get(i))) {
+				out.println("=!" +sutOutput.get(i) );
+				break;
+			} 
+		}
+		out.close();
+	}
+
 	private static void closeOutputStreams() {
 		statsOut.close();
 		absTraceOut.close();
@@ -321,6 +356,7 @@ public class Main {
 			eqOracle = eqOracle1;
 		} else {
 			eqOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces);
+			YannakakisWrapper.setYannakakisCmd(learningParams.yanCommand);
 		}
 		if (learningParams.testTraces != null && !learningParams.testTraces.isEmpty()) {
 			WordCheckingEquivalenceOracle eqOracle2 = new WordCheckingEquivalenceOracle(queryOracle, learningParams.testTraces);
