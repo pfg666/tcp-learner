@@ -1,5 +1,7 @@
 package learner;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +10,11 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,7 +27,9 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import sutInterface.CacheOracle;
+import sutInterface.CacheReaderOracle;
 import sutInterface.DeterminismCheckerOracleWrapper;
+import sutInterface.ObservationTreeWrapper;
 import sutInterface.ProbablisticOracle;
 import sutInterface.SutInfo;
 import sutInterface.SutWrapper;
@@ -38,6 +47,7 @@ import sutInterface.tcp.init.LogOracleWrapper;
 import sutInterface.tcp.init.PartialInitOracle;
 import util.FileManager;
 import util.Log;
+import util.ObservationTree;
 import util.SoundUtils;
 import util.Tuple2;
 import util.learnlib.Dot;
@@ -58,6 +68,8 @@ import sutInterface.tcp.functionalMappers.TCPMapperSpecification;
 import sutInterface.tcp.functionalMappers.TCPSutWrapperSpecification;
 
 public class Main {
+	public static final String CACHE_FILE = "cache.ser";
+	
 	private static File sutConfigFile = null;
 	public static LearningParams learningParams;
 	private static final long timeSnap = System.currentTimeMillis();
@@ -71,6 +83,7 @@ public class Main {
 	private static boolean done;
 	public static Config config;
 	private static File sutInterfaceFile;
+	private static ObservationTree tree;
 
 	public static void main(String[] args) throws LearningException, IOException, Exception {
 		handleArgs(args);
@@ -213,8 +226,9 @@ public class Main {
 			public void run() {
 				closeOutputStreams();
 				copyInputsToOutputFolder();
-				InitCacheManager mgr = new InitCacheManager();
-				mgr.dump(outputDir + File.separator +  "cache.txt"); 
+				writeCacheTree();
+				//InitCacheManager mgr = new InitCacheManager();
+				//mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				if (done == false) {
 					SoundUtils.failure();
 				}
@@ -320,6 +334,7 @@ public class Main {
 			eqOracle1.setRandom(random);
 			eqOracle = eqOracle1;
 		} else {
+			YannakakisWrapper.setYannakakisCmd(learningParams.yanCommand);
 			eqOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces);
 		}
 		if (learningParams.testTraces != null && !learningParams.testTraces.isEmpty()) {
@@ -331,41 +346,13 @@ public class Main {
 	}
 	
 	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
-		// setup tcp oracles/wrappers
-		SutWrapper sutWrapper = null;
-		Oracle eqOracleRunner = null;
-		Oracle memOracleRunner = null;
-		
-		// in a normal init-oracle ("functional") TCP setup, we use the conventional eq/mem oracles
-		if(! "adaptive".equalsIgnoreCase(tcp.oracle)) {
-			InitOracle initOracle = null;
-			if("client".equalsIgnoreCase(tcp.oracle)) {
-				initOracle = new ClientInitOracle();
-			} else {
-				initOracle = new FunctionalInitOracle();
-			}
-			//TCPMapperSpecification tcpMapper = new TCPMapperSpecification(initOracle);
-			//sutWrapper = new TCPSutWrapperSpecification(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
-			sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
-			//eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)), 1, 0.8, 1))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-			//memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new ProbablisticOracle(new LogOracleWrapper(new MembershipOracle(sutWrapper)), 1, 0.8, 1)));
-			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new CacheOracle(new EquivalenceOracle(sutWrapper))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new CacheOracle(new MembershipOracle(sutWrapper)))));
+		SutWrapper sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
+		tree = readCacheTree();
+		if (tree == null) {
+			tree = new ObservationTree();
 		}
-		
-		// in an adaptive-oracle ("adaptive") TCP setup, we wrap eq/mem oracles around an adaptive Wrapper class
-		// this class, along with passing regular queries, also applies the SYN extension to determine the init-status
-		// it updates the init status in a cache
-		// a CachedInitOracle will then read from this cache and is used by the mapper instead of the FunctionInitOracle
-		else {
-			//TCPMapperSpecification tcpMapper = new TCPMapperSpecification();
-			sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
-			//sutWrapper = new TCPSutWrapperSpecification(tcp.sutPort, tcpMapper, false);
-			//InitOracle initOracle = new AdaptiveInitOracle(tcp.sutPort, new PartialInitOracle());
-			//tcpMapper.setInitOracle(initOracle);
-			eqOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper))));
-			memOracleRunner = new InvCheckOracleWrapper(new DeterminismCheckerOracleWrapper(new LogOracleWrapper(new MembershipOracle(sutWrapper))));
-		}
+		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new EquivalenceOracle(sutWrapper))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new MembershipOracle(sutWrapper)))));
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
 	}
 
@@ -426,6 +413,41 @@ public class Main {
 	public static void printUsage() {
 		System.out
 				.println(" config_file     - .yaml config file describing the sut/learning.");
+	}
+	
+	public static void writeCacheTree() {
+		if (tree == null) {
+			System.err.println("Could not write uninitialized observation tree");
+		}
+		try (
+				OutputStream file = new FileOutputStream(CACHE_FILE);
+				OutputStream buffer = new BufferedOutputStream(file);
+				ObjectOutput output = new ObjectOutputStream(buffer);
+				) {
+			output.writeObject(tree);
+		}  
+		catch (IOException ex){
+			System.err.println("Could not write observation tree");
+		}
+	}
+	
+	public static ObservationTree readCacheTree() {
+		try(
+				InputStream file = new FileInputStream(CACHE_FILE);
+				InputStream buffer = new BufferedInputStream(file);
+				ObjectInput input = new ObjectInputStream (buffer);
+				) {
+			//deserialize the List
+			return (ObservationTree)input.readObject();
+		}
+		catch(ClassNotFoundException ex) {
+			System.err.println("Cache file corrupt");
+			return null;
+		}
+		catch(IOException ex) {
+			System.err.println("Could not read cache file");
+			return null;
+		}
 	}
 }
 
