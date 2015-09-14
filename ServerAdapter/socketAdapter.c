@@ -123,6 +123,7 @@ void *do_connect(void *arg)
 
 void start_connecting_thread() {
 	if (main_socket_blocked == 0 && secondary_sd == -1) {
+		main_socket_blocked = 1;
 #ifdef _WIN32
 		socket_thread = CreateThread(NULL, 0, &do_connect, NULL, 0, NULL);
 #elif __gnu_linux__
@@ -134,7 +135,6 @@ void start_connecting_thread() {
 		send_ok();
 		wait_ok();
 	}
-	main_socket_blocked = 1;
 }
 
 void stop_thread() {
@@ -173,6 +173,7 @@ void *do_accept(void *arg) {
 
 void start_accepting_thread() {
 	if (main_socket_blocked == 0 && secondary_sd == -1) {
+		main_socket_blocked = 1;
 #ifdef _WIN32
 		socket_thread = CreateThread(NULL, 0, &do_accept, NULL, 0, NULL);
 #elif __gnu_linux__
@@ -181,7 +182,6 @@ void start_accepting_thread() {
 		printf("cannot accept process, unknown OS\n");
 #endif
 	}
-	main_socket_blocked = 1;
 }
 
 void init() {
@@ -190,9 +190,6 @@ void init() {
 		WSAStartup(0x0202, &wsaData);
 	#endif
 	learner_listener_sd = socket(AF_INET, SOCK_STREAM, 0);
-	int reuse = 1;
-    if (setsockopt(	learner_listener_sd, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) < 0)
-        perror("setsockopt(SO_REUSEADDR) failed");
 	struct sockaddr_in learner_addr;
 	memset(&learner_addr, 0, sizeof(struct sockaddr_in));
 	learner_addr.sin_family = AF_INET; 
@@ -200,7 +197,7 @@ void init() {
 	learner_addr.sin_port = htons(learner_port);
 	bind(learner_listener_sd, (struct sockaddr*)&learner_addr, sizeof(learner_addr));
 	
-	if (listen(learner_listener_sd, 10) != 0) {
+	if (listen(learner_listener_sd, 1) != 0) {
 		error("cannot open socket to listen to learner\n");
 	}
 	printf("listening for learner...\n");
@@ -339,7 +336,7 @@ void process_accept() {
 
 void process_listen() {
 	printf("LISTEN\n");
-	if (listen(main_sd, 10) == 0) {
+	if (listen(main_sd, 1) == 0) {
 		//answer("OK\n");
 		printf("listening succesfully\n");
 	}
