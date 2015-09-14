@@ -99,6 +99,7 @@ public class Main {
 		LearnResult learnResult;
 		
 		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = buildEquivalenceOracle(learningParams, tcpOracles.tuple1);
+		SingleTransitionReducer ceReducer = new SingleTransitionReducer(tcpOracles.tuple1);
 
 		learner = new ObservationPack();
 		//learner = new Angluin();
@@ -107,7 +108,7 @@ public class Main {
 		learner.setAlphabet(SutInfo.generateInputAlphabet());
 		SutInfo.generateOutputAlphabet();
 		
-		learnResult = learn(learner, eqOracle);
+		learnResult = learn(learner, eqOracle, ceReducer);
 		
 
 		// final output to out.txt
@@ -228,7 +229,7 @@ public class Main {
 	}
 
 	public static LearnResult learn(Learner learner,
-			de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle)
+			de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle, SingleTransitionReducer ceReducer)
 			throws LearningException, ObservationConflictException, IOException {
 		LearnResult learnResult = new LearnResult();
 		Statistics stats = Statistics.getStats();
@@ -278,9 +279,6 @@ public class Main {
 				EquivalenceOracleOutput o = eqOracle
 						.findCounterExample(hyp);
 				
-				logCounterExampleAnalysis(hyp, hypCounter, o);
-				hypCounter ++;
-				
 				absTraceOut.flush();
 				errOut.flush();
 				absTraceOut.println("done equivalence query");
@@ -293,6 +291,10 @@ public class Main {
 					done = true;
 					continue;
 				} 
+				o = ceReducer.reducedCounterexample(o, hyp);
+				
+				logCounterExampleAnalysis(hyp, hypCounter, o);
+				hypCounter ++;
 				absTraceOut.println("Sending CE to LearnLib.");
 				absTraceOut.println("Counter Example: "
 						+ o.getCounterExample().toString());
