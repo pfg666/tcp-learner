@@ -67,7 +67,7 @@ public class TraceRunner {
 		while(it.hasNext()) {
 			String line = it.next();
 			System.out.print((i++) + ": " + line);
-			if (line.startsWith("#") || line.isEmpty()) {
+			if (line.startsWith("#") || line.startsWith("!") || line.isEmpty()) {
 				it.remove();
 				System.out.println(" (skipped)");
 			} else {
@@ -136,7 +136,7 @@ public class TraceRunner {
 	public TraceRunner(List<String> inputTrace, InvlangSutWrapper sutWrapper) {
 		List<InputAction> inputActions = new ArrayList<>(inputTrace.size());
 		for (String s : inputTrace) {
-			inputActions.add(new InputAction(s));
+			inputActions.add(new InputAction(s.trim()));
 		}
 		this.inputTrace = inputActions;
 		this.sutWrapper = sutWrapper;

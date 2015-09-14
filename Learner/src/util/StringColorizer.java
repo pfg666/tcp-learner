@@ -1,7 +1,7 @@
 package util;
 
 public class StringColorizer {
-	private static final boolean COLORS_ARE_ACTUALLY_WORKING = false;
+	private static final boolean COLORS_ARE_ACTUALLY_WORKING = true;
 	
 	public enum TextColor {
 		BLACK(ANSI_BLACK),

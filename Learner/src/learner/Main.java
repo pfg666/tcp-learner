@@ -1,47 +1,48 @@
 package learner;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
-
-import javax.sound.midi.SysexMessage;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import sutInterface.CacheOracle;
 import sutInterface.CacheReaderOracle;
-import sutInterface.DeterminismCheckerOracleWrapper;
 import sutInterface.ObservationTreeWrapper;
-import sutInterface.ProbablisticOracle;
 import sutInterface.SutInfo;
 import sutInterface.SutWrapper;
 import sutInterface.tcp.InvlangSutWrapper;
 import sutInterface.tcp.LearnResult;
-import sutInterface.tcp.TCPMapper;
-import sutInterface.tcp.TCPSutWrapper;
-import sutInterface.tcp.init.AdaptiveInitOracle;
-import sutInterface.tcp.init.ClientInitOracle;
-import sutInterface.tcp.init.FunctionalInitOracle;
-import sutInterface.tcp.init.InitCacheManager;
-import sutInterface.tcp.init.InitOracle;
 import sutInterface.tcp.init.InvCheckOracleWrapper;
 import sutInterface.tcp.init.LogOracleWrapper;
-import sutInterface.tcp.init.PartialInitOracle;
 import util.FileManager;
-import util.LearnlibUtils;
 import util.Log;
 import util.ObservationTree;
 import util.SoundUtils;
 import util.Tuple2;
 import util.learnlib.Dot;
 import de.ls5.jlearn.abstractclasses.LearningException;
-import de.ls5.jlearn.algorithms.angluin.Angluin;
+import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
 import de.ls5.jlearn.exceptions.ObservationConflictException;
 import de.ls5.jlearn.interfaces.Automaton;
@@ -56,8 +57,6 @@ import de.ls5.jlearn.logging.LogLevel;
 import de.ls5.jlearn.logging.PrintStreamLoggingAppender;
 import de.ls5.jlearn.shared.WordImpl;
 import de.ls5.jlearn.util.DotUtil;
-import sutInterface.tcp.functionalMappers.TCPMapperSpecification;
-import sutInterface.tcp.functionalMappers.TCPSutWrapperSpecification;
 
 public class Main {
 	public static final String CACHE_FILE = "cache.ser";
@@ -65,7 +64,7 @@ public class Main {
 	private static File sutConfigFile = null;
 	public static LearningParams learningParams;
 	private static final long timeSnap = System.currentTimeMillis();
-	private static final String outputDir = "output" + File.separator + timeSnap;
+	public static final String outputDir = "output" + File.separator + timeSnap;
 	private static File outputFolder;
 	public static PrintStream learnOut;
 	public static PrintStream absTraceOut, absAndConcTraceOut;
@@ -101,8 +100,8 @@ public class Main {
 		
 		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = buildEquivalenceOracle(learningParams, tcpOracles.tuple1);
 
-		//learner = new ObservationPack();
-		learner = new Angluin();
+		learner = new ObservationPack();
+		//learner = new Angluin();
 		learner.setOracle(tcpOracles.tuple0);
 
 		learner.setAlphabet(SutInfo.generateInputAlphabet());
@@ -235,7 +234,7 @@ public class Main {
 		Statistics stats = Statistics.getStats();
 		stats.startTime = System.currentTimeMillis();
 		long starttmp = stats.startTime;
-		int hypCounter = 0;
+		int hypCounter = 1;
 		long endtmp;
 		done = false;
 
@@ -264,9 +263,9 @@ public class Main {
 				// stable hypothesis after membership queries
 				Automaton hyp = learner.getResult();
 				String hypFileName = outputDir + File.separator + "tmp-learnresult"
-						+ hypCounter++ + ".dot";
+						+ hypCounter + ".dot";
 				String hypPdfFileName = outputDir + File.separator + "tmp-learnresult"
-						+ hypCounter++ + ".pdf";
+						+ hypCounter + ".pdf";
 				
 				File hypPDF = new File(hypPdfFileName);
 				Dot.writeDotFile(hyp, hypFileName );
@@ -279,7 +278,8 @@ public class Main {
 				EquivalenceOracleOutput o = eqOracle
 						.findCounterExample(hyp);
 				
-				analyzeCounterExample(hyp, o);
+				logCounterExampleAnalysis(hyp, hypCounter, o);
+				hypCounter ++;
 				
 				absTraceOut.flush();
 				errOut.flush();
@@ -310,15 +310,15 @@ public class Main {
 		return learnResult;
 	}
 	
-	private static void analyzeCounterExample(Automaton hyp, EquivalenceOracleOutput o) throws IOException {
-		PrintStream out = new PrintStream( new FileOutputStream("cexanalysis.txt", true));
+	private static void logCounterExampleAnalysis(Automaton hyp, int hypCounter, EquivalenceOracleOutput o) throws IOException {
+		PrintStream out = new PrintStream( new FileOutputStream(outputDir + File.separator +"cexanalysis.txt", true));
 		Word ceInputWord = o.getCounterExample();
 		Word oracleOutputWord = o.getOracleOutput();
 		List<Symbol> ceInputSymbols = ceInputWord.getSymbolList();
 		List<Symbol> sutOutput = oracleOutputWord.getSymbolList();
 		List<Symbol> inputSymbols = new ArrayList<Symbol>();
 		List<Symbol> hypOutput = hyp.getTraceOutput(ceInputWord).getSymbolList();
-		out.print("\n\n\n\n");
+		out.print("\n Counterexample for hyp"+hypCounter +"\n");
 		
 		for (int i = 0; i < ceInputSymbols.size(); i++) {
 			inputSymbols.add(ceInputSymbols.get(i));
@@ -327,7 +327,7 @@ public class Main {
 			out.println("!" +hypOutput.get(i) + " s" + hyp.getTraceState(inputWord, i+1).getId());
 			
 			if (! hypOutput.get(i).equals( sutOutput.get(i))) {
-				out.println("=!" +sutOutput.get(i) );
+				out.println("#!" +sutOutput.get(i));
 				break;
 			} 
 		}
@@ -370,8 +370,8 @@ public class Main {
 		if (tree == null) {
 			tree = new ObservationTree();
 		}
-		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new EquivalenceOracle(sutWrapper))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new MembershipOracle(sutWrapper)))));
+		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new CacheOracle(new EquivalenceOracle(sutWrapper)))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new CacheOracle(new MembershipOracle(sutWrapper))))));
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
 	}
 
@@ -444,6 +444,7 @@ public class Main {
 				ObjectOutput output = new ObjectOutputStream(buffer);
 				) {
 			output.writeObject(tree);
+			output.close();
 		}  
 		catch (IOException ex){
 			System.err.println("Could not write observation tree");

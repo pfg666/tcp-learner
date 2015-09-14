@@ -1,21 +1,13 @@
 package sutInterface;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import de.ls5.jlearn.abstractclasses.LearningException;
-import de.ls5.jlearn.interfaces.Oracle;
-import de.ls5.jlearn.interfaces.Symbol;
-import de.ls5.jlearn.interfaces.Word;
-import de.ls5.jlearn.shared.SymbolImpl;
-import de.ls5.jlearn.shared.WordImpl;
-
-import util.LearnlibUtils;
 import util.ObservationTree;
 import util.exceptions.InconsistencyException;
 import util.exceptions.NonDeterminismException;
+import de.ls5.jlearn.abstractclasses.LearningException;
+import de.ls5.jlearn.interfaces.Oracle;
+import de.ls5.jlearn.interfaces.Word;
 
 /**
  * Creates a consistent observation tree. Implies that it checks for non-determinism.

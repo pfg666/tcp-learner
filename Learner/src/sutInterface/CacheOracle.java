@@ -1,5 +1,6 @@
 package sutInterface;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,8 @@ public class CacheOracle implements Oracle {
 		if (! cacheAtShutdownSet) {
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				public void run() {
-					cacheManager.dump("cache.txt", inputToOutput); 
+					cacheManager.dump("cache.txt", inputToOutput);
+					cacheManager.dump(learner.Main.outputDir + File.separator + "cache.txt", inputToOutput);
 				}
 			});
 			

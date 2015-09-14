@@ -1,0 +1,8 @@
+Running time of membership queries: 281ms.
+Running time of membership queries: 131635ms.
+Running time of membership queries: 225977ms.
+Running time of membership queries: 3623653ms.
+Running time of membership queries: 4375709ms.
+Running time of membership queries: 2024580ms.
+Running time of membership queries: 1195076ms.
+Running time of membership queries: 3186156ms.
