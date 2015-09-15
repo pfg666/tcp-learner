@@ -1,15 +1,21 @@
 package util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import learner.Main;
+
 import util.exceptions.InconsistencyException;
 
 import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.interfaces.Word;
+import de.ls5.jlearn.shared.SymbolImpl;
 import de.ls5.jlearn.shared.WordImpl;
 
 public class ObservationTree implements Serializable {
@@ -116,5 +122,17 @@ public class ObservationTree implements Serializable {
 				return observationTail;
 			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		String[] lookup = "LISTEN SYN(V,V) ACK(V,V) ACCEPT CLOSECONNECTION ACK(V,V) CLOSE FIN+ACK(V,V)"
+				.split("\\s+");
+		ObservationTree observations = Main.readCacheTree();
+		LinkedList<Symbol> symbols = new LinkedList<>();
+		for (String string : lookup) {
+			symbols.add(new SymbolImpl(string));
+		}
+		System.out.println(symbols);
+		System.out.println(observations.getObservation(symbols));
 	}
 }

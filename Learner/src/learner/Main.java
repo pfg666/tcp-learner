@@ -377,7 +377,7 @@ public class Main {
 		}
 		if (learningParams.testTraces != null && !learningParams.testTraces.isEmpty()) {
 			WordCheckingEquivalenceOracle eqOracle2 = new WordCheckingEquivalenceOracle(queryOracle, learningParams.testTraces);
-			CompositeEquivalenceOracle compOracle = new CompositeEquivalenceOracle(eqOracle, eqOracle2);
+			CompositeEquivalenceOracle compOracle = new CompositeEquivalenceOracle(eqOracle2, eqOracle);
 			eqOracle = compOracle;
 		}
 		return eqOracle;

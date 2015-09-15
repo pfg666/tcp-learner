@@ -10,7 +10,10 @@ import de.ls5.jlearn.interfaces.Automaton;
 import de.ls5.jlearn.interfaces.EquivalenceOracle;
 import de.ls5.jlearn.interfaces.EquivalenceOracleOutput;
 import de.ls5.jlearn.interfaces.Oracle;
+import de.ls5.jlearn.interfaces.State;
+import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.interfaces.Word;
+import de.ls5.jlearn.shared.WordImpl;
 import de.ls5.jlearn.equivalenceoracles.EquivalenceOracleOutputImpl;
 
 public class WordCheckingEquivalenceOracle implements EquivalenceOracle{
@@ -35,6 +38,7 @@ public class WordCheckingEquivalenceOracle implements EquivalenceOracle{
 	public EquivalenceOracleOutput findCounterExample(Automaton hyp) {
 		EquivalenceOracleOutputImpl equivOracleOutput = null;
 		for (Word wordInput : wordsToCheck) {
+			System.err.println(wordInput);
 			Word hypOutput = hyp.getTraceOutput(wordInput);
 			Word sutOutput;
 			try {
