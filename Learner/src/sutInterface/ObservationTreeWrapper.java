@@ -35,7 +35,7 @@ public class ObservationTreeWrapper implements Oracle, Serializable {
 			this.tree.addObservation(input, output);
 			return output;
 		} catch (InconsistencyException e) {
-			throw new NonDeterminismException("Non-determinism detected for input\n" + input.getSymbolList() + "\n" + e.getMessage());
+			throw new NonDeterminismException("Non-determinism detected for input\n" + input.getSymbolList() + "\n" + e.getMessage(), input);
 		}
 	}
 	

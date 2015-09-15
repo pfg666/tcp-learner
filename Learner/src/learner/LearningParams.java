@@ -16,6 +16,7 @@ public class LearningParams {
 	public int minTraceLength;
 	public int maxTraceLength;
 	public String mapper;
+	public int nonDeterminismTestIterations;
 	
 	public void printParams(PrintStream stdout) {
 		String seedStr = Long.toString(seed) + " - Set statically";

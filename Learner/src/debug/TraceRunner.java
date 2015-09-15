@@ -1,6 +1,8 @@
 package debug;
 
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,6 +17,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import de.ls5.jlearn.interfaces.Oracle;
+import de.ls5.jlearn.interfaces.Symbol;
+import de.ls5.jlearn.interfaces.Word;
 
 import learner.Config;
 import learner.EquivalenceOracle;
@@ -36,6 +40,7 @@ import sutInterface.tcp.init.InvCheckOracleWrapper;
 import sutInterface.tcp.init.LogOracleWrapper;
 import util.InputAction;
 import util.Log;
+import util.NullStream;
 import util.ObservationTree;
 import util.OutputAction;
 import util.Tuple2;
@@ -103,14 +108,12 @@ public class TraceRunner {
 		
 		InvlangSutWrapper sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 		TraceRunner traceRunner = new TraceRunner(trace, sutWrapper);
-		for (i = 0; i < iterations; i++) {
-			traceRunner.runTrace((i+1));
-		}
+		traceRunner.testTrace(iterations);
 		sutWrapper.close();
-		System.out.println(traceRunner.results());
+		System.out.println(traceRunner.getResults());
 	}
 	
-	private String results() {
+	public String getResults() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(START);
 		sb.append("input:" + this.inputTrace);
@@ -132,7 +135,16 @@ public class TraceRunner {
 		sb.append(END);
 		return sb.toString();
 	}
-
+	
+	public TraceRunner(Word word, InvlangSutWrapper sutWrapper) {
+		List<InputAction> inputActions = new ArrayList<>(word.size());
+		for (Symbol symbol : word.getSymbolList()) {
+			inputActions.add(new InputAction(symbol.toString()));
+		}
+		this.inputTrace = inputActions;
+		this.sutWrapper = sutWrapper;
+	}
+	
 	public TraceRunner(List<String> inputTrace, InvlangSutWrapper sutWrapper) {
 		List<InputAction> inputActions = new ArrayList<>(inputTrace.size());
 		for (String s : inputTrace) {
@@ -142,10 +154,16 @@ public class TraceRunner {
 		this.sutWrapper = sutWrapper;
 	}
 	
-	protected void runTrace(int number) {
+	public void testTrace(int iterations) {
+		for (int i = 0; i < iterations; i++) {
+			runTrace((i+1));
+		}
+	}
+	
+	protected void runTrace(int printNumber) {
 		List<String> outcome = new LinkedList<String>();
 		sutWrapper.sendReset();
-		System.out.println("# " + number);
+		System.out.println("# " + printNumber);
 		//System.out.println("# " + number + " @@@ " + this.sutWrapper.toString());
 		for (InputAction input : inputTrace) {
 			OutputAction output;

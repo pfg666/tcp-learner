@@ -23,8 +23,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import javax.sound.midi.SysexMessage;
+
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+
+import com.sun.management.jmx.Trace;
 
 import sutInterface.CacheOracle;
 import sutInterface.CacheReaderOracle;
@@ -40,6 +44,7 @@ import util.Log;
 import util.ObservationTree;
 import util.SoundUtils;
 import util.Tuple2;
+import util.exceptions.NonDeterminismException;
 import util.learnlib.Dot;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.packs.ObservationPack;
@@ -57,6 +62,7 @@ import de.ls5.jlearn.logging.LogLevel;
 import de.ls5.jlearn.logging.PrintStreamLoggingAppender;
 import de.ls5.jlearn.shared.WordImpl;
 import de.ls5.jlearn.util.DotUtil;
+import debug.TraceRunner;
 
 public class Main {
 	public static final String CACHE_FILE = "cache.ser";
@@ -75,6 +81,7 @@ public class Main {
 	public static Config config;
 	private static File sutInterfaceFile;
 	private static ObservationTree tree;
+	private static InvlangSutWrapper sutWrapper;
 
 	public static void main(String[] args) throws LearningException, IOException, Exception {
 		handleArgs(args);
@@ -248,64 +255,74 @@ public class Main {
 				absTraceOut.flush();
 				errOut.flush();
 
-				// execute membership queries
-				learner.learn();
-				absTraceOut.flush();
-				errOut.flush();
-				absTraceOut.println("done learning");
-				endtmp = System.currentTimeMillis();
-				statsOut
-						.println("Running time of membership queries: "
-								+ (endtmp - starttmp) + "ms.");
-				stats.totalTimeMemQueries += endtmp - starttmp;
-				starttmp = System.currentTimeMillis();
-				absTraceOut.flush();
-
-				// stable hypothesis after membership queries
-				Automaton hyp = learner.getResult();
-				String hypFileName = outputDir + File.separator + "tmp-learnresult"
-						+ hypCounter + ".dot";
-				String hypPdfFileName = outputDir + File.separator + "tmp-learnresult"
-						+ hypCounter + ".pdf";
-				
-				File hypPDF = new File(hypPdfFileName);
-				Dot.writeDotFile(hyp, hypFileName );
-				DotUtil.invokeDot(hypFileName, "pdf", hypPDF);
-
-				absTraceOut.println("starting equivalence query");
-				absTraceOut.flush();
-				errOut.flush();
-				// search for counterexample
-				EquivalenceOracleOutput o = eqOracle
-						.findCounterExample(hyp);
-				
-				absTraceOut.flush();
-				errOut.flush();
-				absTraceOut.println("done equivalence query");
-				endtmp = System.currentTimeMillis();
-				stats.totalTimeEquivQueries += endtmp - starttmp;
-				starttmp = System.currentTimeMillis();
-
-				// no counter example -> learning is done
-				if (o == null) {
-					done = true;
-					continue;
-				} 
-				o = ceReducer.reducedCounterexample(o, hyp);
-				
-				logCounterExampleAnalysis(hyp, hypCounter, o);
-				hypCounter ++;
-				absTraceOut.println("Sending CE to LearnLib.");
-				absTraceOut.println("Counter Example: "
-						+ o.getCounterExample().toString());
-				absTraceOut.flush();
-				errOut.flush();
-				// return counter example to the learner, so that it can use
-				// it to generate new membership queries
-				learner.addCounterExample(o.getCounterExample(),
-						o.getOracleOutput());
-				absTraceOut.flush();
-				errOut.flush();
+				try {
+					// execute membership queries
+					learner.learn();
+					absTraceOut.flush();
+					errOut.flush();
+					absTraceOut.println("done learning");
+					endtmp = System.currentTimeMillis();
+					statsOut
+							.println("Running time of membership queries: "
+									+ (endtmp - starttmp) + "ms.");
+					stats.totalTimeMemQueries += endtmp - starttmp;
+					starttmp = System.currentTimeMillis();
+					absTraceOut.flush();
+	
+					// stable hypothesis after membership queries
+					Automaton hyp = learner.getResult();
+					String hypFileName = outputDir + File.separator + "tmp-learnresult"
+							+ hypCounter + ".dot";
+					String hypPdfFileName = outputDir + File.separator + "tmp-learnresult"
+							+ hypCounter + ".pdf";
+					
+					File hypPDF = new File(hypPdfFileName);
+					Dot.writeDotFile(hyp, hypFileName );
+					DotUtil.invokeDot(hypFileName, "pdf", hypPDF);
+	
+					absTraceOut.println("starting equivalence query");
+					absTraceOut.flush();
+					errOut.flush();
+					// search for counterexample
+					EquivalenceOracleOutput o = eqOracle
+							.findCounterExample(hyp);
+					
+					absTraceOut.flush();
+					errOut.flush();
+					absTraceOut.println("done equivalence query");
+					endtmp = System.currentTimeMillis();
+					stats.totalTimeEquivQueries += endtmp - starttmp;
+					starttmp = System.currentTimeMillis();
+	
+					// no counter example -> learning is done
+					if (o == null) {
+						done = true;
+						continue;
+					} 
+					o = ceReducer.reducedCounterexample(o, hyp);
+					
+					logCounterExampleAnalysis(hyp, hypCounter, o);
+					hypCounter ++;
+					absTraceOut.println("Sending CE to LearnLib.");
+					absTraceOut.println("Counter Example: "
+							+ o.getCounterExample().toString());
+					absTraceOut.flush();
+					errOut.flush();
+					// return counter example to the learner, so that it can use
+					// it to generate new membership queries
+					learner.addCounterExample(o.getCounterExample(),
+							o.getOracleOutput());
+					absTraceOut.flush();
+					errOut.flush();
+				} catch (NonDeterminismException e) {
+					int testIterations = config.learningParams.nonDeterminismTestIterations;
+					if (testIterations > 0) {
+						TraceRunner traceRunner = new TraceRunner(e.getInputs(), sutWrapper);
+						traceRunner.testTrace(testIterations);
+						System.err.println(traceRunner.getResults());
+					}
+					throw e;
+				}
 			}
 		stats.endTime = System.currentTimeMillis();
 		learnResult.learnedModel = learner.getResult();
@@ -367,13 +384,13 @@ public class Main {
 	}
 	
 	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
-		SutWrapper sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
+		sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 		tree = readCacheTree();
 		if (tree == null) {
 			tree = new ObservationTree();
 		}
-		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new CacheOracle(new EquivalenceOracle(sutWrapper)))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new CacheOracle(new MembershipOracle(sutWrapper))))));
+		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new EquivalenceOracle(sutWrapper))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new MembershipOracle(sutWrapper)))));
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
 	}
 
@@ -439,6 +456,7 @@ public class Main {
 	public static void writeCacheTree() {
 		if (tree == null) {
 			System.err.println("Could not write uninitialized observation tree");
+			return;
 		}
 		try (
 				OutputStream file = new FileOutputStream(CACHE_FILE);
