@@ -1,5 +1,6 @@
 package sutInterface.tcp;
 
+import invlang.inverter.Reducer;
 import invlang.mapperReader.InvLangHandler;
 import invlang.semantics.programTree.expressionTree.Expression;
 import invlang.types.EnumValue;
@@ -88,7 +89,7 @@ public class InvlangMapper {
 			while ((c = input.read()) != -1) {
 				sb.append((char) c);
 			}
-			handler = new InvLangHandler(sb.toString(), true);
+			handler = new InvLangHandler(sb.toString(), new Reducer(Reducer.RANGE_LENGTH+4, Reducer.RANGE_START, Reducer.INITIAL_START, Reducer.NR_RANGES+2));
 		}
 	}
 	
