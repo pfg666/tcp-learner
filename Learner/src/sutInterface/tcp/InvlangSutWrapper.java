@@ -22,7 +22,7 @@ public class InvlangSutWrapper implements SutWrapper {
 	
 	public InvlangSutWrapper(int tcpServerPort, String mapperName) {
 		try {
-			this.mapper = new InvlangMapper(mapperName);
+			this.mapper = new InvlangRandomMapper(mapperName);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

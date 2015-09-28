@@ -16,7 +16,38 @@ import java.util.Map.Entry;
 import sutInterface.Serializer;
 
 public class InvlangMapper {
-	
+	protected final class Inputs {
+		protected static final String
+				FLAGS = "flagsIn",
+				CONC_SEQ = "concSeqIn",
+				CONC_ACK = "concAckIn",
+				ABS_SEQ = "absSeqIn",
+				ABS_ACK = "absAckIn",
+				TMP = "tmp";
+	}
+	protected final class Outputs {
+			protected static final String
+				FLAGS_OUT = "flagsOut",
+				FLAGS_OUT_2 = "flagsOut2",
+				ABS_SEQ = "absSeqOut",
+				ABS_ACK = "absAckOut",
+				CONC_SEQ = "concSeqOut",
+				CONC_ACK = "concAckOut",
+				UNDEF = "undefined",
+				TIMEOUT = "TIMEOUT";
+	}
+	protected final class Mappings{
+		protected static final String
+				INCOMING_RESPONSE = "incomingResponse",
+				OUTGOING_REQUEST = "outgoingRequest",
+				INCOMING_TIMEOUT = "incomingTimeout";
+	}
+	protected final class Enums {
+		protected static final String
+				IN = "absin";
+	}
+	protected static final String DEFAULT_MAPPER_PATH = "input/mappers/";
+			
 	public enum Validity {
 		VALID("VALID", "V"), INVALID("INV", "INV");
 
@@ -43,11 +74,11 @@ public class InvlangMapper {
 	
 	public static final int NOT_SET = -3;
 	
-	private final InvLangHandler handler;
+	protected final InvLangHandler handler;
 	private Expression lastConstraints; // for debugging purposes only
 	
 	public InvlangMapper(String mapperName) throws IOException {
-		this(new File("input/mappers/" + mapperName));
+		this(new File(DEFAULT_MAPPER_PATH + mapperName));
 	}
 	
 	public InvlangMapper(File file) throws IOException {
@@ -78,19 +109,19 @@ public class InvlangMapper {
 	}
 
 	public String processIncomingResponse(FlagSet flags, int seqNr, int ackNr) {
-		handler.setFlags("flagsIn", flags);
-		handler.setInt("concSeqIn", seqNr);
-		handler.setInt("concAckIn", ackNr);
-		handler.execute("incomingResponse");
-		EnumValue absSeq = handler.getEnumResult("absSeqIn");
-		EnumValue absAck = handler.getEnumResult("absAckIn");
+		handler.setFlags(Inputs.FLAGS, flags);
+		handler.setInt(Inputs.CONC_SEQ, seqNr);
+		handler.setInt(Inputs.CONC_ACK, ackNr);
+		handler.execute(Mappings.INCOMING_RESPONSE);
+		EnumValue absSeq = handler.getEnumResult(Inputs.ABS_SEQ);
+		EnumValue absAck = handler.getEnumResult(Inputs.ABS_ACK);
 		return Serializer.abstractMessageToString(flags, absSeq.getValue(), absAck.getValue());
 	}
 	
 	public String processIncomingTimeout() {
-		handler.setInt("tmp", 0); // invlang-thing: functions need at least 1 argument
-		handler.execute("incomingTimeout");
-		return "TIMEOUT";
+		handler.setInt(Inputs.TMP, 0); // invlang-thing: functions need at least 1 argument
+		handler.execute(Mappings.INCOMING_TIMEOUT);
+		return Outputs.TIMEOUT;
 	}
 	
 	public String processOutgoingRequest(FlagSet flags, String absSeq, String absAck) {
@@ -98,17 +129,17 @@ public class InvlangMapper {
 	}
 	
 	private String processOutgoingRequest(FlagSet flags, Validity absSeq, Validity absAck) {
-		handler.setFlags("flagsOut2", flags);
-		handler.setEnum("absSeqOut", "absin", absSeq.toInvLang());
-		handler.setEnum("absAckOut", "absin", absAck.toInvLang());
-		this.lastConstraints = handler.executeInverted("outgoingRequest");
+		handler.setFlags(Outputs.FLAGS_OUT_2, flags);
+		handler.setEnum(Outputs.ABS_SEQ, Enums.IN, absSeq.toInvLang());
+		handler.setEnum(Outputs.ABS_ACK, Enums.IN, absAck.toInvLang());
+		this.lastConstraints = handler.executeInverted(Mappings.OUTGOING_REQUEST);
 		if (handler.hasResult()) {
-			int concSeq = handler.getIntResult("concSeqOut");
-			int concAck = handler.getIntResult("concAckOut");
+			int concSeq = handler.getIntResult(Outputs.CONC_SEQ);
+			int concAck = handler.getIntResult(Outputs.CONC_ACK);
 			long lConcSeq = getUnsignedInt(concSeq), lConcAck = getUnsignedInt(concAck);
 			return Serializer.concreteMessageToString(flags, lConcSeq, lConcAck);
 		} else {
-			return "UNDEFINED";
+			return Outputs.UNDEF;
 		}
 	}
 	
