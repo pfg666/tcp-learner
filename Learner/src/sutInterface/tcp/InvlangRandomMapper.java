@@ -30,12 +30,6 @@ public class InvlangRandomMapper extends InvlangMapper {
 
 	public InvlangRandomMapper(String mapperName) throws IOException {
 		super(mapperName);
-		Reducer.debugStream = System.out;
-		if (Reducer.debugStream == null) {
-			System.err.println("debug stream is null");
-		} else {
-			System.err.println("debug stream not null");
-		}
 	}
 	
 	@Override

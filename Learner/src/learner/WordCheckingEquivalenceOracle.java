@@ -39,8 +39,10 @@ public class WordCheckingEquivalenceOracle implements EquivalenceOracle{
 		EquivalenceOracleOutputImpl equivOracleOutput = null;
 		for (Word wordInput : wordsToCheck) {
 			System.err.println(wordInput);
-			if (!hyp.getAlphabet().getSymbolList().contains(wordInput)) {
-				throw new RuntimeException("Alphabet " + hyp.getAlphabet().getSymbolList() + " does not contain " + wordInput);
+			for (Symbol s : wordInput.getSymbolList()) {
+				if (!hyp.getAlphabet().getSymbolList().contains(s)) {
+					throw new RuntimeException("Alphabet " + hyp.getAlphabet().getSymbolList() + " does not contain " + wordInput);
+				}
 			}
 			Word hypOutput = hyp.getTraceOutput(wordInput);
 			Word sutOutput;
