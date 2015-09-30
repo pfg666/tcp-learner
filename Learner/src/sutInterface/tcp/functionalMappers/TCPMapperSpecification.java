@@ -88,7 +88,7 @@ public class TCPMapperSpecification {
 	}*/
 	
 	public String processOutgoingRequest(FlagSet flags, Symbol abstractSeq,
-			Symbol abstractAck) {
+			Symbol abstractAck, int payloadLength) {
 		
 		/* check if abstraction is defined */
 //		if (this.freshSeqEnabled && (Symbol.INV.equals(abstractAck) || Symbol.INV.equals(abstractSeq))) {
@@ -128,12 +128,12 @@ public class TCPMapperSpecification {
 		
 		/* build concrete input */
 		String concreteInput = Serializer.concreteMessageToString(flags,
-				concreteSeq, concreteAck);
+				concreteSeq, concreteAck, payloadLength);
 		return concreteInput;
 	}
 	
 	public String processOutgoingReset() {
-		return (learnerSeq == NOT_SET)? null : Serializer.concreteMessageToString(new FlagSet(Flag.RST), learnerSeq, 0);
+		return (learnerSeq == NOT_SET)? null : Serializer.concreteMessageToString(new FlagSet(Flag.RST), learnerSeq, 0, 0);
 	}
 	
 	public void processOutgoingAction(Action action) {
@@ -230,13 +230,14 @@ public class TCPMapperSpecification {
 		}
 		
 		/* build concrete output */
-		String abstractOutput = Serializer.abstractMessageToString(
+		/*String abstractOutput = Serializer.abstractMessageToString(
 				flags, abstractSeq,
 				abstractAck);
 		
 		checkInit();
 		
-		return abstractOutput;
+		return abstractOutput;*/
+		return null;
 	}
 
 	private Symbol getAbstract(Long nrReceived, boolean isIncomingSeq) {
@@ -299,7 +300,7 @@ public class TCPMapperSpecification {
 	}
 
 	public String processOutgoingRequest(String flags, String abstractSeq,
-			String abstractAck) {
+			String abstractAck, int payloadLength) {
 
 		/* generate enum classes */
 		Symbol seqSymbol = Symbol.toSymbol(abstractSeq);
@@ -307,7 +308,7 @@ public class TCPMapperSpecification {
 		FlagSet flagSet = new FlagSet(flags);
 		
 		/* call actual method */
-		String concreteInput = processOutgoingRequest(flagSet, seqSymbol, ackSymbol);
+		String concreteInput = processOutgoingRequest(flagSet, seqSymbol, ackSymbol, payloadLength);
 		return concreteInput;
 	}	
 	

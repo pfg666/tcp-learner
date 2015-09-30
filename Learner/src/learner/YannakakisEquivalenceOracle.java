@@ -20,9 +20,17 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 	private Oracle oracle;
 	private int numberOfTests;
 	
+	public YannakakisEquivalenceOracle (Oracle oracle) {
+		this(oracle, 0);
+	}
+	
 	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests) {
 		this.oracle = oracle;
-		this.numberOfTests = numberOfTests;
+		if (numberOfTests <= 0) {
+			this.numberOfTests = Integer.MAX_VALUE - 1;
+		} else {
+			this.numberOfTests = numberOfTests;
+		}
 	}
 	
 	@Override
@@ -31,8 +39,9 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 		YannakakisWrapper wrapper = new YannakakisWrapper(hyp);
 		wrapper.initialize();
 		String line;
+		int i = 0;
 		try {
-			for (int i=0; i<numberOfTests; i++) {
+			for (; i<numberOfTests; i++) {
 				line = wrapper.out().readLine();
 			
 				if ( line != null) {
@@ -52,12 +61,15 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 							equivOracleOutput.setCounterExample(wordInput);
 							equivOracleOutput.setOracleOutput(sutOutput);
 							wrapper.close();
+							Log.err("Counterexample found after " + i + " attempts");
 							return equivOracleOutput;
 						}
 					} catch (LearningException e) {
 						Log.err("Error executing the test query: " + wordInput);
 						System.exit(0);
 					}
+				} else {
+					break;
 				}
 			}
 		} catch (IOException e) {
@@ -65,6 +77,7 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 			System.exit(0);
 		}
 		wrapper.close();
+		Log.err("No counterexample found after " + i + " attempts");
 		return null;
 	}
 	

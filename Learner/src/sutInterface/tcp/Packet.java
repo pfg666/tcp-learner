@@ -6,12 +6,14 @@ public class Packet implements TCPMessage {
 	public final FlagSet flags;
 	public final Symbol seq;
 	public final Symbol ack;
+	public final int payloadLength;
 
-	public Packet(FlagSet flags, Symbol seq, Symbol ack) {
+	public Packet(FlagSet flags, Symbol seq, Symbol ack, int payloadLength) {
 		super();
 		this.flags = flags;
 		this.seq = seq;
 		this.ack = ack;
+		this.payloadLength = payloadLength;
 	}
 	
 	public Packet(String packetString) {
@@ -19,6 +21,7 @@ public class Packet implements TCPMessage {
 		this.flags = new FlagSet(parts[0]);
 		this.seq = Symbol.valueOf(parts[1]);
 		this.ack = Symbol.valueOf(parts[2]);
+		this.payloadLength = Integer.parseInt(parts[3]);
 	}
 	
 	public int payload() {
@@ -75,14 +78,14 @@ public class Packet implements TCPMessage {
 		char[] flagInitials = flags.toInitials();
 		String seqString = seq.name();
 		String ackString = ack.name();
-		String result = Serializer.abstractMessageToString(flagInitials, seqString, ackString);
+		String result = Serializer.abstractMessageToString(flagInitials, seqString, ackString, this.payloadLength);
 		return result;
 	}
 	
 	public static void main(String arg []) {
-		Packet a = new Packet(new FlagSet(Flag.ACK, Flag.SYN), Symbol.FRESH, Symbol.FRESH);
+		Packet a = new Packet(new FlagSet(Flag.ACK, Flag.SYN), Symbol.FRESH, Symbol.FRESH, 1);
 		
-		Packet b = new Packet(new FlagSet(Flag.ACK, Flag.RST), Symbol.FRESH, Symbol.FRESH);
+		Packet b = new Packet(new FlagSet(Flag.ACK, Flag.RST), Symbol.FRESH, Symbol.FRESH, 0);
 		
 		System.out.println(a.flags.has(Flag.SYN));
 		System.out.println(a.flags.has(Flag.FIN));

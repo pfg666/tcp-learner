@@ -142,9 +142,9 @@ public class TCPSutWrapperSpecification implements SutWrapper{
 		String flags = inputValues[0];
 		String abstractSeq = inputValues[1];
 		String abstractAck = inputValues[2];
-
+		int payloadLength = Integer.parseInt(inputValues[3]);
 		String concreteInput = mapper.processOutgoingRequest(flags,
-				abstractSeq, abstractAck);
+				abstractSeq, abstractAck, payloadLength);
 		return concreteInput;
 	}
 

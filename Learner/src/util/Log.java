@@ -67,4 +67,8 @@ public class Log {
 		}
 		return relevantStackTraceElement;
 	}
+	
+	public static PrintStream getPrintStream() {
+		return activePrintStream;
+	}
 }

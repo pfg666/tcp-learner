@@ -123,16 +123,20 @@ public class InvlangSutWrapper implements SutWrapper {
 			String flags = inputValues[0];
 			int seqReceived = (int)Long.parseLong(inputValues[1]);
 			int ackReceived = (int)Long.parseLong(inputValues[2]);
-			return mapper.processIncomingResponse(FlagSet.fromAcronym(flags), seqReceived, ackReceived);
+			String payload = inputValues[3];
+			if (payload.length() < 2 || payload.charAt(0) != '[' || payload.charAt(payload.length() - 1) != ']') {
+				throw new RuntimeException("Cannot parse packet '" + payload + "'");
+			}
+			return mapper.processIncomingResponse(FlagSet.fromAcronym(flags), seqReceived, ackReceived, payload.length() - 2);
 		}
 	}
 	
 	/**
 	 * Updates seqToSend and ackToSend correspondingly.
 	 * 
-	 * @param abstract input e.g. "FA(V,INV)"
-	 * @return concrete output of the form "flags seqNr ackNr" describing a
-	 *         packet, e.g. "FA 651 814", through the socket.
+	 * @param abstract input e.g. "FA(V,INV,1)"
+	 * @return concrete output of the form "flags seqNr ackNr payload" describing a
+	 *         packet, e.g. "FA 651 814 [xyz]", through the socket.
 	 */
 	private String processOutgoingPacket(String input) {
 		String[] inputValues = input.split("\\(|,|\\)"); // of form {flags, seq,
@@ -142,10 +146,11 @@ public class InvlangSutWrapper implements SutWrapper {
 		String flags = inputValues[0];
 		String abstractSeq = inputValues[1];
 		String abstractAck = inputValues[2];
+		int payloadLength = Integer.parseInt(inputValues[3]);
 		String concreteInput;
 		try {
 			concreteInput = mapper.processOutgoingRequest(new FlagSet(flags),
-				abstractSeq, abstractAck);
+				abstractSeq, abstractAck, payloadLength);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot map abstract input '" + input + "'", e);
 		}

@@ -91,7 +91,7 @@ class Sender:
         if self.useTracking == True :
             self.tracker.clearLastResponse()
         #if self.isVerbose == 1 :
-        packet = self.createPacket(flagsSet, seqNr, ackNr)
+        packet = self.createPacket(flagsSet, seqNr, ackNr, '')
         response = self.sendPacketAndRetrieveResponse(packet)
         return response
     
@@ -102,25 +102,25 @@ class Sender:
         self.senderPort = newPort
     
     # function that creates packet from data strings/integers
-    def createPacket(self, tcpFlagsSet, seqNr, ackNr, destIP = None, destPort = None, srcPort = None,
-                     ipFlagsSet="DF", data="cc"):
+    def createPacket(self, tcpFlagsSet, seqNr, ackNr, payload, destIP = None, destPort = None, srcPort = None,
+                     ipFlagsSet="DF"):
         if destIP is None:
             destIP = self.serverIP
         if destPort is None:
             destPort = self.serverPort
         if srcPort is None:
             srcPort = self.senderPort
-        print "" +tcpFlagsSet + " " + str(seqNr) + " " + str(ackNr)
+        print "" +tcpFlagsSet + " " + str(seqNr) + " " + str(ackNr) + " [" + payload + "]"
         pIP = IP(dst=destIP, flags=ipFlagsSet, version=4)
         pTCP = TCP(sport=srcPort,
         dport=destPort,
         seq=seqNr,
         ack=ackNr,
         flags=tcpFlagsSet)
-        if "P" in tcpFlagsSet or "p" in tcpFlagsSet:
-            p = pIP / pTCP / Raw(load="cc")
+        if payload == '':
+            p = pIP / pTCP
         else:
-            p = pIP / pTCP 
+            p = pIP / pTCP / Raw(load=payload)
         return p
     
     # sends packets and ensures both reception tools are used so as to retrieve the response when such response is given
@@ -245,10 +245,10 @@ class Sender:
 
     # captures a response without sendin a packet first, in the same way as though a packet was sent
     def captureResponse(self):
-        return self.sendInput("nil", None, None);
+        return self.sendInput("nil", None, None, None);
 
     # sends input over the network to the server
-    def sendInput(self, input1, seqNr, ackNr):
+    def sendInput(self, input1, seqNr, ackNr, payload):
         # add the MAC-address of the server to scapy's ARP-table to use LAN
         # used every iteration, otherwise the entry somehow
         # w disappears after a while
@@ -260,7 +260,7 @@ class Sender:
         if input1 != "nil":
             #response = self.sendPacket(input1, seqNr, ackNr)
             ###
-            packet = self.createPacket(input1, seqNr, ackNr)
+            packet = self.createPacket(input1, seqNr, ackNr, payload)
             ###
         else:
             packet = None
@@ -288,7 +288,7 @@ class Sender:
     # number of connections allowed on a port.
     def sendValidReset(self,seq):
         if self.resetMechanism == 0 or self.resetMechanism == 2:
-            self.sendInput("R", seq, 0)
+            self.sendInput("R", seq, 0, '')
             if self.useTracking == True:
                 self.tracker.clearLastResponse()
         if self.resetMechanism == 1 or self.resetMechanism == 2:
@@ -313,6 +313,6 @@ if __name__ == "__main__":
     sender = Sender(serverMAC="08:00:27:23:AA:AF", serverIP="131.174.142.227", serverPort=8000, useTracking=False, isVerbose=0, networkPortMinimum=20000, waitTime=1)
     seq = 50
     sender.refreshNetworkPort()
-    sender.sendInput("S", seq, 1) #SA svar seq+1 | SYN_REC
-    sender.sendInput("A", seq + 1, seqVar + 1) #A svar+1 seq+2 | CLOSE_WAIT
-    sender.sendInput("FA", seq + 1, seqVar + 1)
+    sender.sendInput("S", seq, 1, '') #SA svar seq+1 | SYN_REC
+    sender.sendInput("A", seq + 1, seqVar + 1, '') #A svar+1 seq+2 | CLOSE_WAIT
+    sender.sendInput("FA", seq + 1, seqVar + 1, '')

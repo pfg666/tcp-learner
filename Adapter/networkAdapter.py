@@ -120,15 +120,15 @@ class Adapter:
     # response, extracts the relevant parameters and sends them back to the learner
     def handleInput(self, sender):
         self.sender = sender
-        count = 0
+        #count = 0
         while (True):
             input1 = self.receiveInput()
             print "received input " + input1
             seqNr = 0
             ackNr = 0
-            count = (count + 1) % 1000
-            if count == 999:
-                sleep(5)
+            #count = (count + 1) % 1000
+            #if count == 999:
+            #    sleep(5)
             
             if input1 == "reset":
                 print "Received reset signal."
@@ -149,8 +149,9 @@ class Adapter:
                 if sender.isFlags(input1):
                     seqNr = self.receiveNumber()
                     ackNr = self.receiveNumber()
+                    payload = self.receiveInput()[1:-1]
                     print ("send packet: " +input1 + " " + str(seqNr) + " " + str(ackNr))
-                    response = sender.sendInput(input1, seqNr, ackNr);
+                    response = sender.sendInput(input1, seqNr, ackNr, payload);
                 elif "sendAction" in dir(self.sender) and self.sender.isAction(input1):
                     print ("send action: " +input1)
                     input1 = input1.lower().replace("\n","")

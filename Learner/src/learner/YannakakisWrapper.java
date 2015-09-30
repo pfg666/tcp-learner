@@ -29,7 +29,7 @@ public class YannakakisWrapper {
  	
 	public YannakakisWrapper(Automaton inputEnabledHypothesis) {
 		this.hyp = inputEnabledHypothesis;
-		this.pb = new ProcessBuilder(yannakakisCmd, "--", "1", "3", "random");
+		this.pb = new ProcessBuilder(yannakakisCmd, "--", "2", "2", "fixed");
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				if (!isClosed()) {

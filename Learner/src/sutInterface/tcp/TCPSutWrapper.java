@@ -136,9 +136,9 @@ public class TCPSutWrapper implements SutWrapper{
 	/**
 	 * Updates seqToSend and ackToSend correspondingly.
 	 * 
-	 * @param abstract input e.g. "FA(V,INV)"
-	 * @return concrete output of the form "flags seqNr ackNr" describing a
-	 *         packet, e.g. "FA 651 814", through the socket.
+	 * @param abstract input e.g. "FA(V,INV,0)"
+	 * @return concrete output of the form "flags seqNr ackNr payload" describing a
+	 *         packet, e.g. "FA 651 814 xyz", through the socket.
 	 */
 	private String processOutgoingPacket(String input) {
 		String[] inputValues = input.split("\\(|,|\\)"); // of form {flags, seq,
@@ -148,9 +148,10 @@ public class TCPSutWrapper implements SutWrapper{
 		String flags = inputValues[0];
 		String abstractSeq = inputValues[1];
 		String abstractAck = inputValues[2];
-
+		int payloadLength = Integer.parseInt(inputValues[3]);
+		
 		String concreteInput = mapper.processOutgoingRequest(flags,
-				abstractSeq, abstractAck);
+				abstractSeq, abstractAck, payloadLength);
 		return concreteInput;
 	}
 
@@ -167,8 +168,8 @@ public class TCPSutWrapper implements SutWrapper{
 	/**
 	 * 
 	 * @param concreteResponse 
-	 *            of the form "flags seqNr ackNr", e.g. "FA 1000 2000"
-	 * @return output, e.g. "FA(V,INV)"
+	 *            of the form "flags seqNr ackNr [payload]", e.g. "FA 1000 2000 [x]"
+	 * @return output, e.g. "FA(V,INV)[1]"
 	 */
 	private String processIncomingPacket(String concreteResponse) {
 		String abstractResponse;
@@ -181,8 +182,13 @@ public class TCPSutWrapper implements SutWrapper{
 
 			long seqReceived = Long.parseLong(inputValues[1]);
 			long ackReceived = Long.parseLong(inputValues[2]);
+			String payload = inputValues[3];
+			if (payload.length() < 2 || payload.charAt(0) != '[' || payload.charAt(payload.length()-1) != ']') {
+				throw new RuntimeException("Could not parse payload '" + payload + "'");
+			}
+			int payloadLength = payload.length() - 2;
 			abstractResponse = mapper.processIncomingResponse(flags,
-					seqReceived, ackReceived);
+					seqReceived, ackReceived, payloadLength);
 		}
 		return abstractResponse;
 	}

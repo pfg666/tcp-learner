@@ -109,14 +109,14 @@ public class InvlangMapper {
 		return state;
 	}
 
-	public String processIncomingResponse(FlagSet flags, int seqNr, int ackNr) {
+	public String processIncomingResponse(FlagSet flags, int seqNr, int ackNr, int payloadLength) {
 		handler.setFlags(Inputs.FLAGS, flags);
 		handler.setInt(Inputs.CONC_SEQ, seqNr);
 		handler.setInt(Inputs.CONC_ACK, ackNr);
 		handler.execute(Mappings.INCOMING_RESPONSE);
 		EnumValue absSeq = handler.getEnumResult(Inputs.ABS_SEQ);
 		EnumValue absAck = handler.getEnumResult(Inputs.ABS_ACK);
-		return Serializer.abstractMessageToString(flags, absSeq.getValue(), absAck.getValue());
+		return Serializer.abstractMessageToString(flags, absSeq.getValue(), absAck.getValue(), payloadLength);
 	}
 	
 	public String processIncomingTimeout() {
@@ -125,11 +125,11 @@ public class InvlangMapper {
 		return Outputs.TIMEOUT;
 	}
 	
-	public String processOutgoingRequest(FlagSet flags, String absSeq, String absAck) {
-		return processOutgoingRequest(flags, Validity.getValidity(absSeq), Validity.getValidity(absAck));
+	public String processOutgoingRequest(FlagSet flags, String absSeq, String absAck, int payloadLength) {
+		return processOutgoingRequest(flags, Validity.getValidity(absSeq), Validity.getValidity(absAck), payloadLength);
 	}
 	
-	private String processOutgoingRequest(FlagSet flags, Validity absSeq, Validity absAck) {
+	private String processOutgoingRequest(FlagSet flags, Validity absSeq, Validity absAck, int payloadLength) {
 		handler.setFlags(Outputs.FLAGS_OUT_2, flags);
 		handler.setEnum(Outputs.ABS_SEQ, Enums.IN, absSeq.toInvLang());
 		handler.setEnum(Outputs.ABS_ACK, Enums.IN, absAck.toInvLang());
@@ -138,7 +138,7 @@ public class InvlangMapper {
 			int concSeq = handler.getIntResult(Outputs.CONC_SEQ);
 			int concAck = handler.getIntResult(Outputs.CONC_ACK);
 			long lConcSeq = getUnsignedInt(concSeq), lConcAck = getUnsignedInt(concAck);
-			return Serializer.concreteMessageToString(flags, lConcSeq, lConcAck);
+			return Serializer.concreteMessageToString(flags, lConcSeq, lConcAck, payloadLength);
 		} else {
 			return Outputs.UNDEF;
 		}
@@ -168,16 +168,16 @@ public class InvlangMapper {
 	
 	public String processOutgoingReset() {
 		long learnerSeq = getUnsignedInt((int)this.handler.getState().get("learnerSeq"));
-		return (learnerSeq == NOT_SET)? null : Serializer.concreteMessageToString(new sutInterface.tcp.FlagSet(Flag.RST), learnerSeq, 0);
+		return (learnerSeq == NOT_SET)? null : Serializer.concreteMessageToString(new sutInterface.tcp.FlagSet(Flag.RST), learnerSeq, 0, 0);
 	}
 
 	public static void main(String[] args) throws IOException {
 		InvlangMapper mapper = new InvlangMapper("CLIENT_NO_ACTIONS_ALL_V");
-		System.out.println(mapper.processIncomingResponse(new FlagSet("SYN"), 123, 0));
+		System.out.println(mapper.processIncomingResponse(new FlagSet("SYN"), 123, 0, 0));
 		System.out.println(mapper.getState());
-		System.out.println(mapper.processOutgoingRequest(new FlagSet("ACK"), Validity.VALID, Validity.VALID));
+		System.out.println(mapper.processOutgoingRequest(new FlagSet("ACK"), Validity.VALID, Validity.VALID, 0));
 		System.out.println(mapper.getState());
-		System.out.println(mapper.processIncomingResponse(new FlagSet("FIN"), 125, 500));
+		System.out.println(mapper.processIncomingResponse(new FlagSet("FIN"), 125, 500, 0));
 		System.out.println(mapper.getState());
 		
 		/*

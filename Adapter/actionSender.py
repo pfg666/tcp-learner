@@ -13,7 +13,8 @@ class ActionSender:
                "closeserver",
                "exit",
                "closeclient",
-               "connect"]
+               "connect",
+               "send"]
     def __init__(self, cmdIp = "192.168.56.1", cmdPort=5000, sender = None):
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp
@@ -119,8 +120,8 @@ class ActionSender:
             print inputString + " not a valid action ( it is not one of: " + str(self.actions) + ")"
         return response
                 
-    def sendInput(self, input1, seqNr, ackNr):
-        return self.sender.sendInput(input1, seqNr, ackNr)
+    def sendInput(self, input1, seqNr, ackNr, payload):
+        return self.sender.sendInput(input1, seqNr, ackNr, payload)
     
     def shutdown(self):
         self.closeSockets()

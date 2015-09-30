@@ -90,21 +90,19 @@ public class Main {
 
 		Config config = createConfig();
 		Main.config = config;
-
 		SutInterface sutInterface = createSutInterface(config);
 	
 		TCPParams tcp = readConfig(config, sutInterface);
 		
 		Log.setLogLevel(tcp.logLevel);
-		
+
 		// first is the membership, second is the equivalence oracle
 		Tuple2<Oracle,Oracle> tcpOracles = buildOraclesFromConfig(tcp);
-		
 		
 		Learner learner;
 
 		LearnResult learnResult;
-		
+
 		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = buildEquivalenceOracle(learningParams, tcpOracles.tuple1);
 		SingleTransitionReducer ceReducer = new SingleTransitionReducer(tcpOracles.tuple1);
 
@@ -391,9 +389,11 @@ public class Main {
 		}
 		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new EquivalenceOracle(sutWrapper))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
 		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new MembershipOracle(sutWrapper)))));
-		//ObservationTree tree = new ObservationTree();
-		//Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-		//Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new MembershipOracle(sutWrapper))));
+		
+		/*ObservationTree tree = new ObservationTree();
+		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new MembershipOracle(sutWrapper))));
+		*/
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
 	}
 

@@ -100,6 +100,7 @@ class Tracker(threading.Thread):
     def impacketResponseParse(self, tcpPacket):
         response = None
         if isinstance(tcpPacket, TCP):
+            print "response:" + str(tcpPacket)
             tcp_syn = tcpPacket.get_th_seq()
             tcp_ack = tcpPacket.get_th_ack()
 
@@ -108,7 +109,8 @@ class Tracker(threading.Thread):
             flags += 'R' if tcpPacket.get_RST() == 1 else ''
             flags += 'P' if tcpPacket.get_PSH() == 1 else ''
             flags += 'A' if tcpPacket.get_ACK() == 1 else ''
-            response = ConcreteResponse(flags, tcp_syn, tcp_ack)
+            payload = tcpPacket.get_data_as_string()
+            response = ConcreteResponse(flags, tcp_syn, tcp_ack, payload)
         return response
     
     # clears all last responses for all ports (keep that in mind if you have responses on several ports)

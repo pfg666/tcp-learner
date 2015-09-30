@@ -99,8 +99,8 @@ public class TCPMapper {
 		this.seqSent = this.ackSent = NOT_SET;
 		this.seqReceived = this.ackReceived = NOT_SET;
 		this.serverSeq = this.clientSeq = NOT_SET;
-		this.packetSent = new Packet(FlagSet.EMPTY, Symbol.INV, Symbol.INV);
-		this.packetReceived = new Packet(FlagSet.EMPTY, Symbol.INV, Symbol.INV);
+		this.packetSent = new Packet(FlagSet.EMPTY, Symbol.INV, Symbol.INV, 0);
+		this.packetReceived = new Packet(FlagSet.EMPTY, Symbol.INV, Symbol.INV, 0);
 		this.freshSeqEnabled = this.startState;
 		this.freshAckEnabled = this.startState;
 		this.isResponseTimeout = false;
@@ -116,7 +116,7 @@ public class TCPMapper {
 	}
 	
 	public String processOutgoingRequest(FlagSet flags, Symbol abstractSeq,
-			Symbol abstractAck) {
+			Symbol abstractAck, int payloadLength) {
 		this.actionSent = null; // no action sent
 		
 		/* check if abstraction is defined */
@@ -125,7 +125,7 @@ public class TCPMapper {
 		}
 		
 
-		this.packetSent = new Packet(flags, abstractSeq, abstractAck);
+		this.packetSent = new Packet(flags, abstractSeq, abstractAck, payloadLength);
 		this.lastMessageSent = this.packetSent.serialize();
 
 		/* generate input numbers */
@@ -142,12 +142,12 @@ public class TCPMapper {
 		
 		/* build concrete input */
 		String concreteInput = Serializer.concreteMessageToString(flags,
-				concreteSeq, concreteAck);
+				concreteSeq, concreteAck, payloadLength);
 		return concreteInput;
 	}
 	
 	public String processOutgoingReset() {
-		return (clientSeq == NOT_SET)? null : Serializer.concreteMessageToString(new FlagSet(Flag.RST), clientSeq, 0);
+		return (clientSeq == NOT_SET)? null : Serializer.concreteMessageToString(new FlagSet(Flag.RST), clientSeq, 0, 0);
 	}
 	
 	public void processOutgoingAction(Action action) {
@@ -232,7 +232,7 @@ public class TCPMapper {
 	}
 	
 	public String processIncomingResponse(FlagSet flags, long concreteSeq,
-			long concreteAck) {
+			long concreteAck, int payloadLength) {
 		/* generate output symbols */
 		Symbol abstractSeq = getAbstract(concreteSeq, true);
 		Symbol abstractAck = getAbstract(concreteAck, false);
@@ -248,15 +248,14 @@ public class TCPMapper {
 		/* state 0 detecting condition */
 		this.seqReceived = concreteSeq;
 		this.ackReceived = concreteAck;
-		this.packetReceived = new Packet(flags, abstractSeq, abstractAck);
+		this.packetReceived = new Packet(flags, abstractSeq, abstractAck, payloadLength);
 		this.lastMessageReceived = this.packetReceived.serialize();
 		this.isResponseTimeout = false;
 		checkInit();
 
 		/* build concrete output */
 		String abstractOutput = Serializer.abstractMessageToString(
-				flags, abstractSeq,
-				abstractAck);
+				flags, abstractSeq, abstractAck, payloadLength);
 		
 		return abstractOutput;
 	}
@@ -373,7 +372,7 @@ public class TCPMapper {
 	}
 
 	public String processOutgoingRequest(String flags, String abstractSeq,
-			String abstractAck) {
+			String abstractAck, int payloadLength) {
 
 		/* generate enum classes */
 		Symbol seqSymbol = Symbol.toSymbol(abstractSeq);
@@ -381,27 +380,27 @@ public class TCPMapper {
 		FlagSet flagSet = new FlagSet(flags);
 		
 		/* call actual method */
-		String concreteInput = processOutgoingRequest(flagSet, seqSymbol, ackSymbol);
+		String concreteInput = processOutgoingRequest(flagSet, seqSymbol, ackSymbol, payloadLength);
 		return concreteInput;
 	}	
 	
 	public String processIncomingResponse(String flags, long concreteSeq,
-			long concreteAck) {
+			long concreteAck, int payloadLength) {
 		
 		/* generate enum classes */
 		FlagSet flagSet = new FlagSet(flags.toCharArray());
 		
 		/* call actual method */
-		String abstractOutput = processIncomingResponse(flagSet, concreteSeq, concreteAck);
+		String abstractOutput = processIncomingResponse(flagSet, concreteSeq, concreteAck, payloadLength);
 		return abstractOutput;
 	}
 
 	/* compatibility version */
 	public String processIncomingResponseComp(String flags, String seqReceived,
-			String ackReceived) {
+			String ackReceived, int payloadLength) {
 		long seq = Long.valueOf(seqReceived);
 		long ack = Long.valueOf(ackReceived);
-		String abstractOutput = processIncomingResponse(flags, seq, ack);
+		String abstractOutput = processIncomingResponse(flags, seq, ack, payloadLength);
 		return abstractOutput;
 	}
 	

@@ -4,7 +4,8 @@ import sutInterface.tcp.FlagSet;
 import sutInterface.tcp.Symbol;
 
 public class Serializer {
-
+	private static final String DATA = "x";
+	
 	public static String concreteMessageToString(String flags, long seqNr,
 			long ackNr) {
 		StringBuilder result = new StringBuilder();
@@ -22,15 +23,19 @@ public class Serializer {
 	}
 	
 	public static String concreteMessageToString(invlang.types.FlagSet flags, long seqNr,
-			long ackNr) {
+			long ackNr, int payloadLength) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(flags.toInitials()).append(" ").append(seqNr).append(" ").append(ackNr);
+		sb.append(flags.toInitials()).append(" ").append(seqNr).append(" ").append(ackNr).append(" [");
+		for (int i = 0; i < payloadLength; i++) {
+			sb.append(DATA);
+		}
+		sb.append("]");
 		return sb.toString();
 	}
 	
 	
 	public static String concreteMessageToString(FlagSet flags, long seqNr,
-			long ackNr) {
+			long ackNr, int payloadLength) {
 		StringBuilder result = new StringBuilder();
 
 		result.append(flags.toInitials());
@@ -39,11 +44,16 @@ public class Serializer {
 		result.append(seqNr);
 		result.append(" ");
 		result.append(ackNr);
+		result.append(" [");
+		for (int i = 0; i < payloadLength; i++) {
+			result.append(DATA);
+		}
+		result.append("]");
 		return result.toString();
 	}
 
 	public static String abstractMessageToString(invlang.types.FlagSet flags,
-			String seqValidity, String ackValidity) {
+			String seqValidity, String ackValidity, int payloadLength) {
 		StringBuilder sb = new StringBuilder();
 		boolean first = true;
 		for (invlang.types.Flag flag : flags.getSortedFlags()) {
@@ -53,12 +63,13 @@ public class Serializer {
 			first = false;
 			sb.append(flag);
 		}
-		sb.append("(").append(seqValidity).append(",").append(ackValidity).append(")");
+		sb.append("(").append(seqValidity).append(",").append(ackValidity)
+			.append(",").append(payloadLength).append(")");
 		return sb.toString();
 	}
 	
 	public static String abstractMessageToString(char[] flags,
-			String seqValidity, String ackValidity) {
+			String seqValidity, String ackValidity, int payloadLength) {
 		StringBuilder result = new StringBuilder();
 		if (flags.length != 0) {
 			result.append(charToFlag(flags[0]));
@@ -74,16 +85,18 @@ public class Serializer {
 		result.append(seqValidity);
 		result.append(",");
 		result.append(ackValidity);
+		result.append(",");
+		result.append(payloadLength);
 		result.append(")");
 		return result.toString();
 	}
 	
 	public static String abstractMessageToString(FlagSet flags,
-			Symbol seqValidity, Symbol ackValidity) {
+			Symbol seqValidity, Symbol ackValidity, int payloadLength) {
 		char[] flagInitials = flags.toInitials();
 		String seqString = seqValidity.name();
 		String ackString = ackValidity.name();
-		String result = abstractMessageToString(flagInitials, seqString, ackString);
+		String result = abstractMessageToString(flagInitials, seqString, ackString, payloadLength);
 		return result;
 	}
 	

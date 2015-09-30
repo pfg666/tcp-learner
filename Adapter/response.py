@@ -13,22 +13,24 @@ class ConcreteResponse(Response):
     flags = ''
     ack = 0
     seq = 0
-
-    def __init__(self, flags, seq, ack):
+    payload = ''
+    
+    def __init__(self, flags, seq, ack, payload = ''):
         super(ConcreteResponse, self).__init__("CONCRETE")
         self.seq = seq
         self.ack = ack
         self.flags = flags
+        self.payload = payload
 
     def __str__(self):
-        outputString = self.flags + " " + str(self.seq) + " " + str(self.ack)
+        outputString = self.flags + " " + str(self.seq) + " " + str(self.ack) + " [" + str(self.payload) + "]"
         return outputString
     
     def __eq__(self, other):
         equ = False
         if other is not None and type(other) is ConcreteResponse:  
             equ = (self.flags == other.flags) and (self.ack == other.ack) 
-            equ = equ and (self.seq == other.seq)
+            equ = equ and (self.seq == other.seq) and (self.payload == other.payload)
         return equ
 
     def hasFlags(self):
@@ -52,7 +54,7 @@ class Undefined(Response):
         return  outputString
 
 if __name__ == "__main__":
-    response = ConcreteResponse("ss",10,20)
+    response = ConcreteResponse("ss",10,20,"")
     timeout = Timeout()
     l = [response, timeout]
     l.append(timeout)

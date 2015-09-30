@@ -34,7 +34,7 @@ public class InvlangRandomMapper extends InvlangMapper {
 	
 	@Override
 	public String processOutgoingRequest(FlagSet flags, String absSeq,
-			String absAck) {
+			String absAck, int payloadLength) {
 		LinkedList<Long> pointsOfInterest = new LinkedList<>();
 		pointsOfInterest.add(0L);
 		for (Entry<String, Object> entry : this.handler.getState().entrySet()) {
@@ -61,9 +61,9 @@ public class InvlangRandomMapper extends InvlangMapper {
 				handler.setInt(Outputs.CONC_ACK, concAck);
 				handler.execute(Mappings.OUTGOING_REQUEST);
 				long lConcSeq = getUnsignedInt(concSeq), lConcAck = getUnsignedInt(concAck);
-				return Serializer.concreteMessageToString(flags, lConcSeq, lConcAck);
+				return Serializer.concreteMessageToString(flags, lConcSeq, lConcAck, payloadLength);
 			}
 		}
-		return super.processOutgoingRequest(flags, absSeq, absAck);
+		return super.processOutgoingRequest(flags, absSeq, absAck, payloadLength);
 	}
 }
