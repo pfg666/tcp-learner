@@ -6,6 +6,10 @@
 	<classpathentry kind="lib" path="Learner/lib/snakeyaml-1.9.jar"/>
 	<classpathentry kind="lib" path="Learner/lib/json_simple-1.1.jar"/>
 	<classpathentry kind="lib" path="Learner/lib/tomte-0.2.jar"/>
+	<classpathentry kind="lib" path="Learner/lib/antlr-4.5-complete.jar"/>
+	<classpathentry kind="lib" path="Learner/lib/choco-solver-3.3.1-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="Learner/lib/InvlangReader.jar"/>
+	<classpathentry kind="lib" path="Learner/lib/MapperLanguage.jar"/>
 	<classpathentry kind="src" path="Learner/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>

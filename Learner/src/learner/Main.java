@@ -28,8 +28,6 @@ import javax.sound.midi.SysexMessage;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import com.sun.management.jmx.Trace;
-
 import sutInterface.CacheOracle;
 import sutInterface.CacheReaderOracle;
 import sutInterface.ObservationTreeWrapper;
