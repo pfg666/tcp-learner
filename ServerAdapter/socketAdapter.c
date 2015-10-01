@@ -10,6 +10,7 @@
 	#include <netdb.h>
 	#include <arpa/inet.h>
 	#include <pthread.h>
+	#include <netinet/tcp.h>
 #elif _WIN32
 	#include <winsock.h>
 	#include <windows.h>
@@ -29,6 +30,8 @@ int main_socket_blocked;
 int server_port, learner_port;
 char server_addr[100];
 
+#define send_buf "x"
+
 #define default_learner_port 5000
 #define default_server_port 34567
 #define default_server_addr "1.2.3.4"
@@ -37,7 +40,10 @@ char server_addr[100];
 #define output_buffer_size 1025
 char output_buffer[output_buffer_size];
 
-#define syn_ok 0
+#define syn_ok (0)
+#define client_type (0)
+#define server_type (1)
+int type;
 
 struct sockaddr_in serv_addr_struct;
 struct sockaddr_in local_addr;
@@ -116,6 +122,9 @@ void *do_connect(void *arg)
         printf("error connecting to server\n");
 	} else {
 		printf("connected successfully\n");
+		int i = 1;
+		setsockopt(main_sd, IPPROTO_TCP, TCP_NODELAY, (void *)&i, sizeof(i));
+		setsockopt(main_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
 	}
 	main_socket_blocked = 0;
 	return 0;
@@ -163,6 +172,9 @@ void *do_accept(void *arg) {
 		//answer("NOK\n");
 	}
 	else {
+		int i = 1;
+		setsockopt(secondary_sd, IPPROTO_TCP, TCP_NODELAY, (void *)&i, sizeof(i));
+		setsockopt(secondary_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
 		printf("accepting succeeded\n");
 		//answer("OK\n");
 	}
@@ -212,7 +224,7 @@ void init() {
 
 void init_run() {
 	main_socket_blocked = 0;
-	
+	type = -1;
 	printf("*** NEW RUN ***\n");
 	printf("creating socket...\n");
 	main_sd = socket(AF_INET, SOCK_STREAM, 0);
@@ -299,8 +311,23 @@ void close_run() {
 }
 
 void process_connect() {
+	type = client_type;
 	//stop_connecting_thread();
 	start_connecting_thread();
+}
+
+void process_send() {
+	int sd = -1;
+	// find the connection socket, if any
+	if (type == server_type) {
+		sd = secondary_sd;
+	} else if (type == client_type) {
+		sd = main_sd;
+	}
+	if (sd != -1) {
+		//send(SOCKET socket, const char * buffer, int buflen, int flags);
+		send(sd, send_buf, strlen(send_buf), 0);
+	}
 }
 
 void process_close() {
@@ -335,6 +362,7 @@ void process_accept() {
 }
 
 void process_listen() {
+	type = server_type;
 	printf("LISTEN\n");
 	if (listen(main_sd, 1) == 0) {
 		//answer("OK\n");
@@ -381,6 +409,9 @@ int process_input() {
 	}
 	else if (strncmp(read_buffer, "closeconnection", sizeof(read_buffer)) == 0) {
 		process_close_secondary();
+	}
+	else if (strncmp(read_buffer, "send", sizeof(read_buffer)) == 0) {
+		process_send();
 	}
 	
 	else if (strncmp(read_buffer, "reset", sizeof(read_buffer)) == 0) {
@@ -478,3 +509,4 @@ int main(int argc, char *argv[]) {
 	#endif
 	return 0;
 }
+
