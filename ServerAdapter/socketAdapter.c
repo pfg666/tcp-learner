@@ -12,8 +12,10 @@
 	#include <pthread.h>
 	#include <netinet/tcp.h>
 #elif _WIN32
-	#include <winsock.h>
+	#include <winsock2.h>
 	#include <windows.h>
+	#include <ws2tcpip.h>
+	#pragma comment(lib, "Ws2_32.lib ")
 	#pragma comment(lib, "wsock32.lib")
 #else
 	#error OS not supported, have fun with adding ifdefs
@@ -61,7 +63,11 @@ void strcpy_end(char* dest, char* src, int maxsize) {
 	if (len == 0) {
 		error("cannot copy 0 characters safely!"); // not very subtle, but I want to know these things
 	}
-	strncpy(dest, src, len-1);
+#ifdef _WIN32
+	strcpy_s(dest, len, src);
+#else
+	strncpy(dest, src, len - 1);
+#endif
 	dest[len-1] = '\0';
 }
 
@@ -124,7 +130,9 @@ void *do_connect(void *arg)
 		printf("connected successfully\n");
 		int i = 1;
 		setsockopt(main_sd, IPPROTO_TCP, TCP_NODELAY, (void *)&i, sizeof(i));
-		setsockopt(main_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
+#ifdef __gnu_linux__
+		setsockopt(secondary_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
+#endif
 	}
 	main_socket_blocked = 0;
 	return 0;
@@ -174,7 +182,9 @@ void *do_accept(void *arg) {
 	else {
 		int i = 1;
 		setsockopt(secondary_sd, IPPROTO_TCP, TCP_NODELAY, (void *)&i, sizeof(i));
+#ifdef __gnu_linux__
 		setsockopt(secondary_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
+#endif
 		printf("accepting succeeded\n");
 		//answer("OK\n");
 	}
@@ -216,7 +226,11 @@ void init() {
 	learner_conn_sd = accept(learner_listener_sd, (struct sockaddr*)NULL, NULL);
 	while (learner_conn_sd == -1) {
 		printf("could not establish connection with learner, retrying...\n");
+		#ifdef _WIN32
+		Sleep(1);
+		#elif __gnu_linux__
 		sleep(1);
+		#endif
 		learner_conn_sd = accept(learner_listener_sd, (struct sockaddr*)NULL, NULL);
 	}
 	printf("established connection with learner!\n");
@@ -248,7 +262,12 @@ void init_run() {
     local_addr.sin_family = AF_INET;
     local_addr.sin_port = htons(0);
     
+	#ifdef _WIN32
+	int int_addr = InetPton(AF_INET, "0.0.0.0", &local_addr.sin_addr.s_addr);
+	#elif __gnu_linux__
 	int int_addr = inet_pton(AF_INET, "0.0.0.0", &local_addr.sin_addr.s_addr);
+	#endif
+
 	if (int_addr <= 0) {
 		if (int_addr == 0)
 			error("Client address not a valid address");
@@ -261,7 +280,7 @@ void init_run() {
 		error("could not bind local socket to random port number");
 	} else {
 		struct sockaddr_in infoaddr;
-		socklen_t infolen = sizeof(infoaddr);
+		int infolen = sizeof(infoaddr);
 		getsockname(main_sd, (struct sockaddr*) &infoaddr, &infolen);
 		//(struct sockaddr_in*) infoaddr_pointer = (struct sockaddr_in*) infoaddr;
 		assigned_port = ntohs(infoaddr.sin_port);
