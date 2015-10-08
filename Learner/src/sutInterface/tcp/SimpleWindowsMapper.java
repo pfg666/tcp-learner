@@ -28,11 +28,10 @@ public class SimpleWindowsMapper implements MapperInterface {
 		return mapperState;
 	}
 	
-	
-	// 1. same fresh syn as before or learnerSeq  
-	// 2. a fresh syn within [learnerSeq+1, learnerSeq + MaxNum/2]
-	// 3. a fresh syn between [learnerSeq + MaxNum/2, learnerSeq-1]
-	
+	// cases for nondet in TIME_WAIT state:
+	// 1. [learnerSeq, learnerSeq + MaxNum/2) -> SYN+ACK
+	// 2. learnerSeq + MaxNum/2 -> RST
+	// 3. (learnerSeq + MaxNum/2, learnerSeq) -> timeout
 	
 	
 	private long generateFreshSeq() {
@@ -47,8 +46,8 @@ public class SimpleWindowsMapper implements MapperInterface {
 		if (learnerSeq == -3) {
 			newSeq = Calculator.randWithinRange(0, Calculator.MAX_NUM);
 		} else {
-			//Calculator.sub(Calculator.MAX_NUM/2, 1)
-			newSeq = Calculator.randWithinRange(learnerSeq, Calculator.sum(learnerSeq, 10000));
+			// we should generate random values greater than learnerSeq that are outside of the window ( I assume WINDOW_SIZE < 10000)
+			newSeq = Calculator.randWithinRange(Calculator.sum(learnerSeq, 10000), Calculator.sum(learnerSeq, 20000));
 		}
 		
 		return newSeq;
@@ -101,10 +100,11 @@ public class SimpleWindowsMapper implements MapperInterface {
 	private void updateResponse(FlagSet flagsIn, long concSeqIn, long concAckIn,
 			int concDataIn) {
 		// segment which leave state unchanged 
-		if (lastFlagsSent.contains(Flag.SYN) && flagsIn.contains(Flag.RST)) {
-			this.sutSeq = sutSeq;
-			this.learnerSeq = learnerSeq;
-		} else if ((flagsIn.contains(Flag.RST) ) | ((learnerSeqProposed != -3) & (concAckIn != learnerSeqProposed+1))) {
+//		if (lastFlagsSent.contains(Flag.SYN) && flagsIn.contains(Flag.RST)) {
+//			this.sutSeq = sutSeq;
+//			this.learnerSeq = learnerSeq;
+//		} else 
+			if ((flagsIn.contains(Flag.RST) ) | ((learnerSeqProposed != -3) & (concAckIn != learnerSeqProposed+1))) {
 			// upon reset, or if a fresh seq from the learner is not acknowledged
 			this.sutSeq = -3;
 			this.learnerSeq = generateFreshSeq();
