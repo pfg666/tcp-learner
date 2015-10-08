@@ -13,20 +13,23 @@ import util.InputAction;
 import util.Log;
 import util.OutputAction;
 
-public class InvlangSutWrapper implements SutWrapper {
+public class MapperSutWrapper implements SutWrapper {
 	private final static Map<Integer,SocketWrapper> socketWrapperMap = new HashMap<Integer, SocketWrapper>();
 	
 	private  MapperInterface mapper;
 	private final SocketWrapper socketWrapper;
 	
-	public InvlangSutWrapper(int tcpServerPort, String mapperName) {
+	public MapperSutWrapper(int tcpServerPort, String mapperName) {
 		try {
-			this.mapper = new InvlangRandomMapper(mapperName);
+			if (mapperName.equalsIgnoreCase("java")) {
+				this.mapper = new SimpleWindowsMapper();
+			} else {
+				this.mapper = new InvlangRandomMapper(mapperName);
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 		
-		this.mapper = new SimpleWindowsMapper();
 		if(socketWrapperMap.containsKey(tcpServerPort)) {
 			this.socketWrapper = socketWrapperMap.get(tcpServerPort); 
 		} else {
