@@ -1,0 +1,131 @@
+digraph G {
+label=""
+init [color="red"]
+listen
+syn_rcvd
+established_preaccept
+close_wait_preaccept
+s5_
+established_postaccept
+close_wait
+fin_wait1
+established_postdata
+last_ack
+fin_wait2
+time_wait
+close_wait_postdata
+close_post_closewait
+init [label="init"];
+init -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>RST(ZERO,ZERO,0)</td></tr></table>>]
+init -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN(V,V,0)</td><td>/</td><td>ACK+RST(ZERO,NEXT,0)</td></tr></table>>]
+init -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>RST(ZERO,ZERO,0)</td></tr></table>>]
+init -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>LISTEN</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+init -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>RST(ZERO,ZERO,0)</td></tr></table>>]
+init -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN(V,V,0)</td><td>/</td><td>ACK+RST(ZERO,NEXT,0)</td></tr></table>>]
+init -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK(V,V,0)</td><td>/</td><td>RST(ZERO,ZERO,0)</td></tr></table>>]
+listen [label="listen"];
+listen -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>RST(ZERO,ZERO,0)</td></tr></table>>]
+listen -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>RST(ZERO,ZERO,0)</td></tr></table>>]
+listen -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>RST(ZERO,ZERO,0)</td></tr></table>>]
+listen -> syn_rcvd[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN(V,V,0)</td><td>/</td><td>ACK+SYN(FRESH,NEXT,0)</td></tr></table>>]
+listen -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSE</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+listen -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK(V,V,0)</td><td>/</td><td>RST(ZERO,ZERO,0)</td></tr></table>>]
+syn_rcvd [label="syn_rcvd"];
+syn_rcvd -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+syn_rcvd -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+syn_rcvd -> close_wait_preaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+syn_rcvd -> established_preaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+syn_rcvd -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN(V,V,0)</td><td>/</td><td>ACK+RST(ZERO,NEXT,0)</td></tr></table>>]
+syn_rcvd -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+syn_rcvd -> s5_[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSE</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+syn_rcvd -> established_preaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_preaccept [label="established_preaccept"];
+established_preaccept -> established_preaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+established_preaccept -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_preaccept -> established_postaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACCEPT</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_preaccept -> close_wait_preaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+established_preaccept -> established_preaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+established_preaccept -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_preaccept -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSE</td><td>/</td><td>ACK+RST(NEXT,CURRENT,0)</td></tr></table>>]
+close_wait_preaccept [label="close_wait_preaccept"];
+close_wait_preaccept -> close_wait_preaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+close_wait_preaccept -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_wait_preaccept -> close_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACCEPT</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_wait_preaccept -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_wait_preaccept -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSE</td><td>/</td><td>ACK+RST(NEXT,CURRENT,0)</td></tr></table>>]
+s5_ [label="s5_"];
+s5_ -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+s5_ -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+s5_ -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN(V,V,0)</td><td>/</td><td>ACK+RST(ZERO,NEXT,0)</td></tr></table>>]
+s5_ -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+s5_ -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+s5_ -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN(V,V,0)</td><td>/</td><td>ACK+RST(ZERO,NEXT,0)</td></tr></table>>]
+s5_ -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+s5_ -> init[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK(V,V,0)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+established_postaccept [label="established_postaccept"];
+established_postaccept -> fin_wait1[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSECONNECTION</td><td>/</td><td>ACK+FIN(NEXT,CURRENT,0)</td></tr></table>>]
+established_postaccept -> established_postaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+established_postaccept -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_postaccept -> close_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+established_postaccept -> established_postdata[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+established_postaccept -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_postaccept -> established_postaccept[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SEND</td><td>/</td><td>ACK+PSH(NEXT,CURRENT,1)</td></tr></table>>]
+close_wait [label="close_wait"];
+close_wait -> last_ack[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSECONNECTION</td><td>/</td><td>ACK+FIN(NEXT,CURRENT,0)</td></tr></table>>]
+close_wait -> close_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+close_wait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_wait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_wait -> close_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SEND</td><td>/</td><td>ACK+PSH(NEXT,CURRENT,1)</td></tr></table>>]
+fin_wait1 [label="fin_wait1"];
+fin_wait1 -> fin_wait1[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+fin_wait1 -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+fin_wait1 -> time_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+fin_wait1 -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+fin_wait1 -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+fin_wait1 -> fin_wait2[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_postdata [label="established_postdata"];
+established_postdata -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSECONNECTION</td><td>/</td><td>ACK+RST(NEXT,CURRENT,0)</td></tr></table>>]
+established_postdata -> established_postdata[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+established_postdata -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_postdata -> close_wait_postdata[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+established_postdata -> established_postdata[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+established_postdata -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+established_postdata -> established_postdata[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SEND</td><td>/</td><td>ACK+PSH(NEXT,CURRENT,1)</td></tr></table>>]
+last_ack [label="last_ack"];
+last_ack -> last_ack[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+last_ack -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+last_ack -> close_post_closewait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+last_ack -> close_post_closewait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+last_ack -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+last_ack -> close_post_closewait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+fin_wait2 [label="fin_wait2"];
+fin_wait2 -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+fin_wait2 -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+fin_wait2 -> time_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,NEXT,0)</td></tr></table>>]
+fin_wait2 -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+fin_wait2 -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN(V,V,0)</td><td>/</td><td>ACK+RST(ZERO,NEXT,0)</td></tr></table>>]
+fin_wait2 -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+time_wait [label="time_wait"];
+time_wait -> time_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+time_wait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+time_wait -> time_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+time_wait -> time_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+time_wait -> time_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+time_wait -> time_wait[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+time_wait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_wait_postdata [label="close_wait_postdata"];
+close_wait_postdata -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSECONNECTION</td><td>/</td><td>ACK+RST(NEXT,CURRENT,0)</td></tr></table>>]
+close_wait_postdata -> close_wait_postdata[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>ACK(NEXT,CURRENT,0)</td></tr></table>>]
+close_wait_postdata -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_wait_postdata -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_wait_postdata -> close_wait_postdata[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SEND</td><td>/</td><td>ACK+PSH(NEXT,CURRENT,1)</td></tr></table>>]
+close_post_closewait [label="close_post_closewait"];
+close_post_closewait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN+ACK(V,V,0)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+close_post_closewait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_post_closewait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>FIN+ACK(V,V,0)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+close_post_closewait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>PSH+ACK(V,V,1)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+close_post_closewait -> syn_rcvd[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>SYN(V,V,0)</td><td>/</td><td>ACK+SYN(FRESH,NEXT,0)</td></tr></table>>]
+close_post_closewait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK+RST(V,V,0)</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_post_closewait -> s5_[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>CLOSE</td><td>/</td><td>TIMEOUT</td></tr></table>>]
+close_post_closewait -> listen[label=<<table border="0" cellpadding="1" cellspacing="0"><tr><td>ACK(V,V,0)</td><td>/</td><td>RST(NEXT,ZERO,0)</td></tr></table>>]
+}
