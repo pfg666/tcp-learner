@@ -1,7 +1,6 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +18,10 @@ public class RangePicker {
 		this.min = min;
 		this.max = max;
 		this.pointsOfInterest = pointsOfInterest2;
+		if (pointsOfInterest.isEmpty()) {
+			rangesOfInterest = Collections.emptyList();
+			return ;
+		}
 		List<Long> boundaryValues = new ArrayList<>();
 		for (long l : this.pointsOfInterest) {
 			long low = l-1, high = l+1;
@@ -81,7 +84,11 @@ public class RangePicker {
 	}
 	
 	public long getRandom() {
-		return getRandom(r.nextInt(this.pointsOfInterest.size() + this.rangesOfInterest.size()));
+		if (pointsOfInterest.isEmpty()) {
+			return Calculator.randWithinRange(min, max);
+		} else {
+			return getRandom(r.nextInt(this.pointsOfInterest.size() + this.rangesOfInterest.size()));
+		}
 	}
 	
 	/**
@@ -90,7 +97,7 @@ public class RangePicker {
 	 * @param i
 	 * @return
 	 */
-	public long getRandom(int i) {
+	private  long getRandom(int i) {
 		int j;
 		if (i < this.pointsOfInterest.size()) {
 			return this.pointsOfInterest.get(i);

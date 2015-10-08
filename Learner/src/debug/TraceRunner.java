@@ -72,11 +72,19 @@ public class TraceRunner {
 		while(it.hasNext()) {
 			String line = it.next();
 			System.out.print((i++) + ": " + line);
-			if (line.startsWith("#") || line.startsWith("!") || line.isEmpty()) {
+			if (line.startsWith("#") || line.startsWith("!")) {
 				it.remove();
 				System.out.println(" (skipped)");
 			} else {
-				System.out.println();
+				 if ( line.isEmpty()) {
+					 it.remove();
+					 while (it.hasNext()) {
+						 it.next();
+						 it.remove();
+					 } 
+				 } else {
+					 System.out.println();
+				 }
 			}
 		}
 		int iterations;
