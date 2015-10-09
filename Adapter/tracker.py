@@ -70,7 +70,7 @@ class Tracker(threading.Thread):
 #                self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
                 #self.lastResponse = response
                 # ignore a packet if it was a retransmit
-                if (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["SA", "AS", "AF", "FA"]:
+                if self.isRetransmit(response):
                     print "ignoring retransmission: ", response.__str__()
                 else:
                     if (response.seq, response.ack, response.flags) not in self.responseHistory:
@@ -84,6 +84,14 @@ class Tracker(threading.Thread):
 #                    self.lastResponse = response
 #                else:
 
+    def isRetransmit(self, response):
+        isRet = (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["SA", "AS", "AF", "FA"]
+        if not isRet:
+	        if "P" in response.flags and "A" in response.flags and response.payload > 0:
+		        for (seq, ack, flags) in self.responseHistory:
+		        	if seq == response.seq and "P" in flags and "A" in flags:
+		        		isRet = True
+        return isRet
 
     def processResponse(self, response):
         if response is not None:

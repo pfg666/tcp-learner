@@ -17,6 +17,7 @@ public class SimpleWindowsMapper implements MapperInterface {
 	private long sutSeq;
 	private long learnerSeq;
 	private long learnerSeqProposed;
+	private long oldSeq = -3;
 	private FlagSet lastFlagsSent;
 	private Random random = new Random(0);
 	
@@ -43,12 +44,13 @@ public class SimpleWindowsMapper implements MapperInterface {
 //			pointsOfInterest.add(learnerSeq);
 //		long newSeq = new RangePicker(random, 0, 0xffffffffL, pointsOfInterest).getRandom();
 		long newSeq;
-		if (learnerSeq == -3) {
+		if (oldSeq == -3) {
 			newSeq = Calculator.randWithinRange(0, Calculator.MAX_NUM);
 		} else {
 			// we should generate random values greater than learnerSeq that are outside of the window ( I assume WINDOW_SIZE < 10000)
-			newSeq = Calculator.randWithinRange(Calculator.sum(learnerSeq, 10000), Calculator.sum(learnerSeq, 20000));
+			newSeq = Calculator.randWithinRange(Calculator.sum(oldSeq, 10000), Calculator.sum(oldSeq, 20000));
 		}
+		oldSeq = newSeq;
 		
 		return newSeq;
 	}
