@@ -24,6 +24,7 @@ public class InvlangMapper {
 				CONC_ACK = "concAckIn",
 				ABS_SEQ = "absSeqIn",
 				ABS_ACK = "absAckIn",
+				CONC_DATA = "concDataIn",
 				TMP = "tmp";
 	}
 	protected final class Outputs {
@@ -32,8 +33,10 @@ public class InvlangMapper {
 				FLAGS_OUT_2 = "flagsOut2",
 				ABS_SEQ = "absSeqOut",
 				ABS_ACK = "absAckOut",
+				ABS_DATA = "absDataOut",
 				CONC_SEQ = "concSeqOut",
 				CONC_ACK = "concAckOut",
+				CONC_DATA = "concDataOut",
 				UNDEF = "undefined",
 				TIMEOUT = "TIMEOUT";
 	}
@@ -113,6 +116,7 @@ public class InvlangMapper {
 		handler.setFlags(Inputs.FLAGS, flags);
 		handler.setInt(Inputs.CONC_SEQ, seqNr);
 		handler.setInt(Inputs.CONC_ACK, ackNr);
+		handler.setInt(Inputs.CONC_DATA, payloadLength);
 		handler.execute(Mappings.INCOMING_RESPONSE);
 		EnumValue absSeq = handler.getEnumResult(Inputs.ABS_SEQ);
 		EnumValue absAck = handler.getEnumResult(Inputs.ABS_ACK);
@@ -133,6 +137,8 @@ public class InvlangMapper {
 		handler.setFlags(Outputs.FLAGS_OUT_2, flags);
 		handler.setEnum(Outputs.ABS_SEQ, Enums.IN, absSeq.toInvLang());
 		handler.setEnum(Outputs.ABS_ACK, Enums.IN, absAck.toInvLang());
+		handler.setInt(Outputs.ABS_DATA, payloadLength);
+		
 		this.lastConstraints = handler.executeInverted(Mappings.OUTGOING_REQUEST);
 		if (handler.hasResult()) {
 			int concSeq = handler.getIntResult(Outputs.CONC_SEQ);

@@ -22,7 +22,8 @@ public class InvlangSutWrapper implements SutWrapper {
 	
 	public InvlangSutWrapper(int tcpServerPort, String mapperName) {
 		try {
-			this.mapper = new InvlangRandomMapper(mapperName);
+			this.mapper = new InvlangMapper(mapperName);
+			//this.mapper = new InvlangRandomMapper(mapperName);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -127,7 +128,7 @@ public class InvlangSutWrapper implements SutWrapper {
 			if (payload.length() < 2 || payload.charAt(0) != '[' || payload.charAt(payload.length() - 1) != ']') {
 				throw new RuntimeException("Cannot parse packet '" + payload + "'");
 			}
-			return mapper.processIncomingResponse(FlagSet.fromAcronym(flags), seqReceived, ackReceived, payload.length() - 2);
+			return mapper.processIncomingResponse(FlagSet.fromAcronym(flags), seqReceived, ackReceived, payload.length() - 2 == 0 ? 0 : 1);
 		}
 	}
 	
@@ -146,7 +147,14 @@ public class InvlangSutWrapper implements SutWrapper {
 		String flags = inputValues[0];
 		String abstractSeq = inputValues[1];
 		String abstractAck = inputValues[2];
-		int payloadLength = Integer.parseInt(inputValues[3]);
+		int payloadLength;
+		if (inputValues.length == 3) {
+			payloadLength = 0;
+		} else if (inputValues.length == 4) {
+			payloadLength = Integer.parseInt(inputValues[3]);
+		} else {
+			throw new RuntimeException("Cannot handle abstract input '" + input + "'");
+		}
 		String concreteInput;
 		try {
 			concreteInput = mapper.processOutgoingRequest(new FlagSet(flags),

@@ -221,7 +221,7 @@ public class Main {
 			public void run() {
 				closeOutputStreams();
 				copyInputsToOutputFolder();
-				writeCacheTree();
+				writeCacheTree(tree);
 				//InitCacheManager mgr = new InitCacheManager();
 				//mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				if (done == false) {
@@ -454,7 +454,7 @@ public class Main {
 				.println(" config_file     - .yaml config file describing the sut/learning.");
 	}
 	
-	public static void writeCacheTree() {
+	public static void writeCacheTree(ObservationTree tree) {
 		if (tree == null) {
 			System.err.println("Could not write uninitialized observation tree");
 			return;

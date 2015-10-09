@@ -4,9 +4,17 @@ learningParams:
     maxValue: 300
     minTraceLength: 6
     maxTraceLength: 6
-    maxNumTraces: 50
+    maxNumTraces: 0
     sutInterface: sutinfo.yaml
-    mapper: CLIENT_NO_ACTIONS_ALL_V
+    mapper: simple_4
+    yanCommand: /home/student/yannakakis2/build/main
+    nonDeterminismTestIterations: 50
+    testTraces: [
+        #["LISTEN", "SYN(V,V)", "ACK(V,V)", "ACCEPT", "CLOSECONNECTION", "ACK(V,V)", "CLOSE", "FIN+ACK(V,V)"],
+        #["LISTEN", "SYN(V,V)", "CLOSE", "LISTEN", "SYN(V,V)", "LISTEN", "SYN(V,V)"],
+        #["CLOSE", "LISTEN", "SYN(V,V)"]
+        ["LISTEN", "SYN(V,V,0)", "CLOSE", "FIN+ACK(V,V,0)", "LISTEN", "SYN(V,V,0)"]
+        ]
 tcpParams:
     sutPort: 18200
     sutIP: 127.0.0.1

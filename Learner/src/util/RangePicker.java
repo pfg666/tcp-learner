@@ -14,11 +14,11 @@ public class RangePicker {
 	private final List<Tuple2<Long, Long>> rangesOfInterest;
 	private final Random r;
 	
-	public RangePicker(Random random, long min, long max, LinkedList<Long> pointsOfInterest2) {
+	public RangePicker(Random random, long min, long max, LinkedList<Long> pointsOfInterest) {
 		this.r = random;
 		this.min = min;
 		this.max = max;
-		this.pointsOfInterest = pointsOfInterest2;
+		this.pointsOfInterest = pointsOfInterest;
 		List<Long> boundaryValues = new ArrayList<>();
 		for (long l : this.pointsOfInterest) {
 			long low = l-1, high = l+1;
