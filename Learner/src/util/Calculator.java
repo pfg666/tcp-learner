@@ -57,29 +57,41 @@ public class Calculator {
 		return rand;
 	}
 	
+	public static long randWithinRanges(long boundaryProximity, long nearBoundaryBias, long [] ... ranges) { 
+		long rand;
+		int randIndex;
+		long [] rands = new long [ranges.length];
+		for (int i = 0; i < ranges.length; i ++) {
+			rands[i] = randWithinRange(ranges[i][0], ranges[i][1], boundaryProximity, nearBoundaryBias);
+		}
+		randIndex = (int)randWithinRange(0, ranges.length/2);
+		rand = rands[randIndex];
+		return rand;
+	}
+	
 	/**
 	 * Gen. 
 	 * @param rangeMin
 	 * @param rangeMax
 	 * @param boundaryProximity
-	 * @param nearBoundaryChance
+	 * @param nearBoundaryBias chance that a value near a boundary is picked instead of the randomly selected value
 	 * @return
 	 */
-	public static long randWithinRange(long rangeMin, long rangeMax, long boundaryProximity, long nearBoundaryChance) {
+	public static long randWithinRange(long rangeMin, long rangeMax, long boundaryProximity, long nearBoundaryBias) {
 		//System.out.println("[" + rangeMin + "-"+ rangeMax + "]");
 		long rand;
 		if(rangeMax > rangeMin) {
 			long span = rangeMax - rangeMin;
-			rand = (long) (Math.random() * span + 0.5) + rangeMin;
+			rand = sum((long)  (Math.random() * span + 0.5), rangeMin);
 			double chance = Math.random(); 
-			rand = 	(chance < 1 - nearBoundaryChance) ? rand : 
-					(chance < 1 - nearBoundaryChance/2) ? rangeMin + ((long) ((boundaryProximity + 1) * Math.random())%span) :
+			rand = 	(chance < 1 - nearBoundaryBias) ? rand : 
+					(chance < 1 - nearBoundaryBias/2) ? rangeMin + ((long) ((boundaryProximity + 1) * Math.random())%span) :
 						rangeMax - ((long) ((boundaryProximity + 1) * Math.random())%span);
 		} else {
 			if(rangeMin == rangeMax) {
 				rand = rangeMin;
 			} else {
-				rand = randWithinRanges(new long [] {rangeMin, MAX_NUM}, new long[] {0, rangeMax});
+				rand = randWithinRanges(boundaryProximity, nearBoundaryBias, new long [] {rangeMin, MAX_NUM}, new long[] {0, rangeMax});
 			}
 		}
 		return rand;
@@ -89,24 +101,7 @@ public class Calculator {
 	 * Gen. random number within one interval 
 	 */
 	public static long randWithinRange(long rangeMin, long rangeMax) {
-		long rand, boundaryProximity = 3;
-		double nearBoundaryBias = 0.5;
-		//System.out.println("[" + rangeMin + "-"+ rangeMax + "]");
-		if(rangeMax > rangeMin) {
-			long span = rangeMax - rangeMin;
-			rand = (long) (Math.random() * span + 0.5) + rangeMin;
-			double chance = Math.random(); 
-			rand = 	(chance < 1 - nearBoundaryBias) ? rand : 
-					(chance < 1 - nearBoundaryBias/2) ? rangeMin + ((long) ((boundaryProximity + 1) * Math.random())%span) :
-						rangeMax - ((long) ((boundaryProximity + 1) * Math.random())%span);
-		} else {
-			if(rangeMin == rangeMax) {
-				rand = rangeMin;
-			} else {
-				rand = randWithinRanges(new long [] {rangeMin, MAX_NUM}, new long[] {0, rangeMax});
-			}
-		}
-		return rand;
+		return randWithinRange(rangeMin, rangeMax, 0, 0);
 	}
 	
 	public static void main(String[] args) {

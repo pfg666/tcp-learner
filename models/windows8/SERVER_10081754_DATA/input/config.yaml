@@ -1,0 +1,16 @@
+learningParams:
+    seed: 1299777356020
+    minValue: 0
+    maxValue: 300
+    minTraceLength: 6
+    maxTraceLength: 6
+    maxNumTraces: 2000
+    sutInterface: sutinfo.yaml
+    yanCommand: /home/paul/Yannakakis/main
+    mapper: CLIENT_NO_ACTIONS_ALL_V
+tcpParams:
+    sutPort: 18200
+    sutIP: 127.0.0.1
+    oracle: client
+
+

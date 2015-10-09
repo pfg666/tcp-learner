@@ -29,7 +29,7 @@ import learner.TCPParams;
 import sutInterface.ObservationTreeWrapper;
 import sutInterface.SutWrapper;
 import sutInterface.tcp.InvlangMapper;
-import sutInterface.tcp.InvlangSutWrapper;
+import sutInterface.tcp.MapperSutWrapper;
 import sutInterface.tcp.TCPMapper;
 import sutInterface.tcp.TCPSutWrapper;
 import sutInterface.tcp.init.CachedInitOracle;
@@ -53,7 +53,7 @@ public class TraceRunner {
 	public static final String END = 		"\n*********************\n";
 	
 	private Map<List<String>, Integer> outcomes = new HashMap<List<String>, Integer>();
-	private final InvlangSutWrapper sutWrapper;
+	private final MapperSutWrapper sutWrapper;
 	private final List<InputAction> inputTrace;
 	//private final CacheInputValidator validator;
 	
@@ -72,11 +72,19 @@ public class TraceRunner {
 		while(it.hasNext()) {
 			String line = it.next();
 			System.out.print((i++) + ": " + line);
-			if (line.startsWith("#") || line.startsWith("!") || line.isEmpty()) {
+			if (line.startsWith("#") || line.startsWith("!")) {
 				it.remove();
 				System.out.println(" (skipped)");
 			} else {
-				System.out.println();
+				 if ( line.isEmpty()) {
+					 it.remove();
+					 while (it.hasNext()) {
+						 it.next();
+						 it.remove();
+					 } 
+				 } else {
+					 System.out.println();
+				 }
 			}
 		}
 		int iterations;
@@ -106,7 +114,7 @@ public class TraceRunner {
 		TCPMapper tcpMapper = new TCPMapper(initOracle);*/
 		//TCPSutWrapper sutWrapper = new TCPSutWrapper(tcp.sutPort, tcpMapper, tcp.exitIfInvalid);
 		
-		InvlangSutWrapper sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
+		MapperSutWrapper sutWrapper = new MapperSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 		TraceRunner traceRunner = new TraceRunner(trace, sutWrapper);
 		traceRunner.testTrace(iterations);
 		sutWrapper.close();
@@ -136,7 +144,7 @@ public class TraceRunner {
 		return sb.toString();
 	}
 	
-	public TraceRunner(Word word, InvlangSutWrapper sutWrapper) {
+	public TraceRunner(Word word, MapperSutWrapper sutWrapper) {
 		List<InputAction> inputActions = new ArrayList<>(word.size());
 		for (Symbol symbol : word.getSymbolList()) {
 			inputActions.add(new InputAction(symbol.toString()));
@@ -145,7 +153,7 @@ public class TraceRunner {
 		this.sutWrapper = sutWrapper;
 	}
 	
-	public TraceRunner(List<String> inputTrace, InvlangSutWrapper sutWrapper) {
+	public TraceRunner(List<String> inputTrace, MapperSutWrapper sutWrapper) {
 		List<InputAction> inputActions = new ArrayList<>(inputTrace.size());
 		for (String s : inputTrace) {
 			inputActions.add(new InputAction(s.trim()));

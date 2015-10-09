@@ -7,23 +7,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import learner.Main;
-
 import sutInterface.SocketWrapper;
 import sutInterface.SutWrapper;
 import util.InputAction;
 import util.Log;
 import util.OutputAction;
 
-public class InvlangSutWrapper implements SutWrapper {
+public class MapperSutWrapper implements SutWrapper {
 	private final static Map<Integer,SocketWrapper> socketWrapperMap = new HashMap<Integer, SocketWrapper>();
 	
-	private final InvlangMapper mapper;
+	private  MapperInterface mapper;
 	private final SocketWrapper socketWrapper;
 	
-	public InvlangSutWrapper(int tcpServerPort, String mapperName) {
+	public MapperSutWrapper(int tcpServerPort, String mapperName) {
 		try {
-			this.mapper = new InvlangMapper(mapperName);
-			//this.mapper = new InvlangRandomMapper(mapperName);
+			if (mapperName.equalsIgnoreCase("java")) {
+				this.mapper = new SimpleWindowsMapper();
+			} else {
+				this.mapper = new InvlangRandomMapper(mapperName);
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -90,7 +92,8 @@ public class InvlangSutWrapper implements SutWrapper {
 		if(concreteRequest.equalsIgnoreCase(Symbol.UNDEFINED.name())) {
 			symbolicOutput = new OutputAction(Symbol.UNDEFINED.name());
 			Log.info("ABSTRACT RESPONSE: " + Symbol.UNDEFINED.name() + " (no transition)");
-			Main.absAndConcTraceOut.println("> " + Symbol.UNDEFINED.name() + " - " + this.mapper.getLastConstraints());
+			Main.absAndConcTraceOut.println("> " + Symbol.UNDEFINED.name() + " - " + this.mapper.getState()
+					);
 		}
 		// Send concrete input, receive output from SUT and make abs
 		else {
@@ -122,13 +125,13 @@ public class InvlangSutWrapper implements SutWrapper {
 		} else {
 			String[] inputValues = concreteResponse.split(" ");
 			String flags = inputValues[0];
-			int seqReceived = (int)Long.parseLong(inputValues[1]);
-			int ackReceived = (int)Long.parseLong(inputValues[2]);
+			long seqReceived = Long.parseLong(inputValues[1]);
+			long ackReceived = Long.parseLong(inputValues[2]);
 			String payload = inputValues[3];
 			if (payload.length() < 2 || payload.charAt(0) != '[' || payload.charAt(payload.length() - 1) != ']') {
 				throw new RuntimeException("Cannot parse packet '" + payload + "'");
 			}
-			return mapper.processIncomingResponse(FlagSet.fromAcronym(flags), seqReceived, ackReceived, payload.length() - 2 == 0 ? 0 : 1);
+			return mapper.processIncomingResponse(FlagSet.fromAcronym(flags), seqReceived, ackReceived, payload.length() - 2);
 		}
 	}
 	
@@ -147,14 +150,7 @@ public class InvlangSutWrapper implements SutWrapper {
 		String flags = inputValues[0];
 		String abstractSeq = inputValues[1];
 		String abstractAck = inputValues[2];
-		int payloadLength;
-		if (inputValues.length == 3) {
-			payloadLength = 0;
-		} else if (inputValues.length == 4) {
-			payloadLength = Integer.parseInt(inputValues[3]);
-		} else {
-			throw new RuntimeException("Cannot handle abstract input '" + input + "'");
-		}
+		int payloadLength = Integer.parseInt(inputValues[3]);
 		String concreteInput;
 		try {
 			concreteInput = mapper.processOutgoingRequest(new FlagSet(flags),

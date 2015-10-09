@@ -10,9 +10,9 @@ learningParams:
     yanCommand: /home/student/yannakakis2/build/main
     nonDeterminismTestIterations: 50
     testTraces: [
-        #["LISTEN", "SYN(V,V)", "ACK(V,V)", "ACCEPT", "CLOSECONNECTION", "ACK(V,V)", "CLOSE", "FIN+ACK(V,V)"],
-        #["LISTEN", "SYN(V,V)", "CLOSE", "LISTEN", "SYN(V,V)", "LISTEN", "SYN(V,V)"],
-        #["CLOSE", "LISTEN", "SYN(V,V)"]
+        ["LISTEN", "SYN(V,V)", "ACK(V,V)", "ACCEPT", "CLOSECONNECTION", "ACK(V,V)", "CLOSE", "FIN+ACK(V,V)"],
+        ["LISTEN", "SYN(V,V)", "CLOSE", "LISTEN", "SYN(V,V)", "LISTEN", "SYN(V,V)"],
+        ["CLOSE", "LISTEN", "SYN(V,V)"],
         ["LISTEN", "SYN(V,V,0)", "CLOSE", "FIN+ACK(V,V,0)", "LISTEN", "SYN(V,V,0)"]
         ]
 tcpParams:

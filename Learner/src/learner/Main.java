@@ -33,7 +33,7 @@ import sutInterface.CacheReaderOracle;
 import sutInterface.ObservationTreeWrapper;
 import sutInterface.SutInfo;
 import sutInterface.SutWrapper;
-import sutInterface.tcp.InvlangSutWrapper;
+import sutInterface.tcp.MapperSutWrapper;
 import sutInterface.tcp.LearnResult;
 import sutInterface.tcp.init.InvCheckOracleWrapper;
 import sutInterface.tcp.init.LogOracleWrapper;
@@ -79,7 +79,7 @@ public class Main {
 	public static Config config;
 	private static File sutInterfaceFile;
 	private static ObservationTree tree;
-	private static InvlangSutWrapper sutWrapper;
+	private static MapperSutWrapper sutWrapper;
 
 	public static void main(String[] args) throws LearningException, IOException, Exception {
 		handleArgs(args);
@@ -380,7 +380,7 @@ public class Main {
 	}
 	
 	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
-		sutWrapper = new InvlangSutWrapper(tcp.sutPort, Main.learningParams.mapper);
+		sutWrapper = new MapperSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 		tree = readCacheTree();
 		if (tree == null) {
 			tree = new ObservationTree();
