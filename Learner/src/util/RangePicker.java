@@ -8,23 +8,24 @@ import java.util.ListIterator;
 import java.util.Random;
 
 public class RangePicker {
+	private static final long INTEREST_LOWER_OFFSET = 0, INTEREST_UPPER_OFFSET = 1;
 	private final long min, max;
 	private final LinkedList<Long> pointsOfInterest;
 	private final List<Tuple2<Long, Long>> rangesOfInterest;
 	private final Random r;
 	
-	public RangePicker(Random random, long min, long max, LinkedList<Long> pointsOfInterest2) {
+	public RangePicker(Random random, long min, long max, LinkedList<Long> pointsOfInterest) {
 		this.r = random;
 		this.min = min;
 		this.max = max;
-		this.pointsOfInterest = pointsOfInterest2;
+		this.pointsOfInterest = pointsOfInterest;
 		if (pointsOfInterest.isEmpty()) {
 			rangesOfInterest = Collections.emptyList();
 			return ;
 		}
 		List<Long> boundaryValues = new ArrayList<>();
 		for (long l : this.pointsOfInterest) {
-			long low = l-1, high = l+1;
+			long low = l-INTEREST_LOWER_OFFSET, high = l+INTEREST_UPPER_OFFSET;
 			if (low >= min && low <= max) {
 				boundaryValues.add(low);
 			}

@@ -77,7 +77,7 @@ public class ObservationTree implements Serializable {
 			newOutputChain.add(output);
 			boolean action = removeOnNonDet; //askForRemoval(oldOutputChain, newOutputChain);
 			if (action) {
-			    Main.writeCacheTree(false);
+			    Main.writeCacheTree(this, false);
     			this.children.remove(input);
     			this.outputs.remove(input);
 			}

@@ -108,7 +108,6 @@ class Tracker(threading.Thread):
     def impacketResponseParse(self, tcpPacket):
         response = None
         if isinstance(tcpPacket, TCP):
-            print "response:" + str(tcpPacket)
             tcp_syn = tcpPacket.get_th_seq()
             tcp_ack = tcpPacket.get_th_ack()
 

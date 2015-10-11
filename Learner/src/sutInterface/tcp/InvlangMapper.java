@@ -24,6 +24,7 @@ public class InvlangMapper implements MapperInterface {
 				CONC_ACK = "concAckIn",
 				ABS_SEQ = "absSeqIn",
 				ABS_ACK = "absAckIn",
+				CONC_DATA = "concDataIn",
 				TMP = "tmp";
 	}
 	protected final class Outputs {
@@ -32,8 +33,10 @@ public class InvlangMapper implements MapperInterface {
 				FLAGS_OUT_2 = "flagsOut2",
 				ABS_SEQ = "absSeqOut",
 				ABS_ACK = "absAckOut",
+				ABS_DATA = "absDataOut",
 				CONC_SEQ = "concSeqOut",
 				CONC_ACK = "concAckOut",
+				CONC_DATA = "concDataOut",
 				UNDEF = "undefined",
 				TIMEOUT = "TIMEOUT";
 	}
@@ -83,14 +86,17 @@ public class InvlangMapper implements MapperInterface {
 	}
 	
 	public InvlangMapper(File file) throws IOException {
+		System.out.println("Reading mapper file...");
 		try (BufferedReader input = new BufferedReader(new FileReader(file))) {
 			int c;
 			StringBuilder sb = new StringBuilder();
 			while ((c = input.read()) != -1) {
 				sb.append((char) c);
 			}
-			handler = new InvLangHandler(sb.toString(), new Reducer(Reducer.RANGE_LENGTH+4, Reducer.RANGE_START, Reducer.INITIAL_START, Reducer.NR_RANGES+2));
+			System.out.println("Transforming mapper...");
+			handler = new InvLangHandler(sb.toString(), new Reducer(Reducer.RANGE_LENGTH+4, 2, Reducer.INITIAL_START, Reducer.NR_RANGES+2));
 		}
+		System.out.println("Finished transforming mapper...");
 	}
 	
 	/* (non-Javadoc)
@@ -119,6 +125,7 @@ public class InvlangMapper implements MapperInterface {
 	@Override
 	public String processIncomingResponse(FlagSet flags, long seqNr, long ackNr, int payloadLength) {
 		handler.setFlags(Inputs.FLAGS, flags);
+		handler.setInt(Inputs.CONC_DATA, payloadLength);
 		handler.setInt(Inputs.CONC_SEQ, (int) seqNr);
 		handler.setInt(Inputs.CONC_ACK, (int) ackNr);
 		handler.execute(Mappings.INCOMING_RESPONSE);
@@ -149,6 +156,8 @@ public class InvlangMapper implements MapperInterface {
 		handler.setFlags(Outputs.FLAGS_OUT_2, flags);
 		handler.setEnum(Outputs.ABS_SEQ, Enums.IN, absSeq.toInvLang());
 		handler.setEnum(Outputs.ABS_ACK, Enums.IN, absAck.toInvLang());
+		handler.setInt(Outputs.ABS_DATA, payloadLength);
+		
 		this.lastConstraints = handler.executeInverted(Mappings.OUTGOING_REQUEST);
 		if (handler.hasResult()) {
 			int concSeq = handler.getIntResult(Outputs.CONC_SEQ);

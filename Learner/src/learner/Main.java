@@ -221,7 +221,8 @@ public class Main {
 			public void run() {
 				closeOutputStreams();
 				copyInputsToOutputFolder();
-				writeCacheTree(true);
+				writeCacheTree(tree, true);
+
 				//InitCacheManager mgr = new InitCacheManager();
 				//mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				if (done == false) {
@@ -456,7 +457,7 @@ public class Main {
 	
 	public static int cachedTreeNum = 0;
 	
-	public static void writeCacheTree(boolean isFinal) {
+	public static void writeCacheTree(ObservationTree tree, boolean isFinal) {
 		if (tree == null) {
 			System.err.println("Could not write uninitialized observation tree");
 			return;
