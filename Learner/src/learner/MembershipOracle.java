@@ -30,7 +30,7 @@ public class MembershipOracle implements ExtendedOracle {
 			String outputString = sendInput(currentSymbol.toString());
 			result.addSymbol(new SymbolImpl(outputString));
 		}
-
+		
 		System.out.println("Returning to LearnLib: " + result);
 
 		return result;
