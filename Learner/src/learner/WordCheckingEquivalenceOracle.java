@@ -6,15 +6,13 @@ import java.util.List;
 import util.LearnlibUtils;
 import util.Log;
 import de.ls5.jlearn.abstractclasses.LearningException;
+import de.ls5.jlearn.equivalenceoracles.EquivalenceOracleOutputImpl;
 import de.ls5.jlearn.interfaces.Automaton;
 import de.ls5.jlearn.interfaces.EquivalenceOracle;
 import de.ls5.jlearn.interfaces.EquivalenceOracleOutput;
 import de.ls5.jlearn.interfaces.Oracle;
-import de.ls5.jlearn.interfaces.State;
 import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.interfaces.Word;
-import de.ls5.jlearn.shared.WordImpl;
-import de.ls5.jlearn.equivalenceoracles.EquivalenceOracleOutputImpl;
 
 public class WordCheckingEquivalenceOracle implements EquivalenceOracle{
 	
@@ -37,11 +35,14 @@ public class WordCheckingEquivalenceOracle implements EquivalenceOracle{
 
 	public EquivalenceOracleOutput findCounterExample(Automaton hyp) {
 		EquivalenceOracleOutputImpl equivOracleOutput = null;
-		for (Word wordInput : wordsToCheck) {
-			System.err.println(wordInput);
+		TEST: for (Word wordInput : wordsToCheck) {
+			Log.err("Executing the test query: "+ wordInput);
 			for (Symbol s : wordInput.getSymbolList()) {
 				if (!hyp.getAlphabet().getSymbolList().contains(s)) {
-					throw new RuntimeException("Alphabet " + hyp.getAlphabet().getSymbolList() + " does not contain " + wordInput);
+				    
+					Log.err("Alphabet " + hyp.getAlphabet().getSymbolList() + " does not contain symbol: " + s);
+					Log.err("Skipping test");
+					continue TEST;
 				}
 			}
 			Word hypOutput = hyp.getTraceOutput(wordInput);
