@@ -144,7 +144,7 @@ public class Dot {
 		List<Symbol> inputs=automaton.getAlphabet().getSymbolList();
 		java.util.Collections.sort(inputs);
 		
-		 List<State> states = util.learnlib.AutomatonUtil.getStatesInBFSOrder(automaton);
+		 List<State> states = util.learnlib.AutomatonUtils.getStatesInBFSOrder(automaton);
 /*		
 		for( Symbol input:  inputs ) {
 			
