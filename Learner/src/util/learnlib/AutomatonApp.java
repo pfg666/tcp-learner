@@ -4,27 +4,39 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.List;
 
 import de.ls5.jlearn.interfaces.Automaton;
-import de.ls5.jlearn.interfaces.State;
 import de.ls5.jlearn.interfaces.Symbol;
 
 public class AutomatonApp {
 	private BufferedReader in;
 	private PrintStream out;
+	private Deque<String> commands;
 	
 	public AutomatonApp(BufferedReader in, PrintStream out) {
 		this.in = in;
 		this.out = out;
+		this.commands = new ArrayDeque<String>();
 	}
 	
 	public AutomatonApp() {
 		this(new BufferedReader(new InputStreamReader(System.in)), System.out);
 	}
 	
+	public void bufferCommands(Collection<String> commands) {
+		this.commands.addAll(commands);
+	}
+	
 	private String ask(String msg) throws IOException{
 		out.println(msg);
+		if (!commands.isEmpty()) {
+			return commands.remove();
+		}
 		return in.readLine().trim();
 	}
 	
@@ -75,6 +87,9 @@ public class AutomatonApp {
 
 	public static void main(String args[]) throws IOException {
 		AutomatonApp app = new AutomatonApp();
+		if (args.length > 0) {
+			app.bufferCommands(Arrays.asList(args));
+		}
 		app.play();
 	}
 	
