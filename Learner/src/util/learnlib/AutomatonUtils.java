@@ -59,7 +59,8 @@ public class AutomatonUtils {
 	 * return one. The length is the first order. Traces of equal length are order by the position of the last input
 	 * in the alphabet.
 	 */
-	public static List<Symbol> traceToState(Automaton automaton, State state) {
+	public static List<Symbol> traceToState(Automaton automaton, int stateId) {
+		State state = AutomatonUtils.get(automaton, stateId);
 		List<Symbol> alphabet = automaton.getAlphabet().getSymbolList();
 		List<Symbol> selectedMiddlePart = new ArrayList<Symbol>();
 		List<List<Symbol>> middleParts = new ArrayList<List<Symbol>>();
@@ -107,11 +108,11 @@ public class AutomatonUtils {
 	}
 	
 	private static int indexOf(Automaton automaton, State state) {
-		return automaton.getAllStates().indexOf(state);
+		return getStatesInBFSOrder(automaton).indexOf(state);
 	}
 	
 	private static State get(Automaton automaton, int index) {
-		return automaton.getAllStates().get(index);
+		return getStatesInBFSOrder(automaton).get(index);
 	}
 
 	private static List<Symbol> getDistinguishingSeq(Automaton automaton,
@@ -139,8 +140,10 @@ public class AutomatonUtils {
 				if (!reachedStateFrom1.getTransitionOutput(input).equals(reachedStateFrom2
 						.getTransitionOutput(input))) {
 					System.out.println(
-							"(s" + indexOf(automaton,reachedStateFrom1) + ") " + input + "/" + reachedStateFrom1.getTransitionOutput(input) + 
-							" != (s" + indexOf(automaton,reachedStateFrom2) + ") " + input  + "/" + reachedStateFrom2.getTransitionOutput(input));
+							"(s" + indexOf(automaton,reachedStateFrom1) + ") " + input + "/" + reachedStateFrom1.getTransitionOutput(input) 
+							+  " (s" + indexOf(automaton,reachedStateFrom1.getTransitionState(input)) + ") " +
+							" != (s" + indexOf(automaton,reachedStateFrom2) + ") " + input  + "/" + reachedStateFrom2.getTransitionOutput(input) 
+							+  " (s" + indexOf(automaton,reachedStateFrom2.getTransitionState(input)) + ") ");
 					selectedMiddlePart.add(input);
 					diffFound = true;
 					break;

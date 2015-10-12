@@ -49,8 +49,7 @@ public class AutomatonApp {
 					out.println("Load a hyp first!");
 				} else {
 					int stateId = Integer.valueOf(ask("State ID:"));
-					State state = loadedHyp.getAllStates().get(stateId);
-					List<Symbol> traceToState = AutomatonUtils.traceToState(loadedHyp, state);
+					List<Symbol> traceToState = AutomatonUtils.traceToState(loadedHyp, stateId);
 					out.println("Trace to state: " + traceToState); 
 				}
 				break;
