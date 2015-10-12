@@ -9,7 +9,6 @@ import java.util.List;
 import de.ls5.jlearn.interfaces.Automaton;
 import de.ls5.jlearn.interfaces.State;
 import de.ls5.jlearn.interfaces.Symbol;
-import de.ls5.jlearn.interfaces.Word;
 
 public class AutomatonApp {
 	private BufferedReader in;
@@ -33,7 +32,8 @@ public class AutomatonApp {
 		Automaton loadedHyp = null;
 		while (true) {
 			out.println("Welcome to the hyp assistent. Today you can: " +
-					"\n 1. Load a new hypothesis \n 2. Get trace to state \n 3. Get dist seq between two state \n 4. Quit");
+					"\n 1. Load a new hypothesis \n 2. Get trace to state \n " +
+					"3. Get distinguishing seq between two states \n 4. Quit");
 			
 			String command = ask("Command:");
 			switch(command) {
@@ -50,7 +50,7 @@ public class AutomatonApp {
 				} else {
 					int stateId = Integer.valueOf(ask("State ID:"));
 					State state = loadedHyp.getAllStates().get(stateId);
-					Word traceToState = loadedHyp.getTraceToState(state);
+					List<Symbol> traceToState = AutomatonUtils.traceToState(loadedHyp, state);
 					out.println("Trace to state: " + traceToState); 
 				}
 				break;
@@ -65,7 +65,7 @@ public class AutomatonApp {
 					out.println("Distinguishing trace: " + distSeq); 
 				}
 				break;
-
+				
 			case "4":
 				out.println("Byee");
 				return ;
@@ -75,12 +75,8 @@ public class AutomatonApp {
 	}
 
 	public static void main(String args[]) throws IOException {
-		//AutomatonApp app = new AutomatonApp();
-		//app.play();
-		Automaton a = Dot.readDotFile("learned2.dot");
-		Dot.writeDotFile(a, "understood.dot");
-		System.out.println(AutomatonUtils.distinguishingSeq(a, 0, 12));
-		
+		AutomatonApp app = new AutomatonApp();
+		app.play();
 	}
 	
 }

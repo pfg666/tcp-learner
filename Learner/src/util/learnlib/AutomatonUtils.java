@@ -92,8 +92,8 @@ public class AutomatonUtils {
 	public static List<Symbol> distinguishingSeq(Automaton automaton, int stateId1, int stateId2) {
 		Alphabet alpha = automaton.getAlphabet();
 		List<Symbol> symbols = alpha.getSymbolList();
-		State state1 = automaton.getAllStates().get(stateId1);
-		State state2 = automaton.getAllStates().get(stateId2);
+		State state1 = get(automaton, stateId1);
+		State state2 = get(automaton, stateId2);
 		List<Symbol> distSeq = getDistinguishingSeq(automaton, symbols, state1, state2);
 		return distSeq;
 	}
@@ -104,6 +104,14 @@ public class AutomatonUtils {
 			word.addSymbol(symbol);
 		}
 		return word;
+	}
+	
+	private static int indexOf(Automaton automaton, State state) {
+		return automaton.getAllStates().indexOf(state);
+	}
+	
+	private static State get(Automaton automaton, int index) {
+		return automaton.getAllStates().get(index);
 	}
 
 	private static List<Symbol> getDistinguishingSeq(Automaton automaton,
@@ -128,15 +136,19 @@ public class AutomatonUtils {
 			
 			boolean diffFound = false;
 			for (Symbol input : symbols) {
-				if (reachedStateFrom1.getTransitionOutput(input) != reachedStateFrom2
-						.getTransitionOutput(input)) {
+				if (!reachedStateFrom1.getTransitionOutput(input).equals(reachedStateFrom2
+						.getTransitionOutput(input))) {
+					System.out.println(
+							"(s" + indexOf(automaton,reachedStateFrom1) + ") " + input + "/" + reachedStateFrom1.getTransitionOutput(input) + 
+							" != (s" + indexOf(automaton,reachedStateFrom2) + ") " + input  + "/" + reachedStateFrom2.getTransitionOutput(input));
 					selectedMiddlePart.add(input);
 					diffFound = true;
 					break;
 				}
 			}
-			if (diffFound)
+			if (diffFound) {
 				break;
+			}
 			
 			Tuple2<State,State> reachedStatePair = new Tuple2<>(reachedStateFrom1, reachedStateFrom2);
 			reachedSatePairs.add(reachedStatePair);
