@@ -53,14 +53,18 @@ public class AutomatonUtils {
 		return result;
 	}
 	
+	public static List<Symbol> traceToState(Automaton automaton, int stateId) {
+		State state = AutomatonUtils.get(automaton, stateId);
+		return traceToState(automaton, state);
+	}
+	
 	/**
 	 * Gives a minimal length path from the start state to the given state. We build this path based 
 	 * on the random value generator. Note, there can be several minimal paths to the given state. We only 
 	 * return one. The length is the first order. Traces of equal length are order by the position of the last input
 	 * in the alphabet.
 	 */
-	public static List<Symbol> traceToState(Automaton automaton, int stateId) {
-		State state = AutomatonUtils.get(automaton, stateId);
+	public static List<Symbol> traceToState(Automaton automaton, State state) {
 		List<Symbol> alphabet = automaton.getAlphabet().getSymbolList();
 		List<Symbol> selectedMiddlePart = new ArrayList<Symbol>();
 		List<List<Symbol>> middleParts = new ArrayList<List<Symbol>>();
