@@ -102,10 +102,10 @@ public class SimpleWindowsMapper implements MapperInterface {
 	private void updateResponse(FlagSet flagsIn, long concSeqIn, long concAckIn,
 			int concDataIn) {
 		// segment which leave state unchanged 
-//		if (lastFlagsSent.contains(Flag.SYN) && flagsIn.contains(Flag.RST)) {
-//			this.sutSeq = sutSeq;
-//			this.learnerSeq = learnerSeq;
-//		} else 
+		if (lastFlagsSent != null && lastFlagsSent.contains(Flag.SYN) && flagsIn.contains(Flag.RST)) {
+			this.sutSeq = sutSeq;
+			this.learnerSeq = learnerSeq;
+		} else 
 			if ((flagsIn.contains(Flag.RST) ) | ((learnerSeqProposed != -3) & (concAckIn != learnerSeqProposed+1))) {
 			// upon reset, or if a fresh seq from the learner is not acknowledged
 			this.sutSeq = -3;

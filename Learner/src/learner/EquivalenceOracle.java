@@ -25,6 +25,7 @@ public class EquivalenceOracle implements ExtendedOracle {
 
 		System.out.println("Equivalence query number: " + ++Statistics.getStats().totalEquivQueries);
 
+		
 		for (Symbol currentSymbol : query.getSymbolList()) {
 			String outputString = sendInput(currentSymbol.toString());
 			result.addSymbol(new SymbolImpl(outputString));
@@ -33,7 +34,7 @@ public class EquivalenceOracle implements ExtendedOracle {
 		System.out.println("Returning to LearnLib: " + result);
 		return result;
 	}
-
+	
 	public String sendInput(String inputString) {
 		InputAction input = new InputAction(inputString);
 		System.out.println("Sending: " + inputString);

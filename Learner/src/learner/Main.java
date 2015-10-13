@@ -230,7 +230,8 @@ public class Main {
 			public void run() {
 				closeOutputStreams();
 				copyInputsToOutputFolder();
-				writeCacheTree(tree);
+				writeCacheTree(tree, true);
+
 				//InitCacheManager mgr = new InitCacheManager();
 				//mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				if (done == false) {
@@ -397,8 +398,8 @@ public class Main {
 		if (tree == null) {
 			tree = new ObservationTree();
 		}
-		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new EquivalenceOracle(sutWrapper))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new MembershipOracle(sutWrapper)))));
+		Oracle eqOracleRunner = new NonDeterminismValidatorWrapper(10, new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new NonDeterministicOutputCheckWrapper(new EquivalenceOracle(sutWrapper)))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+		Oracle memOracleRunner = new NonDeterminismValidatorWrapper(10, new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new NonDeterministicOutputCheckWrapper( new MembershipOracle(sutWrapper))))));
 		
 		/*ObservationTree tree = new ObservationTree();
 		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
@@ -466,13 +467,15 @@ public class Main {
 				.println(" config_file     - .yaml config file describing the sut/learning.");
 	}
 	
-	public static void writeCacheTree(ObservationTree tree) {
+	public static int cachedTreeNum = 0;
+	
+	public static void writeCacheTree(ObservationTree tree, boolean isFinal) {
 		if (tree == null) {
 			System.err.println("Could not write uninitialized observation tree");
 			return;
 		}
 		try (
-				OutputStream file = new FileOutputStream(CACHE_FILE);
+				OutputStream file = new FileOutputStream(isFinal?CACHE_FILE:cachedTreeNum+CACHE_FILE);
 				OutputStream buffer = new BufferedOutputStream(file);
 				ObjectOutput output = new ObjectOutputStream(buffer);
 				) {
@@ -482,6 +485,7 @@ public class Main {
 		catch (IOException ex){
 			System.err.println("Could not write observation tree");
 		}
+		Main.cachedTreeNum += 1;
 	}
 	
 	public static ObservationTree readCacheTree() {

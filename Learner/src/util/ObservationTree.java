@@ -1,5 +1,6 @@
 package util;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,10 +22,15 @@ import de.ls5.jlearn.shared.WordImpl;
 
 public class ObservationTree implements Serializable {
 	private static final long serialVersionUID = 6001736L;
+	private static boolean removeOnNonDet = false;
 	private final ObservationTree parent;
 	private final Symbol parentOutput;
 	private final Map<Symbol, ObservationTree> children;
 	private final Map<Symbol, Symbol> outputs;
+	
+	public static void removeBranchOnNonDeterminism(boolean removeBranch) {
+	    removeOnNonDet = removeBranch;
+	}
 	
 	public ObservationTree() {
 		this(null, null);
@@ -70,13 +76,39 @@ public class ObservationTree implements Serializable {
 			List<Symbol> oldOutputChain = this.children.get(input).getOutputChain();
 			List<Symbol> newOutputChain = this.getOutputChain();
 			newOutputChain.add(output);
-			this.children.remove(input);
-			this.outputs.remove(input);
+			boolean action = removeOnNonDet; //askForRemoval(oldOutputChain, newOutputChain);
+			if (action) {
+			    Main.writeCacheTree(this, false);
+    			this.children.remove(input);
+    			this.outputs.remove(input);
+			}
 			throw new InconsistencyException(oldOutputChain, newOutputChain);
 		} else {
 			// input is consistent with previous observations, just traverse
 			return this.children.get(input);
 		}
+	}
+	
+	private boolean askForRemoval(List<Symbol> oldOutputChain, List<Symbol> newOutputChain) {
+	    System.out.println("Do you want the input removed from the tree? (1/0)");
+	    System.out.println("Old output chain: " + oldOutputChain);
+	    System.out.println("New output chain: " + newOutputChain);
+	    boolean toRemove = true;
+	    try{
+        char answer = (char)System.in.read();
+        if (answer == '1') {
+            System.out.println("OK, removing");
+            toRemove = true;
+        } else {
+            System.out.println("OK, not removing");
+            toRemove = false;
+        }
+	    }catch(IOException e) {
+	        System.err.println("IO Exception. Tree gets to leave another day.");
+	        System.exit(0);
+	    }
+	    
+	    return toRemove;
 	}
 	
 	public void addObservation(Word inputs, Word outputs) throws InconsistencyException {
@@ -139,16 +171,24 @@ public class ObservationTree implements Serializable {
 		}
 	}
 	
-	public static void main(String[] args) {
-		String[] lookup = "LISTEN SYN(V,V) ACK(V,V) ACCEPT CLOSECONNECTION ACK(V,V) CLOSE FIN+ACK(V,V)"
-				.split("\\s+");
-		ObservationTree observations = Main.readCacheTree();
-		LinkedList<Symbol> symbols = new LinkedList<>();
-		for (String string : lookup) {
-			symbols.add(new SymbolImpl(string));
-		}
-		System.out.println(symbols);
-		System.out.println(observations.getObservation(symbols));
+	public static void main(String[] args) throws Exception{
+	    System.out.println("Do you the input removed from the tree? (0/1)");
+	    char answer = (char)System.in.read();
+	    if (answer == '0') {
+	        System.out.println("OK, removing");
+	    } else {
+	        System.out.println("OK, not removing");
+	    }
+	    
+//		String[] lookup = "LISTEN SYN(V,V) ACK(V,V) ACCEPT CLOSECONNECTION ACK(V,V) CLOSE FIN+ACK(V,V)"
+//				.split("\\s+");
+//		ObservationTree observations = Main.readCacheTree();
+//		LinkedList<Symbol> symbols = new LinkedList<>();
+//		for (String string : lookup) {
+//			symbols.add(new SymbolImpl(string));
+//		}
+//		System.out.println(symbols);
+//		System.out.println(observations.getObservation(symbols));
 	}
 
 	public void remove() {
