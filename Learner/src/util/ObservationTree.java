@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import learner.Main;
 
@@ -106,6 +107,20 @@ public class ObservationTree implements Serializable {
 		return new WordImpl(outputArray);
 	}
 	
+	public ObservationTree getState(List<Symbol> inputs) {
+		if (inputs.isEmpty()) {
+			return this;
+		} else {
+			Symbol firstInput = inputs.get(0);
+			ObservationTree child = null;
+			if ((child = this.children.get(firstInput)) == null) {
+				return null;
+			} else {
+				return child.getState(inputs.subList(1, inputs.size()));
+			}
+		}
+	}
+	
 	public LinkedList<Symbol> getObservation(LinkedList<Symbol> inputs) {
 		if (inputs.isEmpty()) {
 			return new LinkedList<>();
@@ -134,5 +149,22 @@ public class ObservationTree implements Serializable {
 		}
 		System.out.println(symbols);
 		System.out.println(observations.getObservation(symbols));
+	}
+
+	public void remove() {
+		if (this.parent == null) {
+			throw new RuntimeException("Cannot remove root node");
+		}
+		for (Symbol symbol : this.parent.children.keySet()) {
+			if (this == this.parent.children.get(symbol)) {
+				this.parent.children.remove(symbol);
+				this.parent.outputs.remove(symbol);
+				break;
+			}
+		}
+	}
+
+	public Set<Symbol> getInputs() {
+		return this.children.keySet();
 	}
 }

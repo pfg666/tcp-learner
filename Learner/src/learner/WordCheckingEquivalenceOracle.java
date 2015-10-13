@@ -37,11 +37,14 @@ public class WordCheckingEquivalenceOracle implements EquivalenceOracle{
 
 	public EquivalenceOracleOutput findCounterExample(Automaton hyp) {
 		EquivalenceOracleOutputImpl equivOracleOutput = null;
+		
+		wordLoop:
 		for (Word wordInput : wordsToCheck) {
 			System.err.println(wordInput);
 			for (Symbol s : wordInput.getSymbolList()) {
 				if (!hyp.getAlphabet().getSymbolList().contains(s)) {
-					throw new RuntimeException("Alphabet " + hyp.getAlphabet().getSymbolList() + " does not contain " + wordInput);
+					System.err.println("Alphabet " + hyp.getAlphabet().getSymbolList() + " does not contain " + wordInput);
+					continue wordLoop;
 				}
 			}
 			Word hypOutput = hyp.getTraceOutput(wordInput);
