@@ -81,6 +81,8 @@ public class Main {
 	private static ObservationTree tree;
 	private static MapperSutWrapper sutWrapper;
 
+    private static PrintStream dupStdout;
+
 	public static void main(String[] args) throws LearningException, IOException, Exception {
 		handleArgs(args);
 		
@@ -212,6 +214,9 @@ public class Main {
 		absAndConcTraceOut.println("copy this to obtain the regex describing any text between two inputs of a trace:\n[^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n]\n\n");
 		learnOut = new PrintStream(
 				new FileOutputStream(outputDir + File.separator + "learnLog.txt", false));
+		dupStdout =  new PrintStream(
+                new FileOutputStream(outputDir + File.separator + "stdout.txt", false));
+	//	Log.setActivePrintStream(dupStdout);
 		
 		errOut = System.err;
 		
@@ -318,6 +323,7 @@ public class Main {
 						traceRunner.testTrace(testIterations);
 						System.err.println(traceRunner.getResults());
 					}
+					Log.err(e.getMessage() + "\n" + e.getStackTrace());
 					throw e;
 				}
 			}
@@ -356,6 +362,7 @@ public class Main {
 		absAndConcTraceOut.close();
 		learnOut.close();
 		errOut.close();
+		dupStdout.close();
 	}
 	
 	private static de.ls5.jlearn.interfaces.EquivalenceOracle buildEquivalenceOracle(LearningParams learningParams, Oracle queryOracle) {
@@ -386,8 +393,8 @@ public class Main {
 		if (tree == null) {
 			tree = new ObservationTree();
 		}
-		Oracle eqOracleRunner = new NonDeterminismValidatorWrapper(10, new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new NonDeterministicOutputCheckWrapper(new EquivalenceOracle(sutWrapper)))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-		Oracle memOracleRunner = new NonDeterminismValidatorWrapper(10, new ObservationTreeWrapper(tree, new LogOracleWrapper(new CacheReaderOracle(tree, new NonDeterministicOutputCheckWrapper( new MembershipOracle(sutWrapper))))));
+		Oracle eqOracleRunner = new NonDeterminismValidatorWrapper(10, new ObservationTreeWrapper(tree, new CacheReaderOracle(tree, new NonDeterministicOutputCheckWrapper(new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
+		Oracle memOracleRunner = new NonDeterminismValidatorWrapper(10, new ObservationTreeWrapper(tree, new CacheReaderOracle(tree, new NonDeterministicOutputCheckWrapper(new LogOracleWrapper( new MembershipOracle(sutWrapper))))));
 		
 		/*ObservationTree tree = new ObservationTree();
 		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));

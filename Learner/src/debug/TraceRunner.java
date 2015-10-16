@@ -28,6 +28,7 @@ import learner.SutInterface;
 import learner.TCPParams;
 import sutInterface.ObservationTreeWrapper;
 import sutInterface.SutWrapper;
+import sutInterface.tcp.Action;
 import sutInterface.tcp.InvlangMapper;
 import sutInterface.tcp.MapperSutWrapper;
 import sutInterface.tcp.TCPMapper;
@@ -166,6 +167,7 @@ public class TraceRunner {
 		for (int i = 0; i < iterations; i++) {
 			runTrace((i+1));
 		}
+	    sutWrapper.sendReset();
 	}
 	
 	protected void runTrace(int printNumber) {

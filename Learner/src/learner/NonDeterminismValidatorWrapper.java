@@ -37,6 +37,7 @@ public class NonDeterminismValidatorWrapper implements Oracle{
             }
             Log.err("Non-determinism judged to be due to packet miss.\n Learning can continue");
             ObservationTree.removeBranchOnNonDeterminism(false);
+            //throw nonDet;
         }
         return output;
     }

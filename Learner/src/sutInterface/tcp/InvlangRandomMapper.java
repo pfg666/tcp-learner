@@ -15,7 +15,7 @@ import sutInterface.Serializer;
 import util.RangePicker;
 
 public class InvlangRandomMapper extends InvlangMapper {
-	private static final int RANDOM_ATTEMPTS = 100;
+	private static final int RANDOM_ATTEMPTS = 3;
 	private final Random random = new Random();
 	private LinkedList<Long> valuesOfInterest = new LinkedList<>();
 	
@@ -45,6 +45,7 @@ public class InvlangRandomMapper extends InvlangMapper {
 				}
 			}
 		}
+
 		RangePicker picker = new RangePicker(random, 0, 0xffffffffL, this.valuesOfInterest);
 		System.out.println("points of interest: " + this.valuesOfInterest);
 		for (int i = 0; i < RANDOM_ATTEMPTS; i++) {

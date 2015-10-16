@@ -23,7 +23,9 @@ public class MapperSutWrapper implements SutWrapper {
 		try {
 			if (mapperName.equalsIgnoreCase("java")) {
 				this.mapper = new SimpleWindowsMapper();
-			} else {
+			} else if (mapperName.contains("windows")) {
+                this.mapper = new WinInvlangRandomMapper(mapperName);
+            } else {
 				this.mapper = new InvlangRandomMapper(mapperName);
 			}
 		} catch (IOException e) {
