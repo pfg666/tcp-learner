@@ -56,7 +56,7 @@ void error(char* msg) {
 }
 
 void strcpy_end(char* dest, char* src, int maxsize) {
-	int len = strlen(src)+1;
+	int len = strlen(src) + 1;
 	if (maxsize < len) {
 		len = maxsize;
 	}
@@ -174,6 +174,7 @@ void *do_accept(void *arg) {
 	int new_connection = accept(main_sd, (struct sockaddr*)NULL, NULL);
 	if (new_connection >= 0) {
 		secondary_sd = new_connection;
+		printf("\n Created connection socket %d", new_connection);
 	}
 	if (secondary_sd == -1) {
 		printf("accepting failed\n");
@@ -427,6 +428,7 @@ int process_input() {
 		process_accept();
 	}
 	else if (strncmp(read_buffer, "closeconnection", sizeof(read_buffer)) == 0) {
+		printf("closing connection");
 		process_close_secondary();
 	}
 	else if (strncmp(read_buffer, "send", sizeof(read_buffer)) == 0) {

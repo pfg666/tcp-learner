@@ -21,7 +21,7 @@ import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.shared.AlphabetImpl;
 import de.ls5.jlearn.shared.AutomatonImpl;
 
-public class Dot {
+public class TCPDot {
 	private static final String LABEL = "label=<<table border=\"0\" "
 			+ "cellpadding=\"1\" cellspacing=\"0\"><tr><td>";
 	private static final String MID = "</td><td>/</td><td>";
@@ -141,6 +141,7 @@ public class Dot {
 	 * 
 	 */
 	public static void write(Automaton automaton, Appendable out, List<State> highlights, String description, boolean doubleCircleStartState,Set<Symbol> hide) {
+		Map<State, String> tcpStateMap = AutomatonTCPStateMatcher.produceTCPStateMap(automaton);
 		List<Symbol> inputs=automaton.getAlphabet().getSymbolList();
 		java.util.Collections.sort(inputs);
 		
@@ -178,12 +179,20 @@ public class Dot {
 	      // and also immmediate store a state's label  in 'labels' mapping ( state -> label )
 	      int i = 0;
 	      for (State s : states) {
+	    	  String stateLabel;
+	    	  if (tcpStateMap.containsKey(s)) {
+	    		  stateLabel = tcpStateMap.get(s);
+	    	  } else {
+	    		  stateLabel = new StringBuilder().append("s").append(i).toString();
+	    	  }
+	    	  
 	        if (highlightsSet.contains(s))
-	          out.append(new StringBuilder().append("s").append(i).append(" [color=\"red\"]\n").toString());
+	          out.append(new StringBuilder().append(stateLabel).append(" [color=\"red\"]\n").toString());
 	        else {
-	          out.append(new StringBuilder().append("s").append(i).append("\n").toString());
+	          out.append(new StringBuilder().append(stateLabel).append("\n").toString());
 	        }
-	        labels.put(s, new StringBuilder().append("s").append(i++).toString());
+	        labels.put(s, new StringBuilder().append(stateLabel).toString());
+	        i++;
 	      }
 	      
 	      // for each state
