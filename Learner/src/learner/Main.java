@@ -82,25 +82,33 @@ public class Main {
 	private static MapperSutWrapper sutWrapper;
 
 	public static void main(String[] args) throws LearningException, IOException, Exception {
+		System.out.println("Reading program arguments");
 		handleArgs(args);
 		
+		System.out.println("Setting up output directory...");
 		setupOutput(outputDir);
 
+		System.out.println("Reading config...");
 		Config config = createConfig();
 		Main.config = config;
+		
+		System.out.println("Creating SUT interface...");
 		SutInterface sutInterface = createSutInterface(config);
 	
+		System.out.println("Reading TCP parameters...");
 		TCPParams tcp = readConfig(config, sutInterface);
 		
 		Log.setLogLevel(tcp.logLevel);
 
 		// first is the membership, second is the equivalence oracle
+		System.out.println("Building oracles...");
 		Tuple2<Oracle,Oracle> tcpOracles = buildOraclesFromConfig(tcp);
 		
 		Learner learner;
 
 		LearnResult learnResult;
 
+		System.out.println("Building equivalence oracle...");
 		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = buildEquivalenceOracle(learningParams, tcpOracles.tuple1);
 		SingleTransitionReducer ceReducer = new SingleTransitionReducer(tcpOracles.tuple1);
 
@@ -110,7 +118,8 @@ public class Main {
 
 		learner.setAlphabet(SutInfo.generateInputAlphabet());
 		SutInfo.generateOutputAlphabet();
-		
+
+		System.out.println("Starting learner...");
 		learnResult = learn(learner, eqOracle, ceReducer);
 		
 
@@ -381,7 +390,10 @@ public class Main {
 	}
 	
 	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
+		System.out.println("Building SUT wrapper...");
 		sutWrapper = new MapperSutWrapper(tcp.sutPort, Main.learningParams.mapper);
+		
+		System.out.println("Building cache tree...");
 		tree = readCacheTree();
 		if (tree == null) {
 			tree = new ObservationTree();
