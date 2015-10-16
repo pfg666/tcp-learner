@@ -71,9 +71,9 @@ MAP outgoingRequest (int concSeqOut, int concAckOut, flags flagsOut, int concDat
 						-> absin absSeqOut, absin absAckOut, flags flagsOut2, int absDataOut)
 flagsOut2 = flagsOut;
 absDataOut = concDataOut;
-if (((learnerSeq == -3) | (learnerSeq == concSeqOut))
-//	| ((lastAckReceived == 0) & (concSeqOut == 0) & (flagsOut has $R) & (flagsOut has $A))
-	| ((flagsOut has $R) & (!(flagsOut has $A)) & (lastAckReceived != 0) & (concSeqOut == lastAckReceived))
+if (((learnerSeq == -3) 
+	| (learnerSeq == concSeqOut))
+	| ((flagsOut has $R) & (!(flagsOut has $A)) & (lastAckReceived != 0) & (learnerSeq == -3) & (concSeqOut == lastAckReceived))
 	) {
 	absSeqOut = absin.VALID;
 } else {
