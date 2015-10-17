@@ -24,20 +24,19 @@ public class NonDeterminismValidatorWrapper implements Oracle{
             output = oracle.processQuery(word);
         } catch(NonDeterminismException nonDet) {
             Log.err("Rerunning word which caused non-determinism: \n" + word);
+            ObservationTree.removeBranchOnNonDeterminism(true);
+            Log.err("Running word several times to see if non-determinism still exists");
             try{
-                ObservationTree.removeBranchOnNonDeterminism(true);
+                for (int i=0; i<numberTries; i++) {
+                    output = oracle.processQuery(word);
+                }
                 oracle.processQuery(word);
             }catch(NonDeterminismException nonDet2){
                 Log.err("Branch from tree removed for input word: " + nonDet2.getInputs());
                 throw nonDet2;
             }
-            Log.err("Running word several times to see if non-determinism still exists");
-            for (int i=0; i<numberTries; i++) {
-                output = oracle.processQuery(word);
-            }
-            Log.err("Non-determinism judged to be due to packet miss.\n Learning can continue");
             ObservationTree.removeBranchOnNonDeterminism(false);
-            //throw nonDet;
+            Log.err("Non-determinism judged to be due to packet miss.\n Learning can continue");
         }
         return output;
     }
