@@ -73,7 +73,7 @@ flagsOut2 = flagsOut;
 absDataOut = concDataOut;
 if (((learnerSeq == -3) | (learnerSeq == concSeqOut))
 //	| ((lastAckReceived == 0) & (concSeqOut == 0) & (flagsOut has $R) & (flagsOut has $A))
-	| ((flagsOut has $R) & (!(flagsOut has $A)) & (lastAckReceived != 0) & (concSeqOut == lastAckReceived))
+	| ((flagsOut has $R) & (!(flagsOut has $A)) & (lastAckReceived != 0) & (learnerSeq != -3) & (concSeqOut == lastAckReceived))
 	) {
 	absSeqOut = absin.VALID;
 } else {

@@ -155,7 +155,10 @@ class Adapter:
                 elif "sendAction" in dir(self.sender) and self.sender.isAction(input1):
                     print ("send action: " +input1)
                     input1 = input1.lower().replace("\n","")
-                    response = sender.sendAction(input1) # response might arrive before sender is ready
+                    try:
+                        response = sender.sendAction(input1) # response might arrive before sender is ready
+                    except: 
+                        response = "BROKENPIPE"
                 elif input1 == "nil":
                     print("send nothing (nil)")
                     response = sender.captureResponse()

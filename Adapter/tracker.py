@@ -24,6 +24,7 @@ class Tracker(threading.Thread):
     
     def __init__ (self,interface, serverIp, interfaceType=InterfaceType.Ethernet, readTimeout = 1):
         super(Tracker, self).__init__()
+        print str(interface)
         self.interface = interface
         self.decoder = self.getDecoder(interfaceType) # Wireless not yet supported
         self._stop = threading.Event()
@@ -85,7 +86,7 @@ class Tracker(threading.Thread):
 #                else:
 
     def isRetransmit(self, response):
-        isRet = (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["SA", "AS", "AF", "FA"]
+        isRet = (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["S", "SA", "AS", "AF", "FA"]
         if not isRet:
 	        if "P" in response.flags and "A" in response.flags and response.payload > 0:
 		        for (seq, ack, flags) in self.responseHistory:

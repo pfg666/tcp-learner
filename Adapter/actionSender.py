@@ -1,5 +1,7 @@
 #from socketAdapter import SocketAdapter
 import socket
+import time
+from _socket import MSG_DONTWAIT, MSG_PEEK
 syn_ok = False
 
 # extends sender functionality with higher level commands
@@ -14,7 +16,8 @@ class ActionSender:
                "exit",
                "closeclient",
                "connect",
-               "send"]
+               "send",
+               "rcv"]
     def __init__(self, cmdIp = "192.168.56.1", cmdPort=5000, sender = None):
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp
@@ -36,8 +39,6 @@ class ActionSender:
             #self.cmdSocket = SocketAdapter(cmdSocket)
             self.cmdSocket = cmdSocket
             self.sockFile = self.cmdSocket.makefile('r')
-        self.listenForServerPort()
-        
     
     def closeSockets(self):
         try:
@@ -54,26 +55,29 @@ class ActionSender:
     def listenForServerPort(self):
 #        while True:
             line = self.sockFile.readline()
+            if line == "":
+                self.cmdSocket.close()
+                self.cmdSocket = None
+                print "Setting up socket"
+                self.setUpSocket()
+                time.sleep(0.3)
+                #self.sendReset()
+                line = self.sockFile.readline()
             print "received " + line
             line = line.split()
             if line[0] != "port":
                 raise Exception("expected 'port', received '" + line[0] + "'")
             self.serverPort = int(line[1])
             print "next server port: " + str(self.serverPort)
-#            word = self.sockFile.readline()
-#            newPortString = self.cmdSocket.recv(1024)
-#             print "received " + newPortString
-#             for word in newPortString.split(): # TODO check if this really always works with a stream
-#                 if newPortFound:
-#                     self.serverPort = int(word)
-#                     print "next server port: " + word
-#                     return
-#                 if word == "port":
-#                     newPortFound = True
                     
     def sendReset(self):
+        try:
+            self.checkAlive()
+        except: 
+            pass
         if self.cmdSocket is None:
             self.setUpSocket()
+            self.listenForServerPort()
         print "reset"
         print "********** reset **********"
         self.cmdSocket.send("reset\n")
@@ -101,6 +105,7 @@ class ActionSender:
     
     def sendAction(self, inputString):
         if self.isAction(inputString):
+            #self.cmdSocket.recv(1000, MSG_DONTWAIT)
             self.cmdSocket.send(inputString + "\n")
             if syn_ok:
                 ok = self.sockFile.readline()
@@ -118,8 +123,21 @@ class ActionSender:
             #print "server adapter response: " + cmdResponse
         else:
             print inputString + " not a valid action ( it is not one of: " + str(self.actions) + ")"
+        self.checkAlive()
         return response
-                
+    def checkAlive(self):
+        try:
+            print "receiving"
+            self.cmdSocket.send("probe\n")
+            time.sleep(0.1)
+            self.cmdSocket.send("probe\n")
+            #self.cmdSocket.recv(1, MSG_DONTWAIT | MSG_PEEK)
+            print "received"
+        except:
+            print "He died"
+            self.cmdSocket.close()
+            self.cmdSocket = None
+            raise Exception("broken pipe")
     def sendInput(self, input1, seqNr, ackNr, payload):
         return self.sender.sendInput(input1, seqNr, ackNr, payload)
     

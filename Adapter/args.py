@@ -20,7 +20,7 @@ adapterArguments = [
 configArguments = [
     Argument("c","useConfig", bool, True, "Sets whether the tool will read sender args from a configuration file"),
   #  Argument("csec","configSection", str, "tcp", "The section in the configuration file."),
-    Argument("cfile","configFile", str, "../input/config.cfg", "The configuration file used. Preferably left as the default value.")]
+    Argument("cfile","configFile", str, "input/config.cfg", "The configuration file used. Preferably left as the default value.")]
 
 senderArguments = [
     Argument("ni","networkInterface", str, "eth0","The net interface through which the client communicates"),
