@@ -7,7 +7,8 @@
 /Learner/.settings
 /Learner/.classpath
 /Learner/.project
-/Learner/.goutput*
+/Learner/output*
+/output/*
 /input/*
 */.classpath
 output/*

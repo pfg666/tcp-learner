@@ -1,4 +1,4 @@
-package sutInterface.tcp.init;
+package sutInterface.tcp;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -10,21 +10,16 @@ import java.util.Random;
 public class RangePicker {
 	private static final long INTEREST_LOWER_OFFSET = 0, INTEREST_UPPER_OFFSET = 1;
 	private final long min, max;
-	private final LinkedList<Long> pointsOfInterest;
 	private final List<Tuple2<Long, Long>> rangesOfInterest;
 	private final Random r;
 	
-	public RangePicker(Random random, long min, long max, LinkedList<Long> pointsOfInterest) {
+	public RangePicker(Random random, long min, long max, List<Long> pointsOfInterest) {
 		this.r = random;
 		this.min = min;
 		this.max = max;
-		this.pointsOfInterest = pointsOfInterest;
-		if (pointsOfInterest.isEmpty()) {
-			rangesOfInterest = Collections.emptyList();
-			return ;
-		}
+		pointsOfInterest = new ArrayList<>(pointsOfInterest);
 		List<Long> boundaryValues = new ArrayList<>();
-		for (long l : this.pointsOfInterest) {
+		for (long l : pointsOfInterest) {
 			long low = l-INTEREST_LOWER_OFFSET, high = l+INTEREST_UPPER_OFFSET;
 			if (low >= min && low <= max) {
 				boundaryValues.add(low);
@@ -33,21 +28,33 @@ public class RangePicker {
 				boundaryValues.add(high);
 			}
 		}
-		this.pointsOfInterest.addAll(boundaryValues);
+		pointsOfInterest.addAll(boundaryValues);
 		
-		Collections.sort(this.pointsOfInterest);
-		removeDuplicatesFromSorted(this.pointsOfInterest);
-		if (this.min > this.pointsOfInterest.get(0) || this.max < this.pointsOfInterest.get(this.pointsOfInterest.size()-1)) {
-			throw new RuntimeException("Range (" + this.pointsOfInterest +
+		Collections.sort(pointsOfInterest);
+		removeDuplicatesFromSorted(pointsOfInterest);
+		if (this.min > pointsOfInterest.get(0) || this.max < pointsOfInterest.get(pointsOfInterest.size()-1)) {
+			throw new RuntimeException("Range (" + pointsOfInterest +
 					") should have its values between min (" + this.min + ") and max (" + this.max + ")");
 		}
-		this.rangesOfInterest = computeRangesFromSorted(this.pointsOfInterest);
+		this.rangesOfInterest = computeRangesFromSorted(pointsOfInterest);
 	}
-
-	private List<Tuple2<Long, Long>> computeRangesFromSorted(LinkedList<Long> pointsOfInterest) {
+	
+	private List<Tuple2<Long, Long>> computeRangesFromSorted(List<Long> pointsOfInterest) {
 		ArrayList<Tuple2<Long, Long>> ranges = new ArrayList<>();
 		long rangeStart = this.min;
-		ListIterator<Long> it = pointsOfInterest.listIterator();
+		for (long i : pointsOfInterest) {
+			long rangeEnd = i - 1;
+			if (rangeEnd >= rangeStart) {
+				ranges.add(new Tuple2<>(rangeStart, rangeEnd));
+			}
+			rangeStart = i + 1;
+			ranges.add(new Tuple2<>(i, i));
+		}
+		long rangeEnd = this.max - 1;
+		if (rangeEnd >= rangeStart) {
+			ranges.add(new Tuple2<>(rangeStart, rangeEnd));
+		}
+		/*ListIterator<Long> it = pointsOfInterest.listIterator();
 		while(it.hasNext()) {
 			long poi = it.next();
 			long rangeEnd = poi - 1;
@@ -64,11 +71,11 @@ public class RangePicker {
 			ranges.add(new Tuple2<Long, Long>(rangeStart, max));
 		} else if (rangeStart == max) {
 			pointsOfInterest.add(rangeStart);
-		}
+		}*/
 		return ranges;
 	}
 
-	private static void removeDuplicatesFromSorted(LinkedList<Long> longs) {
+	private static void removeDuplicatesFromSorted(List<Long> longs) {
 		if (longs.isEmpty()) {
 			return;
 		}
@@ -85,37 +92,38 @@ public class RangePicker {
 	}
 	
 	public long getRandom() {
-		if (pointsOfInterest.isEmpty()) {
-			return Calculator.randWithinRange(min, max);
-		} else {
-			return getRandom(r.nextInt(this.pointsOfInterest.size() + this.rangesOfInterest.size()));
-		}
+		return getRandom(r.nextInt(this.rangesOfInterest.size()));
 	}
 	
 	/**
-	 * Get the point of interest or a random number from a range of interest specified
-	 * by this index
+	 * Get a random number from a range of interest specified by this index
 	 * @param i
 	 * @return
 	 */
-	private  long getRandom(int i) {
-		int j;
-		if (i < this.pointsOfInterest.size()) {
-			return this.pointsOfInterest.get(i);
-		} else if ((j = i - this.pointsOfInterest.size()) < this.rangesOfInterest.size()) {
-			Tuple2<Long, Long> rangeOfInterest = this.rangesOfInterest.get(j);
-			return Rand.nextLong(r, rangeOfInterest.tuple1 - rangeOfInterest.tuple0) + rangeOfInterest.tuple0;
-		} else {
-			throw new RuntimeException("Index (" + i + ") should be smaller than sum of points and ranges of interest ("
-						+ (this.pointsOfInterest.size() + this.rangesOfInterest.size()) + ")");
-		}
+	public long getRandom(int i) {
+		Tuple2<Long, Long> rangeOfInterest = this.rangesOfInterest.get(i);
+		return Rand.nextLong(r, rangeOfInterest.tuple1 - rangeOfInterest.tuple0 + 1) + rangeOfInterest.tuple0;
+	}
+	
+	public Tuple2<Long, Long> getRangeOfInterest(int index) {
+		return this.rangesOfInterest.get(index);
+	}
+	
+	public boolean valueIsInRangeOfInterest(long value, int index) {
+		Tuple2<Long, Long> range = getRangeOfInterest(index);
+		return value >= range.tuple0 && value <= range.tuple1;
+	}
+	
+	public boolean valueIsRangeOfInterest(long value, int index) {
+		Tuple2<Long, Long> range = getRangeOfInterest(index);
+		return value == range.tuple0 && value == range.tuple1;
 	}
 	
 	/**
 	 * The number of points/ranges of interest
 	 * @return
 	 */
-	public int getNumberOfInterests() {
-		return this.pointsOfInterest.size() + this.rangesOfInterest.size();
+	public int getNumberOfRanges() {
+		return this.rangesOfInterest.size();
 	}
 }

@@ -2,23 +2,24 @@ package util.exceptions;
 
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.interfaces.Word;
-import de.ls5.jlearn.shared.WordImpl;
 
 public class NonDeterminismException extends LearningException {
-	private static final long serialVersionUID = 9265414L;
-	private final Word inputs;
+	protected final Word input;
 	
-	public NonDeterminismException(Word inputs) {
-		super();
-		this.inputs = inputs;
+	public NonDeterminismException(String msg, Word input) {
+		super(msg);
+		this.input = input;
 	}
 	
-	public NonDeterminismException(String message, Word inputs) {
-		super(message);
-		this.inputs = inputs;
+	public NonDeterminismException(Word input) {
+		this.input = input;
 	}
-	
-	public Word getInputs() {
-		return this.inputs;
+
+	/**
+	 * The full input for which the non-determinism was observed
+	 * @return
+	 */
+	public Word getInput() {
+		return this.input;
 	}
 }

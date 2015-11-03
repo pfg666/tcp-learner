@@ -1,6 +1,7 @@
 package learner;
 
 import sutInterface.SutWrapper;
+import util.Container;
 import util.InputAction;
 import util.OutputAction;
 import de.ls5.jlearn.abstractclasses.LearningException;
@@ -12,9 +13,17 @@ import de.ls5.jlearn.shared.WordImpl;
 public class EquivalenceOracle implements ExtendedOracle {
 	private static final long serialVersionUID = -5409624854115451929L;
 	private SutWrapper sutWrapper;
-
-	public EquivalenceOracle(SutWrapper sutWrapper) {
+	private final Container<Integer> equivCounter;
+	private final Container<Integer> uniqueEquivCounter;
+	
+	public EquivalenceOracle(SutWrapper sutWrapper, Container<Integer> equivCounter, Container<Integer> uniqueEquivCounter) {
 		this.sutWrapper = sutWrapper;
+		this.equivCounter = equivCounter;
+		this.uniqueEquivCounter = uniqueEquivCounter;
+	}
+	
+	public EquivalenceOracle(SutWrapper sutWrapper, Container<Integer> equivCounter) {
+		this(sutWrapper, equivCounter, null);
 	}
 
 	public Word processQuery(Word query) throws LearningException {
@@ -23,7 +32,8 @@ public class EquivalenceOracle implements ExtendedOracle {
 
 		sutWrapper.sendReset();
 
-		System.out.println("Equivalence query number: " + ++Statistics.getStats().totalEquivQueries);
+		System.out.println("Equivalence query number: " + equivCounter.value +
+				(uniqueEquivCounter == null ? "" : " (" + uniqueEquivCounter.value + ")"));
 
 		
 		for (Symbol currentSymbol : query.getSymbolList()) {

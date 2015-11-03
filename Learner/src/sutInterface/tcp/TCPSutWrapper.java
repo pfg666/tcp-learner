@@ -3,6 +3,8 @@ package sutInterface.tcp;
 import java.util.HashMap;
 import java.util.Map;
 
+import learner.Main;
+
 import sutInterface.SocketWrapper;
 import sutInterface.SutWrapper;
 import util.InputAction;
@@ -29,7 +31,8 @@ public class TCPSutWrapper implements SutWrapper{
 		} else {
 			this.socketWrapper = new SocketWrapper(tcpServerPort);
 			socketWrapperMap.put(tcpServerPort,this.socketWrapper);
-			Runtime.getRuntime().addShutdownHook(new Thread() {
+			Main.registerShutdownHook(new Runnable(){
+				@Override
 				public void run() {
 					Log.fatal("Detected shutdown, commencing connection "+ 
 							socketWrapper + " termination");

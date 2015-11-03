@@ -52,8 +52,7 @@ public class SoundUtils {
 			Thread.sleep(100);
 			SoundUtils.tone(400, 500, 0.2);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 	}
 	

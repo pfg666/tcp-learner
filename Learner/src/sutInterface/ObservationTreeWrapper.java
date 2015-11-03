@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import util.ObservationTree;
 import util.exceptions.InconsistencyException;
-import util.exceptions.NonDeterminismException;
+import util.exceptions.CacheInconsistencyException;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.interfaces.Oracle;
 import de.ls5.jlearn.interfaces.Word;
@@ -31,12 +31,8 @@ public class ObservationTreeWrapper implements Oracle, Serializable {
 	@Override
 	public Word processQuery(Word input) throws LearningException {
 		Word output = this.oracle.processQuery(input);
-		try {
-			this.tree.addObservation(input, output);
-			return output;
-		} catch (InconsistencyException e) {
-			throw new NonDeterminismException("Non-determinism detected for input\n" + input.getSymbolList() + "\n" + e.getMessage(), input);
-		}
+		this.tree.addObservation(input, output);
+		return output;
 	}
 	
 	public ObservationTree getObservationTree() {

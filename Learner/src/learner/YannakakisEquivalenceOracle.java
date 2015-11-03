@@ -2,9 +2,12 @@ package learner;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
+import util.Container;
 import util.LearnlibUtils;
 import util.Log;
 import de.ls5.jlearn.abstractclasses.LearningException;
@@ -18,30 +21,37 @@ import de.ls5.jlearn.interfaces.Word;
 public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 	
 	private Oracle oracle;
-	private int numberOfTests;
+	private final int numberOfTests;
+	private final boolean uniqueOnly;
+	private final Container<Integer> uniqueCounter;
+	private final String mode;
 	
-	public YannakakisEquivalenceOracle (Oracle oracle) {
-		this(oracle, 0);
+	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests, String mode) {
+		this(oracle, numberOfTests, mode, null);
 	}
 	
-	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests) {
+	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests, String mode, Container<Integer> uniqueCounter) {
 		this.oracle = oracle;
 		if (numberOfTests <= 0) {
 			this.numberOfTests = Integer.MAX_VALUE - 1;
 		} else {
 			this.numberOfTests = numberOfTests;
 		}
+		this.uniqueCounter = uniqueCounter;
+		this.uniqueOnly = uniqueCounter != null;
+		this.mode = mode;
 	}
 	
 	@Override
 	public EquivalenceOracleOutput findCounterExample(Automaton hyp) {
 		List<String> testQuery = null;
-		YannakakisWrapper wrapper = new YannakakisWrapper(hyp);
+		YannakakisWrapper wrapper = new YannakakisWrapper(hyp, mode);
 		wrapper.initialize();
 		String line;
 		int i = 0;
+		int uniqueValueStart = uniqueOnly ? uniqueCounter.value : 0;
 		try {
-			for (; i<numberOfTests; i++) {
+			for (; uniqueOnly ? uniqueCounter.value - uniqueValueStart < numberOfTests : i < numberOfTests; i++) {
 				line = wrapper.out().readLine();
 			
 				if ( line != null) {
@@ -65,16 +75,16 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 							return equivOracleOutput;
 						}
 					} catch (LearningException e) {
-						Log.err("Error executing the test query: " + wordInput);
-						System.exit(0);
+						e.printStackTrace();
+						throw new RuntimeException("Error executing the test query: " + wordInput);
 					}
 				} else {
+					Log.err("Yannakakis did not produce enough equivalence queries");
 					break;
 				}
 			}
 		} catch (IOException e) {
-			Log.err("Generated IO Exception while generating tests from stdin");
-			System.exit(0);
+			throw new RuntimeException("Generated IO Exception while generating tests from stdin");
 		}
 		wrapper.close();
 		Log.err("No counterexample found after " + i + " attempts");

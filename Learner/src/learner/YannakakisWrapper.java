@@ -13,7 +13,7 @@ import de.ls5.jlearn.interfaces.Automaton;
 import de.ls5.jlearn.util.DotUtil;
 
 public class YannakakisWrapper {
-
+	private static final int SEED = 123456789;
 	private final ProcessBuilder pb; 
 	private Process process;
 	private Writer processInput;
@@ -27,10 +27,12 @@ public class YannakakisWrapper {
 		yannakakisCmd = cmd;
 	}
  	
-	public YannakakisWrapper(Automaton inputEnabledHypothesis) {
+	public YannakakisWrapper(Automaton inputEnabledHypothesis, String mode) {
 		this.hyp = inputEnabledHypothesis;
-		this.pb = new ProcessBuilder(yannakakisCmd, "--", "2", "2", "fixed");
-		Runtime.getRuntime().addShutdownHook(new Thread() {
+		//this.pb = new ProcessBuilder(yannakakisCmd, "--", "3", "3", "random");
+		this.pb = new ProcessBuilder(yannakakisCmd, "--seed", Integer.toString(SEED), "/dev/stdin", mode, "3", "3");
+		Main.registerShutdownHook(new Runnable() {
+			@Override
 			public void run() {
 				if (!isClosed()) {
 					closeAll();
@@ -73,6 +75,16 @@ public class YannakakisWrapper {
 		// we input the dot string to the Yannakakis tool and flush
 		processInput.append(dotString);
 		processInput.flush();
+	}
+	
+	/**
+	 * Strips the tags produces by learnlib 2 so that Yannakakis can use it
+	 */
+	public String stripTagsFromDot(String dotWithTags) {
+		return dotWithTags
+			.replaceAll("<<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr><td>", "\"")
+			.replaceAll("</td><td>", " ")
+			.replaceAll("</td></tr></table>>", "\"");
 	}
 	
 	/**

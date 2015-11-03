@@ -1,6 +1,7 @@
 package learner;
 
 import sutInterface.SutWrapper;
+import util.Container;
 import util.InputAction;
 import util.OutputAction;
 import de.ls5.jlearn.abstractclasses.LearningException;
@@ -12,9 +13,11 @@ import de.ls5.jlearn.shared.WordImpl;
 public class MembershipOracle implements ExtendedOracle {
 	private static final long serialVersionUID = -1374892499287788040L;
 	private SutWrapper sutWrapper;
+	private final Container<Integer> membershipCounter;
 
-	public MembershipOracle(SutWrapper sutWrapper) {
+	public MembershipOracle(SutWrapper sutWrapper, Container<Integer> membershipCounter) {
 		this.sutWrapper = sutWrapper;
+		this.membershipCounter = membershipCounter;
 	}
 
 	//@Override
@@ -23,7 +26,7 @@ public class MembershipOracle implements ExtendedOracle {
 
 		sutWrapper.sendReset();
 		
-		System.out.println("Membership query number: " + ++Statistics.getStats().totalMemQueries);
+		System.out.println("Membership query number: " + this.membershipCounter.value);
 		System.out.println("Query: " + query);
 
 		for (Symbol currentSymbol : query.getSymbolList()) {

@@ -94,7 +94,8 @@ public class InvlangMapper implements MapperInterface {
 				sb.append((char) c);
 			}
 			System.out.println("Transforming mapper...");
-			handler = new InvLangHandler(sb.toString(), new Reducer(Reducer.RANGE_LENGTH+4, 2, Reducer.INITIAL_START, Reducer.NR_RANGES+2));
+			handler = new InvLangHandler(sb.toString(), null);
+			//handler = new InvLangHandler(sb.toString(), new Reducer(Reducer.RANGE_LENGTH+4, 2, Reducer.INITIAL_START, Reducer.NR_RANGES+2));
 		}
 		System.out.println("Finished transforming mapper...");
 	}

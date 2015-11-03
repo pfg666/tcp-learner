@@ -13,6 +13,7 @@ public class Statistics {
 	public long endTime = 0;
 	public int totalEquivQueries = 0;
 	public int totalMemQueries = 0;
+	public int totalUniqueEquivQueries = 0;
 	public int totalTimeMemQueries = 0;
 	public int totalTimeEquivQueries = 0;
 	public int totalQueriesSavedByPartialOracle = 0;
@@ -33,9 +34,10 @@ public class Statistics {
 				+ runs);
 		statsOut.println("Total Membership queries: "
 				+ totalMemQueries);
-		statsOut
-				.println("Total Membership queries in Equivalence query: "
-						+ totalEquivQueries);
+		statsOut.println("Total Equivalence queries: "
+				+ totalEquivQueries);
+		statsOut.println("Total unique Equivalence queries: "
+				+ totalUniqueEquivQueries);
 		
 		if (totalQueriesSavedByPartialOracle != 0) {
 			statsOut

@@ -1,8 +1,6 @@
 package debug;
 
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,34 +14,16 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import de.ls5.jlearn.interfaces.Oracle;
-import de.ls5.jlearn.interfaces.Symbol;
-import de.ls5.jlearn.interfaces.Word;
-
 import learner.Config;
-import learner.EquivalenceOracle;
 import learner.Main;
-import learner.MembershipOracle;
 import learner.SutInterface;
 import learner.TCPParams;
-import sutInterface.ObservationTreeWrapper;
-import sutInterface.SutWrapper;
-import sutInterface.tcp.InvlangMapper;
 import sutInterface.tcp.MapperSutWrapper;
-import sutInterface.tcp.TCPMapper;
-import sutInterface.tcp.TCPSutWrapper;
-import sutInterface.tcp.init.CachedInitOracle;
-import sutInterface.tcp.init.FunctionalInitOracle;
-import sutInterface.tcp.init.InitCacheManager;
-import sutInterface.tcp.init.InitOracle;
-import sutInterface.tcp.init.InvCheckOracleWrapper;
-import sutInterface.tcp.init.LogOracleWrapper;
 import util.InputAction;
 import util.Log;
-import util.NullStream;
-import util.ObservationTree;
 import util.OutputAction;
-import util.Tuple2;
+import de.ls5.jlearn.interfaces.Symbol;
+import de.ls5.jlearn.interfaces.Word;
 
 public class TraceRunner {
 	private static final String PATH = "testtrace.txt";
@@ -166,6 +146,7 @@ public class TraceRunner {
 		for (int i = 0; i < iterations; i++) {
 			runTrace((i+1));
 		}
+	    sutWrapper.sendReset();
 	}
 	
 	protected void runTrace(int printNumber) {

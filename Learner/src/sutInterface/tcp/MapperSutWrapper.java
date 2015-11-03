@@ -20,10 +20,13 @@ public class MapperSutWrapper implements SutWrapper {
 	private final SocketWrapper socketWrapper;
 	
 	public MapperSutWrapper(int tcpServerPort, String mapperName) {
+		
 		try {
 			if (mapperName.equalsIgnoreCase("java")) {
+				System.out.println("Using java mapper...");
 				this.mapper = new SimpleWindowsMapper();
 			} else {
+				System.out.println("Using invlang mapper '" + mapperName + "'...");
 				this.mapper = new InvlangRandomMapper(mapperName);
 			}
 		} catch (IOException e) {
@@ -35,7 +38,9 @@ public class MapperSutWrapper implements SutWrapper {
 		} else {
 			this.socketWrapper = new SocketWrapper(tcpServerPort);
 			socketWrapperMap.put(tcpServerPort,this.socketWrapper);
-			Runtime.getRuntime().addShutdownHook(new Thread() {
+			System.out.println("Adding shutdown hook...");
+			Main.registerShutdownHook(new Runnable() {
+				@Override
 				public void run() {
 					Log.fatal("Detected shutdown, commencing connection "+ 
 							socketWrapper + " termination");
@@ -122,6 +127,8 @@ public class MapperSutWrapper implements SutWrapper {
 	private String processIncomingPacket(String concreteResponse) {
 		if (concreteResponse.equals("timeout")) {
 			return mapper.processIncomingTimeout();
+		} else if (concreteResponse.equals("BROKENPIPE")) {
+			return "BROKENPIPE";
 		} else {
 			String[] inputValues = concreteResponse.split(" ");
 			String flags = inputValues[0];
