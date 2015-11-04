@@ -111,12 +111,20 @@ public class AutomatonUtils {
 		return word;
 	}
 	
-	private static int indexOf(Automaton automaton, State state) {
+	public static int indexOf(Automaton automaton, State state) {
 		return getStatesInBFSOrder(automaton).indexOf(state);
 	}
 	
-	private static State get(Automaton automaton, int index) {
+	public static State get(Automaton automaton, int index) {
 		return getStatesInBFSOrder(automaton).get(index);
+	}
+	
+	public static List<Symbol> buildSymbols(Collection<String> trace) {
+		List<Symbol> traceSymbols = new ArrayList<Symbol>();
+		for (String str : trace) {
+			traceSymbols.add(new SymbolImpl(str));
+		}
+		return traceSymbols;
 	}
 
 	private static List<Symbol> getDistinguishingSeq(Automaton automaton,
@@ -180,7 +188,7 @@ public class AutomatonUtils {
 	
 	
 	
-	private static State getState(Automaton automaton, List<Symbol> symbols ) {
+	public static State getState(Automaton automaton, List<Symbol> symbols ) {
 		State currentState = automaton.getStart();
 		for(Symbol symbol : symbols) {
 			currentState = currentState.getTransitionState(symbol);

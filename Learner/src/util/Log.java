@@ -41,7 +41,13 @@ public class Log {
 	private static void log(Level level, String message) {
 		if(activePrintStream != null)
 			log(level, message, activePrintStream);
-		log(level, message, System.out);
+		switch (level)
+		{
+		case ERROR: log(level, message, System.err);
+		break;
+		default: log(level, message, System.out);
+		break;
+		}
 	}
 	
 	/** Logs message prepending location of log invocation. To retrieve the location from which the log was called, 

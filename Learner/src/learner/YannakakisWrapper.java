@@ -31,8 +31,8 @@ public class YannakakisWrapper {
 		this.hyp = inputEnabledHypothesis;
 		//this.pb = new ProcessBuilder(yannakakisCmd, "--", "3", "3", "random");
 		this.pb = new ProcessBuilder(yannakakisCmd, "--seed", Integer.toString(SEED), "/dev/stdin", mode, "3", "3");
+		//this.pb = new ProcessBuilder(yannakakisCmd, "--", "4", "4", "random");
 		Main.registerShutdownHook(new Runnable() {
-			@Override
 			public void run() {
 				if (!isClosed()) {
 					closeAll();

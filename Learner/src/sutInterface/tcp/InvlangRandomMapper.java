@@ -17,6 +17,10 @@ import util.RangePicker;
 import util.Tuple2;
 
 public class InvlangRandomMapper extends InvlangMapper {
+<<<<<<< HEAD
+=======
+	private static final int RANDOM_ATTEMPTS = 3;
+>>>>>>> 3f7df17ed79cc473aa11be0f908542645861ed3a
 	private final Random random = new Random();
 	private LinkedList<Long> valuesOfInterest = new LinkedList<>();
 	public InvlangRandomMapper(File file) throws IOException {
@@ -45,6 +49,7 @@ public class InvlangRandomMapper extends InvlangMapper {
 				}
 			}
 		}
+
 		RangePicker picker = new RangePicker(random, 0, 0xffffffffL, this.valuesOfInterest);
 		System.out.println("points of interest: " + this.valuesOfInterest);
 		List<Integer> seqIndices = new ArrayList<>(), ackIndices = new ArrayList<>();

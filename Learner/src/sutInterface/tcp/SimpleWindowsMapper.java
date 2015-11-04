@@ -3,6 +3,7 @@ package sutInterface.tcp;
 import invlang.types.Flag;
 import invlang.types.FlagSet;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Random;
 
 import sutInterface.Serializer;
 import util.Calculator;
+import util.Log;
 import util.RangePicker;
 
 public class SimpleWindowsMapper implements MapperInterface {
@@ -18,14 +20,16 @@ public class SimpleWindowsMapper implements MapperInterface {
 	private long learnerSeq;
 	private long learnerSeqProposed;
 	private long oldSeq = -3;
-	private FlagSet lastFlagsSent;
 	private Random random = new Random(0);
+    private long lastAckReceived;
+    private FlagSet lastFlagsSent;
 	
 	public Map<String, Object> getState() {
 		Map<String, Object> mapperState = new LinkedHashMap<String, Object>();
 		mapperState.put("sutSeq", sutSeq);
 		mapperState.put("learnerSeq", learnerSeq);
 		mapperState.put("learnerSeqProposed", learnerSeqProposed);
+		mapperState.put("lastFlagsSent", lastFlagsSent);
 		return mapperState;
 	}
 	
@@ -101,38 +105,47 @@ public class SimpleWindowsMapper implements MapperInterface {
 	
 	private void updateResponse(FlagSet flagsIn, long concSeqIn, long concAckIn,
 			int concDataIn) {
-		// segment which leave state unchanged 
-		if (lastFlagsSent != null && lastFlagsSent.contains(Flag.SYN) && flagsIn.contains(Flag.RST)) {
-			this.sutSeq = sutSeq;
-			this.learnerSeq = learnerSeq;
-		} else 
-			if ((flagsIn.contains(Flag.RST) ) | ((learnerSeqProposed != -3) & (concAckIn != learnerSeqProposed+1))) {
-			// upon reset, or if a fresh seq from the learner is not acknowledged
-			this.sutSeq = -3;
-			this.learnerSeq = generateFreshSeq();
-		} else { if ((learnerSeqProposed != -3) | (concSeqIn == sutSeq+1)) {
-			// if a fresh seq from the learner is acknowledged, or if the sequence number is valid
-			if ((flagsIn.contains(Flag.SYN)) | (flagsIn.contains(Flag.FIN))) {
-				this.sutSeq = concSeqIn;
-			} else { if (flagsIn.contains(Flag.PSH)) {
-				this.sutSeq = sutSeq + concDataIn;
-			} else {
-				this.sutSeq = sutSeq;
-			}}
-			this.learnerSeq = concAckIn;
-		} else {if (flagsIn.contains(Flag.SYN)) {
-			// fresh sequence number
-			this.sutSeq = concSeqIn;
-			if (concAckIn == 0) {
-				this.learnerSeq = learnerSeq;
-			} else {
-				this.learnerSeq = concAckIn;
-			}
+	    if (this.lastFlagsSent != null && this.lastFlagsSent.containsAll(Arrays.asList(Flag.SYN, Flag.ACK)) && flagsIn.contains(Flag.RST)) {
+	        this.sutSeq = sutSeq;
+	        this.learnerSeq = learnerSeq;
+	        Log.err("cond active");
+	    } else 
+	        if ((flagsIn.contains(Flag.RST) ) | ((learnerSeqProposed != -3) & (concAckIn != learnerSeqProposed+1))) {
+    			// upon reset, or if a fresh seq from the learner is not acknowledged
+    			this.sutSeq = -3;
+    			this.learnerSeq = generateFreshSeq();
+	        } else { 
+	            
+	            if ((learnerSeqProposed != -3) | (concSeqIn == sutSeq+1)) {
+        			// if a fresh seq from the learner is acknowledged, or if the sequence number is valid
+        			if ((flagsIn.contains(Flag.SYN)) | (flagsIn.contains(Flag.FIN))) {
+        				this.sutSeq = concSeqIn;
+        			} else { 
+        			    if (flagsIn.contains(Flag.PSH)) {
+            				this.sutSeq = sutSeq + concDataIn;
+            			} else {
+            				this.sutSeq = sutSeq;
+            			}
+        			}
+        		this.learnerSeq = concAckIn;
 		} else {
-			this.sutSeq = sutSeq;
-			this.learnerSeq = learnerSeq;
-		}}}
+		    if (flagsIn.contains(Flag.SYN)) {
+    			// fresh sequence number
+    			this.sutSeq = concSeqIn;
+    			if (concAckIn == 0) {
+    				this.learnerSeq = learnerSeq;
+    			} else {
+    				this.learnerSeq = concAckIn;
+    			}
+    		} else {
+    			this.sutSeq = sutSeq;
+    			this.learnerSeq = learnerSeq;
+    		
+    		}
+		    }
+	    }
 		learnerSeqProposed = -3;
+		lastAckReceived = concAckIn;
 	}
 
 	@Override
@@ -147,18 +160,26 @@ public class SimpleWindowsMapper implements MapperInterface {
 	public String processOutgoingRequest(FlagSet flagsOut, String absSeq,
 			String absAck, int payloadLength) {
 		long concSeqOut = -3, concAckOut = -3;
-			if (learnerSeq == -3) {
-				concSeqOut = generateFreshSeq();
+			if (learnerSeq != -3) {
+			    concSeqOut = learnerSeq;
 			} else {
-				concSeqOut = learnerSeq;
-			}
+			    if(flagsOut.contains(Flag.RST) && !flagsOut.contains(Flag.ACK) && this.lastAckReceived != -3) {
+			        concSeqOut = this.lastAckReceived;
+			    } 
+			    else {
+			        concSeqOut = generateFreshSeq();
+			    }
+			} 
 		
+		if(!flagsOut.contains(Flag.ACK)) {
+		    concAckOut = Calculator.newValue();
+		} else {
 			if (sutSeq == -3) {
 				concAckOut = 0;
 			} else {
 				concAckOut = sutSeq + 1;
 			}
-		
+		}
 		if (flagsOut.contains(Flag.RST)) {
 			learnerSeqProposed = -3;
 			sutSeq = -3;
@@ -187,6 +208,8 @@ public class SimpleWindowsMapper implements MapperInterface {
 		learnerSeqProposed = -3;
 		sutSeq = -3;
 		learnerSeq = -3;
+		lastAckReceived = -3;
+		lastFlagsSent = null;
 	}
 
 	@Override

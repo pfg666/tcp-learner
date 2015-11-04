@@ -25,7 +25,6 @@ import java.util.Random;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-
 import sutInterface.SutInfo;
 import sutInterface.tcp.LearnResult;
 import sutInterface.tcp.MapperSutWrapper;
@@ -81,30 +80,19 @@ public class Main {
 				nrResets = new Container<>(); 
 				
 	private static List<Runnable> shutdownHooks = new ArrayList<>();
+
+    private static PrintStream dupStdout;
 	
 	public static void main(String[] args) throws LearningException, IOException, Exception {
 		try{
-		// if you encounter a corrupted learner, continue
-		//while (true) {
-		//	try {
-				runLearner(args);
-		//		break;
+			// wrapper around main to return a useful error code upon nondeterminism
+			runLearner(args);
 		} catch (CorruptedLearningException e) {
 			System.exit(42);
-		//		e.printStackTrace();
-		//		for (Runnable r : shutdownHooks) {
-		//			r.run();
-		//		}
-		//		shutdownHooks.clear();
-		//		// Give the program some time to write/read files, and display the exception for a while
-		//		Thread.sleep(5000);
-		//	}
 		}
 	}
 					
 	public static void runLearner(String[] args) throws LearningException, IOException, Exception {
-		
-		
 		nrMembershipQueries.value = nrEquivalenceQueries.value = nrResets.value = nrUniqueEquivalenceQueries.value = 0;
 		
 		System.out.println("Reading program arguments");
@@ -225,7 +213,8 @@ public class Main {
 		absAndConcTraceOut.println("copy this to obtain the regex describing any text between two inputs of a trace:\n[^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n]\n\n");
 		learnOut = new PrintStream(
 				new FileOutputStream(outputDir + File.separator + "learnLog.txt", false));
-		
+		dupStdout =  new PrintStream(
+                new FileOutputStream(outputDir + File.separator + "stdout.txt", false));
 		errOut = System.err;
 		
 		statsOut = new PrintStream(

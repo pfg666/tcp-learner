@@ -8,11 +8,13 @@ public enum Action implements TCPMessage{
 	ACCEPT,
 	CONNECT,
 	//CLOSECLIENT,
-	//CLOSESERVER, 
+	//CLOSESERVER,
+	EXIT,
 	CLOSE,
 	CLOSECONNECTION,
 	SEND,
 	RCV;
+	
 	
 	public String serialize() {
 		return this.name();
