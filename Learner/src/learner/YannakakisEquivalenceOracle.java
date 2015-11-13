@@ -25,6 +25,7 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 	private final boolean uniqueOnly;
 	private final Container<Integer> uniqueCounter;
 	private final String mode;
+	private int hypTestNumber = 0;
 	
 	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests, String mode) {
 		this(oracle, numberOfTests, mode, null);
@@ -48,10 +49,10 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 		YannakakisWrapper wrapper = new YannakakisWrapper(hyp, mode);
 		wrapper.initialize();
 		String line;
-		int i = 0;
 		int uniqueValueStart = uniqueOnly ? uniqueCounter.value : 0;
 		try {
-			for (; uniqueOnly ? uniqueCounter.value - uniqueValueStart < numberOfTests : i < numberOfTests; i++) {
+			for (hypTestNumber = 0;	hypTestNumber < numberOfTests; hypTestNumber = uniqueOnly ? uniqueCounter.value - uniqueValueStart : hypTestNumber + 1) {
+				Log.info("Equivalence test " + hypTestNumber + " for this hypothesis");
 				line = wrapper.out().readLine();
 			
 				if ( line != null) {
@@ -71,7 +72,7 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 							equivOracleOutput.setCounterExample(wordInput);
 							equivOracleOutput.setOracleOutput(sutOutput);
 							wrapper.close();
-							Log.err("Counterexample found after " + i + " attempts");
+							Log.err("Counterexample found after " + hypTestNumber + " attempts");
 							return equivOracleOutput;
 						}
 					} catch (LearningException e) {
@@ -87,7 +88,7 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 			throw new RuntimeException("Generated IO Exception while generating tests from stdin");
 		}
 		wrapper.close();
-		Log.err("No counterexample found after " + i + " attempts");
+		Log.err("No counterexample found after " + hypTestNumber + " attempts");
 		return null;
 	}
 	
@@ -107,4 +108,11 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 		this.oracle = arg0;
 	}
 	
+	/**
+	 * Gets the number of tests done for the current/most recent hypothesis
+	 * @return
+	 */
+	public int getNrHypthesisTests() {
+		return this.hypTestNumber;
+	}
 }

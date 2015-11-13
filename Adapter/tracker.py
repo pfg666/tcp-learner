@@ -86,7 +86,7 @@ class Tracker(threading.Thread):
 #                else:
 
     def isRetransmit(self, response):
-        isRet = (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["SA", "AS", "AF", "FA", "S"] #add "S" when learning for client
+        isRet = (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["SA", "AS", "AF", "FA", "S", "P", "PA"] #add "S" when learning for client
         if not isRet:
 	        if "P" in response.flags and "A" in response.flags and response.payload > 0:
 		        for (seq, ack, flags) in self.responseHistory:
