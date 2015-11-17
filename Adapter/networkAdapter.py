@@ -55,19 +55,19 @@ class Adapter:
                     print "Closing local server socket"
                     self.learnerSocket.close()
             except IOError as e:
-                print "Error closing learner socket " + e
+                print "Error closing learner socket ", e
             try:
                 print(self.serverSocket)
                 if self.serverSocket is not None:
                     print "Closing gateway server socket"
                     self.serverSocket.close()
             except IOError as e:
-                print "Error closing network adapter socket " + e
+                print "Error closing network adapter socket ", e
             if self.sender is not None:
                 try:
                     self.sender.shutdown()
                 except Exception as e:
-                    print "Error closing sender " + e
+                    print "Error closing sender ", e
             print "Have a nice day"
             time.sleep(1)
             sys.exit(1)
@@ -89,7 +89,7 @@ class Adapter:
         while not finished:
             if not self.data:
                 try:
-                    ready = select([self.learnerSocket], [], [], 300)
+                    ready = select([self.learnerSocket], [], [], 1000)
                     if ready[0]:
                         self.data = self.learnerSocket.recv(1024)
                     else:
@@ -157,7 +157,8 @@ class Adapter:
                     input1 = input1.lower().replace("\n","")
                     try:
                         response = sender.sendAction(input1) # response might arrive before sender is ready
-                    except: 
+                    except Exception as e: 
+                        print str(e)
                         response = "BROKENPIPE"
                 elif input1 == "nil":
                     print("send nothing (nil)")

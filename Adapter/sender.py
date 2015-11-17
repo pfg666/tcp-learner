@@ -116,6 +116,7 @@ class Sender:
         dport=destPort,
         seq=seqNr,
         ack=ackNr,
+        # window=1,
         flags=tcpFlagsSet)
         if payload == '':
             p = pIP / pTCP
@@ -125,23 +126,24 @@ class Sender:
     
     # sends packets and ensures both reception tools are used so as to retrieve the response when such response is given
     # use packet = None for sniffing without sending a packet
-    def sendPacketAndRetrieveResponse(self, packet):
+    def sendPacketAndRetrieveResponse(self, packet, waitTime = None):
+        if waitTime is None:
+            waitTime = self.waitTime
+
         # we need first to clear the last response cached in the tracker 
         if self.useTracking == True :
             self.tracker.clearLastResponse()
         
         scapyResponse = None
-        if packet != None:
+        if packet is not None:
             #todo find a more elegant way of finding the client IP?
             self.clientIP = packet[IP].src
             # consider adding the parameter: iface="ethx" if you don't receive a response. Also consider increasing the wait time
-            scapyResponse = sr1(packet, timeout=self.waitTime, iface=self.networkInterface, verbose=self.isVerbose)
+            #scapyResponse = sr1(packet, timeout=waitTime, iface=self.networkInterface, verbose=self.isVerbose)
+            send([packet], iface=self.networkInterface, verbose=self.isVerbose)
             if self.useTracking:
                 # the tracker discards retransmits, but scapy doesn't, so don't use scapy
                 scapyResponse = None
-                time.sleep(self.waitTime)
-        else:
-            time.sleep(self.waitTime)
         captureMethod = ""
         if scapyResponse is not None:
             response = self.scapyResponseParse(scapyResponse)
@@ -149,16 +151,14 @@ class Sender:
         else:
             response = None
             if self.useTracking == True:
-                if packet is None:
-                    response = self.tracker.getLastResponse(self.serverPort, self.senderPort)
-                else:
-                    # timeout case, return the response (if caught) by the tracker and missed by scapy
-                    response = self.tracker.getLastResponse(self.serverPort, self.senderPort, packet.seq)
-                if response is not None:
-                    captureMethod = "tracker"
-                else:
-                    response = Timeout()
+                response = self.tracker.sniffForResponse(self.serverPort, self.senderPort, waitTime)
+                #if packet is None:
+                #    response = self.tracker.sniffForResponse(self.serverPort, self.senderPort, waitTime)
+                #else:
+                #    response = self.tracker.getLastResponse(self.serverPort, self.senderPort)
+                captureMethod = "tracker"
             else:
+                captureMethod = "scapy"
                 response = Timeout()
 
         if captureMethod != "":
@@ -244,11 +244,15 @@ class Sender:
         return sniffedPackets
 
     # captures a response without sendin a packet first, in the same way as though a packet was sent
-    def captureResponse(self):
-        return self.sendInput("nil", None, None, None);
+    def captureResponse(self, waitTime=None):
+        if waitTime is None:
+            waitTime = self.waitTime
+        return self.sendInput("nil", None, None, None, waitTime);
 
     # sends input over the network to the server
-    def sendInput(self, input1, seqNr, ackNr, payload):
+    def sendInput(self, input1, seqNr, ackNr, payload, waitTime=None):
+        if waitTime is None:
+            waitTime = self.waitTime
         # add the MAC-address of the server to scapy's ARP-table to use LAN
         # used every iteration, otherwise the entry somehow
         # w disappears after a while
@@ -264,20 +268,13 @@ class Sender:
             ###
         else:
             packet = None
-        response = self.sendPacketAndRetrieveResponse(packet)
-#         
-#         if input1 != "nil":
-#             response = self.sendPacket(input1, seqNr, ackNr)
-#         else:
-#             sniffed = self.sniffPackets()
-#             if len(sniffed) > 0:
-#                 response = self.scapyResponseParse(sniffed[0])
-#             else:
-#                 response = Timeout()
+        response = self.sendPacketAndRetrieveResponse(packet, waitTime)
+        
+        # wait a certain amount of time after sending the packet
         timeAfter = time.time()
         timeSpent = timeAfter - timeBefore
-        if timeSpent < self.waitTime:
-            time.sleep(self.waitTime - timeSpent)
+        if timeSpent < waitTime:
+            time.sleep(waitTime - timeSpent)
         if type(response) is not Timeout:
             global seqVar, ackVar
             seqVar = response.seq;

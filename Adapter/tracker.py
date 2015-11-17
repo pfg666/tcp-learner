@@ -2,6 +2,7 @@ from pcapy import open_live
 from impacket.ImpactDecoder import EthDecoder,Dot11WPA2Decoder
 from impacket.ImpactPacket import IP, TCP
 from interfaceType import InterfaceType
+import time
 import threading
 from response import ConcreteResponse, Timeout
 
@@ -28,6 +29,7 @@ class Tracker(threading.Thread):
         self.interface = interface
         self.decoder = self.getDecoder(interfaceType) # Wireless not yet supported
         self._stop = threading.Event()
+        self._received = threading.Event()
         self.daemon = True
         self.readTimeout = readTimeout
         self.serverIp = serverIp
@@ -56,6 +58,8 @@ class Tracker(threading.Thread):
             print("Tracker is stopped.")
             exit(-1) # results in a strange warning
         else:
+            if data is None:
+                return
             packet=self.decoder.decode(data)
             l2=packet.child()
             if isinstance(l2,IP):
@@ -68,25 +72,18 @@ class Tracker(threading.Thread):
                 tcp_syn = l3.get_th_seq()
                 tcp_ack = l3.get_th_ack()
                 response = self.impacketResponseParse(l3)
-#                self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
-                #self.lastResponse = response
-                # ignore a packet if it was a retransmit
                 if self.isRetransmit(response):
                     print "ignoring retransmission: ", response.__str__()
                 else:
+                    print "received: ",(response.seq, response.ack, response.flags)
                     if (response.seq, response.ack, response.flags) not in self.responseHistory:
-                        self.responseHistory.add((response.seq, response.ack, response.flags))
+                        self.responseHistory.add((response.seq, response.ack, response.flags))  
                     self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
                     self.lastResponse = response
-                    
-#                    #if "S" in response.flags:
-#                    self.responseHistory.add((response.seq, response.ack, response.flags))
-#                    self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
-#                    self.lastResponse = response
-#                else:
+                    self._received.set()
 
     def isRetransmit(self, response):
-        isRet = (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["SA", "AS", "AF", "FA", "S"] #add "S" when learning for client
+        isRet = (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["SA", "AS", "AF", "FA", "S", "P", "PA"] #add "S" when learning for client
         if not isRet:
 	        if "P" in response.flags and "A" in response.flags and response.payload > 0:
 		        for (seq, ack, flags) in self.responseHistory:
@@ -101,8 +98,6 @@ class Tracker(threading.Thread):
                 print 'ignoring SA retransmission ' + response.__str__()
             else:
                 print 'non SA-ret packet:' + response.__str__()
-#                self.lastResponses.append(response)
-#                self.lastResponse = response
 
 
     # MAKE SURE the order of checking/appending characters is the same here as it is in the sender
@@ -130,23 +125,27 @@ class Tracker(threading.Thread):
     def reset(self):
         self.clearLastResponse()
         self.responseHistory.clear()
+        self._received.clear()
     
+    def sniffForResponse(self,  serverPort, senderPort, waitTime):
+        div = waitTime/10
+        for i in range(0,9):
+            time.sleep(div)
+            response = self.getLastResponse(serverPort, senderPort)
+            if response != Timeout():
+                break;        
+        #self._received.wait(timeout=waitTime)
+        #response = self.getLastResponse(serverPort, senderPort)    
+        #self._received.clear()
+        return response
+
     # fetches the last response from an active port. If no response was sent, then it returns Timeout
-    def getLastResponse(self, serverPort, senderPort, requestSN = None):
+    def getLastResponse(self, serverPort, senderPort):
         lastResponse = self.lastResponses.get((serverPort,senderPort))
         if lastResponse is None:
             lastResponse = Timeout()
         return lastResponse
-#        else:
-#            if  requestSN is None or requestSN <= self.lastResponse.ack:
-#                lastResponse = self.lastResponse
-#            else:
-#                if len(self.lastResponses) > 0:
-#                    for response in reversed(self.lastResponses):
-#                        if response.seq <= requestSN:
-#                            lastResponse = response
-#                            break
-        return lastResponse
+
     
     def run(self):
         self.trackPackets()

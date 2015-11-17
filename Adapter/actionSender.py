@@ -18,10 +18,12 @@ class ActionSender:
                "connect",
                "send",
                "rcv"]
+    count = None
     def __init__(self, cmdIp = "192.168.56.1", cmdPort=5000, sender = None):
         self.cmdPort = cmdPort
         self.cmdIp = cmdIp
         self.sender = sender
+        self.count = 0
         
     def __str__(self):
         ret =  "ActionSender with parameters: " + str(self.__dict__)
@@ -32,7 +34,14 @@ class ActionSender:
     # returns a new socket to the mapper/learner
     def setUpSocket(self):
         if self.cmdSocket is None:
-            cmdSocket = socket.create_connection((self.cmdIp, self.cmdPort))
+            print (self.cmdIp, self.cmdPort)
+            try:
+                cmdSocket = socket.create_connection((self.cmdIp, self.cmdPort))
+            except:
+                print "connection refused"
+                print "sleeping and attempting to establish connection again"
+                time.sleep(0.5)
+                socket.create_connection((self.cmdIp, self.cmdPort))
             cmdSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
             cmdSocket.settimeout(60)
             print "python connected to server Adapter at " + self.cmdIp + " " + (str(self.cmdPort))
@@ -78,16 +87,29 @@ class ActionSender:
         if self.cmdSocket is None:
             self.setUpSocket()
             self.listenForServerPort()
+            self.sender.setServerPort(self.serverPort)
+            return 
         print "reset"
         print "********** reset **********"
-        self.cmdSocket.send("reset\n")
+        self.count = self.count + 1
+        if self.count % 5 == 0:
+            self.restartAdapter()
+        else:
+            self.resetAdapter()
+        self.listenForServerPort()
+        self.sender.setServerPort(self.serverPort)
+
+    def resetAdapter(self):
+        self.cmdSocket.send("reset\n")    
+    def restartAdapter(self):
+        self.cmdSocket.send("exit\n")
         if syn_ok:
             line = self.sockFile.readline()
             if line != "ok\n":
                 raise Exception("expected 'ok' upon reset, received '" + line + "'")
-        self.listenForServerPort()
-        self.sender.setServerPort(self.serverPort)
-    
+        time.sleep(0.4)
+        self.setUpSocket()        
+
     def captureResponse(self):
         response = None
         if self.sender is not None:
@@ -104,6 +126,7 @@ class ActionSender:
         return inputString in self.actions
     
     def sendAction(self, inputString):
+        print "sending action ", inputString
         if self.isAction(inputString):
             #self.cmdSocket.recv(1000, MSG_DONTWAIT)
             self.cmdSocket.send(inputString + "\n")
@@ -112,32 +135,28 @@ class ActionSender:
                 if ok != "ok\n":
                     raise Exception("expected 'ok', received '" + ok + "'")
                 self.cmdSocket.send("ok\n")
-            response = self.sender.captureResponse()
-#             for word in ok.split(): # TODO check if this really always works with a stream
-#                 if word == "ok":
-#                     self.cmdSocket.send("ok\n")
-#                 else:
-#                     raise Exception("expected 'ok', received" + word)
-#             response = self.sender.captureResponse()
-            #cmdResponse = self.cmdSocket.recv(1024)
+#            if inputString in ["send"]:
+#                self.sender.captureResponse(waitTime = 0.3)
+            response = self.sender.captureResponse(waitTime=self.sender.waitTime + 0.2)
             #print "server adapter response: " + cmdResponse
         else:
             print inputString + " not a valid action ( it is not one of: " + str(self.actions) + ")"
         self.checkAlive()
         return response
     def checkAlive(self):
-        try:
-            print "receiving"
-            self.cmdSocket.send("probe\n")
-            time.sleep(0.1)
-            self.cmdSocket.send("probe\n")
+        return
+#        try:
+#            print "receiving"
+#            self.cmdSocket.send("probe\n")
+#            time.sleep(0.1)
+#            self.cmdSocket.send("probe\n")
             #self.cmdSocket.recv(1, MSG_DONTWAIT | MSG_PEEK)
-            print "received"
-        except:
-            print "He died"
-            self.cmdSocket.close()
-            self.cmdSocket = None
-            raise Exception("broken pipe")
+#            print "received"
+#        except:
+#            print "He died"
+#            self.cmdSocket.close()
+#            self.cmdSocket = None
+#            raise Exception("broken pipe")
     def sendInput(self, input1, seqNr, ackNr, payload):
         return self.sender.sendInput(input1, seqNr, ackNr, payload)
     
