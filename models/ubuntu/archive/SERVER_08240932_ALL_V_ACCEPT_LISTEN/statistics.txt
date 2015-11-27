@@ -1,0 +1,11 @@
+Running time of membership queries: 436994ms.
+Total states in learned abstract Mealy machine: 6
+
+
+		STATISTICS SUMMARY:
+Total running time: 509564ms.
+Total time Membership queries: 436994
+Total time Equivalence queries: 72570
+Total number of runs: 1
+Total Membership queries: 495
+Total Membership queries in Equivalence query: 50

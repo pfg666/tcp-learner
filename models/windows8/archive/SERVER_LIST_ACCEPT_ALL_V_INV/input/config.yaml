@@ -1,0 +1,14 @@
+learningParams:
+    seed: 1299777356020
+    minValue: 0
+    maxValue: 300
+    minTraceLength: 20
+    maxTraceLength: 20
+    maxNumTraces: 1000
+    sutInterface: sutinfo.yaml
+tcpParams:
+    sutPort: 18200
+    sutIP: 127.0.0.1
+    oracle: functional
+
+

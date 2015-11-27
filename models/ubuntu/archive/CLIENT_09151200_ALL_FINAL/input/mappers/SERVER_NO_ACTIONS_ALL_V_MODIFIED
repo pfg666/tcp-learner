@@ -1,0 +1,162 @@
+ENUM
+absin {VALID, INV}
+ENUM
+abssut {SNSUT, SNSUTP1, SNSUTP2, ANSENT, ZERO, FRESH, INV}
+ENUM
+abslearner {SNLEARNER, SNLEARNERP1, SNLEARNERP2, ZERO, INV}
+
+STATE
+int lastConcSeqSent = -3;
+int lastConcAckSent = -3;
+int lastConcSeqReceived = -3;
+int lastConcAckReceived = -3;
+int sutSeq = -3;
+int learnerSeq = -3;
+flags lastFlagsReceived = $;
+flags lastFlagsSent = $;
+absin lastAbsSeqSent = absin.INV;
+bool freshSeqEnabled = true;
+bool freshAckEnabled = true;
+bool isLastResponseTimeout = false;
+bool waitingForSyn = false;
+
+MAP incomingResponse (flags flagsIn, int concSeqIn, int concAckIn
+						-> abssut absSeqIn, abslearner absAckIn)
+if (concSeqIn == sutSeq) {
+	absSeqIn = abssut.SNSUT;
+} else {if (concSeqIn == sutSeq + 1) {
+	absSeqIn = abssut.SNSUTP1;
+} else {if (concSeqIn == sutSeq + 2) {
+	absSeqIn = abssut.SNSUTP2;
+} else {if (concSeqIn == lastConcAckSent) {
+	absSeqIn = abssut.ANSENT;
+} else {if (concSeqIn == 0) {
+	absSeqIn = abssut.ZERO; //FRESH, INV
+} else {if (freshAckEnabled) {
+	absSeqIn = abssut.FRESH;
+} else {
+	absSeqIn = abssut.INV;
+}}}}}}
+if (concAckIn == learnerSeq) {
+	absAckIn = abslearner.SNLEARNER;
+} else {if (concAckIn == learnerSeq + 1) {
+	absAckIn = abslearner.SNLEARNERP1;
+} else {if (concAckIn == learnerSeq + 2) {
+	absAckIn = abslearner.SNLEARNERP2;
+} else {if (concAckIn == 0) {
+	absAckIn = abslearner.ZERO;
+} else {
+	absAckIn = abslearner.INV;
+}}}}
+UPDATE
+if ((absSeqIn == abssut.SNSUTP1) | (absSeqIn == abssut.FRESH)) {
+	learnerSeq = concAckIn;
+	sutSeq = concSeqIn;
+} else {
+	learnerSeq = learnerSeq;
+	sutSeq = sutSeq;
+}
+isLastResponseTimeout = false;
+lastConcSeqReceived = concSeqIn;
+lastConcAckReceived = concAckIn;
+lastFlagsReceived = flagsIn;
+if ((lastConcAckReceived == 0) &
+		((/*sentRST*/ lastFlagsSent has $R & (lastAbsSeqSent == absin.VALID) /*end_sentRST*/)
+	| 	(/*rcvdRST*/ !isLastResponseTimeout & lastFlagsReceived has $R /*end_rcvdRST*/))
+	|	(lastConcSeqReceived == 0)) {
+	freshSeqEnabled = true;
+} else {
+	freshSeqEnabled = !((lastFlagsSent has $S) &
+						(lastConcAckReceived == lastConcSeqSent + 1) &
+						freshSeqEnabled);
+}
+if (false
+	//	(/*sentRST*/ (lastFlagsSent has $R) & (lastAbsSeqSent == absin.VALID) /*end_sentRST*/)
+	//| 	(/*rcvdRST*/ !isLastResponseTimeout & (lastFlagsReceived has $R) /*end_rcvdRST*/)
+	) {
+	freshAckEnabled = true;
+} else {
+	freshAckEnabled = false;
+}
+// not updated
+lastFlagsSent = lastFlagsSent;
+lastConcSeqSent = lastConcSeqSent;
+lastConcAckSent = lastConcAckSent;
+waitingForSyn = waitingForSyn;
+lastAbsSeqSent = lastAbsSeqSent;
+
+MAP outgoingRequest (int concSeqOut, int concAckOut, flags flagsOut
+						-> absin absSeqOut, absin absAckOut, flags flagsOut2)
+flagsOut2 = flagsOut;
+if ((concSeqOut == learnerSeq) | freshSeqEnabled | (waitingForSyn & (flagsOut == $S))) {
+	absSeqOut = absin.VALID;
+} else {
+	absSeqOut = absin.INV;
+}
+if (
+	(
+		((lastFlagsReceived has $S | lastFlagsReceived has $F) & (concAckOut == sutSeq + 1))
+		| (!(lastFlagsReceived has $S | lastFlagsReceived has $F) & (concAckOut == sutSeq))
+	)
+	| freshAckEnabled | (waitingForSyn & (flagsOut == $S))) {
+	absAckOut = absin.VALID;
+} else {
+	absAckOut = absin.INV;
+}
+UPDATE
+if (freshSeqEnabled) {
+	learnerSeq = concSeqOut;
+} else {
+	learnerSeq = learnerSeq;
+}
+lastConcSeqSent = concSeqOut;
+lastConcAckSent = concAckOut;
+lastFlagsSent = flagsOut;
+lastAbsSeqSent = absSeqOut;
+if (waitingForSyn & (flagsOut has $S)) {
+	waitingForSyn = false;
+} else {
+	waitingForSyn = waitingForSyn;
+}
+// not updated
+sutSeq = sutSeq;
+isLastResponseTimeout = isLastResponseTimeout;
+lastFlagsReceived = lastFlagsReceived;
+lastConcSeqReceived = lastConcSeqReceived;
+lastConcAckReceived = lastConcAckReceived;
+freshSeqEnabled = freshSeqEnabled;
+freshAckEnabled = freshAckEnabled;
+
+MAP incomingTimeout (int tmp -> int tmp2)
+tmp2 = tmp;
+UPDATE
+isLastResponseTimeout = true;
+if ((lastConcAckReceived == 0) &
+		((/*sentRST*/ lastFlagsSent has $R & (lastAbsSeqSent == absin.VALID) /*end_sentRST*/)
+	| 	(/*rcvdRST*/ !isLastResponseTimeout & lastFlagsReceived has $R /*end_rcvdRST*/))
+	|	(lastConcSeqReceived == 0)) {
+	freshSeqEnabled = true;
+} else {
+	freshSeqEnabled = !((lastFlagsSent has $S) &
+						(lastConcAckReceived == lastConcSeqSent + 1) &
+						freshSeqEnabled);
+}
+if (
+		(/*sentRST*/ lastFlagsSent has $R & (lastAbsSeqSent == absin.VALID) /*end_sentRST*/)
+	| 	(/*rcvdRST*/ !isLastResponseTimeout & lastFlagsReceived has $R /*end_rcvdRST*/)
+	) {
+	freshAckEnabled = true;
+} else {
+	freshAckEnabled = false;
+}
+// not updated
+learnerSeq = learnerSeq;
+sutSeq = sutSeq;
+lastConcSeqReceived = lastConcSeqReceived;
+lastConcAckReceived = lastConcAckReceived;
+lastFlagsReceived = lastFlagsReceived;
+lastFlagsSent = lastFlagsSent;
+lastConcSeqSent = lastConcSeqSent;
+lastConcAckSent = lastConcAckSent;
+waitingForSyn = waitingForSyn;
+lastAbsSeqSent = lastAbsSeqSent;

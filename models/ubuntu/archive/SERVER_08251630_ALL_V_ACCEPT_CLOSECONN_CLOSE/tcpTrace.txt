@@ -1,0 +1,2150 @@
+copy this to obtain the regex describing any text between two inputs of a trace:
+[^\r\n]*[\r\n][^\r\n]*[\r\n][^\r\n]*[\r\n][^\r\n]*[\r\n]
+
+
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 978930813 4273492461
+{learnerSeqProposed=?, sutSeq=978930813, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 978930814
+{learnerSeqProposed=?, sutSeq=978930813, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=978930813, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=978930813, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=978930813, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=978930813, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 978930814 4273492461
+{learnerSeqProposed=?, sutSeq=978930814, learnerSeq=4273492461}
+SYN(V,V) \ S 4273492461 978930815
+{learnerSeqProposed=?, sutSeq=978930814, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=978930814, learnerSeq=4273492461}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=978930814, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=978930814, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 978930815
+{learnerSeqProposed=?, sutSeq=978930814, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1536230062 4273492461
+{learnerSeqProposed=?, sutSeq=1536230062, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1536230063
+{learnerSeqProposed=?, sutSeq=1536230062, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1536230062, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1536230062, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1536230062, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1536230062, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 1536230063 4273492461
+{learnerSeqProposed=?, sutSeq=1536230063, learnerSeq=4273492461}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1536230063, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1536230063, learnerSeq=4273492461}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1536230063, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1536230063, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 1536230064
+{learnerSeqProposed=?, sutSeq=1536230063, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 600296387 4273492461
+{learnerSeqProposed=?, sutSeq=600296387, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 600296388
+{learnerSeqProposed=?, sutSeq=600296387, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=600296387, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=600296387, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=600296387, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=600296387, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 600296388 4273492461
+{learnerSeqProposed=?, sutSeq=600296388, learnerSeq=4273492461}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=600296388, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=600296388, learnerSeq=4273492461}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=600296388, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=600296388, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 600296389
+{learnerSeqProposed=?, sutSeq=600296388, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1715813420 4273492461
+{learnerSeqProposed=?, sutSeq=1715813420, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1715813421
+{learnerSeqProposed=?, sutSeq=1715813420, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1715813420, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1715813420, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1715813420, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1715813420, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 1715813421 4273492461
+{learnerSeqProposed=?, sutSeq=1715813421, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1715813421, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1715813421, learnerSeq=4273492461}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1715813421, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1715813421, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 1715813422
+{learnerSeqProposed=?, sutSeq=1715813421, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 3481090540 4273492461
+{learnerSeqProposed=?, sutSeq=3481090540, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 3481090541
+{learnerSeqProposed=?, sutSeq=3481090540, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3481090540, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=3481090540, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3481090540, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=3481090540, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 3481090541 4273492461
+{learnerSeqProposed=?, sutSeq=3481090541, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=3481090541, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3481090541, learnerSeq=4273492461}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=3481090541, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3481090541, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 3481090542
+{learnerSeqProposed=?, sutSeq=3481090541, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 726968856 4273492461
+{learnerSeqProposed=?, sutSeq=726968856, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 726968857
+{learnerSeqProposed=?, sutSeq=726968856, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=726968856, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=726968856, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=726968856, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=726968856, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 726968857 4273492461
+{learnerSeqProposed=?, sutSeq=726968857, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 726968858
+{learnerSeqProposed=?, sutSeq=726968857, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=726968857, learnerSeq=4273492461}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=726968857, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=726968857, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 726968858
+{learnerSeqProposed=?, sutSeq=726968857, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1971959577 4273492461
+{learnerSeqProposed=?, sutSeq=1971959577, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1971959578
+{learnerSeqProposed=?, sutSeq=1971959577, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1971959577, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1971959577, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1971959577, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1971959577, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 1971959578 4273492461
+{learnerSeqProposed=?, sutSeq=1971959578, learnerSeq=4273492461}
+SYN+ACK(V,V) \ AS 4273492461 1971959579
+{learnerSeqProposed=?, sutSeq=1971959578, learnerSeq=4273492461}
+> ACK(NEXT,CURRENT) \ A 1971959579 4273492461
+{learnerSeqProposed=?, sutSeq=1971959578, learnerSeq=4273492461}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1971959578, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1971959578, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 1971959579
+{learnerSeqProposed=?, sutSeq=1971959578, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1820179575 4273492461
+{learnerSeqProposed=?, sutSeq=1820179575, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1820179576
+{learnerSeqProposed=?, sutSeq=1820179575, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1820179575, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 1820179576
+{learnerSeqProposed=?, sutSeq=1820179575, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 1820179576 4273492462
+{learnerSeqProposed=?, sutSeq=1820179575, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1820179575, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1820179575, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1820179575, learnerSeq=4273492462}
+> ACK+FIN(NEXT,CURRENT) \ FA 1820179576 4273492462
+{learnerSeqProposed=?, sutSeq=1820179576, learnerSeq=4273492462}
+SYN+ACK(V,V) \ AS 4273492462 1820179577
+{learnerSeqProposed=?, sutSeq=1820179576, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 1820179577 4273492462
+{learnerSeqProposed=?, sutSeq=1820179576, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1820179576, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1820179576, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 1820179577
+{learnerSeqProposed=?, sutSeq=1820179576, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1773061297 4273492461
+{learnerSeqProposed=?, sutSeq=1773061297, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1773061298
+{learnerSeqProposed=?, sutSeq=1773061297, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1773061297, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 1773061298
+{learnerSeqProposed=?, sutSeq=1773061297, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 1773061298 4273492462
+{learnerSeqProposed=?, sutSeq=1773061297, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1773061297, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1773061297, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1773061297, learnerSeq=4273492462}
+> ACK+FIN(NEXT,CURRENT) \ FA 1773061298 4273492462
+{learnerSeqProposed=?, sutSeq=1773061298, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1773061298, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1773061298, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1773061298, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1773061298, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 1773061299
+{learnerSeqProposed=?, sutSeq=1773061298, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 2469256421 4273492461
+{learnerSeqProposed=?, sutSeq=2469256421, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 2469256422
+{learnerSeqProposed=?, sutSeq=2469256421, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=2469256421, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 2469256422
+{learnerSeqProposed=?, sutSeq=2469256421, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 2469256422 4273492462
+{learnerSeqProposed=?, sutSeq=2469256421, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=2469256421, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=2469256421, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=2469256421, learnerSeq=4273492462}
+> ACK+FIN(NEXT,CURRENT) \ FA 2469256422 4273492462
+{learnerSeqProposed=?, sutSeq=2469256422, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 2469256423
+{learnerSeqProposed=?, sutSeq=2469256422, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=2469256422, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=2469256422, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=2469256422, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 2469256423
+{learnerSeqProposed=?, sutSeq=2469256422, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 3670231071 4273492461
+{learnerSeqProposed=?, sutSeq=3670231071, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 3670231072
+{learnerSeqProposed=?, sutSeq=3670231071, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3670231071, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 3670231072
+{learnerSeqProposed=?, sutSeq=3670231071, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 3670231072 4273492462
+{learnerSeqProposed=?, sutSeq=3670231071, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=3670231071, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3670231071, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=3670231071, learnerSeq=4273492462}
+> ACK+FIN(NEXT,CURRENT) \ FA 3670231072 4273492462
+{learnerSeqProposed=?, sutSeq=3670231072, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=3670231072, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3670231072, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=3670231072, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3670231072, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 3670231073
+{learnerSeqProposed=?, sutSeq=3670231072, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 594062609 4273492461
+{learnerSeqProposed=?, sutSeq=594062609, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 594062610
+{learnerSeqProposed=?, sutSeq=594062609, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=594062609, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 594062610
+{learnerSeqProposed=?, sutSeq=594062609, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 594062610 4273492462
+{learnerSeqProposed=?, sutSeq=594062609, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=594062609, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=594062609, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=594062609, learnerSeq=4273492462}
+> ACK+FIN(NEXT,CURRENT) \ FA 594062610 4273492462
+{learnerSeqProposed=?, sutSeq=594062610, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=594062610, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=594062610, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=594062610, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=594062610, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 594062611
+{learnerSeqProposed=?, sutSeq=594062610, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1957330938 4273492461
+{learnerSeqProposed=?, sutSeq=1957330938, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1957330939
+{learnerSeqProposed=?, sutSeq=1957330938, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1957330938, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 1957330939
+{learnerSeqProposed=?, sutSeq=1957330938, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 1957330939 4273492462
+{learnerSeqProposed=?, sutSeq=1957330938, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1957330938, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1957330938, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1957330938, learnerSeq=4273492462}
+> ACK+FIN(NEXT,CURRENT) \ FA 1957330939 4273492462
+{learnerSeqProposed=?, sutSeq=1957330939, learnerSeq=4273492462}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=1957330939, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1957330939, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1957330939, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1957330939, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 1957330940
+{learnerSeqProposed=?, sutSeq=1957330939, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 3702451798 4273492461
+{learnerSeqProposed=?, sutSeq=3702451798, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 3702451799
+{learnerSeqProposed=?, sutSeq=3702451798, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3702451798, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 3702451799
+{learnerSeqProposed=?, sutSeq=3702451798, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 3702451799 4273492462
+{learnerSeqProposed=?, sutSeq=3702451798, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=3702451798, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3702451798, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=3702451798, learnerSeq=4273492462}
+> ACK+FIN(NEXT,CURRENT) \ FA 3702451799 4273492462
+{learnerSeqProposed=?, sutSeq=3702451799, learnerSeq=4273492462}
+SYN(V,V) \ S 4273492462 3702451800
+{learnerSeqProposed=?, sutSeq=3702451799, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3702451799, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=3702451799, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=3702451799, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 3702451800
+{learnerSeqProposed=?, sutSeq=3702451799, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1464950827 4273492461
+{learnerSeqProposed=?, sutSeq=1464950827, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1464950828
+{learnerSeqProposed=?, sutSeq=1464950827, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1464950827, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1464950827, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1464950827, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1464950827, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 1464950828 4273492461
+{learnerSeqProposed=?, sutSeq=1464950828, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 1464950829
+{learnerSeqProposed=?, sutSeq=1464950828, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 1464950829 4273492462
+{learnerSeqProposed=?, sutSeq=1464950828, learnerSeq=4273492462}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1464950828, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1464950828, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1464950828, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1464950828, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 1464950829
+{learnerSeqProposed=?, sutSeq=1464950828, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 1464950829 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1209854495 4273492461
+{learnerSeqProposed=?, sutSeq=1209854495, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1209854496
+{learnerSeqProposed=?, sutSeq=1209854495, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1209854495, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1209854495, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1209854495, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1209854495, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 1209854496 4273492461
+{learnerSeqProposed=?, sutSeq=1209854496, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 1209854497
+{learnerSeqProposed=?, sutSeq=1209854496, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 1209854497 4273492462
+{learnerSeqProposed=?, sutSeq=1209854496, learnerSeq=4273492462}
+ACK(V,V) \ A 4273492462 1209854497
+{learnerSeqProposed=?, sutSeq=1209854496, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1209854496, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1209854496, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1209854496, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 1209854497
+{learnerSeqProposed=?, sutSeq=1209854496, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 1209854497 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1909460945 4273492461
+{learnerSeqProposed=?, sutSeq=1909460945, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1909460946
+{learnerSeqProposed=?, sutSeq=1909460945, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1909460945, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1909460945, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1909460945, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1909460945, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 1909460946 4273492461
+{learnerSeqProposed=?, sutSeq=1909460946, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 1909460947
+{learnerSeqProposed=?, sutSeq=1909460946, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 1909460947 4273492462
+{learnerSeqProposed=?, sutSeq=1909460946, learnerSeq=4273492462}
+FIN+ACK(V,V) \ AF 4273492462 1909460947
+{learnerSeqProposed=?, sutSeq=1909460946, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 1909460947 4273492462
+{learnerSeqProposed=?, sutSeq=1909460946, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1909460946, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1909460946, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 1909460947
+{learnerSeqProposed=?, sutSeq=1909460946, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 1909460947 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1027443694 4273492461
+{learnerSeqProposed=?, sutSeq=1027443694, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1027443695
+{learnerSeqProposed=?, sutSeq=1027443694, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1027443694, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1027443694, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1027443694, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1027443694, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 1027443695 4273492461
+{learnerSeqProposed=?, sutSeq=1027443695, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 1027443696
+{learnerSeqProposed=?, sutSeq=1027443695, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 1027443696 4273492462
+{learnerSeqProposed=?, sutSeq=1027443695, learnerSeq=4273492462}
+SYN+ACK(V,V) \ AS 4273492462 1027443696
+{learnerSeqProposed=?, sutSeq=1027443695, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 1027443696 4273492462
+{learnerSeqProposed=?, sutSeq=1027443695, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1027443695, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1027443695, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 1027443696
+{learnerSeqProposed=?, sutSeq=1027443695, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 1027443696 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 217224642 4273492461
+{learnerSeqProposed=?, sutSeq=217224642, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 217224643
+{learnerSeqProposed=?, sutSeq=217224642, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=217224642, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=217224642, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=217224642, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=217224642, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 217224643 4273492461
+{learnerSeqProposed=?, sutSeq=217224643, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 217224644
+{learnerSeqProposed=?, sutSeq=217224643, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 217224644 4273492462
+{learnerSeqProposed=?, sutSeq=217224643, learnerSeq=4273492462}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=217224643, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=217224643, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=217224643, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=217224643, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 217224644
+{learnerSeqProposed=?, sutSeq=217224643, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 217224644 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 465307322 4273492461
+{learnerSeqProposed=?, sutSeq=465307322, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 465307323
+{learnerSeqProposed=?, sutSeq=465307322, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=465307322, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=465307322, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=465307322, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=465307322, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 465307323 4273492461
+{learnerSeqProposed=?, sutSeq=465307323, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 465307324
+{learnerSeqProposed=?, sutSeq=465307323, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 465307324 4273492462
+{learnerSeqProposed=?, sutSeq=465307323, learnerSeq=4273492462}
+SYN(V,V) \ S 4273492462 465307324
+{learnerSeqProposed=?, sutSeq=465307323, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 465307324 4273492462
+{learnerSeqProposed=?, sutSeq=465307323, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=465307323, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=465307323, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 465307324
+{learnerSeqProposed=?, sutSeq=465307323, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 465307324 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 519810281 4273492461
+{learnerSeqProposed=?, sutSeq=519810281, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 519810282
+{learnerSeqProposed=?, sutSeq=519810281, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=519810281, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=519810281, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=519810281, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=519810281, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 519810282 4273492461
+{learnerSeqProposed=?, sutSeq=519810282, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 519810283
+{learnerSeqProposed=?, sutSeq=519810282, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 519810283 4273492462
+{learnerSeqProposed=?, sutSeq=519810282, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 519810283
+{learnerSeqProposed=?, sutSeq=519810282, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 519810283 4273492462
+{learnerSeqProposed=?, sutSeq=519810282, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=519810282, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=519810282, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 519810283
+{learnerSeqProposed=?, sutSeq=519810282, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 519810283 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1440090045 4273492461
+{learnerSeqProposed=?, sutSeq=1440090045, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 1440090046
+{learnerSeqProposed=?, sutSeq=1440090045, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1440090045, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=1440090045, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1440090045, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=1440090045, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 1440090046 4273492461
+{learnerSeqProposed=?, sutSeq=1440090046, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 1440090047
+{learnerSeqProposed=?, sutSeq=1440090046, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 1440090047 4273492462
+{learnerSeqProposed=?, sutSeq=1440090046, learnerSeq=4273492462}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=1440090046, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1440090046, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=1440090046, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1440090046, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 1440090047
+{learnerSeqProposed=?, sutSeq=1440090046, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 1440090047 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 2231874226 4273492461
+{learnerSeqProposed=?, sutSeq=2231874226, learnerSeq=4273492461}
+ACK(V,V) \ A 4273492461 2231874227
+{learnerSeqProposed=?, sutSeq=2231874226, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=2231874226, learnerSeq=4273492461}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=2231874226, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=2231874226, learnerSeq=4273492461}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=2231874226, learnerSeq=4273492461}
+> ACK+FIN(NEXT,CURRENT) \ FA 2231874227 4273492461
+{learnerSeqProposed=?, sutSeq=2231874227, learnerSeq=4273492461}
+FIN+ACK(V,V) \ AF 4273492461 2231874228
+{learnerSeqProposed=?, sutSeq=2231874227, learnerSeq=4273492461}
+> ACK(NEXT,NEXT) \ A 2231874228 4273492462
+{learnerSeqProposed=?, sutSeq=2231874227, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=2231874227, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=2231874227, learnerSeq=4273492462}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=2231874227, learnerSeq=4273492462}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=2231874227, learnerSeq=4273492462}
+FIN(V,V) \ F 4273492462 2231874228
+{learnerSeqProposed=?, sutSeq=2231874227, learnerSeq=4273492462}
+> ACK(NEXT,CURRENT) \ A 2231874228 4273492462
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 4270094119 4273492461
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+SYN(FRESH,NEXT) \ SA 1256839121 4273492461
+{learnerSeqProposed=?, sutSeq=1256839121, learnerSeq=4273492461}
+RST(V,V) \ R 4273492461 1256839122
+{learnerSeqProposed=?, sutSeq=1256839121, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1256839121, learnerSeq=4273492461}
+ACK+RST(V,V) \ AR 4273492461 1256839122
+{learnerSeqProposed=?, sutSeq=1256839121, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1256839121, learnerSeq=4273492461}
+RST(V,V) \ R 4273492461 1256839122
+{learnerSeqProposed=?, sutSeq=1256839121, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=1256839121, learnerSeq=4273492461}
+FIN(V,V) \ F 4273492461 1256839122
+{learnerSeqProposed=?, sutSeq=1256839121, learnerSeq=4273492461}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSECONNECTION \ closeconnection
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+LISTEN \ listen
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN+ACK(V,V) \ AS 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN(V,V) \ F 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK+RST(V,V) \ AR 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACK(V,V) \ A 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+CLOSE \ close
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+reset
+
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+ACCEPT \ accept
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+RST(V,V) \ R 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> TIMEOUT \ timeout
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+SYN(V,V) \ S 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> ACK+RST(ZERO,NEXT) \ RA 0 4273492461
+{learnerSeqProposed=?, sutSeq=?, learnerSeq=?}
+FIN+ACK(V,V) \ AF 4273492460 0
+{learnerSeqProposed=4273492460, sutSeq=?, learnerSeq=?}
+> RST(ZERO,ZERO) \ R 0 0
