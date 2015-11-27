@@ -144,12 +144,17 @@ public class SutInterfaceBuilder {
 			return wrapperBuilder;
 		}
 		
-		public WrapperBuilder probablisticNonDeterminismValidator(int attempts, double minimumFraction, ObservationTree tree) {
+		public WrapperBuilder prlobablisticNonDeterminismValidator(int attempts, double minimumFraction, ObservationTree tree) {
 			current = new ProbablisticNonDeterminismValidator(attempts, minimumFraction, tree, current, afterCache);
 			return wrapperBuilder;
 		}
 		
 		public WrapperBuilder crashOnNonDeterminsm() {
+			return wrapperBuilder;
+		}
+		
+		public WrapperBuilder askOnNonDeterminsm(ObservationTree tree) {
+			current = new NonDeterminismTreePrunerAsker(tree, current);
 			return wrapperBuilder;
 		}
 		

@@ -15,18 +15,27 @@ public class CacheViewer {
 	private static Scanner scanner;
 	
 	public static void main(String[] args) {
-		root = Main.readCacheTree(Main.CACHE_FILE);
-		if (root == null) {
-			System.err.println("Aborting");
-			System.exit(1);
-		}
-		current = root;
 	 	try {
 	 		scanner = new Scanner(System.in);
+	 		System.out.println("Please give the filename of the tree (empty line for standard file)");
+	 		String fileName = scanner.nextLine();
+	 		if (fileName.isEmpty()) {
+				root = Main.readCacheTree(Main.CACHE_FILE);
+	 		} else {
+	 			root = Main.readCacheTree(fileName);
+	 		}
+			if (root == null) {
+				System.err.println("Cannot read tree, aborting");
+				System.exit(1);
+			} else {
+				System.out.println("Succesfully read file");
+			}
+			current = root;
 			while(!exit && scanner.hasNextLine()) {
 				process(scanner.nextLine());
 			}
 		} finally {
+			System.out.println("Aborting");
 			scanner.close();
 		}
 	}

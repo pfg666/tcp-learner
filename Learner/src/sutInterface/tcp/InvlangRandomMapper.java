@@ -17,10 +17,7 @@ import util.RangePicker;
 import util.Tuple2;
 
 public class InvlangRandomMapper extends InvlangMapper {
-<<<<<<< HEAD
-=======
 	private static final int RANDOM_ATTEMPTS = 3;
->>>>>>> 3f7df17ed79cc473aa11be0f908542645861ed3a
 	private final Random random = new Random();
 	private LinkedList<Long> valuesOfInterest = new LinkedList<>();
 	public InvlangRandomMapper(File file) throws IOException {

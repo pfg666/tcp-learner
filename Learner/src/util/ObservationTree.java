@@ -40,6 +40,14 @@ public class ObservationTree implements Serializable {
 		this.parentOutput = parentSymbol;
 	}
 	
+	public Symbol getOutput(Symbol input) {
+		return this.outputs.get(input);
+	}
+	
+	public ObservationTree getState(Symbol input) {
+		return this.children.get(input);
+	}
+	
 	/**
 	 * @return The outputs observed from the root of the tree until this node
 	 */
@@ -246,5 +254,29 @@ public class ObservationTree implements Serializable {
 			max = Math.max(max, child.getDepth());
 		}
 		return max + 1;
+	}
+	
+	public static void main(String[] args) {
+		ObservationTree tree = new ObservationTree();
+		LinkedList<Symbol> in = new LinkedList<Symbol>(), out1 = new LinkedList<>(), out2 = new LinkedList<Symbol>();
+		in.add(new SymbolImpl("a"));
+		in.add(new SymbolImpl("b"));
+		in.add(new SymbolImpl("c"));
+		out1.add(new SymbolImpl("x"));
+		out1.add(new SymbolImpl("y"));
+		out1.add(new SymbolImpl("z"));
+		out2.add(new SymbolImpl("x"));
+		out2.add(new SymbolImpl("z"));
+		out2.add(new SymbolImpl("z"));
+		try {
+			tree.addObservation(WordConverter.toWord(in), WordConverter.toWord(out1));
+			tree.addObservation(WordConverter.toWord(in), WordConverter.toWord(out2));
+		} catch (CacheInconsistencyException e) {
+			System.err.println(e.getInput());
+			System.err.println(e.getOldOutput());
+			System.err.println(e.getNewOutput());
+			System.err.println(e.getShortestInconsistentInput());
+			e.printStackTrace();
+		}	
 	}
 }

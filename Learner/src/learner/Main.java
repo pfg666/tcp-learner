@@ -16,19 +16,24 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import org.antlr.v4.parse.ANTLRParser.throwsSpec_return;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import sutInterface.SutInfo;
 import sutInterface.tcp.LearnResult;
 import sutInterface.tcp.MapperSutWrapper;
 import sutInterface.tcp.SutInterfaceBuilder;
+import util.Chmod;
 import util.Container;
 import util.FileManager;
 import util.Log;
@@ -77,7 +82,8 @@ public class Main {
 				nrMembershipQueries = new Container<>(),
 				nrEquivalenceQueries = new Container<>(),
 				nrUniqueEquivalenceQueries = new Container<>(),
-				nrResets = new Container<>(); 
+				nrResets = new Container<>();
+	private static YannakakisEquivalenceOracle yanOracle;
 				
 	private static List<Runnable> shutdownHooks = new ArrayList<>();
 
@@ -200,8 +206,12 @@ public class Main {
 		} catch (IOException e1) {
 			System.err.println("could not write to dot file");
 		}
+		try {
+			Chmod.set(7, 7, 5, true, outputFolder.getAbsolutePath());
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 	}
-	
 	
 	public static void setupOutput(final String outputDir) throws FileNotFoundException {
 		outputFolder = new File(outputDir);
@@ -222,11 +232,14 @@ public class Main {
 		registerShutdownHook(new Runnable() {
 			@Override
 			public void run() {
-				closeOutputStreams();
+				System.err.println("Running shutdown hook");
 				copyInputsToOutputFolder();
 				writeCacheTree(tree, true);
 				Statistics.getStats().printStats(statsOut);
+				Statistics.getStats().printStats(System.out);
+				statsOut.flush();
 
+				closeOutputStreams();
 				//InitCacheManager mgr = new InitCacheManager();
 				//mgr.dump(outputDir + File.separator +  "cache.txt"); 
 				if (done == false) {
@@ -286,8 +299,12 @@ public class Main {
 					absTraceOut.flush();
 					errOut.flush();
 					// search for counterexample
-					EquivalenceOracleOutput o = eqOracle
-							.findCounterExample(hyp);
+					EquivalenceOracleOutput o = null;
+					o = eqOracle
+						.findCounterExample(hyp);
+					if (yanOracle != null) {
+						stats.addNrHypothesisEquivalenceQueries(yanOracle.getNrHypthesisTests());
+					}	
 					stats.totalEquivQueries = nrEquivalenceQueries.value;
 					stats.totalUniqueEquivQueries = nrUniqueEquivalenceQueries.value;
 					absTraceOut.flush();
@@ -378,7 +395,8 @@ public class Main {
 			eqOracle = eqOracle1;
 		} else {
 			YannakakisWrapper.setYannakakisCmd(learningParams.yanCommand);
-			eqOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces, config.learningParams.yanMode, nrUniqueEquivalenceQueries);
+			yanOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces, config.learningParams.yanMode, nrUniqueEquivalenceQueries);
+			eqOracle = yanOracle;
 		}
 		if (learningParams.testTraces != null && !learningParams.testTraces.isEmpty()) {
 			WordCheckingEquivalenceOracle eqOracle2 = new WordCheckingEquivalenceOracle(queryOracle, learningParams.testTraces);
@@ -399,7 +417,7 @@ public class Main {
 		}
 		
 		int minAttempts = 3, maxAttempts = 100;
-		double probFraction = 0.895;
+		double probFraction = 0.80;
 		
 		SutInterfaceBuilder builder = new SutInterfaceBuilder();
 		Oracle eqOracleRunner = builder
@@ -410,9 +428,9 @@ public class Main {
 				.logger()
 				.cacheReaderWriter(tree)
 				//.probablisticNonDeterminismValidator(10, 0.8, tree)
-				.crashAndPruneTree(tree)
+				.askOnNonDeterminsm(tree)
 				.resetCounter(nrResets)
-				.queryCounter(nrUniqueEquivalenceQueries)
+				.uniqueQueryCounter(nrUniqueEquivalenceQueries)
 				.queryCounter(nrEquivalenceQueries)
 				.learnerInterface();
 		Oracle memOracleRunner = builder
@@ -423,7 +441,7 @@ public class Main {
 				.logger()
 				.cacheReaderWriter(tree)
 				//.probablisticNonDeterminismValidator(10, 0.8, tree)
-				.crashAndPruneTree(tree)
+				.askOnNonDeterminsm(tree)
 				.resetCounter(nrResets)
 				.queryCounter(nrMembershipQueries)
 				.learnerInterface();
@@ -504,12 +522,16 @@ public class Main {
 	public static int cachedTreeNum = 0;
 	
 	public static void writeCacheTree(ObservationTree tree, boolean isFinal) {
+		writeCacheTree(tree, isFinal?CACHE_FILE:cachedTreeNum+CACHE_FILE);
+	}
+	
+	public static void writeCacheTree(ObservationTree tree, String fileName) {
 		if (tree == null) {
 			System.err.println("Could not write uninitialized observation tree");
 			return;
 		}
 		try (
-				OutputStream file = new FileOutputStream(isFinal?CACHE_FILE:cachedTreeNum+CACHE_FILE);
+				OutputStream file = new FileOutputStream(fileName);
 				OutputStream buffer = new BufferedOutputStream(file);
 				ObjectOutput output = new ObjectOutputStream(buffer);
 				) {
