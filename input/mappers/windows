@@ -45,7 +45,7 @@ if ((lastFlagsSent has $S) & (lastFlagsSent has $A) & (flagsIn has $R)) {
 } else { if ((learnerSeqProposed != -3) | (concSeqIn == sutSeq+1)) {
 	// if a fresh seq from the learner is acknowledged, or if the sequence number is valid
 	if ((flagsIn has $S) | (flagsIn has $F)) {
-		sutSeq = concSeqIn;
+		sutSeq = concSeqIn + concDataIn;
 	} else { if (flagsIn has $P) {
 		sutSeq = sutSeq + concDataIn;
 	} else {
