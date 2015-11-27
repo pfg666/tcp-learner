@@ -23,7 +23,7 @@ class ConcreteResponse(Response):
         self.payload = payload
 
     def __str__(self):
-        outputString = self.flags + " " + str(self.seq) + " " + str(self.ack) + " [" + str(self.payload) + "]"
+        outputString = self.flags.replace("U","") + " " + str(self.seq) + " " + str(self.ack) + " [" + str(self.payload) + "]"
         return outputString
     
     def __eq__(self, other):

@@ -116,7 +116,7 @@ class Sender:
         dport=destPort,
         seq=seqNr,
         ack=ackNr,
-        # window=1,
+       # window=1,
         flags=tcpFlagsSet)
         if payload == '':
             p = pIP / pTCP
@@ -218,11 +218,13 @@ class Sender:
             result = result + "P"
         if self.checkForFlag(x, 4):
             result = result + "A"
+        if self.checkForFlag(x, 5):
+            result = result + "U"
         return result
     
     def isFlags(self, inputString):
         isFlags = False
-        matchResult = re.match("[FSRPA]*", inputString)
+        matchResult = re.match("[FSRPAU]*", inputString)
         if matchResult is not None:
             isFlags = matchResult.group(0) == inputString
         return isFlags

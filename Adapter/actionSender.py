@@ -17,7 +17,8 @@ class ActionSender:
                "closeclient",
                "connect",
                "send",
-               "rcv"]
+               "rcv",
+                "nil"]
     count = None
     def __init__(self, cmdIp = "192.168.56.1", cmdPort=5000, sender = None):
         self.cmdPort = cmdPort
@@ -92,10 +93,10 @@ class ActionSender:
         print "reset"
         print "********** reset **********"
         self.count = self.count + 1
-        if self.count % 5 == 0:
+        if self.count % 10 == 0:
             self.restartAdapter()
         else:
-            self.resetAdapter()
+             self.resetAdapter()
         self.listenForServerPort()
         self.sender.setServerPort(self.serverPort)
 
@@ -128,16 +129,23 @@ class ActionSender:
     def sendAction(self, inputString):
         print "sending action ", inputString
         if self.isAction(inputString):
+            #if inputString == "nil":
             #self.cmdSocket.recv(1000, MSG_DONTWAIT)
-            self.cmdSocket.send(inputString + "\n")
+            if inputString != "nil":
+                self.cmdSocket.send(inputString + "\n")
             if syn_ok:
                 ok = self.sockFile.readline()
                 if ok != "ok\n":
                     raise Exception("expected 'ok', received '" + ok + "'")
                 self.cmdSocket.send("ok\n")
-#            if inputString in ["send"]:
-#                self.sender.captureResponse(waitTime = 0.3)
-            response = self.sender.captureResponse(waitTime=self.sender.waitTime + 0.2)
+            waitForAns = self.sender.waitTime 
+            if inputString in ["connect"]:
+                waitForAns = waitForAns + 0.1
+            if inputString in ["send"]:
+                waitForAns = waitForAns + 0.01            
+            if inputString in ["close"]:
+                waitForAns = waitForAns + 0.1            
+            response = self.sender.captureResponse(waitTime=waitForAns)
             #print "server adapter response: " + cmdResponse
         else:
             print inputString + " not a valid action ( it is not one of: " + str(self.actions) + ")"

@@ -72,22 +72,21 @@ class Tracker(threading.Thread):
                 tcp_syn = l3.get_th_seq()
                 tcp_ack = l3.get_th_ack()
                 response = self.impacketResponseParse(l3)
-                if self.isRetransmit(response):
+                if self.isRetransmit(tcp_src_port, tcp_dst_port, response):
                     print "ignoring retransmission: ", response.__str__()
                 else:
-                    print "received: ",(response.seq, response.ack, response.flags)
-                    if (response.seq, response.ack, response.flags) not in self.responseHistory:
-                        self.responseHistory.add((response.seq, response.ack, response.flags))  
+                   # print "received: ",(tcp_src_port, tcp_dst_port),":",(response.seq, response.ack, response.flags)
+                    self.responseHistory.add(((tcp_src_port, tcp_dst_port), response.seq, response.ack, response.flags))  
                     self.lastResponses[(tcp_src_port, tcp_dst_port)] = response
                     self.lastResponse = response
                     self._received.set()
 
-    def isRetransmit(self, response):
-        isRet = (response.seq, response.ack, response.flags) in self.responseHistory and response.flags in ["SA", "AS", "AF", "FA", "S", "P", "PA"] #add "S" when learning for client
+    def isRetransmit(self, tcp_src_port, tcp_dst_port, response):
+        isRet = ((tcp_src_port, tcp_dst_port), response.seq, response.ack, response.flags) in self.responseHistory and response.flags.replace("U","") in ["SA", "AS", "AF", "FA", "S", "P", "PA"] 
         if not isRet:
 	        if "P" in response.flags and "A" in response.flags and response.payload > 0:
-		        for (seq, ack, flags) in self.responseHistory:
-		        	if seq == response.seq and "P" in flags and "A" in flags:
+		        for ((src_port, dst_port), seq, ack, flags) in self.responseHistory:
+		        	if (src_port, dst_port) == (tcp_src_port, tcp_dst_port) and (seq == response.seq) and "P" in flags and "A" in flags:
 		        		isRet = True
         return isRet
 
@@ -112,6 +111,7 @@ class Tracker(threading.Thread):
             flags += 'R' if tcpPacket.get_RST() == 1 else ''
             flags += 'P' if tcpPacket.get_PSH() == 1 else ''
             flags += 'A' if tcpPacket.get_ACK() == 1 else ''
+            flags += 'U' if tcpPacket.get_URG() == 1 else ''
             payload = tcpPacket.get_data_as_string()
             response = ConcreteResponse(flags, tcp_syn, tcp_ack, payload)
         return response
@@ -129,10 +129,12 @@ class Tracker(threading.Thread):
     
     def sniffForResponse(self,  serverPort, senderPort, waitTime):
         div = waitTime/10
+        #print "sniffing for response ", waitTime
         for i in range(0,9):
+            #print "waiting... ", div
             time.sleep(div)
             response = self.getLastResponse(serverPort, senderPort)
-            if response != Timeout():
+            if not isinstance(response, Timeout):
                 break;        
         #self._received.wait(timeout=waitTime)
         #response = self.getLastResponse(serverPort, senderPort)    
