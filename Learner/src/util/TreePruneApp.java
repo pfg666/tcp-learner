@@ -20,30 +20,45 @@ public class TreePruneApp {
 		try {
 			tree = Main.readCacheTree(fileName);
 			if (tree == null) {
+			    scanner.close();
 				throw new NullPointerException();
 			}
 		} catch (Exception e) {
 			System.out.println("Could not read tree, aborting...");
 			System.exit(1);
 		}
-		System.out.println("Which output do you want to remove? You can use a java-regex, such as '.*PSH.*'");
+		System.out.println("Do you want to remove an input (0) or an output (!0)");
+		boolean isInput = scanner.nextLine().trim().equals("0");
+		String msgType = isInput ? "input" : "output";
+		System.out.println("Which " + msgType + "  do you want to remove? You can use a java-regex, such as '.*PSH.*'");
 		String suspiciousOutput = scanner.nextLine();
-		sanitizeBranch(tree, Pattern.compile(suspiciousOutput));
+		sanitizeBranch(tree, isInput, Pattern.compile(suspiciousOutput));
 		Main.writeCacheTree(tree, true);
 		System.out.println("Tree written");
+		scanner.close();
 	}
 	
-	private static void sanitizeBranch(ObservationTree tree, Pattern outputToRemove) {
+	private static void sanitizeBranch(ObservationTree tree, boolean isInput, Pattern removePattern) {
 		Set<Symbol> inputs = new HashSet<>(tree.getInputs());
 		for (Symbol input : inputs) {
-			ObservationTree child = tree.getState(input);
-			String output = tree.getOutput(input).toString();
-			Matcher m = outputToRemove.matcher(output);
-			if (m.matches()) {
-				child.remove();
-			} else {
-				sanitizeBranch(child, outputToRemove);
-			}
+		    ObservationTree child = tree.getState(input);
+		    if (!isInput) {
+    			String outputString = tree.getOutput(input).toString();
+    			Matcher m = removePattern.matcher(outputString);
+    			if (m.matches()) {
+    				child.remove();
+    			} else {
+    				sanitizeBranch(child, isInput, removePattern);
+    			}
+		    } else {
+		        String inputString = input.toString();
+		        Matcher m = removePattern.matcher(inputString);
+                if (m.matches()) {
+                    child.remove();
+                } else {
+                    sanitizeBranch(child, isInput, removePattern);
+                }
+		    }
 		}
 	}
 }
