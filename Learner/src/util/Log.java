@@ -11,12 +11,18 @@ public class Log {
 		ERROR
 	}
 	
-	private static PrintStream activePrintStream = null;
+	private static PrintStream activePrintStream = System.out;
+	private static PrintStream errorPrintStream = System.err;
 	private static Level logLevel = Level.INFO;
 	
 	public static void setActivePrintStream(PrintStream printStream) {
 		activePrintStream = printStream;
 	}
+	
+	public static void setErrorPrintStream(PrintStream printStream) {
+	    errorPrintStream = printStream;
+	}
+	
 	
 	public static void setLogLevel(String logLevel) {
 		Log.logLevel = Level.valueOf(logLevel);
@@ -39,13 +45,11 @@ public class Log {
 	}
 	
 	private static void log(Level level, String message) {
-		if(activePrintStream != null)
-			log(level, message, activePrintStream);
 		switch (level)
 		{
-		case ERROR: log(level, message, System.err);
+		case ERROR: log(level, message, errorPrintStream);
 		break;
-		default: log(level, message, System.out);
+		default: log(level, message, activePrintStream);
 		break;
 		}
 	}

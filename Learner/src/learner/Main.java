@@ -225,7 +225,9 @@ public class Main {
 				new FileOutputStream(outputDir + File.separator + "learnLog.txt", false));
 		dupStdout =  new PrintStream(
                 new FileOutputStream(outputDir + File.separator + "stdout.txt", false));
-		errOut = System.err;
+	    errOut = new PrintStream(
+	                new FileOutputStream(outputDir + File.separator + "err.txt", false));
+	    Log.setErrorPrintStream(errOut);
 		
 		statsOut = new PrintStream(
 				new FileOutputStream(outputDir + File.separator + "statistics.txt", false));
@@ -395,7 +397,7 @@ public class Main {
 			eqOracle = eqOracle1;
 		} else {
 			YannakakisWrapper.setYannakakisCmd(learningParams.yanCommand);
-			yanOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces, config.learningParams.yanMode, nrUniqueEquivalenceQueries);
+			yanOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces, nrUniqueEquivalenceQueries);
 			eqOracle = yanOracle;
 		}
 		if (learningParams.testTraces != null && !learningParams.testTraces.isEmpty()) {
@@ -416,7 +418,7 @@ public class Main {
 			tree = new ObservationTree();
 		}
 		
-		int minAttempts = 3, maxAttempts = 100;
+		int minAttempts = 2, maxAttempts = 100;
 		double probFraction = 0.80;
 		
 		SutInterfaceBuilder builder = new SutInterfaceBuilder();

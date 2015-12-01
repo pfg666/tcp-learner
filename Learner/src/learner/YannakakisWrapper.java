@@ -13,7 +13,6 @@ import de.ls5.jlearn.interfaces.Automaton;
 import de.ls5.jlearn.util.DotUtil;
 
 public class YannakakisWrapper {
-	private static final int SEED = 123456789;
 	private final ProcessBuilder pb; 
 	private Process process;
 	private Writer processInput;
@@ -21,17 +20,17 @@ public class YannakakisWrapper {
 	private StreamGobbler errorGobbler;
 	private Automaton hyp;
 	
-	private static String yannakakisCmd = null;
+	private static String [] yannakakisCmd = null;
+	
 	
 	public static void setYannakakisCmd( String cmd) {
-		yannakakisCmd = cmd;
+		yannakakisCmd = cmd.split("\\s");
 	}
  	
-	public YannakakisWrapper(Automaton inputEnabledHypothesis, String mode) {
+	public YannakakisWrapper(Automaton inputEnabledHypothesis) {
 		this.hyp = inputEnabledHypothesis;
-		//this.pb = new ProcessBuilder(yannakakisCmd, "--", "3", "3", "random");
-		this.pb = new ProcessBuilder(yannakakisCmd, "--seed", Integer.toString(SEED), "/dev/stdin", mode, "3", "3");
-		//this.pb = new ProcessBuilder(yannakakisCmd, "--", "4", "4", "random");
+		
+		this.pb = new ProcessBuilder(yannakakisCmd);
 		Main.registerShutdownHook(new Runnable() {
 			public void run() {
 				if (!isClosed()) {

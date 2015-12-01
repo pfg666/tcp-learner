@@ -2,10 +2,8 @@ package learner;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 import util.Container;
 import util.LearnlibUtils;
@@ -24,14 +22,13 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 	private final int numberOfTests;
 	private final boolean uniqueOnly;
 	private final Container<Integer> uniqueCounter;
-	private final String mode;
 	private int hypTestNumber = 0;
 	
-	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests, String mode) {
-		this(oracle, numberOfTests, mode, null);
+	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests) {
+		this(oracle, numberOfTests, null);
 	}
 	
-	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests, String mode, Container<Integer> uniqueCounter) {
+	public YannakakisEquivalenceOracle (Oracle oracle, int numberOfTests, Container<Integer> uniqueCounter) {
 		this.oracle = oracle;
 		if (numberOfTests <= 0) {
 			this.numberOfTests = Integer.MAX_VALUE - 1;
@@ -40,13 +37,12 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 		}
 		this.uniqueCounter = uniqueCounter;
 		this.uniqueOnly = uniqueCounter != null;
-		this.mode = mode;
 	}
 	
 	@Override
 	public EquivalenceOracleOutput findCounterExample(Automaton hyp) {
 		List<String> testQuery = null;
-		YannakakisWrapper wrapper = new YannakakisWrapper(hyp, mode);
+		YannakakisWrapper wrapper = new YannakakisWrapper(hyp);
 		wrapper.initialize();
 		String line;
 		int uniqueValueStart = uniqueOnly ? uniqueCounter.value : 0;
