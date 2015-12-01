@@ -55,76 +55,35 @@ void error(char* msg) {
 	exit(-1);
 }
 
-void print_errno() {
-	if (errno == EBADF) {
-		printf("errno = EBADF\n");
-	} else if (errno == EINTR) {
-		printf("errno = EINTR\n");
-	} else if (errno == EIO) {
-		printf("errno = EIO\n");
-	} else {
-		printf("errno = %i\n", errno);
-	}
-}
-
-void print_socket_status(int sd) {
-	int error = 0;
-	socklen_t len = sizeof(error);
-	int retval = getsockopt(sd, SOL_SOCKET, SO_ERROR, &error, &len);
-	
-	if (retval != 0) {
-		/* there was a problem getting the error code */
-		printf("error getting socket error code: %s\n", strerror(retval));
-		return;
-	} else {
-		printf("socket alive\n");
-		return;
-	}
-
-	if (error != 0) {
-		/* socket has a non zero error status */
-		fprintf(stderr, "socket error: %s\n", strerror(error));
-	}
-}
-
 void strcpy_end(char* dest, char* src, int maxsize) {
-	int len = strlen(src)+1;
+	int len = strlen(src) + 1;
 	if (maxsize < len) {
 		len = maxsize;
 	}
 	if (len == 0) {
 		error("cannot copy 0 characters safely!"); // not very subtle, but I want to know these things
 	}
-	strncpy(dest, src, len-1);
-	#ifdef _WIN32
-		strcpy_s(dest, len, src);
-	#else
-		strncpy(dest, src, len - 1);
-	#endif
+#ifdef _WIN32
+	strcpy_s(dest, len, src);
+#else
+	strncpy(dest, src, len - 1);
+#endif
 	dest[len-1] = '\0';
 }
 
 void answer(char* output) {
-	if (send(learner_conn_sd, output, strlen(output), 0) == -1) {
-		printf("Could not send '%s'\n", output);
-		print_errno();
-	}
+	send(learner_conn_sd, output, strlen(output), 0);
 }
 
-// convert first newline in input to null-terminator. Returns string
-// length of the new string, or -1 if no newline was found or if a null-
-// terminator was found first
-int str_network_to_c(char* string, int len) {
-	int i;
-	for (i = 0; i < len; i++) {
+//convert newline-terminated input to null-terminated input
+void str_network_to_c(char* string) {
+	unsigned int i;
+	for (i = 0; i < strlen(string); i++) {
 		if (string[i] == '\n' || string[i] == '\r') {
 			string[i] = '\0';
-			return i;
-		} else if (string[i] == '\0') {
-			return -1;
+			return;
 		}
 	}
-	return -1;
 }
 
 void wait_ok() {
@@ -138,7 +97,8 @@ void wait_ok() {
 		if (result <= 0) { // either -1 for an error, or 0 if connection is closed properly
 			error("expected 'ok' but could not read socket input\n");
 		}
-		str_network_to_c(read_buffer, sizeof(read_buffer));
+		str_network_to_c(read_buffer);
+		
 
 		if (strncmp(read_buffer, "ok", sizeof(read_buffer)) == 0) {
 			printf("received permission\n");
@@ -165,20 +125,20 @@ void *do_connect(void *arg)
 	send_ok();
 	wait_ok();
 	if (connect(main_sd, (struct sockaddr *) &serv_addr_struct, sizeof(serv_addr_struct)) < 0) {
-        printf("error connecting to server\n");
+        printf("connect failed\n");
 	} else {
-		printf("connected successfully\n");
+		printf("connect succeeded\n");
 		int i = 1;
 		setsockopt(main_sd, IPPROTO_TCP, TCP_NODELAY, (void *)&i, sizeof(i));
-		#ifdef __gnu_linux__
-			setsockopt(main_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
-		#endif
+#ifdef __gnu_linux__
+		setsockopt(secondary_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
+#endif
 	}
 	main_socket_blocked = 0;
 	return 0;
 }
 
-void start_connecting_thread() {
+void start_connect_thread() {
 	if (main_socket_blocked == 0 && secondary_sd == -1) {
 		main_socket_blocked = 1;
 #ifdef _WIN32
@@ -214,26 +174,59 @@ void *do_accept(void *arg) {
 	int new_connection = accept(main_sd, (struct sockaddr*)NULL, NULL);
 	if (new_connection >= 0) {
 		secondary_sd = new_connection;
-	}
-	if (secondary_sd == -1) {
-		printf("accepting failed\n");
-		//answer("NOK\n");
-	}
-	else {
+		printf("accept succeeded\n");
+		printf("created connection socket %d\n", new_connection);
 		int i = 1;
 		setsockopt(secondary_sd, IPPROTO_TCP, TCP_NODELAY, (void *)&i, sizeof(i));
-		#ifdef __gnu_linux__
-			setsockopt(secondary_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
-		#endif
-		printf("accepting succeeded\n");
-		//answer("OK\n");
+#ifdef __gnu_linux__
+		setsockopt(secondary_sd, IPPROTO_TCP, TCP_QUICKACK, (void *)&i, sizeof(i));
+#endif
+	} else { 
+		printf("accept failed\n");
+		//answer("NOK\n");
 	}
 	//} while (secondary_sd != -1);
 	main_socket_blocked = 0;
 	return 0;
 }
 
-void start_accepting_thread() {
+#ifdef _WIN32
+DWORD WINAPI do_recv(void *arg) {
+#elif __gnu_linux__
+void *do_recv(void *arg) {
+#endif
+	int sd = -1;
+	if (type == server_type) {
+		sd = secondary_sd;
+	}
+	else if (type == client_type) {
+		sd = main_sd;
+	}
+	if (sd != -1) {
+		char read_buffer[input_buffer_size];
+		recv(sd, read_buffer, sizeof(read_buffer), 0);
+		printf("receive succeeded\n");
+	}
+	else {
+		printf("connection socket not defined\n");
+	}
+	main_socket_blocked = 0;
+}
+
+void start_recv_thread() {
+	if (main_socket_blocked == 0) {
+		main_socket_blocked = 1;
+#ifdef _WIN32
+		socket_thread = CreateThread(NULL, 0, &do_recv, NULL, 0, NULL);
+#elif __gnu_linux__
+		pthread_create(&socket_thread, NULL, &do_recv, NULL);
+#else
+		printf("cannot accept process, unknown OS\n");
+#endif
+	}
+}
+
+void start_accept_thread() {
 	if (main_socket_blocked == 0 && secondary_sd == -1) {
 		main_socket_blocked = 1;
 #ifdef _WIN32
@@ -243,6 +236,16 @@ void start_accepting_thread() {
 #else
 		printf("cannot accept process, unknown OS\n");
 #endif
+	}
+	else {
+		if (main_socket_blocked == 1) {
+			printf("accept failed, server socket blocked");
+		}
+		else {
+			if (secondary_sd != -1) {
+				printf("accept failed, connection socket (%d) has already been created", secondary_sd);
+			}
+		}
 	}
 }
 
@@ -257,14 +260,12 @@ void init() {
 	learner_addr.sin_family = AF_INET; 
 	learner_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	learner_addr.sin_port = htons(learner_port);
-	int yes = 1;
-	setsockopt(learner_listener_sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 	bind(learner_listener_sd, (struct sockaddr*)&learner_addr, sizeof(learner_addr));
 	
 	if (listen(learner_listener_sd, 1) != 0) {
 		error("cannot open socket to listen to learner\n");
 	}
-	printf("listening for learner...\n");
+	printf("listen for learner...\n");
 	learner_conn_sd = accept(learner_listener_sd, (struct sockaddr*)NULL, NULL);
 	while (learner_conn_sd == -1) {
 		printf("could not establish connection with learner, retrying...\n");
@@ -280,7 +281,6 @@ void init() {
 
 void init_run() {
 	main_socket_blocked = 0;
-	//stop_thread();
 	type = -1;
 	printf("*** NEW RUN ***\n");
 	printf("creating socket...\n");
@@ -304,13 +304,13 @@ void init_run() {
 	memset(&local_addr, 0, sizeof(struct sockaddr_in));
     local_addr.sin_family = AF_INET;
     local_addr.sin_port = htons(0);
-
+    
 	#ifdef _WIN32
 	int int_addr = InetPton(AF_INET, "0.0.0.0", &local_addr.sin_addr.s_addr);
 	#elif __gnu_linux__
 	int int_addr = inet_pton(AF_INET, "0.0.0.0", &local_addr.sin_addr.s_addr);
 	#endif
-	
+
 	if (int_addr <= 0) {
 		if (int_addr == 0)
 			error("Client address not a valid address");
@@ -340,13 +340,33 @@ void close_run() {
 	closesocket(main_sd);
 	closesocket(secondary_sd);
 #elif __gnu_linux__	
+	char msg[200];
+	snprintf(msg, sizeof(msg), "socket descriptors:\n1: %i\n2: %i\n", 
+		main_sd, secondary_sd);
+		printf("%s", msg);
 	if (main_sd != -1 && close(main_sd) != 0) {
+		if (errno == EBADF) {
+			printf("errno = EBADF\n");
+		} else if (errno == EINTR) {
+			printf("errno = EINTR\n");
+		} else if (errno == EIO) {
+			printf("errno = EIO\n");
+		} else {
+			printf("errno = %i\n", errno);
+		}
 		error("could not close main socket");
-		print_errno();
 	}
 	if (secondary_sd != -1 && close(secondary_sd) != 0) {
+		if (errno == EBADF) {
+			printf("errno = EBADF\n");
+		} else if (errno == EINTR) {
+			printf("errno = EINTR\n");
+		} else if (errno == EIO) {
+			printf("errno = EIO\n");
+		} else {
+			printf("errno = %i\n", errno);
+		}
 		error("could not close secondary socket");
-		print_errno();
 	}
 #endif
 	main_sd = secondary_sd = -1;
@@ -354,10 +374,8 @@ void close_run() {
 
 void process_connect() {
 	type = client_type;
-	//stop_connecting_thread();
-	printf("now starting connecting thread\n");
-	start_connecting_thread();
-	printf("started connecting thread\n");
+	//stop_connect_thread();
+	start_connect_thread();
 }
 
 void process_send() {
@@ -368,51 +386,39 @@ void process_send() {
 	} else if (type == client_type) {
 		sd = main_sd;
 	}
-	
 	if (sd != -1) {
-		printf("starting send on socket %i, type %s\n", sd, type == server_type ? "server" : type == client_type ? "client" : "?");
-		//printf("socket fd's:\nlearner listener %i\nlearner connection %i\nmain %i\nsecondary %i\n", learner_listener_sd, learner_conn_sd, main_sd, secondary_sd);
 		//send(SOCKET socket, const char * buffer, int buflen, int flags);
-		//printf("learner connection status:\n");
-		//print_socket_status(learner_conn_sd);
-		//printf("SUT socket status:\n");
-		//print_socket_status(sd);
-		//printf("learner listener socket status:\n");
-		//print_socket_status(learner_listener_sd);
-		//printf("learner connection socket status:\n");
-		//print_socket_status(learner_conn_sd);
-		printf("now sending '%s' with length %i\n", send_buf, (int)strlen(send_buf));
-		send(sd, send_buf, strlen(send_buf), MSG_DONTWAIT);
-	} else {
-		printf("cannot send on sd=-1");
+		if (send(sd, send_buf, strlen(send_buf), MSG_NOSIGNAL ) != -1) {
+			printf("send succeeded\n");
+		}
+		else {
+			printf("send failed\n");
+		}
 	}
-	printf("finishing send\n");
 }
 
-void process_rcv() {
-	int sd = -1;
-	if (type == server_type) {
-		sd = secondary_sd;
-	} else if (type == client_type) {
-		sd = main_sd;
-	}
-	if (sd != -1) {
-		char read_buffer[input_buffer_size];
-		recv(sd, read_buffer, sizeof(read_buffer), MSG_DONTWAIT);
-	}
+void process_recv() {
+	start_recv_thread();
 }
+
+
 
 void process_close() {
 	send_ok();
 	wait_ok();
 	stop_thread();
-	char read_buffer[200];
-	//recv(main_sd, read_buffer, sizeof(read_buffer), 0);
+	int ret;
 #ifdef _WIN32
-	closesocket(main_sd);
+	ret = closesocket(main_sd);
 #elif __gnu_linux__	
-	close(main_sd);
+	ret = close(main_sd);
 #endif
+	if (ret == 0) {
+		printf("close succeded\n");
+	}
+	else {
+		printf("close failed\n");
+	}
 	main_sd = -1;
 }
 
@@ -420,21 +426,24 @@ void process_close_secondary() {
 	send_ok();
 	wait_ok();
 	stop_thread();
-	//char read_buffer[200];
-	//recv(secondary_sd, read_buffer, sizeof(read_buffer), 0);
+	int ret;
 #ifdef _WIN32
-	closesocket(secondary_sd);
+	ret = closesocket(secondary_sd);
 #elif __gnu_linux__	
-	close(secondary_sd);
+	ret = close(secondary_sd);
 #endif
+	if (ret == 0) {
+		printf("close succeded\n");
+	}
+	else {
+		printf("close failed\n");
+	}
 	secondary_sd = -1;
 }
 
 void process_accept() {
-	//stop_accepting_thread();
-	printf("ACCEPT\n");
-	start_accepting_thread();
-	printf("accepting\n");
+	//stop_accept_thread();
+	start_accept_thread();
 }
 
 void process_listen() {
@@ -442,11 +451,11 @@ void process_listen() {
 	printf("LISTEN\n");
 	if (listen(main_sd, 1) == 0) {
 		//answer("OK\n");
-		printf("listening succesfully\n");
+		printf("listen succeeded\n");
 	}
 	else {
 		//answer("NOK\n");
-		printf("listening failed\n");
+		printf("listen failed\n");
 #ifdef __gnu_linux__
 		int sendbuf;
 		socklen_t sendbufsize = sizeof(sendbuf);
@@ -458,103 +467,66 @@ void process_listen() {
 	}
 }
 
-// shifts out the first string in a buffer, so that a buffer
-// string1\0string2 so that it becomes string2 (followed by garbage)
-void shift_out_first_string(char buffer[], int buf_size) {
-	int first_str_len = strlen(buffer);
-	int i;
-	for (i = 0; i + first_str_len + 1 < buf_size; i++) {
-		buffer[i] = buffer[i + first_str_len + 1];
-	}
-}
-
-char learner_input[input_buffer_size];
-int unprocessed_learner_input = 0;
-// Returns 0 if learning should continue, -1 if it stops normally
-// (e.g. through an exit command), any other value if it stops abnormally
 int process_input() {
-	int retVal = 0;
-	if (unprocessed_learner_input == 0) {
-	#ifdef _WIN32
-		int result = recv(learner_conn_sd, learner_input, sizeof(learner_input), 0);
-	#elif __gnu_linux__
-		int result = read(learner_conn_sd, learner_input, sizeof(learner_input));
-	#endif
-		if (result <= 0) { // either -1 for an error, or 0 if connection is closed properly
-			printf("could not read next input from learner\n");
-			print_errno();
-			return 1;
-		} else {
-			printf("Received new command data '%.*s'\n", result, learner_input);
-			unprocessed_learner_input = result;
-		}
+	char read_buffer[input_buffer_size];
+#ifdef _WIN32
+	int result = recv(learner_conn_sd, read_buffer, sizeof(read_buffer), 0);
+#elif __gnu_linux__
+	int result = read(learner_conn_sd, read_buffer, sizeof(read_buffer));
+#endif
+	if (result <= 0) { // either -1 for an error, or 0 if connection is closed properly
+		return -1;
 	}
-	int cmd_length = str_network_to_c(learner_input, unprocessed_learner_input);
-	if (cmd_length == -1) {
-		learner_input[sizeof(learner_input) - 1] = '\0';
-		printf("Could not process input, no newline found. Data:\n'%s'", learner_input);
-		return 1;
-	}
-	printf("processing: '%s'\n", learner_input);
-	
-	if (strncmp(learner_input, "connect", sizeof(learner_input)) == 0) {
+	str_network_to_c(read_buffer);
+	printf("received: %s\n", read_buffer);
+
+	if (strncmp(read_buffer, "connect", sizeof(read_buffer)) == 0) {
 		process_connect();
-	} else if (strncmp(learner_input, "close", sizeof(learner_input)) == 0) {
+	}
+	else if (strncmp(read_buffer, "close", sizeof(read_buffer)) == 0) {
 		process_close();
-	} else if (strncmp(learner_input, "listen", sizeof(learner_input)) == 0) {
+	}
+	else if (strncmp(read_buffer, "listen", sizeof(read_buffer)) == 0) {
 		process_listen();
-	} else if (strncmp(learner_input, "accept", sizeof(learner_input)) == 0) {
+	}
+	else if (strncmp(read_buffer, "accept", sizeof(read_buffer)) == 0) {
 		process_accept();
-	} else if (strncmp(learner_input, "closeconnection", sizeof(learner_input)) == 0) {
+	}
+	else if (strncmp(read_buffer, "rcv", sizeof(read_buffer)) == 0) {
+	 process_recv();
+	}
+	else if (strncmp(read_buffer, "closeconnection", sizeof(read_buffer)) == 0) {
 		process_close_secondary();
-	} else if (strncmp(learner_input, "send", sizeof(learner_input)) == 0) {
+	}
+	else if (strncmp(read_buffer, "send", sizeof(read_buffer)) == 0) {
 		process_send();
-	} else if (strncmp(learner_input, "rcv", sizeof(learner_input)) == 0) {
-		process_rcv();
-	} else if (strncmp(learner_input, "reset", sizeof(learner_input)) == 0) {
-		printf("closing run\n");
+	}
+	
+	else if (strncmp(read_buffer, "reset", sizeof(read_buffer)) == 0) {
 		close_run();
 		send_ok();
-		printf("init run\n");
 		init_run();
-		printf("finished init run\n");
-	/*} else if (strncmp(learner_input, "port", sizeof("port")-1) == 0) {
+	}
+	else if (strncmp(read_buffer, "port", sizeof("port")-1) == 0) {
 		char port_buf[100];
 		strncpy(port_buf, &(read_buffer[sizeof("port")]), sizeof(port_buf));
 		server_port = atoi(port_buf);
-		printf("learner port set to %i\n", server_port);*/
+		printf("learner port set to %i\n", server_port);
 	}
-	else if (strncmp(learner_input, "exit", sizeof(learner_input)) == 0) {
-		retVal = -1;
-	}
-	else if (strncmp(learner_input, "probe", sizeof(learner_input)) == 0) {
-		printf("ignoring probe\n");
+	else if (strncmp(read_buffer, "exit", sizeof(read_buffer)) == 0) {
+		return -1;
 	}
 	else {
-		printf("Unrecognized command %s. Exiting...", learner_input);
-		retVal = 1;
+		printf("Unrecognized command %s. Exiting...", read_buffer);
+		return -1;
 	}
-	
-	// move any unread data to the front of the buffer
-	int processed_learner_input = strlen(learner_input) + 1;
-	unprocessed_learner_input -= processed_learner_input;
-	int shifting = unprocessed_learner_input > 0;
-	int i;
-	if (shifting) {
-		printf("already received next input, shifting it forward\n");
-		shift_out_first_string(learner_input, sizeof(learner_input));
-	}
-	if (shifting) {
-		printf("shifted to '%s'\n", learner_input);
-	}
-	return retVal;
+	return 0;
 }
 
-int run() {
+void run() {
 	init_run();
 	
-	int returnCode;
-	while((returnCode = process_input()) == 0); // stop if not succesfull, e.g. learner socket has closed.
+	while(process_input() != -1); // stop if not succesfull, e.g. learner socket has closed.
 	
 	printf("learner disconnected, terminating\n");
 	
@@ -565,8 +537,6 @@ int run() {
 	#elif __gnu_linux__
 		close(learner_conn_sd);
 	#endif
-	
-	return returnCode;
 }
 
 char* help = "[-c | --continuous] [-l learnerport] [--dport|-p portnumber] [--daddr|-a ip address]";
@@ -609,15 +579,14 @@ int main(int argc, char *argv[]) {
 			return 1;
 		}
 	}
-	printf("listening for learner on port %i, learning on server %s:%i\n", learner_port, server_addr, server_port);
+	printf("listen for learner on port %i, learning on server %s:%i\n", learner_port, server_addr, server_port);
 	if (continuous) {
-		printf("listening continuously, just kill when not needed anymore\n");
+		printf("listen continuously, just kill when not needed anymore\n");
 	}
 	init();
 	// if continuous, keep running, otherwise run once
-	int returnCode;
 	do {
-		returnCode = run();
+		run();
 	} while (continuous);
 	
 	#ifdef _WIN32
@@ -626,9 +595,6 @@ int main(int argc, char *argv[]) {
 	#elif __gnu_linux__	
 		close(learner_listener_sd);	
 	#endif
-	if (returnCode == -1) {
-		return 0;
-	} else {
-		return returnCode;
-	}
+	return 0;
 }
+
