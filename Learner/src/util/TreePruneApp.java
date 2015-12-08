@@ -1,5 +1,6 @@
 package util;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -27,38 +28,86 @@ public class TreePruneApp {
 			System.out.println("Could not read tree, aborting...");
 			System.exit(1);
 		}
-		System.out.println("Do you want to remove an input (0) or an output (!0)");
-		boolean isInput = scanner.nextLine().trim().equals("0");
-		String msgType = isInput ? "input" : "output";
-		System.out.println("Which " + msgType + "  do you want to remove? You can use a java-regex, such as '.*PSH.*'");
-		String suspiciousOutput = scanner.nextLine();
-		sanitizeBranch(tree, isInput, Pattern.compile(suspiciousOutput));
+		System.out.println("Do you want to remove an input (0), an output (1) or an input/output transition(2)");
+		int option = Integer.valueOf(scanner.nextLine().trim());
+		String msgType = option==1 ? "input" : option == 2? "output" : "transition";
+		System.out.println("Which " + msgType + "  do you want to remove? You can use a java-regex, such as '.*PSH.*'. For transitions use input|output");
+		String matchPattern = scanner.nextLine();
+		BranchMatcher branchMatcher = null;
+		switch(option) {
+		case 0: branchMatcher = new BranchWithInput(Pattern.compile(matchPattern)); break;
+		case 1: branchMatcher = new BranchWithOutput(Pattern.compile(matchPattern)); break;
+		default: 
+		    String [] io = matchPattern.split("\\|");
+		    branchMatcher = new BranchWithTransition(Pattern.compile(io[0]), Pattern.compile(io[1]));
+		}
+		sanitizeBranch(tree, branchMatcher);
 		Main.writeCacheTree(tree, true);
 		System.out.println("Tree written");
 		scanner.close();
 	}
 	
-	private static void sanitizeBranch(ObservationTree tree, boolean isInput, Pattern removePattern) {
+	private static void sanitizeBranch(ObservationTree tree, BranchMatcher branchMatcher) {
 		Set<Symbol> inputs = new HashSet<>(tree.getInputs());
 		for (Symbol input : inputs) {
 		    ObservationTree child = tree.getState(input);
-		    if (!isInput) {
-    			String outputString = tree.getOutput(input).toString();
-    			Matcher m = removePattern.matcher(outputString);
-    			if (m.matches()) {
-    				child.remove();
-    			} else {
-    				sanitizeBranch(child, isInput, removePattern);
-    			}
+		    String inputString = input.toString();
+		    String outputString = tree.getOutput(input).toString();
+		    if (branchMatcher.isMatch(inputString, outputString)) {
+		        System.out.println("Removing: " + tree.getInputs());
+		        child.remove();
 		    } else {
-		        String inputString = input.toString();
-		        Matcher m = removePattern.matcher(inputString);
-                if (m.matches()) {
-                    child.remove();
-                } else {
-                    sanitizeBranch(child, isInput, removePattern);
-                }
+		        sanitizeBranch(child, branchMatcher);
 		    }
 		}
+	}
+	
+	static class BranchWithTransition implements BranchMatcher{
+
+        private BranchWithInput inputMatcher;
+        private BranchWithOutput outputMatcher;
+
+        public BranchWithTransition(Pattern inputMatch, Pattern outputMatch) {
+	        this.inputMatcher = new BranchWithInput(inputMatch);
+	        this.outputMatcher = new BranchWithOutput(outputMatch);
+	    }
+	    
+        public boolean isMatch(String input, String output) {
+            return this.inputMatcher.isMatch(input, output) && this.outputMatcher.isMatch(input, output);
+        }
+	    
+	}
+	
+	
+	
+    static class BranchWithInput implements BranchMatcher{
+        private Pattern inputMatch;
+
+        public BranchWithInput(Pattern outputMatch) {
+            this.inputMatch = outputMatch;
+        }
+
+        public boolean isMatch(String input, String output) {
+            Matcher m = inputMatch.matcher(input);
+            return m.matches();
+        }
+    }
+	
+    static class BranchWithOutput implements BranchMatcher{
+	    private Pattern outputMatch;
+
+        public BranchWithOutput(Pattern outputMatch) {
+	        this.outputMatch = outputMatch;
+	    }
+
+        public boolean isMatch(String input, String output) {
+            Matcher m = outputMatch.matcher(output);
+            return m.matches();
+        }
+	}
+	
+	static interface BranchMatcher {
+	   
+	    public boolean isMatch(String input, String output);
 	}
 }

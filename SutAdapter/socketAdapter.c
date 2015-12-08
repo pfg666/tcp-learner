@@ -260,6 +260,8 @@ void init() {
 	learner_addr.sin_family = AF_INET; 
 	learner_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	learner_addr.sin_port = htons(learner_port);
+    int yes = 1;
+    setsockopt(learner_listener_sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 	bind(learner_listener_sd, (struct sockaddr*)&learner_addr, sizeof(learner_addr));
 	
 	if (listen(learner_listener_sd, 1) != 0) {
@@ -597,4 +599,5 @@ int main(int argc, char *argv[]) {
 	#endif
 	return 0;
 }
+
 

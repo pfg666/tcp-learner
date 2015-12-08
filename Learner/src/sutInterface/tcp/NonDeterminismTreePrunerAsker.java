@@ -30,5 +30,6 @@ public class NonDeterminismTreePrunerAsker extends NonDeterminismTreePruner {
 				break loop;
 			}
 		}
+		scanner.close();
 	}
 }

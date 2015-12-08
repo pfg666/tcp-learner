@@ -144,18 +144,31 @@ public class TraceRunner {
 	
 	public void testTrace(int iterations) {
 		for (int i = 0; i < iterations; i++) {
-			runTrace((i+1));
+			boolean check = runTrace((i+1));
+			if (!check) {
+			    break;
+			}
+			
 		}
 	    sutWrapper.sendReset();
 	}
 	
-	protected void runTrace(int printNumber) {
+	protected boolean runTrace(int printNumber) {
 		List<String> outcome = new LinkedList<String>();
+		boolean checkResult = true;
 		sutWrapper.sendReset();
 		System.out.println("# " + printNumber);
 		//System.out.println("# " + number + " @@@ " + this.sutWrapper.toString());
 		for (InputAction input : inputTrace) {
 			OutputAction output;
+			if (input.getMethodName().startsWith("=")) {
+			    String checkOutput = input.getMethodName().substring(1);
+			    boolean check = checkOutput.compareToIgnoreCase(outcome.get(outcome.size()-1)) == 0;
+			    if (!check) {
+			        checkResult = false;
+			    }
+			    continue;
+			}
 			if (input.getMethodName().equals("reset")) {
 				this.sutWrapper.sendReset();
 				output = new OutputAction("RESET");
@@ -171,5 +184,6 @@ public class TraceRunner {
 			currentCounter = 0;
 		}
 		outcomes.put(outcome, currentCounter + 1);
+		return checkResult;
 	}
 }
