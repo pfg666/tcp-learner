@@ -22,6 +22,7 @@ import sutInterface.tcp.MapperSutWrapper;
 import util.InputAction;
 import util.Log;
 import util.OutputAction;
+import util.Tuple2;
 import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.interfaces.Word;
 
@@ -37,43 +38,51 @@ public class TraceRunner {
 	private final List<InputAction> inputTrace;
 	//private final CacheInputValidator validator;
 	
+	public static Tuple2<List<String>,Integer> readTraceAndIterations() {
+	    List<String> trace;
+	    try {
+            trace = Files.readAllLines(Paths.get(PATH), StandardCharsets.US_ASCII);
+        } catch (IOException e) {
+            System.out.println("usage of java tracerunner: create a file '" + PATH + "' with the input on each line', optionally preceded by the number of times the input should be repeated");
+            return null;
+        }
+        ListIterator<String> it = trace.listIterator();
+        System.out.println("TRACE FILE: ");
+        int i = 1;
+        while(it.hasNext()) {
+            String line = it.next().trim();
+            System.out.print((i++) + ": " + line);
+            if (line.startsWith("#") || line.startsWith("!")) {
+                it.remove();
+                System.out.println(" (skipped)");
+            } else {
+                 if ( line.isEmpty()) {
+                     it.remove();
+                     while (it.hasNext()) {
+                         it.next();
+                         it.remove();
+                     } 
+                 } else {
+                     System.out.println();
+                 }
+            }
+        }
+        int iterations;
+        try {
+            iterations = Integer.parseInt(trace.get(0));
+            trace.remove(0);
+        } catch (NumberFormatException e) {
+            iterations = 1;
+        }
+        return new Tuple2<List<String>,Integer>(trace, iterations);
+	}
+	
 	public static void main(String[] args) throws IOException {
 		Main.handleArgs(args);
-		List<String> trace;
-		try {
-			trace = Files.readAllLines(Paths.get(PATH), StandardCharsets.US_ASCII);
-		} catch (IOException e) {
-			System.out.println("usage of java tracerunner: create a file '" + PATH + "' with the input on each line', optionally preceded by the number of times the input should be repeated");
-			return;
-		}
-		ListIterator<String> it = trace.listIterator();
-		System.out.println("TRACE FILE: ");
-		int i = 1;
-		while(it.hasNext()) {
-			String line = it.next();
-			System.out.print((i++) + ": " + line);
-			if (line.startsWith("#") || line.startsWith("!")) {
-				it.remove();
-				System.out.println(" (skipped)");
-			} else {
-				 if ( line.isEmpty()) {
-					 it.remove();
-					 while (it.hasNext()) {
-						 it.next();
-						 it.remove();
-					 } 
-				 } else {
-					 System.out.println();
-				 }
-			}
-		}
-		int iterations;
-		try {
-			iterations = Integer.parseInt(trace.get(0));
-			trace.remove(0);
-		} catch (NumberFormatException e) {
-			iterations = 1;
-		}
+		Tuple2<List<String>, Integer> traceAndIncrement = readTraceAndIterations();
+		List<String> trace = traceAndIncrement.tuple0;
+		Integer iterations = traceAndIncrement.tuple1;
+
 		Log.fatal("Start running trace " + iterations + " times");
 
 		Main.setupOutput("trace runner output.txt");

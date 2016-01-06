@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import learner.Main;
@@ -60,6 +62,30 @@ public class ObservationTree implements Serializable {
 			return parentChain;
 		}
 	}
+	
+	public List<Symbol> getInputOutputChain() {
+	    if (this.parent == null) {
+	        return new LinkedList<Symbol>();
+    	} else {
+    	    List<Symbol> parentChain = this.parent.getInputOutputChain();
+    	    parentChain.add(getInputFromParent());
+    	    parentChain.add(parentOutput);
+    	    return parentChain;
+    	}
+	}
+	
+	private Symbol getInputFromParent() {
+	    if (this.parent != null) {
+	        Set<Entry<Symbol, ObservationTree>> set = this.parent.children.entrySet();
+	        for (Entry<Symbol, ObservationTree> a : set) {
+	            if (a.getValue() == this) 
+	                return a.getKey();
+	        }
+	    }
+	    return null;
+	}
+	
+	
 
 	/**
 	 * Add one input and output symbol and traverse the tree to the next node
@@ -201,6 +227,9 @@ public class ObservationTree implements Serializable {
 		if (this.parent == null) {
 			throw new RuntimeException("Cannot remove root node");
 		}
+		for (ObservationTree subTree : this.getAllSubTrees()) {
+            System.out.println(subTree.getInputOutputChain());
+        }
 		for (Symbol symbol : this.parent.children.keySet()) {
 			if (this == this.parent.children.get(symbol)) {
 				this.parent.children.remove(symbol);
@@ -214,8 +243,28 @@ public class ObservationTree implements Serializable {
 		this.remove(WordConverter.toSymbolList(accesSequence));
 	}
 	
+	private Set<ObservationTree> getAllSubTrees() {
+	    if (this.children.isEmpty()) {
+	        return new LinkedHashSet<ObservationTree>();
+	    } else {
+	        LinkedHashSet<ObservationTree> childSet = new LinkedHashSet<ObservationTree>(children.values());
+	        
+	        for (ObservationTree child : childSet.toArray(new ObservationTree [childSet.size()])) {
+	            childSet.addAll(child.getAllSubTrees());
+	        }
+	        
+	        return childSet;
+	    }
+	}
+	
 	public void remove(List<Symbol> accessSequence) throws RemovalException {
+	    
 		if (accessSequence.isEmpty()) {
+		    System.out.println("Removing: " + getInputOutputChain());
+		    System.out.println("Also removing subtrees branches"); 
+		    for (ObservationTree subTree : this.getAllSubTrees()) {
+		        System.out.println(subTree.getInputOutputChain());
+		    }
 			this.remove();
 		} else {
 			ObservationTree child = this.children.get(accessSequence.get(0));
@@ -231,7 +280,12 @@ public class ObservationTree implements Serializable {
 	}
 	
 	public class RemovalException extends RuntimeException {
-		public RemovalException() {
+		/**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
+        public RemovalException() {
 			super();
 		}
 		

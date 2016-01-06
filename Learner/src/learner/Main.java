@@ -16,19 +16,16 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import org.antlr.v4.parse.ANTLRParser.throwsSpec_return;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+
 import sutInterface.SutInfo;
 import sutInterface.tcp.LearnResult;
 import sutInterface.tcp.MapperSutWrapper;
@@ -40,8 +37,8 @@ import util.Log;
 import util.ObservationTree;
 import util.SoundUtils;
 import util.Tuple2;
-import util.exceptions.CorruptedLearningException;
 import util.exceptions.CacheInconsistencyException;
+import util.exceptions.CorruptedLearningException;
 import util.learnlib.Dot;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.packs.ObservationPack;
@@ -67,7 +64,7 @@ public class Main {
 	public static LearningParams learningParams;
 	private static long timeSnap = System.currentTimeMillis();;
 	public static final String outputDir = "output" + File.separator + timeSnap;
-	private static File outputFolder;
+	private static File outputFolder = null;
 	public static PrintStream learnOut;
 	public static PrintStream absTraceOut, absAndConcTraceOut;
 	public static PrintStream stdOut = System.out;
@@ -87,15 +84,16 @@ public class Main {
 				
 	private static List<Runnable> shutdownHooks = new ArrayList<>();
 
-    private static PrintStream dupStdout;
-	
 	public static void main(String[] args) throws LearningException, IOException, Exception {
 		try{
 			// wrapper around main to return a useful error code upon nondeterminism
 			runLearner(args);
 		} catch (CorruptedLearningException e) {
 			System.exit(42);
-		}
+		} 
+//		catch (CacheInconsistencyException e) {
+//		    main(args);
+//		}
 	}
 					
 	public static void runLearner(String[] args) throws LearningException, IOException, Exception {
@@ -223,8 +221,6 @@ public class Main {
 		absAndConcTraceOut.println("copy this to obtain the regex describing any text between two inputs of a trace:\n[^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n][^\\r\\n]*[\\r\\n]\n\n");
 		learnOut = new PrintStream(
 				new FileOutputStream(outputDir + File.separator + "learnLog.txt", false));
-		dupStdout =  new PrintStream(
-                new FileOutputStream(outputDir + File.separator + "stdout.txt", false));
 	    errOut = new PrintStream(
 	                new FileOutputStream(outputDir + File.separator + "err.txt", false));
 	    Log.setErrorPrintStream(errOut);
@@ -418,8 +414,8 @@ public class Main {
 			tree = new ObservationTree();
 		}
 		
-		int minAttempts = 2, maxAttempts = 100;
-		double probFraction = 0.80;
+		int minAttempts = tcp.runsPerQuery, maxAttempts = 100;
+		double probFraction = (double) tcp.confidence / 100;
 		
 		SutInterfaceBuilder builder = new SutInterfaceBuilder();
 		Oracle eqOracleRunner = builder
@@ -448,17 +444,6 @@ public class Main {
 				.queryCounter(nrMembershipQueries)
 				.learnerInterface();
 		
-		/*Oracle eqOracleRunner =
-				new NonDeterminismValidatorWrapper(10, 
-				new ObservationTreeWrapper(tree, new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-		Oracle memOracleRunner = 
-				new NonDeterminismValidatorWrapper(10,
-						new ObservationTreeWrapper(tree, new LogOracleWrapper( new MembershipOracle(sutWrapper))));
-		*/
-		/*ObservationTree tree = new ObservationTree();
-		Oracle eqOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new EquivalenceOracle(sutWrapper)))); //new LogOracleWrapper(new EquivalenceOracle(sutWrapper));
-		Oracle memOracleRunner = new InvCheckOracleWrapper(new ObservationTreeWrapper(tree, new LogOracleWrapper(new MembershipOracle(sutWrapper))));
-		*/
 		return new Tuple2<Oracle,Oracle>(memOracleRunner, eqOracleRunner);
 	}
 
@@ -524,7 +509,15 @@ public class Main {
 	public static int cachedTreeNum = 0;
 	
 	public static void writeCacheTree(ObservationTree tree, boolean isFinal) {
-		writeCacheTree(tree, isFinal?CACHE_FILE:cachedTreeNum+CACHE_FILE);
+	    
+	    String cachePath = CACHE_FILE;
+	    String indexedCachePath = cachedTreeNum + CACHE_FILE;
+		writeCacheTree(tree, isFinal?cachePath:indexedCachePath);
+		if (outputFolder != null) {
+    		cachePath = outputDir + File.separator + cachePath;
+    		indexedCachePath = outputDir + File.separator + indexedCachePath;
+    		writeCacheTree(tree, isFinal?cachePath:indexedCachePath);
+		}
 	}
 	
 	public static void writeCacheTree(ObservationTree tree, String fileName) {

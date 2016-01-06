@@ -35,7 +35,7 @@ public class WinInvlangRandomMapper extends InvlangMapper {
         Integer lastLearnedSeqInt = (Integer) handler.getState().get("lastLearnerSeq");
         Integer concSeq;
         
-        if (lastLearnedSeqInt == InvlangMapper.NOT_SET) {
+        if (lastLearnedSeqInt == null || lastLearnedSeqInt == InvlangMapper.NOT_SET) {
             concSeq = (int) Calculator.randWithinRange(1000L, 0xffffL);
         } else {
             concSeq = (int) Calculator.sum(lastLearnedSeqInt, Calculator.randWithinRange(70000,100000));

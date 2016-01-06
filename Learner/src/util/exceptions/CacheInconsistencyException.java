@@ -47,7 +47,11 @@ public class CacheInconsistencyException extends NonDeterminismException {
 	 * @return
 	 */
 	public Word getShortestInconsistentInput() {
-		return WordConverter.toWord(WordConverter.toSymbolList(this.input).subList(0, this.oldOutput.size()));
+	    int indexOfInconsistency = 0;
+	    while (oldOutput.getSymbolByIndex(indexOfInconsistency).equals(newOutput.getSymbolByIndex(indexOfInconsistency))) {
+	        indexOfInconsistency ++;
+	    }
+		return WordConverter.toWord(WordConverter.toSymbolList(this.input).subList(0, indexOfInconsistency));
 	}
 	
 	@Override

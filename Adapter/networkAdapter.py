@@ -38,7 +38,8 @@ class Adapter:
         self.serverSocket.bind((self.socketIP, commPort))
         # become a server socket
         self.serverSocket.listen(1)
-
+    
+    def establishConnectionWithLearner(self):
         # accept connections from outside
         (clientSocket, address) = self.serverSocket.accept()
         print "learner address connected: " + str(address)
@@ -92,6 +93,9 @@ class Adapter:
                     ready = select([self.learnerSocket], [], [], 1000)
                     if ready[0]:
                         self.data = self.learnerSocket.recv(1024)
+                        if len(self.data) == 0:
+                            print "learner closed"
+                            return None
                     else:
                         self.fault("Learner socket has been unreadable for too long")
                 except IOError:
@@ -123,6 +127,11 @@ class Adapter:
         #count = 0
         while (True):
             input1 = self.receiveInput()
+            if input1 is None:
+                print " Learner closed socket. Closing learner socket."
+                self.closeLearnerSocket()
+                self.establishConnectionWithLearner()
+                continue
             print "received input " + input1
             seqNr = 0
             ackNr = 0
@@ -137,13 +146,15 @@ class Adapter:
                 msg = "Received exit signal " +  "(continuous" +  "=" + str(self.continuous) + ") :"  
                 if self.continuous == False:
                     msg = msg + " Closing all sockets"
+                    print msg
                     self.closeSockets()
                     self.sender.sendReset()
+                    return
                 else:
                     msg = msg + " Closing only learner socket (so we are ready for a new session)"
+                    print msg
                     self.closeLearnerSocket()
-                print msg
-                return
+                    self.establishConnectionWithLearner()
             else:
                 print "*****"
                 if sender.isFlags(input1):
@@ -189,5 +200,6 @@ class Adapter:
         print "listening on "+str(self.socketIP) + ":" +str(self.socketPort)
         signal.getsignal(signal.SIGINT)
         self.setUpSocket(self.socketPort)
+        self.establishConnectionWithLearner()
         self.handleInput(sender)
 

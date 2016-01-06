@@ -60,16 +60,20 @@ public class YannakakisEquivalenceOracle implements EquivalenceOracle{
 					try {
 						sutOutput = oracle.processQuery(wordInput);
 						if (!hypOutput.equals(sutOutput)) {
+						    sutOutput = oracle.processQuery(wordInput);
+						    if (!hypOutput.equals(sutOutput)) {
 							Log.err("Yannakakis counterexample \n" +
 									"for input: " + wordInput + "\n" +
 									"expected: " + sutOutput + "\n" +
 									"received: " + hypOutput);
+							
 							EquivalenceOracleOutputImpl equivOracleOutput = new EquivalenceOracleOutputImpl();
 							equivOracleOutput.setCounterExample(wordInput);
 							equivOracleOutput.setOracleOutput(sutOutput);
 							wrapper.close();
 							Log.err("Counterexample found after " + hypTestNumber + " attempts");
 							return equivOracleOutput;
+						    }
 						}
 					} catch (LearningException e) {
 						e.printStackTrace();
