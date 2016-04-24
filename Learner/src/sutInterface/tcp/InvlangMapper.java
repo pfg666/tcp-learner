@@ -1,6 +1,5 @@
 package sutInterface.tcp;
 
-import invlang.inverter.Reducer;
 import invlang.mapperReader.InvLangHandler;
 import invlang.semantics.programTree.expressionTree.Expression;
 import invlang.types.EnumValue;

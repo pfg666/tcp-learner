@@ -40,9 +40,11 @@ public class SocketWrapper {
 	}
 
 	public void writeInput(String input) {
+	    if (sockout != null) {
 		Log.info("IN: "+ input);
 		sockout.println(input);
 		sockout.flush();
+	    }
 	}
 
 	public String readOutput() {
@@ -60,12 +62,14 @@ public class SocketWrapper {
 	}
 
 	public void close() {
+	    if (sockout != null) {
 		sockout.write("exit");
 		try {
 			sock.close();
 		} catch (IOException ex) {
 
 		}
+	    }
 		/*sockout.close();
 		try {
 			sockin.close();

@@ -95,13 +95,7 @@ public class WinInvlangRandomMapper extends InvlangMapper {
     
     private List<Long> getPointsOfInterest() {
         List<Long> valuesOfInterest = new ArrayList<Long>();
-//        valuesOfInterest.add(InvlangMapper.getUnsignedInt((Integer) (handler.getState().get("learnerSeq"))));
-//        valuesOfInterest.add(InvlangMapper.getUnsignedInt((Integer) (handler.getState().get("learnerSeq")))+1);
-//        valuesOfInterest.add(InvlangMapper.getUnsignedInt((Integer) (handler.getState().get("sutSeq"))));
-//        valuesOfInterest.add(InvlangMapper.getUnsignedInt((Integer) (handler.getState().get("sutSeq")))+1);
-//        valuesOfInterest.add(InvlangMapper.getUnsignedInt((Integer) (handler.getState().get("learnerSeqProposed"))));
-//        valuesOfInterest.add(0L);
-//        
+
         for (Entry<String, Object> entry : this.handler.getState().entrySet()) {
             if (entry.getValue() instanceof Integer) {
                 int value = (Integer) entry.getValue();

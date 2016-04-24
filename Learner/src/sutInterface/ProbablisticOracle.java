@@ -4,14 +4,12 @@ import java.util.List;
 
 import util.Counter;
 import util.Log;
-import util.exceptions.CacheInconsistencyException;
 import util.exceptions.NonDeterminismException;
 import util.learnlib.WordConverter;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.interfaces.Oracle;
 import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.interfaces.Word;
-import de.ls5.jlearn.shared.WordImpl;
 
 public class ProbablisticOracle implements Oracle {
 	private static final long serialVersionUID = 165336527L;
@@ -37,10 +35,24 @@ public class ProbablisticOracle implements Oracle {
 		List<Symbol> input = inputWord.getSymbolList();
 		Counter<List<Symbol>> responseCounter = new Counter<List<Symbol>>();
 		boolean finished = false;
+		boolean firstAttempt = true;
 		do {
+		    
 			if (responseCounter.getTotalNumber() >= this.maximumAttempts) {
-				Log.err("Non-determinism found by probablistic oracle for input\n" + inputWord + "\noutputs:\n" + responseCounter);
-				throw new NonDeterminismException(inputWord);
+			    if (firstAttempt) {
+                    try {
+                        Log.err("Sleeping 3 minutes to check if the non-det will clear");
+                        Thread.sleep(180000);
+                        firstAttempt = false;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    responseCounter.reset();
+    			} 
+			    else {
+    				Log.err("Non-determinism found by probablistic oracle for input\n" + inputWord + "\noutputs:\n" + responseCounter);
+    				throw new NonDeterminismException(inputWord);
+			    }
 			}
 			List<Symbol> output = this.oracle.processQuery(inputWord).getSymbolList();
 			responseCounter.count(output);

@@ -37,6 +37,7 @@ import util.Log;
 import util.ObservationTree;
 import util.SoundUtils;
 import util.Tuple2;
+import util.exceptions.BugException;
 import util.exceptions.CacheInconsistencyException;
 import util.exceptions.CorruptedLearningException;
 import util.learnlib.Dot;
@@ -80,7 +81,8 @@ public class Main {
 				nrEquivalenceQueries = new Container<>(),
 				nrUniqueEquivalenceQueries = new Container<>(),
 				nrResets = new Container<>();
-	private static YannakakisEquivalenceOracle yanOracle;
+	private static IOEquivalenceOracle yanOracle;
+	private static IOEquivalenceOracle yanOracle2;
 				
 	private static List<Runnable> shutdownHooks = new ArrayList<>();
 
@@ -176,13 +178,17 @@ public class Main {
 	
 	private static void copyInputsToOutputFolder() {
 		File inputFolder = sutConfigFile.getParentFile();
+		if (!inputFolder.getName().equalsIgnoreCase("input")) {
+		    Log.err("Could not find input folder \"input\", so not copying ");
+		    return;
+		}
 		Path srcInputPath = inputFolder.toPath();
 		Path dstInputPath = outputFolder.toPath().resolve(inputFolder.getName()); // or resolve("input")
-		Path srcTcpPath = Paths.get(System.getProperty("user.dir")).resolve("Learner").resolve("src").resolve("sutInterface").resolve("tcp");
-		Path dstTcpPath = outputFolder.toPath().resolve("tcp");
+		//Path srcTcpPath = Paths.get(System.getProperty("user.dir")).resolve("Learner").resolve("src").resolve("sutInterface").resolve("tcp");
+		//Path dstTcpPath = outputFolder.toPath().resolve("tcp");
 		try {
 			FileManager.copyFromTo(srcInputPath, dstInputPath);
-			FileManager.copyFromTo(srcTcpPath, dstTcpPath);
+		//	FileManager.copyFromTo(srcTcpPath, dstTcpPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -300,9 +306,9 @@ public class Main {
 					EquivalenceOracleOutput o = null;
 					o = eqOracle
 						.findCounterExample(hyp);
-					if (yanOracle != null) {
-						stats.addNrHypothesisEquivalenceQueries(yanOracle.getNrHypthesisTests());
-					}	
+					int nrHypTests = getNrHypTests();
+					stats.addNrHypothesisEquivalenceQueries(nrHypTests);
+					
 					stats.totalEquivQueries = nrEquivalenceQueries.value;
 					stats.totalUniqueEquivQueries = nrUniqueEquivalenceQueries.value;
 					absTraceOut.flush();
@@ -350,7 +356,20 @@ public class Main {
 		return learnResult;
 	}
 	
-	private static void logCounterExampleAnalysis(Automaton hyp, int hypCounter, EquivalenceOracleOutput o) throws IOException {
+	private static int getNrHypTests() {
+	    int nrTests = 0;
+	    if (yanOracle != null) {
+            nrTests += yanOracle.getNrHypthesisTests(); 
+            yanOracle.clearNrHypTests();
+        }   
+        if (yanOracle2 != null) {
+            nrTests += yanOracle2.getNrHypthesisTests();
+            yanOracle2.clearNrHypTests();
+        }
+        return nrTests;
+    }
+
+    private static void logCounterExampleAnalysis(Automaton hyp, int hypCounter, EquivalenceOracleOutput o) throws IOException {
 		PrintStream out = new PrintStream( new FileOutputStream(outputDir + File.separator +"cexanalysis.txt", true));
 		Word ceInputWord = o.getCounterExample();
 		Word oracleOutputWord = o.getOracleOutput();
@@ -382,25 +401,38 @@ public class Main {
 		errOut.close();
 	}
 	
+	// I hacked in the additional yannakakis command
 	private static de.ls5.jlearn.interfaces.EquivalenceOracle buildEquivalenceOracle(LearningParams learningParams, Oracle queryOracle) {
-		de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle;
+		List<de.ls5.jlearn.interfaces.EquivalenceOracle> eqOracles = new ArrayList<de.ls5.jlearn.interfaces.EquivalenceOracle>();
 		if (learningParams.yanCommand == null) {
 			Random random = new Random(learningParams.seed);
-			RandomWalkEquivalenceOracle eqOracle1 = new RandomWalkEquivalenceOracle(learningParams.maxNumTraces,
+			RandomWalkEquivalenceOracle randEqOracle = new RandomWalkEquivalenceOracle(learningParams.maxNumTraces,
 					learningParams.minTraceLength, learningParams.maxTraceLength);
-			eqOracle1.setOracle(queryOracle);
-			eqOracle1.setRandom(random);
-			eqOracle = eqOracle1;
-		} else {
-			YannakakisWrapper.setYannakakisCmd(learningParams.yanCommand);
-			yanOracle = new YannakakisEquivalenceOracle(queryOracle, learningParams.maxNumTraces, nrUniqueEquivalenceQueries);
-			eqOracle = yanOracle;
+			randEqOracle.setOracle(queryOracle);
+			randEqOracle.setRandom(random);
+			eqOracles.add(randEqOracle);
 		}
 		if (learningParams.testTraces != null && !learningParams.testTraces.isEmpty()) {
-			WordCheckingEquivalenceOracle eqOracle2 = new WordCheckingEquivalenceOracle(queryOracle, learningParams.testTraces);
-			CompositeEquivalenceOracle compOracle = new CompositeEquivalenceOracle(eqOracle2, eqOracle);
-			eqOracle = compOracle;
+            WordCheckingEquivalenceOracle wordEqOracle = new WordCheckingEquivalenceOracle(queryOracle, learningParams.testTraces);
+            eqOracles.add(wordEqOracle);
+        }
+		
+		if (learningParams.yanCommand != null) {
+		    yanOracle = new IOEquivalenceOracle(queryOracle, learningParams.maxNumTraces, learningParams.yanCommand, nrUniqueEquivalenceQueries);
+			eqOracles.add(yanOracle);
 		}
+	    if (learningParams.yanCommand2 != null) {
+	        yanOracle2 = new IOEquivalenceOracle(queryOracle, Integer.MAX_VALUE, learningParams.yanCommand2, nrUniqueEquivalenceQueries);
+	        eqOracles.add(yanOracle2);
+	    }
+	    de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle = null;
+	    if (eqOracles.isEmpty()) {
+	        throw new BugException("No equivalence oracle could be defined");
+	    } else if (eqOracles.size() == 1) {
+	        eqOracle = eqOracles.get(0);
+	    } else {
+	        eqOracle = new CompositeEquivalenceOracle(eqOracles.toArray(new de.ls5.jlearn.interfaces.EquivalenceOracle [eqOracles.size()]));
+	    }
 		return eqOracle;
 	}
 	
@@ -507,6 +539,10 @@ public class Main {
 	}
 	
 	public static int cachedTreeNum = 0;
+	
+	public static ObservationTree getTree() {
+	    return tree;
+	}
 	
 	public static void writeCacheTree(ObservationTree tree, boolean isFinal) {
 	    

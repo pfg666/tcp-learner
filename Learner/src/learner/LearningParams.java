@@ -9,6 +9,7 @@ public class LearningParams {
 	public String algorithm = "Angluin";
 	public List<List<String>> testTraces = null;
 	public String yanCommand = null;
+	public String yanCommand2 = null;
 	public int maxValue;
 	public int minValue;
 	public long seed;

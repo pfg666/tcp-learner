@@ -52,7 +52,7 @@ public class SimpleWindowsMapper implements MapperInterface {
 			newSeq = Calculator.randWithinRange(0, Calculator.MAX_NUM);
 		} else {
 			// we should generate random values greater than learnerSeq that are outside of the window ( I assume WINDOW_SIZE < 10000)
-			newSeq = Calculator.randWithinRange(Calculator.sum(oldSeq, 10000), Calculator.sum(oldSeq, 20000));
+			newSeq = Calculator.randWithinRange(Calculator.sum(oldSeq, 90000), Calculator.sum(oldSeq, 100000));
 		}
 		oldSeq = newSeq;
 		

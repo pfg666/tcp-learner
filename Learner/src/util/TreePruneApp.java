@@ -1,6 +1,5 @@
 package util;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -8,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.ls5.jlearn.interfaces.Symbol;
-import de.ls5.jlearn.shared.SymbolImpl;
 
 import learner.Main;
 
