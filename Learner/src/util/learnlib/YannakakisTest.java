@@ -39,6 +39,11 @@ public class YannakakisTest {
         System.out.println("Best seed:" + seed);
     }
     
+    /**
+     * Instantiates a yannakakis test generation command for seeds from minSeed to maxSeed and picks the best seed out of the lot,
+     * that is, the seed for which the suite generated would require the fewest runs on the sut.
+     * 
+     */
     public static Tuple2<List<LinkedList<String>>,Integer>  getMinimumalTestSuite(Automaton automaton, ObservationTree root, String yanCmd, int minSeed, int maxSeed) throws IOException{
         seed = -1;
         int minCount = MAX_NUM;
@@ -47,7 +52,7 @@ public class YannakakisTest {
         
         for (int i = minSeed; i < maxSeed; i ++) {
             String yannakakisCmdWithSeed = changeSeed(yanCmd, i);
-            testNode = getTestSuite(automaton, root, yannakakisCmdWithSeed, MAX_NUM);
+            testNode = getTestSuiteTree(automaton, root, yannakakisCmdWithSeed, MAX_NUM);
             int suitSize = testNode.getCount(); 
             if (suitSize < minCount) {
                minCount = suitSize;
@@ -60,7 +65,15 @@ public class YannakakisTest {
         return new Tuple2<List<LinkedList<String>>,Integer> (minimalTestNode.getTests(), minimalTestNode.getCount());
     }
     
-    public static Node getTestSuite(Automaton readAutomaton, ObservationTree root, String yannakakisCmd, int maxCount) throws IOException {
+    /**
+     * Runs a yannakakisCmd for test generation on the provided automaton. The tests generated are distributed in
+     * a tree. A count is kept of the actual number of tests that would be run on the SUT. This is done by checking if the tests generated
+     * are included in the ObservationTree, and if so, decrementing a counter.
+     * 
+     * TODO The count should also be decremented when a new test is covered (that is, it is already included in the test tree), or when
+     * a new test covers tests already present in the test tree. 
+     */
+    private static Node getTestSuiteTree(Automaton readAutomaton, ObservationTree root, String yannakakisCmd, int maxCount) throws IOException {
         YannakakisWrapper wrapper = new YannakakisWrapper(readAutomaton, yannakakisCmd);
         Node testTree = new Node();
         
@@ -88,7 +101,10 @@ public class YannakakisTest {
         return testTree;
     }
     
-    public static String changeSeed(String yanCmd, int newSeed) {
+    /**
+     * Replaces the seed used in running the yannakakis command with a different one.
+     */
+    private static String changeSeed(String yanCmd, int newSeed) {
         String[] split = yanCmd.split("\\s");
         int i = 0;
         while (!split[i].contains("seed") && i < split.length) {
