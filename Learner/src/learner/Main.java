@@ -17,7 +17,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,9 +92,6 @@ public class Main {
 		} catch (CorruptedLearningException e) {
 			System.exit(42);
 		} 
-//		catch (CacheInconsistencyException e) {
-//		    main(args);
-//		}
 	}
 					
 	public static void runLearner(String[] args) throws LearningException, IOException, Exception {
@@ -253,7 +249,7 @@ public class Main {
 		});
 	}
 
-	public static LearnResult learn(Learner learner,
+	private static LearnResult learn(Learner learner,
 			de.ls5.jlearn.interfaces.EquivalenceOracle eqOracle, SingleTransitionReducer ceReducer)
 			throws LearningException, ObservationConflictException, IOException {
 		LearnResult learnResult = new LearnResult();
@@ -339,12 +335,6 @@ public class Main {
 					absTraceOut.flush();
 					errOut.flush();
 				} catch (CacheInconsistencyException e) {
-					int testIterations = config.learningParams.nonDeterminismTestIterations;
-					if (testIterations > 0) {
-						//TraceRunner traceRunner = new TraceRunner(e.getInputs(), sutWrapper);
-						//traceRunner.testTrace(testIterations);
-						//System.err.println(traceRunner.getResults());
-					}
 					stats.totalEquivQueries = nrEquivalenceQueries.value;
 					stats.totalUniqueEquivQueries = nrUniqueEquivalenceQueries.value;
 					stats.totalMemQueries = nrMembershipQueries.value;
@@ -436,7 +426,7 @@ public class Main {
 		return eqOracle;
 	}
 	
-	public static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
+	private static Tuple2<Oracle, Oracle> buildOraclesFromConfig(TCPParams tcp) {
 		System.out.println("Building SUT wrapper...");
 		sutWrapper = new MapperSutWrapper(tcp.sutPort, Main.learningParams.mapper);
 		
