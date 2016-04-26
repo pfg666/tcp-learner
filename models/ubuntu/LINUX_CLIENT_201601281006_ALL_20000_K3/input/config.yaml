@@ -6,8 +6,8 @@ learningParams:
     maxTraceLength: 6
     maxNumTraces: 20000
     sutInterface: sutinfo.yaml
-    yanCommand2: "/home/paul/GitHub/Yannakakis/build/main --seed 123456789 = fixed 3 2"
-    yanCommand: "/home/paul/GitHub/Yannakakis/build/main --prefix buggy --seed 123456789 = random 4 4"
+    yanCommand2: "/home/cav/GitHub/Yannakakis/build/main --seed 123456789 = fixed 3 2"
+    yanCommand: "/home/cav/GitHub/Yannakakis/build/main --prefix buggy --seed 123456789 = random 4 4"
     mapper: linux
     testTraces: []
 #     - ["CONNECT" , "SYN(V,V,0)" , "ACK(V,V,0)" , "FIN+ACK(V,V,0)" , "SEND" , "SEND" , "SEND" , "CLOSE" , "ACK+PSH(V,V,1)"]
