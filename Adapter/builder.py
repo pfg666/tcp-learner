@@ -5,7 +5,7 @@
 # the stuff we can build
 from sender import Sender
 from networkAdapter import Adapter
-from traceRunner import TraceRunner
+#from traceRunner import TraceRunner
 from actionSender import ActionSender
 
 # the stuff we use to fetch arguments

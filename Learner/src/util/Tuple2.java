@@ -1,8 +1,10 @@
 package util;
 
-/* Taken from tomte */
-public class Tuple2<T0,T1> {
+import java.io.Serializable;
 
+/* Taken from tomte */
+public class Tuple2<T0,T1> implements Serializable {
+	private static final long serialVersionUID = 7482940805458320647L;
 	public  T0 tuple0;
 	public  T1 tuple1;
 	

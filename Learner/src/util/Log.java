@@ -11,12 +11,18 @@ public class Log {
 		ERROR
 	}
 	
-	private static PrintStream activePrintStream = null;
+	private static PrintStream activePrintStream = System.out;
+	private static PrintStream errorPrintStream = System.err;
 	private static Level logLevel = Level.INFO;
 	
 	public static void setActivePrintStream(PrintStream printStream) {
 		activePrintStream = printStream;
 	}
+	
+	public static void setErrorPrintStream(PrintStream printStream) {
+	    errorPrintStream = printStream;
+	}
+	
 	
 	public static void setLogLevel(String logLevel) {
 		Log.logLevel = Level.valueOf(logLevel);
@@ -39,9 +45,13 @@ public class Log {
 	}
 	
 	private static void log(Level level, String message) {
-		if(activePrintStream != null)
-			log(level, message, activePrintStream);
-		log(level, message, System.out);
+		switch (level)
+		{
+		case ERROR: log(level, message, errorPrintStream);
+		break;
+		default: log(level, message, activePrintStream);
+		break;
+		}
 	}
 	
 	/** Logs message prepending location of log invocation. To retrieve the location from which the log was called, 
@@ -66,5 +76,9 @@ public class Log {
 			}
 		}
 		return relevantStackTraceElement;
+	}
+	
+	public static PrintStream getPrintStream() {
+		return activePrintStream;
 	}
 }
