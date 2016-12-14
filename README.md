@@ -14,8 +14,12 @@ virtual machine (say Virtual Box) and use that machine to learn your host TCP
 Stack. 
 
 For a quick install and run, clone/download the cav-aec branch of the tool. 
+`git clone -b cav-aec https://gitlab.science.ru.nl/pfiteraubrostean/tcp-learner.git`
+
 Make sure you have installed a Java 8 Jdk, Python 2.7, and the Python libraries
 Scapy, Pcapy and Impacket. 
+
+
 
 ## Components ##
 * Learner side:
