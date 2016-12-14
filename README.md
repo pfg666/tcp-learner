@@ -19,7 +19,9 @@ can do this running git clone from a terminal:
 `git clone -b cav-aec https://gitlab.science.ru.nl/pfiteraubrostean/tcp-learner.git`
 
 Make sure you have installed a Java 8 Jdk, Python 2.7, and the Python libraries
-Scapy, Pcapy and Impacket. 
+Scapy, Pcapy and Impacket. This requires installation of libraries such as libcap-dev
+and python-dev, and also graphviz for dot file browsing/processing.
+
 
 
 
@@ -68,7 +70,7 @@ and "SYN(V,V,0)"). Don't combine server socket calls with client socket calls!
 (the adapter should display all the parameters used and start running)
 
 5. (finally) run the java learner. You needn't build it, can just use the distribution:
-`java -jar dist/tcp-learner.jar  config.yaml`
+`java -cp Learner/dist/TCPLearner-20160115.jar:Learner/lib/* learner.Main config.yaml`
 
 There you go! It should be up and running. Use a minimal alphabet at first, so 
 that learning is fast. Then experiment with more inputs. 
@@ -77,6 +79,7 @@ that learning is fast. Then experiment with more inputs.
 After each run, a "cache.ser" is created with outputs for all the tests run. 
 This is loaded on a subsequent run and used as cache. (so these tests are not
 re-run) It allows you to resume learning from the state it was when you terminated it.
+Delete the file in case you want a fresh run.
 
 ## Handling Complications ##
 In case of  non-determinism reported by the learner, tweak the timing parameters. Also,
