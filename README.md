@@ -1,17 +1,20 @@
 __tcp-learner__ is a Java/Python tool you can use to automatically learn 
-TCP stacks. What does it mean to learn? Well, to obtain a model/state machine
-that tells a bit more then the RFC 793 spec. and which fits your TCP stack and
-none other. How does it learn? By running tests on the TCP Stack 
-(sending inputs / receiving outputs), it learnes about how TCP operates until
-it can build a (behavioral model). How much can it learn? Time-stripped TCP
-with seq, ack, flags, 0/1 payload and socket calls.
+TCP stacks. What does it mean to learn? Learning means obtaining a model/state machine
+that tells a bit more then the RFC 793 spec. and which describes your TCP stack and
+none other. You could liken it to reverse engineering of software where the end result is a model.
+
+How does it learn? By running tests on the TCP Stack 
+(sending inputs / receiving outputs) until it acquires enough information about TCP 
+so that it can build a behavioral model of it. The theory behind acquiring and assembling information
+into a model is based on the L* algorithm for learning languages. With that said, can it infer the whole TCP stack? Not quite,
+TCP has to be dumbed down, otherwise it is far too complex for the learning algorithms used. __tcp-learner__ 
+can learn a time-stripped TCP with seq, ack, flags, 0/1 payload and socket calls. 
 
 ##  Installing ##
-The tool can only work reliably on Linux due to some of the Python libraries used.
-In addition, the TCP stack cannot be learned locally, it should be done over 
-an actual connection. As such, we suggest you do your installation on a 
-virtual machine (say Virtual Box) and use that machine to learn your host TCP 
-Stack. 
+The tool can work reliably only on Linux due to some of the Python libraries used.
+In addition, the tool currently can only learn remote TCP stacks, not local ones. 
+As such, we suggest you install __tcp-learner__ on a virtual machine (say Virtual Box) 
+and use that machine to learn your host TCP Stack. 
 
 For a quick install and run, clone/download the cav-aec branch of the tool. You
 can do this running git clone from a terminal:
@@ -89,11 +92,9 @@ that the same sequence of inputs you received different outputs. For example, as
 * ACCEPT/TIMEOUT LISTEN/TIMEOUT SYN/RST+ACK CLOSE/TIMEOUT
 
 For the sequence ACCEPT LISTEN SYN we obtained over two distinct tests different
-outputs (SYN+ACK != RST+ACK)
-
-
-
-
-
-
+outputs (SYN+ACK != RST+ACK). That's a classical sign of non-determinism that cannot be handled
+by the underlying learning algorithm. It is for this reason that certain configurations can
+not be learned by __tcp-learner__, namely some configurations for Linux which include the "SEND" or
+"CLOSECONNECTION" socket calls. Read more about these, as well as the underlying theory and technical
+details in our published CAV paper.
 
