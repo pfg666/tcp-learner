@@ -39,7 +39,7 @@ import util.Tuple2;
 import util.exceptions.BugException;
 import util.exceptions.CacheInconsistencyException;
 import util.exceptions.CorruptedLearningException;
-import util.learnlib.Dot;
+import util.learnlib.DotDo;
 import de.ls5.jlearn.abstractclasses.LearningException;
 import de.ls5.jlearn.algorithms.packs.ObservationPack;
 import de.ls5.jlearn.equivalenceoracles.RandomWalkEquivalenceOracle;
@@ -292,7 +292,7 @@ public class Main {
 							+ hypCounter + ".pdf";
 					
 					File hypPDF = new File(hypPdfFileName);
-					Dot.writeDotFile(hyp, hypFileName );
+					DotDo.writeDotFile(hyp, hypFileName );
 					DotUtil.invokeDot(hypFileName, "pdf", hypPDF);
 	
 					absTraceOut.println("starting equivalence query");

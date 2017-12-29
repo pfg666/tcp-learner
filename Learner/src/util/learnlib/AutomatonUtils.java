@@ -112,11 +112,14 @@ public class AutomatonUtils {
 	}
 	
 	public static int indexOf(Automaton automaton, State state) {
-		return getStatesInBFSOrder(automaton).indexOf(state);
+		//return getStatesInBFSOrder(automaton).indexOf(state);
+		return state.getId();
 	}
 	
 	public static State get(Automaton automaton, int index) {
-		return getStatesInBFSOrder(automaton).get(index);
+		//return getStatesInBFSOrder(automaton).get(index);
+		return automaton.getAllStates().stream().filter(state -> state.getId() == index)
+		.findAny().orElse(null);
 	}
 	
 	public static List<Symbol> buildSymbols(Collection<String> trace) {

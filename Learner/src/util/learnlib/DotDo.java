@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import util.ExceptionAdapter;
 
@@ -21,7 +22,7 @@ import de.ls5.jlearn.interfaces.Symbol;
 import de.ls5.jlearn.shared.AlphabetImpl;
 import de.ls5.jlearn.shared.AutomatonImpl;
 
-public class Dot {
+public class DotDo {
 	private static final String LABEL = "label=<<table border=\"0\" "
 			+ "cellpadding=\"1\" cellspacing=\"0\"><tr><td>";
 	private static final String MID = "</td><td>/</td><td>";
@@ -36,8 +37,14 @@ public class Dot {
 		Alphabet alphabet = new AlphabetImpl();
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line = reader.readLine();
-		Map<String, TempState> states = new HashMap<String, TempState>();
+		Map<String, TempState> states = new TreeMap<String, TempState>(
+				(s1, s2) -> Integer.valueOf(s1.substring(1)).compareTo(Integer.valueOf(s2.substring(1)))
+				);
 		while (line != null) {
+			if (line.trim().matches("s[0-9]*")) {
+				String stateStr = line.trim();
+				states.put(stateStr, new TempState());
+			}
 			if (line.contains("->")) {
 				int nextSpace = line.indexOf(' ');
 				String from = line.substring(0, nextSpace);
@@ -53,15 +60,8 @@ public class Dot {
 				Symbol inputSym = SymbolCache.getSymbol(input);
 				alphabet.addSymbol(inputSym);
 				TempState fromState = states.get(from);
-				if (fromState == null) {
-					fromState = new TempState();
-					states.put(from.intern(), fromState);
-				}
 				TempState toState = states.get(to);
-				if (toState == null) {
-					toState = new TempState();
-					states.put(to.intern(), toState);
-				}
+				assert fromState != null && toState != null;
 				fromState.next.put(input.intern(), toState);
 				fromState.out.put(input.intern(), output.intern());
 			}
@@ -69,13 +69,15 @@ public class Dot {
 		}
 		Automaton result = new AutomatonImpl(alphabet);
 		states.get("s0").state = result.getStart();
-		for (TempState state : states.values()) {
+		for (String str: states.keySet()) {
+			TempState state = states.get(str);
 			if (state.state == null) {
 				State temp = result.addNewState();
 				state.state = temp;
 			}
 		}
-		for (TempState state : states.values()) {
+		for (String str: states.keySet()) {
+			TempState state = states.get(str);
 			for (String input : state.next.keySet()) {
 				Symbol inputSym = SymbolCache.getSymbol(input);
 				Symbol outputSym = SymbolCache.getSymbol(state.out.get(input));

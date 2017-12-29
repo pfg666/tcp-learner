@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
@@ -18,7 +17,6 @@ import java.util.ListIterator;
 import de.ls5.jlearn.interfaces.Automaton;
 import de.ls5.jlearn.interfaces.State;
 import de.ls5.jlearn.interfaces.Symbol;
-import de.ls5.jlearn.shared.SymbolImpl;
 
 public class AutomatonApp {
 	private BufferedReader in;
@@ -71,10 +69,13 @@ public class AutomatonApp {
 		return trace;
 	}
 	
-	public Collection<String> getRoute(Automaton automaton, State startingState, List<Symbol> inputSeq) {
+	public Collection<String> getRoute(Automaton automaton, State startingState, List<Symbol> inputSeq) throws AppException{
 		Deque<String> strings = new ArrayDeque<String>();
 		State currentState = startingState;
 		for (Symbol input : inputSeq) {
+			if (currentState.getTransitionOutput(input) == null) {
+				throw new AppException("Input " + input + " not defined for state s" + currentState.getId());
+			}
 			strings.add(input.toString() +"\\"+ currentState.getTransitionOutput(input) + " (" + AutomatonUtils.indexOf(automaton, currentState.getTransitionState(input)) + ") " );
 			if (inputSeq.size() > 5) {
 				strings.add("\n");
@@ -84,9 +85,16 @@ public class AutomatonApp {
 		return strings;
 	} 
 	
+	static class AppException extends Exception{
+		public AppException(String cause) {
+			super(cause);
+		}
+	}
+	
 	public void play() throws IOException {
 		Automaton loadedHyp = null;
 		while (true) {
+			try {
 			out.println("Welcome to the hyp assistent. Today you can: " +
 					"\n 1. Load a new hypothesis \n 2. Get trace to state \n " +
 					"3. Get distinguishing seq between two states \n 4. Run trace \n " +
@@ -97,7 +105,7 @@ public class AutomatonApp {
 			switch(command) {
 			case "1":
 				String hyp = ask("Hypothesis:");
-				loadedHyp = Dot.readDotFile(hyp);
+				loadedHyp = DotDo.readDotFile(hyp);
 				if (loadedHyp != null) {
 					out.println("Loaded successfully");
 				}
@@ -153,7 +161,9 @@ public class AutomatonApp {
 				out.println("Byee");
 				return ;
 			}
-			
+			} catch(AppException exc) {
+				out.print("Non terminal exception: " + exc.getMessage());
+			}
 		}
 	}
 
