@@ -1,1 +1,3 @@
-java -Djava.ext.dirs=../lib -cp dist/TCPLearner-20160115.jar learner.Main
+From the tcp-adapter directory, run:
+
+java -cp Learner/dist/TCPLearner-20160115.jar:Learner/lib/* learner.Main config.yaml
