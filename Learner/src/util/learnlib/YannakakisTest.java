@@ -33,7 +33,7 @@ public class YannakakisTest {
         
         String dotFile = args[0];
         String yannakakisCmd = args[1];
-        Automaton readAutomaton = Dot.readDotFile(dotFile);
+        Automaton readAutomaton = DotDo.readDotFile(dotFile);
         root = Main.readCacheTree(Main.CACHE_FILE);
         Tuple2<List<LinkedList<String>>, Integer> tuple2 = getMinimumalTestSuite(readAutomaton, root, yannakakisCmd, SEED_MIN, SEED_MAX);
         System.out.println("Best seed:" + seed);
