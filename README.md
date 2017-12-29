@@ -25,9 +25,6 @@ Make sure you have installed a Java 8 Jdk, Python 2.7, and the Python libraries
 Scapy, Pcapy and Impacket. This requires installation of libraries such as libcap-dev
 and python-dev, and also graphviz for dot file browsing/processing.
 
-
-
-
 ## Components ##
 * Learner side:
  * _Learner_ Java tool which sends input and receives output strings from a network adapter,
@@ -43,6 +40,14 @@ back to _Learner_
 * TCP Entity side:
  * _TCP Adapter_ envelops _TCP Entity_, calls corresponding socket calls on it
  * _TCP Entity_ your TCP stack, can either be a Server or a Client
+  
+## Structure ##
+The project is structured as follows:
+* _Learner_ contains the Learner code/libs
+* _SutAdapter_ contains the TCP Adapter code
+* _models_ contains the models learned following the case study joined by experimental data
+* _input/mappers_ contains the mappers for all operating systems
+* _Documents_ contains any relevant documents (pdfs) 
   
 ##  Running ##
 Now, get the TCP Adapter (SutAdapter/socketAdapter.c) and deploy it on the system you want 
