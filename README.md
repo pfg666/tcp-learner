@@ -61,7 +61,7 @@ socket strings are sent along with system resets.
 
 The Learner side requires more tweaking. 
 1. first, don't allow the OS to interfere to the communication with the TCP Entity by running from a terminal:
-`sudo iptables -A OUTPUT -p --tcp-flags RST RST -j DROP`
+`sudo iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP`
 
 Then copy the files from the Example directory to the tcp-learner dir. 
 2. edit sutinfo.yaml with the alphabet used for learner. All possible inputs are included,
