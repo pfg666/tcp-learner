@@ -1,7 +1,7 @@
-__tcp-learner__ is a Java/Python tool you can use to automatically learn 
-TCP stacks. What does it mean to learn? Learning means obtaining a model/state machine
-that tells a bit more then the RFC 793 spec. and which describes your TCP stack and
-none other. You could liken it to reverse engineering of software where the end result is a model.
+__tcp-learner__ is a Java/Python tool you can use to automatically learn  TCP stacks. 
+What does it mean to learn? 
+Learning means obtaining a model/state machine that describes your TCP stack. 
+You could liken it to reverse engineering of software where the end result is a model.
 
 How does it learn? By running tests on the TCP Stack 
 (sending inputs / receiving outputs) until it acquires enough information about TCP 
@@ -9,6 +9,9 @@ so that it can build a behavioral model of it. The theory behind acquiring and a
 into a model is based on the L* algorithm for learning languages. With that said, can it infer the whole TCP stack? Not quite,
 TCP has to be dumbed down, otherwise it is far too complex for the learning algorithms used. __tcp-learner__ 
 can learn a time-stripped TCP with seq, ack, flags, 0/1 payload and socket calls. 
+
+<sub>Note: this is a fork of the __tcp-learner__'s original [public repository](https://gitlab.science.ru.nl/pfiteraubrostean/tcp-learner) to which I no longer have write access.
+This fork allows me to continue development/make fixes where need be.</sub>
 
 ##  Installing ##
 The tool can work reliably only on Linux due to some of the Python libraries used.
@@ -19,14 +22,11 @@ and use that machine to learn your host TCP Stack.
 For a quick install and run, clone/download the cav-aec branch of the tool. You
 can do this running git clone from a terminal:
 
-`git clone -b cav-aec https://gitlab.science.ru.nl/pfiteraubrostean/tcp-learner.git`
+`git clone -b cav-aec git@github.com:pfg666/tcp-learner.git`
 
 Make sure you have installed a Java 8 Jdk, Python 2.7, and the Python libraries
 Scapy, Pcapy and Impacket. This requires installation of libraries such as libcap-dev
 and python-dev, and also graphviz for dot file browsing/processing.
-
-
-
 
 ## Components ##
 * Learner side:
@@ -44,6 +44,14 @@ back to _Learner_
  * _TCP Adapter_ envelops _TCP Entity_, calls corresponding socket calls on it
  * _TCP Entity_ your TCP stack, can either be a Server or a Client
   
+## Structure ##
+The project is structured as follows:
+* _Learner_ contains the Learner code/libs
+* _SutAdapter_ contains the TCP Adapter code
+* _models_ contains the models learned following the case study joined by experimental data
+* _input/mappers_ contains the mappers for all operating systems
+* _Documents_ contains any relevant documents (pdfs) 
+  
 ##  Running ##
 Now, get the TCP Adapter (SutAdapter/socketAdapter.c) and deploy it on the system you want 
 to learn (for example your host). Compile it (with any Linux/Windows 
@@ -56,7 +64,7 @@ socket strings are sent along with system resets.
 
 The Learner side requires more tweaking. 
 1. first, don't allow the OS to interfere to the communication with the TCP Entity by running from a terminal:
-`sudo iptables -A OUTPUT -p --tcp-flags RST RST -j DROP`
+`sudo iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP`
 
 Then copy the files from the Example directory to the tcp-learner dir. 
 2. edit sutinfo.yaml with the alphabet used for learner. All possible inputs are included,
