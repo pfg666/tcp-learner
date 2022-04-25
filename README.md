@@ -1,7 +1,8 @@
-__tcp-learner__ is a Java/Python tool you can use to automatically learn 
-TCP stacks. What does it mean to learn? Learning means obtaining a model/state machine
-that tells a bit more then the RFC 793 spec. and which describes your TCP stack and
-none other. You could liken it to reverse engineering of software where the end result is a model.
+__tcp-learner__ is a Java/Python tool you can use to automatically learn  TCP stacks. 
+What does it mean to learn? 
+Learning means obtaining a model/state machine that describes your TCP stack. 
+You could liken it to reverse engineering of software where the end result is a model.
+
 
 How does it learn? By running tests on the TCP Stack 
 (sending inputs / receiving outputs) until it acquires enough information about TCP 
@@ -9,6 +10,9 @@ so that it can build a behavioral model of it. The theory behind acquiring and a
 into a model is based on the L* algorithm for learning languages. With that said, can it infer the whole TCP stack? Not quite,
 TCP has to be dumbed down, otherwise it is far too complex for the learning algorithms used. __tcp-learner__ 
 can learn a time-stripped TCP with seq, ack, flags, 0/1 payload and socket calls. 
+
+<sub>Note: this is a fork of the __tcp-learner__'s original [public repository](https://gitlab.science.ru.nl/pfiteraubrostean/tcp-learner) to which I no longer have write access.
+This fork allows me to continue development/make fixes where need be.</sub>
 
 ##  Installing ##
 The tool can work reliably only on Linux due to some of the Python libraries used.
@@ -19,7 +23,7 @@ and use that machine to learn your host TCP Stack.
 For a quick install and run, clone/download the cav-aec branch of the tool. You
 can do this running git clone from a terminal:
 
-`git clone -b cav-aec https://gitlab.science.ru.nl/pfiteraubrostean/tcp-learner.git`
+`git clone -b cav-aec git@github.com:pfg666/tcp-learner.git`
 
 Make sure you have installed a Java 8 Jdk, Python 2.7, and the Python libraries
 Scapy, Pcapy and Impacket. This requires installation of libraries such as libcap-dev
