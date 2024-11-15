@@ -110,5 +110,5 @@ details in our published CAV paper.
 ## Relevant links
 
 - the [CAV 2016](https://paulfiterau.github.io/publications/2016-CAV.pdf) publication which employs **tcp-learner** to perform model learning and model checking of TCP stacks;
-- the [FMICS/AVOCS](https://paulfiterau.github.io/publications/2017-FMICS.pdf) publication which employs the Network Adapter component to test the windowing behavior of TCP stacks using RA model learning.
+- the [FMICS/AVOCS 2017](https://paulfiterau.github.io/publications/2017-FMICS.pdf) publication which employs the Network Adapter component to test the windowing behavior of TCP stacks using RA model learning.
 
