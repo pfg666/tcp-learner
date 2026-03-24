@@ -1,5 +1,5 @@
 Development of **tcp-learner** has moved to [here](https://github.com/protocol-fuzzing/TCP-Fuzzer).
-As of March 2026, The tool has been updated to Python 3 andn Java 21. 
+As of March 2026, The tool has been updated to Python 3 and Java 21. 
 It has been renamed to **TCP-Fuzzer** in line with state fuzzer conventions.
 
 ## Original README
